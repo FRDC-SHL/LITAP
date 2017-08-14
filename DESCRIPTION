@@ -1,0 +1,28 @@
+Package: LITAP
+Type: Package
+Title: Landscape Integrated Terrain Analysis Package
+Version: 0.1.0
+Author: Steffi LaZerte
+Maintainer: Steffi LaZerte <steffi@steffi.ca>
+Description: Flow analysis of elevation data including pit removal. 
+    Based on R. A. (Bob) MacMillan's FlowMapR program.
+License: 
+Encoding: UTF-8
+LazyData: true
+Depends:
+    R (>= 3.3.3),
+    magrittr(>= 1.5)
+Imports:
+    dplyr (>= 0.7.0),
+    foreign (>= 0.8.67),
+    ggplot2 (>= 2.2.1),
+    multidplyr (>= 0.0.0.9000),
+    progress (>= 1.1.2),
+    purrr (>= 0.2.2.2),
+    readr (>= 1.1.0),
+    stringr (>= 1.2.0),
+    tibble (>= 1.3.3),
+    tidyr (>= 0.6.3)
+Suggests: knitr,
+    rmarkdown
+VignetteBuilder: knitr
