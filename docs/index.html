@@ -78,6 +78,12 @@ devtools::<span class="kw">install_github</span>(<span class="st">"steffilazerte
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testElev.dem"</span>, <span class="dt">nrow =</span> <span class="dv">100</span>, <span class="dt">ncol =</span> <span class="dv">100</span>, <span class="dt">max_area =</span> <span class="dv">5</span>, <span class="dt">max_depth =</span> <span class="fl">0.2</span>)</code></pre></div>
 <p>As well as the location of output files:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testElev.dem"</span>, <span class="dt">nrow =</span> <span class="dv">100</span>, <span class="dt">ncol =</span> <span class="dv">100</span>, <span class="dt">folder_out =</span> <span class="st">"./Output/"</span>)</code></pre></div>
+</div>
+<div id="output" class="section level2">
+<h2 class="hasAnchor">
+<a href="#output" class="anchor"></a>Output</h2>
+<p>Output files include .rds (R data files) and .csv files in the “Final” folder, .dbf files in the “dbf” folder and backup files (for resuming runs) in teh “Backup” folder. Additionally, an html report summaring the run is included in the output folder</p>
+<p>The .dbf files are designed to imitate the output of the original FlowMapR program (note that the .rds and the .csv files do not).</p>
 <p>See the <a href="http://steffilazerte.github.io/LITAP/">LITAP website</a> hosted on github for more details and examples</p>
 </div>
 </div>
