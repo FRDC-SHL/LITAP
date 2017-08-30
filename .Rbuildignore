@@ -1,2 +1,8 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^docs$
+^data-raw$
+^articles$
+^comparisons$
+^reports$
+^_pkgdown.yaml$

@@ -1,0 +1,12 @@
+url: http://hadley.github.io/pkgdown
+
+articles:
+  - title: Tutorials
+    desc: Running and plotting in LITAP
+    contents:
+    - flow_plots
+    - LITAP
+  - title: Reports
+    desc: Reports comparing the output of original FlowMapR runs with LITAP runs
+    contents:
+    - starts_with("test_")

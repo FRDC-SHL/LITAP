@@ -1,0 +1,12 @@
+---
+title: "Overflow report"
+output: html_document
+params: 
+   file: ""
+   n: ""
+---
+
+```{r, fig.width = 10, fig.height = 10}
+plot_overflow(params$file, params$n)
+```
+

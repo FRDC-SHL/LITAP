@@ -1,27 +1,55 @@
-first_pitr <- function(db, max_area = 10, max_depth = 0.5, parallel = FALSE) {
+first_pitr <- function(db, max_area = 10, max_depth = 0.5, verbose = FALSE) {
 
   # Working with initial_shed
   db$shedno <- db$initial_shed
 
-  w_stats <- pit_stat(db, parallel = parallel) %>%
-    dplyr::arrange(dplyr::desc(pit_elev), varatio)  ## shedord
+  if(max_area > 0 | max_depth > 0) {  # No point if nothing to remove
+    # Initial Shed Statistics
+    w_stats <- pit_stat(db, verbose = verbose) %>%
+      out_stat() %>%
+      dplyr::arrange(dplyr::desc(pit_elev), varatio) %>%
+      dplyr::mutate(remove = (pit_area <= max_area | ((pour_elev - pit_elev) <= max_depth)) &
+                      !edge_pit) #which to remove (only if not edge pit!)
 
-  # In sequence, for each watershed, see if should be combined with another
-  # Combine if too small (max_area) or too shallow (max_depth)
-  w_all <- unique(w_stats$shedno)
-  for(w in w_all){
-    w_rm <- dplyr::filter(w_stats, shedno == w) %>%
-      dplyr::mutate(remove = pit_area <= max_area | pour_elev - pit_elev <= max_depth)
+    # In sequence, for each watershed that should be removed
+    # Combine if too small (max_area) or too shallow (max_depth)
+    done <- FALSE
+    while(!done){
 
-    if(w_rm$remove){
+      w_rm <- w_stats %>%
+        dplyr::filter(remove == TRUE) %>%
+        dplyr::slice(1) # Get next to remove
 
-      db <- remove_pit(w_rm, w_stats, db)
+      if(nrow(w_rm) == 1){
+        sheds <- c(w_rm$shedno, w_rm$out_shed)
+        if(verbose) message("    Combining watersheds ", paste0(sheds, collapse = " and "))
 
-      # Update shed statistics
-      w_stats <- pit_stat(db, parallel = parallel) %>%
-        dplyr::arrange(dplyr::desc(pit_elev), varatio)  ## shedord
+        db <- remove_pit(w_rm, w_stats, db)
 
-    } else message("Skipping watershed number ", w_rm$shedno)
+        # Update shed statistics but only for the two sheds involved
+        w_stats <- w_stats %>%
+          dplyr::filter(!(shedno %in% sheds)) %>%
+          dplyr::bind_rows(pit_stat(db, w = sheds, verbose = verbose)) %>%
+          # Which to remove
+          dplyr::mutate(remove = (pit_area <= max_area | ((pour_elev - pit_elev) <= max_depth)) &
+                          !edge_pit) %>% #which to remove (only if not edge pit!)
+          # Sort order
+          dplyr::arrange(dplyr::desc(pit_elev), varatio)
+
+        shed_rm <- sheds[!(sheds %in% w_stats$shedno)] # Shed removed
+        shed_kept <- sheds[sheds %in% w_stats$shedno] # Shed kept
+
+        if(any(!is.na(w_stats$out_shed))){
+          # Update references to old shed
+          w_stats <- w_stats %>%
+            mutate_cond(out_shed == shed_rm, out_shed = shed_kept)
+        }
+
+        w_stats <- w_stats %>%
+          out_stat()
+
+      } else done <- TRUE
+    }
   }
 
   # Save as local_shed numbers
@@ -31,39 +59,35 @@ first_pitr <- function(db, max_area = 10, max_depth = 0.5, parallel = FALSE) {
 }
 
 #' @import magrittr
-second_pitr <- function(db, parallel = FALSE) {
+second_pitr <- function(db, verbose = FALSE) {
 
   # Working with local_shed
   db$shedno <- db$local_shed
 
-  w_stats <- pit_stat(db, parallel = parallel) %>%
+  w_stats <- pit_stat(db, verbose = verbose) %>%
+    out_stat() %>%
     dplyr::arrange(pit_elev, varatio) %>% ## shedord2  (PITELEV*10^10 + varatio) TAG SHEDORD2
-    dplyr::mutate(removed = FALSE, final = FALSE, nextpit = 0, becomes = 0)
-
-
-  #w_stats %>% select(shedno, edge_pit, pour_elev, pit_elev, out_shed, out_elev)
-
+    dplyr::mutate(removed = FALSE, final = FALSE, next_pit = out_shed, becomes = 0)
 
   # Starting conditions
   pond <- w_stats
   removed <- vector()
   final_pits <- vector()
-  end <- FALSE
+  done <- FALSE
   w <- w_stats$shedno[1]
 
-  while(!end){
+  while(!done){
 
     #w_rm <- find_lowest(w, w_stats, final_pits = pond$shedno[pond$final])
-    w_rm <- find_lowest(w, w_stats, final_pits = final_pits)
+    w_rm <- find_lowest(w, w_stats, final_pits = final_pits, removed = removed, verbose = verbose)
 
     w_focal <- dplyr::filter(w_stats, shedno == w_rm$shedno)
     w_drain <- dplyr::filter(w_stats, shedno == w_rm$out_shed)
 
-    #if(w_rm$shedno == 36) browser()
-
     if(!(w_focal$edge_pit & w_drain$edge_pit)) {
 
       new_shed <- max(db$shedno, na.rm = TRUE) + 1
+      if(verbose) message("  Combining sheds ", w_focal$shedno, " and ", w_drain$shedno, " into new shed ", new_shed)
 
       removed <- c(removed, w_rm$shedno, w_rm$out_shed)
 
@@ -73,128 +97,191 @@ second_pitr <- function(db, parallel = FALSE) {
                                        shedno %in% c(w_rm$shedno, w_rm$out_shed),
                                        new_shed))
 
-      # Update shed statistics
-      w_stats <- pit_stat(db, parallel = parallel) %>%
-        dplyr::arrange(pit_elev, varatio) %>%
-        dplyr::mutate(removed = FALSE, final = FALSE, nextpit = 0, becomes = 0)## shedord
+      # Update shed statistics but only for the two sheds involved
+
+      w_stats <- w_stats %>%
+        mutate_cond(shedno %in% c(w_focal$shedno, w_drain$shedno),
+                    removed = TRUE,
+                    final = w_rm$at_final,
+                    next_pit = out_shed,
+                    becomes = new_shed) %>%
+        #dplyr::filter(!(shedno %in% c(w_focal$shedno, w_drain$shedno))) %>%
+        dplyr::bind_rows(
+          dplyr::mutate(pit_stat(db, w = new_shed, verbose = verbose),
+                        removed = FALSE,
+                        final = FALSE,
+                        next_pit = out_shed,
+                        becomes = 0)) %>%
+        # Sort order
+        dplyr::arrange(pit_elev, varatio)
+
+      # Update references to old shed
+      if(any(!is.na(w_stats$out_shed))){
+        w_stats <- w_stats %>%
+          mutate_cond(out_shed %in% c(w_focal$shedno, w_drain$shedno), out_shed = new_shed) %>%
+          mutate_cond(removed == FALSE & final == FALSE & (next_pit %in% c(w_focal$shedno, w_drain$shedno)),
+                      next_pit = new_shed)
+      }
+
+      w_stats <- w_stats %>%
+        out_stat()
 
       # Keep track of pond statistics (ie. keep track of all watersheds)
       # pond <- dplyr::bind_rows(w_focal, w_drain) %>%
       #   dplyr::mutate(removed = TRUE,
       #                 final = w_rm$at_final,
-      #                 nextpit = out_shed,
+      #                 next_pit = out_shed,
       #                 becomes = new_shed) %>%
       #   dplyr::bind_rows(pond, .)
       pond <- dplyr::bind_rows(pond, w_stats[w_stats$shedno == new_shed,]) %>%
         mutate_cond(shedno %in% c(w_focal$shedno, w_drain$shedno),
                     removed = TRUE,
                     final = w_rm$at_final,
-                    nextpit = out_shed,
+                    next_pit = out_shed,
                     becomes = new_shed)
 
-      pond$nextpit[pond$removed == FALSE & pond$final == FALSE & pond$nextpit == w_focal$shedno |
-                     pond$nextpit == w_drain$shedno] <- new_shed
+      pond$next_pit[pond$removed == FALSE & pond$final == FALSE &
+                     (pond$next_pit == w_focal$shedno | pond$next_pit == w_drain$shedno)] <- new_shed
 
     } else {
-      message("Watersheds ", w_focal$shedno, " and ", w_drain$shedno, " are FINAL sheds")
+      if(verbose) message("  Watersheds ", w_focal$shedno, " and ", w_drain$shedno, " are FINAL sheds")
       final_pits <- unique(c(final_pits, w_rm$shedno, w_rm$out_shed))
 
-      pond <- pond %>%
-        mutate_cond(shedno %in% w_focal$shedno, nextpit = w_drain$shedno) %>%
-        mutate_cond(shedno %in% w_drain$shedno, nextpit = w_focal$shedno)
+      w_stats <- w_stats %>%
+        mutate_cond(shedno %in% c(w_focal$shedno, w_drain$shedno), final = TRUE)
+
+      # pond <- pond %>%
+      #   mutate_cond(shedno %in% w_focal$shedno, next_pit = w_drain$shedno) %>%
+      #   mutate_cond(shedno %in% w_drain$shedno, next_pit = w_focal$shedno)
       # p <- dplyr::bind_rows(w_focal, w_drain) %>%
       #   dplyr::mutate(removed = FALSE,
       #                 final = TRUE,
-      #                 nextpit = out_shed,
+      #                 next_pit = out_shed,
       #                 becomes = 0)#w_stats[w_stats$shedno %in% c(w_rm$shedno, w_rm$out_shed), ]
     }
 
     # Get next shed
-    done <- unique(c(final_pits, removed))
+    finished <- unique(c(final_pits, removed))
 
-    w <- dplyr::filter(w_stats, !(shedno %in% done))
+    w <- dplyr::filter(w_stats, !(shedno %in% finished))
     if(nrow(w) > 0) {
       w <-  w$shedno[1]
-    } else end <- TRUE
+    } else done <- TRUE
 
   }
 
-  # Save as global_shed numbers
-  db <- dplyr::mutate(db, global_shed = shedno)
+  # Update final sheds
+
+  pond <- mutate_cond(pond, shedno %in% final_pits, final = TRUE)
+
+  # Save as pond_shed numbers
+  db <- dplyr::mutate(db, pond_shed = shedno)
 
   return(list("db" = db, "stats" = pond))
 }
 
-third_pitr <- function(db, parallel = FALSE) {
+third_pitr <- function(db, verbose = FALSE) {
 
   # Working with local_shed
   db$shedno <- db$local_shed
 
-  w_stats <- pit_stat(db, parallel = parallel) %>%
-    dplyr::arrange(varatio)
+  w_stats <- pit_stat(db, verbose = verbose) %>%
+    out_stat() %>%
+    dplyr::arrange(varatio) %>%
+    dplyr::mutate(out_shed_orig = out_shed,
+                  next_pit = out_shed,
+                  end_pit = pond_shed,
+                  removed = FALSE)
 
   # Starting conditions
   fill <- tibble::tibble()
-  end <- FALSE
-  done <- vector()
+  done <- FALSE
+  finished <- vector()
   w <- w_stats$shedno[1]
 
-  while(!end){
+  while(!done){
 
     w_focal <- dplyr::filter(w_stats, shedno == w)
     w_drain <- dplyr::filter(w_stats, shedno == w_focal$out_shed)
 
-    message("Assessing ", w)
+    # if(verbose) message("  Assessing ", w)
 
-    if(w_focal$global_shed == w_drain$global_shed) {
+    if(w_focal$end_pit == w_drain$end_pit) {
       new_shed <- max(db$shedno, na.rm = TRUE) + 1
+      if(verbose) message("  Combining sheds ", w_focal$shedno, " and ", w_drain$shedno, " to new shed ", new_shed)
 
       db <- remove_pit(w_focal, w_stats, db) %>%
         dplyr::mutate(shedno = replace(shedno,
                                        shedno %in% c(w_focal$shedno, w_drain$shedno),
                                        new_shed))
 
-      # Update shed statistics
-      w_stats <- pit_stat(db, parallel = parallel) %>%
+      # Update shed statistics but only for the two sheds involved
+      w_new <- pit_stat(db, w = new_shed, verbose = verbose) %>%
+        dplyr::mutate(out_shed_orig = out_shed,
+                      next_pit = out_shed,
+                      end_pit = pond_shed,
+                      removed = FALSE)
+
+      w_stats <- w_stats %>%
+        dplyr::filter(!(shedno %in% c(w_focal$shedno, w_drain$shedno))) %>%
+        dplyr::bind_rows(w_new) %>%
+        out_stat() %>%
+        # Sort order
         dplyr::arrange(varatio)
 
+      # Update references to old shed
+      if(any(!is.na(w_stats$out_shed))){
+        w_stats <- w_stats %>%
+          mutate_cond(out_shed %in% c(w_focal$shedno, w_drain$shedno),
+                      out_shed_orig = out_shed, #save original outshed direction
+                      out_shed = new_shed)
+      }
+
+
+      w_stats <- w_stats %>%
+        out_stat()
+
+      # Update fill data frame
       fill <- dplyr::bind_rows(dplyr::bind_cols(w_focal, becomes = new_shed),
-                            dplyr::bind_cols(w_drain, becomes = new_shed)) %>%
+                               dplyr::bind_cols(w_drain, becomes = new_shed)) %>%
         dplyr::mutate(final = FALSE) %>%
         dplyr::arrange(shedno) %>%
         dplyr::bind_rows(fill, .)
 
-      done <- c(done, w_focal$shedno, w_drain$shedno)
+      finished <- c(finished, w_focal$shedno, w_drain$shedno)
 
     } else {
-      done <- c(done, w_focal$shedno)
+      finished <- c(finished, w_focal$shedno)
     }
 
+
     # Get next shed
-    w <- dplyr::filter(w_stats, !(shedno %in% done))
+    w <- dplyr::filter(w_stats, !(shedno %in% finished))
     if(nrow(w) > 0) {
       w <-  w$shedno[1]
-    } else end <- TRUE
+    } else done <- TRUE
 
   }
 
-  add <- w_stats %>%
-    dplyr::filter(!(shedno %in% fill$shedno)) %>%
-    dplyr::mutate(becomes = shedno, final = TRUE, removed = FALSE) %>%
+  # When all is done, add sheds that weren't removed
+  add <- w_stats
+  if(nrow(fill) > 0) add <- dplyr::filter(add, !(shedno %in% fill$shedno) & removed == FALSE)
+
+  add <- add %>%
+    dplyr::mutate(becomes = shedno, final = TRUE) %>%
     dplyr::arrange(shedno)
 
-  fill <- dplyr::bind_rows(fill, add)
-
-
+  fill <- dplyr::bind_rows(fill, add) %>%
+    dplyr::mutate(next_pit = out_shed,
+                  out_shed = out_shed_orig) %>%
+    dplyr::select(-out_shed_orig)
 
   db <- dplyr::mutate(db, fill_shed = shedno)
 
   return(list("db" = db, "stats" = fill))
 }
 
-
-
-remove_pit <- function(w_rm, w_stats, db) {
+remove_pit <- function(w_rm, w_stats, db, verbose = FALSE) {
 
   db <- dplyr::arrange(db, seqno)
 
@@ -215,9 +302,7 @@ remove_pit <- function(w_rm, w_stats, db) {
                           shedno = out_shed, out_shed = shedno)
   }
 
-  message("Removing watershed number ", w_rm$shedno, ": ")
-
-  #if(w_rm$shedno == 2) browser()
+  #message("Removing watershed number ", w_rm$shedno, ": ")
 
   ## Remove Pit
 

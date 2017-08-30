@@ -1,0 +1,122 @@
+---
+title: "LITAP Final Report"
+date: "`r format(Sys.Date())`"
+output: 
+  html_document:
+    theme: cosmo
+    toc: true
+    toc_float:
+      collapsed: false
+params: 
+   file: ""
+   out_files: ""
+   run: ""
+   max_area: ""
+   max_depth: ""
+   nrow: ""
+   ncol: ""
+   rlim: ""
+   clim: ""
+---
+<style>
+.figure {
+  max-width: 100%;
+  margin: auto;
+}
+</style>
+
+
+```{r load_files, include = FALSE}
+knitr::opts_chunk$set(fig.width = 10, fig.height = 10, tidy = TRUE, echo = FALSE)
+
+if(is.null(params$rlim)) rlim <- "none" else rlim <- params$rlim
+if(is.null(params$clim)) clim <- "none" else clim <- params$clim
+
+files <- params$out_files
+
+library(LITAP)
+library(gridExtra)
+
+dem <- readRDS(stringr::str_subset(files, "_dem_fill.rds"))
+pit <- readRDS(stringr::str_subset(files, paste0(run, "_pit.rds")))
+pond <- readRDS(stringr::str_subset(files, paste0(run, "_pond.rds")))
+fill <- readRDS(stringr::str_subset(files, paste0(run, "_fill.rds")))
+```
+
+## Details
+
+**Input File**:   
+
+`r params$file`  
+
+__Parameters:__
+ 
+ - max_area: `r params$max_area`
+ - max_depth: `r params$max_depth`
+ - nrow: `r params$nrow`
+ - ncol: `r params$ncol`
+ - rlim: `r rlim`
+ - clim: `r clim`
+ 
+__LITAP version:__ 
+
+`r packageVersion("LITAP")`
+
+
+
+## Local files output (.csv)
+
+```{r list_files, results = "asis"}
+lf <- stringr::str_subset(files, "csv$")
+cat(paste0("- [", basename(lf), "](", lf, ")\n"))
+```
+
+
+## Maps
+```{r maps, fig.height = 7}
+grid.arrange(flow_plot(db = dem, type = "relief") + labs(title = "relief"),
+             flow_plot(db = dem, type = "elevation") + labs(title = "elevation"),
+             nrow = 1)
+```
+
+- Initial watersheds represent watersheds identified in the very first pass
+- Local watersheds represent watersheds after the initial pit removal has been performed
+- Pond watersheds represent how the local watersheds overflow into various pond sheds
+
+```{r flow_plots}
+grid.arrange(flow_plot(db = dem, type = "elevation", shed = TRUE, shed_type = "initial") + 
+               labs(title = "Initial Watersheds") +
+               theme(plot.margin = unit(c(0, 0, 5 ,0), "mm")),
+             flow_plot(db = dem, type = "elevation", shed = TRUE, shed_type = "local") + 
+               labs(title = "Local Watersheds")+
+               theme(plot.margin = unit(c(0, 0, 5 ,0), "mm")),
+             flow_plot(db = dem, type = "elevation", shed = TRUE, shed_type = "pond") + 
+               labs(title = "Pond Watersheds")+
+               theme(plot.margin = unit(c(5, 0, 0 ,0), "mm")),
+             flow_plot(db = dem, type = "elevation", shed = TRUE, shed_type = "fill") + 
+               labs(title = "Fill Watersheds")+
+               theme(plot.margin = unit(c(5, 0, 0 ,0), "mm")),
+             ncol = 2)
+```
+
+## Results
+
+__NOTE:__  
+
+- NextPit values do not match the original values from LandMapR
+- Varatio/Pit Vol/Pit Area may be slightly different as well
+
+### Watershed stats - Pit Table
+```{r pit_table}
+DT::datatable(pit, rownames = FALSE)
+```
+
+### Watershed stats - Pond Table
+```{r pond_table}
+DT::datatable(pond, rownames = FALSE)
+```
+
+### Watershed stats - Fill Table
+```{r fill_table}
+DT::datatable(fill, rownames = FALSE, filter = "none", options = list(ordering=F))
+```
