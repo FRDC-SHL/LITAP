@@ -20,6 +20,7 @@
 #' @param rlim Numeric vector. Row limits in format c(0, 100)
 #' @param stats Data frame. Data frame of watershed stats to highlight pour
 #'   points.
+#' @param missing Character. What is the value of missing data? Defaults to NA
 
 #'
 #' @import ggplot2

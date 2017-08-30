@@ -21,6 +21,7 @@
 #'   below)
 #' @param end Character. If ending a run after a particular step, which step
 #'   (see Details below)
+#' @param report Logical. Create html report of results?
 #' @param verbose Logical. Output extra progress messages.
 #' @param quiet Logical. Suppress all messages.
 #'

@@ -40,6 +40,8 @@ for cells with >= this many cells which drain to it.}
 
 \item{stats}{Data frame. Data frame of watershed stats to highlight pour
 points.}
+
+\item{missing}{Character. What is the value of missing data? Defaults to NA}
 }
 \description{
 Plots water flow and watersheds

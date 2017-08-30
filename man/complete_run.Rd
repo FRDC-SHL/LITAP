@@ -40,6 +40,8 @@ below)}
 \item{end}{Character. If ending a run after a particular step, which step
 (see Details below)}
 
+\item{report}{Logical. Create html report of results?}
+
 \item{verbose}{Logical. Output extra progress messages.}
 
 \item{quiet}{Logical. Suppress all messages.}
