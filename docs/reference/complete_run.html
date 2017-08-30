@@ -85,9 +85,9 @@ and fill patterns</p>
     
 
     <pre class="usage"><span class='fu'>complete_run</span>(<span class='no'>file</span>, <span class='no'>nrow</span>, <span class='no'>ncol</span>, <span class='kw'>missing_value</span> <span class='kw'>=</span> -<span class='fl'>9999</span>, <span class='kw'>max_area</span> <span class='kw'>=</span> <span class='fl'>10</span>,
-  <span class='kw'>max_depth</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='kw'>folder_out</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>clean</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>xlim</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>ylim</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>continue</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>end</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+  <span class='kw'>max_depth</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='kw'>folder_out</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>clean</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>clim</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>rlim</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>continue</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>end</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>report</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -129,11 +129,11 @@ location of dem file if not specified</p></td>
 runs?</p></td>
     </tr>
     <tr>
-      <th>xlim</th>
+      <th>clim</th>
       <td><p>Numeric vector. Column limits if specifying a subset of the dem</p></td>
     </tr>
     <tr>
-      <th>ylim</th>
+      <th>rlim</th>
       <td><p>Numeric vector. Row limits if specifying a subset of the dem</p></td>
     </tr>
     <tr>
@@ -171,13 +171,13 @@ below)</p></td>
 <li><p><code>iwatersheds</code> (Calculating Inverted Watersheds)</p></li>
 <li><p><code>iwatershed_area</code> (Calculating Watershed Area)</p></li>
 <li><p><code>ilocal</code> (Initial Inverted Pit Removal)</p></li>
+<li><p><code>report</code> (Create the final report)</p></li>
 </ol>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='co'># Basic Run</span>
-<span class='fu'>not_run</span>({
+    <pre class="examples"><div class='input'><span class='fu'>not_run</span>({
+  <span class='co'># Basic Run</span>
   <span class='fu'>complete_run</span>(<span class='kw'>file</span> <span class='kw'>=</span> <span class='st'>"testElev.dbf"</span>, <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>100</span>)
 
   <span class='co'># Specify parameters for initial pit removal</span>

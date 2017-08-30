@@ -1,0 +1,225 @@
+---
+title: "Flow Plots"
+author: "Steffi LaZerte"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+---
+
+<style>
+.figure {
+  max-width: 100%;
+  margin: auto;
+}
+.table {
+  width: auto;
+  margin: auto;
+}
+</style>
+
+Flow plots are simply a way of visualizing what LITAP is doing under the hood.
+
+In the following examples, we will be using the output from the supplied "testELEV.dbf". You can find these files in the LITAP folder by using the `system.file()` function:
+
+```{r}
+library(LITAP)
+
+files <- system.file("extdata", "final", package = "LITAP")
+list.files(files, full.names = TRUE)
+```
+
+We will load the rds file (R data files) for the relevant dems. Note that in each of these dem files, the only thing that differs is how the watersheds are almalgamated, and the different flow directions to make this happen.
+
+```{r}
+initial_dem <- readRDS(list.files(files, pattern = "dem_initial.rds", full.names = TRUE))
+local_dem <- readRDS(list.files(files, pattern = "dem_local.rds", full.names = TRUE))
+pond_dem <- readRDS(list.files(files, pattern = "dem_pond.rds", full.names = TRUE))
+fill_dem <- readRDS(list.files(files, pattern = "dem_fill.rds", full.names = TRUE))
+inverted_dem <- readRDS(list.files(files, pattern = "dem_ilocal.rds", full.names = TRUE))
+
+local_stats <- readRDS(list.files(files, pattern = "test_local.rds", full.names = TRUE))
+```
+
+## Basic maps
+
+By default, the `flow_plot()` function displays relief maps, using the `terrain()` and `hillShade()` functions from the `raster` package. Note the outer border of dark grey, this represents unknown cells, as the relief calculations do not work on cells without neighbours.
+
+```{r}
+flow_plot(initial_dem)
+```
+
+Alternatively, you can plot elevation data directly.
+
+```{r}
+flow_plot(initial_dem, type = "elevation")
+```
+
+## Subsets
+
+You can zoom in on a particular area of interest by specifying row and column limits:
+
+```{r}
+flow_plot(initial_dem, type = "elevation", rlim = c(20, 30), clim = c(35, 45))
+```
+
+## Cell numbering
+
+You can number the cells in a plot with `seqno = TRUE`:
+
+```{r}
+flow_plot(initial_dem, type = "elevation", rlim = c(20, 30), clim = c(35, 45), 
+          seqno = TRUE)
+```
+
+If you're only interested in certain cells, specify which ones with `cells = c()` and `highlight = TRUE`
+
+```{r}
+flow_plot(initial_dem, type = "elevation", rlim = c(20, 30), clim = c(35, 45), 
+          seqno = TRUE, cells = c(3187:3193, 3336:3343), highlight = TRUE)
+```
+
+## Flow directions
+
+You can plot individual flow directions with `dir = TRUE`.
+
+```{r}
+flow_plot(initial_dem, type = "elevation", rlim = c(20, 30), clim = c(35, 45), 
+          dir = TRUE)
+```
+
+In combination with cell numbers
+
+```{r}
+flow_plot(initial_dem, type = "elevation", rlim = c(20, 30), clim = c(35, 45), 
+          dir = TRUE, seqno = TRUE)
+```
+
+Only for certain cells (this will show the entire flow path that a given cell is on)
+
+```{r}
+flow_plot(initial_dem, type = "elevation", rlim = c(20, 30), clim = c(35, 45), 
+          dir = TRUE, cells = c(3187:3193, 3336:3343))
+```
+
+Only for certain cells and show cell numbers
+
+```{r}
+flow_plot(initial_dem, type = "elevation", rlim = c(20, 30), clim = c(35, 45), 
+          dir = TRUE, seqno = TRUE, cells = c(3187:3193, 3336:3343))
+```
+
+Highlight the cells of interest
+
+```{r}
+flow_plot(initial_dem, type = "elevation", rlim = c(20, 30), clim = c(35, 45), 
+          dir = TRUE, seqno = TRUE, cells = c(3187:3193, 3336:3343), highlight = TRUE)
+```
+
+## Flow directions by upslope area
+
+You can filter the flow directions to show only those with an upslope area greater than some threshold:
+
+```{r}
+flow_plot(initial_dem, type = "elevation", dir = TRUE, upslope_threshold = 500)
+```
+
+### Comparing different upslope thresholds:
+
+```{r, echo = FALSE}
+gridExtra::grid.arrange(flow_plot(initial_dem, type = "elevation", dir = TRUE, upslope_threshold = 0) + ggplot2::labs(title = "0"),
+                        flow_plot(initial_dem, type = "elevation", dir = TRUE, upslope_threshold = 10) + ggplot2::labs(title = "10"),
+                        flow_plot(initial_dem, type = "elevation", dir = TRUE, upslope_threshold = 20) + ggplot2::labs(title = "20"),
+                        flow_plot(initial_dem, type = "elevation", dir = TRUE, upslope_threshold = 40) + ggplot2::labs(title = "75"),
+                        flow_plot(initial_dem, type = "elevation", dir = TRUE, upslope_threshold = 75) + ggplot2::labs(title = "200"),
+                        flow_plot(initial_dem, type = "elevation", dir = TRUE, upslope_threshold = 500) + ggplot2::labs(title = "500"),
+                        ncol = 3)
+```
+
+### Ridge Lines
+
+To look at ridge lines, use the inverted dem files
+
+```{r}
+flow_plot(inverted_dem, type = "elevation", dir = TRUE, upslope_threshold = 250)
+```
+
+
+## Watersheds
+
+You can also highlight watersheds
+
+```{r}
+flow_plot(db = initial_dem, type = "elevation", shed = TRUE, shed_type = "initial")
+```
+
+### Watershed pits
+
+```{r}
+flow_plot(db = initial_dem, type = "elevation", shed = TRUE, shed_type = "initial", 
+          pits = TRUE)
+```
+
+
+### Comparing watersheds at different stages of pit removal
+
+- Initial = no removal
+- Local = smoothing, only small pits removed
+- Pond = looking at overflow in 2nd pit removal process
+- Fill = looking at overflow in a second way in 3rd pit removal process
+
+```{r, echo = FALSE}
+gridExtra::grid.arrange(
+  flow_plot(db = initial_dem, type = "elevation", shed = TRUE, shed_type = "initial") + 
+    ggplot2::labs(title = "Initial Watersheds") + ggplot2::theme(plot.margin = ggplot2::unit(c(5, 1, 5, 1), "pt")),
+  flow_plot(db = local_dem, type = "elevation", shed = TRUE, shed_type = "local") + 
+    ggplot2::labs(title = "Local Watersheds") + ggplot2::theme(plot.margin = ggplot2::unit(c(5, 1, 5, 1), "pt")),
+  flow_plot(db = pond_dem, type = "elevation", shed = TRUE, shed_type = "pond") + 
+    ggplot2::labs(title = "Pond Watersheds") + ggplot2::theme(plot.margin = ggplot2::unit(c(5, 1, 5, 1), "pt")),
+  flow_plot(db = fill_dem, type = "elevation", shed = TRUE, shed_type = "fill") + 
+    ggplot2::labs(title = "Fill Watersheds") + ggplot2::theme(plot.margin = ggplot2::unit(c(5, 1, 5, 1), "pt")),
+  ncol = 2)
+```
+
+### Watersheds by flow paths
+
+```{r}
+flow_plot(db = initial_dem, type = "elevation", shed = TRUE, 
+          shed_type = "initial", dir = TRUE)
+```
+
+Subsets still apply
+
+```{r}
+flow_plot(db = initial_dem, type = "elevation", shed = TRUE, 
+          rlim = c(30,60), clim = c(45,75),
+          shed_type = "initial", dir = TRUE)
+```
+
+### Look at how watersheds combined in the upper right corner
+
+```{r, echo = FALSE}
+gridExtra::grid.arrange(
+  flow_plot(db = initial_dem, type = "elevation", shed = TRUE, shed_type = "initial", dir = TRUE, rlim = c(10, 45), clim = c(85, 115)) + 
+    ggplot2::labs(title = "Initial Watersheds") + ggplot2::theme(plot.margin = ggplot2::unit(c(5, 1, 5, 1), "pt")),
+  flow_plot(db = local_dem, type = "elevation", shed = TRUE, shed_type = "local", dir = TRUE, rlim = c(10, 45), clim = c(85, 115)) + 
+    ggplot2::labs(title = "Local Watersheds") + ggplot2::theme(plot.margin = ggplot2::unit(c(5, 1, 5, 1), "pt")),
+  flow_plot(db = pond_dem, type = "elevation", shed = TRUE, shed_type = "pond", dir = TRUE, rlim = c(10, 45), clim = c(85, 115)) + 
+    ggplot2::labs(title = "Pond Watersheds") + ggplot2::theme(plot.margin = ggplot2::unit(c(5, 1, 5, 1), "pt")),
+  flow_plot(db = fill_dem, type = "elevation", shed = TRUE, shed_type = "fill", dir = TRUE, rlim = c(10, 45), clim = c(85, 115)) + 
+    ggplot2::labs(title = "Fill Watersheds") + ggplot2::theme(plot.margin = ggplot2::unit(c(5, 1, 5, 1), "pt")),
+  ncol = 2)
+```
+
+### Look at pour points
+
+```{r}
+flow_plot(db = local_dem, type = "elevation", shed = TRUE, shed_type = "local", 
+          stats = local_stats)
+```
+
+Take a closer look  
+
+```{r}
+flow_plot(db = local_dem, type = "elevation", shed = TRUE, shed_type = "local",
+          rlim = c(0, 40), clim = c(110, 150), stats = local_stats)
+```
+

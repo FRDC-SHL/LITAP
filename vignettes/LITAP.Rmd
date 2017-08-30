@@ -1,0 +1,150 @@
+---
+title: "Mapping flow: Getting Started"
+author: "Steffi LaZerte"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{litap}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+<style>
+.figure {
+  max-width: 100%;
+  margin: auto;
+}
+.table {
+  width: auto;
+  margin: auto;
+}
+</style>
+
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(fig.width = 15, fig.height = 10, tidy = TRUE, eval = FALSE)
+```
+
+## Basic run
+
+First load the LITAP package:
+  
+```{r}
+library(LITAP)
+```
+
+The only required parameters are the location of the dem file (`file`) and the number of rows and the number of columns (`nrow` and `ncol`) in the dem file.
+
+```{r}
+complete_run(file = "testElev.dem", nrow = 100, ncol = 100)
+```
+
+## Pit removal parameters
+
+The maximum size of initial watersheds which will be removed in the first step can also be specified:
+
+- `max_area` represents the maximum pit area (area of a watershed below it's pour point) of a watershed to be removed in the initial step
+- `max_depth` represents the maximum depth of a pit (difference between the elevation of the pour point and the elevation of the pit centre) of a watershed to be removed in the initial step
+
+```{r}
+complete_run(file = "testElev.dem", nrow = 100, ncol = 100, 
+             max_area = 5, max_depth = 0.2)
+```
+
+## Output folders
+
+A LITAP run saves all output into three folders: `backup`, `dbf`, and `final`.  
+
+- `backup` folder contains .rds files (R data files) used to resume a run from an intermediate point. These shouldn't be used by the user.
+- `dbf` folder contains .dbf files which mimic the output of the original LandMapR program
+- `final` folder contains .csv and .rds files of the output, similar to that produced by the LandMapR program but designed for ease of use in R.
+
+LITAP will automatically prepend the run name according to the input file (e.g. in these examples it would be "test")
+
+You can specify where these output folders/files should be saved with `folder_out`. Otherwise the folders will be created in the folder of the original Elev.dem file, which may not be desirable. Note that folder locations are relative to working directory of the R session.
+
+```{r}
+complete_run(file = "testElev.dem", nrow = 100, ncol = 100, folder_out = "./Output/")
+```
+
+To clean up any old files before conducting a new run, use `clean = TRUE`. __Careful, this will remove all backup files from previous runs making it impossible to resume a run!__
+
+```{r}
+complete_run(file = "testElev.dem", nrow = 100, ncol = 100, folder_out = "./Output/", clean = TRUE)
+```
+
+## Subset of input dem
+
+To conduct a run on only a subset of the dem you can specify row and column limits (`rlim` and `clim` respectively):
+
+```{r}
+complete_run(file = "testElev.dem", nrow = 100, ncol = 100, 
+             rlim = c(50,100), clim = c(50,100))
+```
+
+## Output messages
+
+To prevent detailed output, use `verbose = FALSE`:
+
+```{r}
+complete_run(file = "testElev.dem", nrow = 100, ncol = 100, verbose = FALSE)
+```
+
+To prevent all output, use `quiet = TRUE`:
+
+```{r}
+complete_run(file = "testElev.dem", nrow = 100, ncol = 100, quiet = TRUE)
+```
+
+## Resuming a run
+Each run of LITAP goes through 10 steps. A run can be halted or resumed at step by specifying the corresponding variable.
+
+
+For example, to start with calculating pond statistics (step 5) and continue to the end of the run:
+
+```{r}
+complete_run(file = "testElev.dem", nrow = 100, ncol = 100, 
+             continue = "pond")
+```
+
+Or to start with pond statistics and to end just after calculating fill statistics (step 6):
+
+```{r}
+complete_run(file = "testElev.dem", nrow = 100, ncol = 100, 
+             continue = "pond", end = "fill")
+```
+
+## Steps
+
+The variable in brackets defines the argument to use for continuing and ending a run.
+
+1. __Calculating Directions__ (`directions`)
+Calculating the flow direction of each cell into a neighbouring cell 
+
+2. __Calculating Watersheds__ (`watersheds`)
+From the flow directions, combine cells into initial watersheds
+
+3. __Calculating Watershed Area__ (`watershed_area`)
+Calculate the total area of each watershed
+
+4. __Initial Pit Removal__ (`local`)
+Remove pits which are smaller than the maximum area and depth (and which are not edge pits). These pits are removed into neighbouring pits.
+
+5. __Calculating Pond Shed Statistics Second Pit Removal)__ (`pond`)
+Calculate how pits would overflow into each other
+
+6. __Calculating Fill Shed Statistics (Third Pit Removal)__ (`fill`)
+
+7. __Calculating Directions on Inverted DEM__ (`inverted`)
+Reverse the elevations of the original DEM file. This will make all troughs into peaks, etc. Then calculate the flow direction of each cell into a neighbouring cell. Because the DEM is inverted, this will track upslope flow
+
+8. __Calculating Inverted Watersheds__ (`iwatersheds`)
+From the flow directions, combine cells into initial watersheds
+
+9. __Calculating Inverted Watershed Area__ (`iwatershed_area`)
+Calculate the total area of each watershed
+
+10. __Initial Inverted Pit Removal__ (`ilocal`)
+Remove pits which are smaller than the maximum area and depth (and which are not edge pits). These pits are removed into neighbouring pits. Calculate watershed statistics on these resulting local pits. Because the DEM is inverted, this will highlight peaks and flow down from these peaks.
+
+
