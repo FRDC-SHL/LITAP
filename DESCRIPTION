@@ -15,6 +15,7 @@ Depends:
     magrittr(>= 1.5)
 Imports:
     dplyr (>= 0.7.0),
+    DT (>= 0.2),
     foreign (>= 0.8.67),
     ggplot2 (>= 2.2.1),
     gridExtra(>= 2.2.1),
