@@ -96,7 +96,7 @@ complete_run <- function(file, nrow, ncol, missing_value = -9999,
   if(clean) lapply(out_locs, function(x) file.remove(list.files(x, pattern = f, full.names = TRUE)))
   out_locs <- lapply(out_locs, function(x) paste0(x, f))
 
-  if(log) file.remove(log_file)
+  if(log && file.exists(log_file)) file.remove(log_file)
 
   start <- Sys.time()
 
@@ -137,7 +137,7 @@ complete_run <- function(file, nrow, ncol, missing_value = -9999,
   }
 
   if(end == "directions") {
-    if(!quiet) run_time(start, log)
+    if(!quiet) run_time(start, log, log_file)
     return()
   }
 
@@ -157,7 +157,7 @@ complete_run <- function(file, nrow, ncol, missing_value = -9999,
   }
 
   if(end == "watersheds") {
-    if(!quiet) run_time(start, log)
+    if(!quiet) run_time(start, log, log_file)
     return(db_shed)
   }
 
@@ -183,7 +183,7 @@ complete_run <- function(file, nrow, ncol, missing_value = -9999,
 
 
   if(end == "watershed_area") {
-    if(!quiet) run_time(start, log)
+    if(!quiet) run_time(start, log, log_file)
     return(db_initial)
   }
 
@@ -211,7 +211,7 @@ complete_run <- function(file, nrow, ncol, missing_value = -9999,
   }
 
   if(end == "local") {
-    if(!quiet) run_time(start, log)
+    if(!quiet) run_time(start, log, log_file)
     return()
   }
 
@@ -237,7 +237,7 @@ complete_run <- function(file, nrow, ncol, missing_value = -9999,
   }
 
   if(end == "pond") {
-    if(!quiet) run_time(start, log)
+    if(!quiet) run_time(start, log, log_file)
     return()
   }
 
@@ -289,7 +289,7 @@ complete_run <- function(file, nrow, ncol, missing_value = -9999,
   }
 
   if(end == "fill") {
-    if(!quiet) run_time(start, log)
+    if(!quiet) run_time(start, log, log_file)
     return()
   }
 
@@ -318,7 +318,7 @@ complete_run <- function(file, nrow, ncol, missing_value = -9999,
   }
 
   if(end == "idirections") {
-    if(!quiet) run_time(start, log)
+    if(!quiet) run_time(start, log, log_file)
     return()
   }
 
@@ -337,7 +337,7 @@ complete_run <- function(file, nrow, ncol, missing_value = -9999,
   }
 
   if(end == "iwatersheds") {
-    if(!quiet) run_time(start, log)
+    if(!quiet) run_time(start, log, log_file)
     return()
   }
 
@@ -356,7 +356,7 @@ complete_run <- function(file, nrow, ncol, missing_value = -9999,
   }
 
   if(end == "iwatershed_area") {
-    if(!quiet) run_time(start, log)
+    if(!quiet) run_time(start, log, log_file)
     return()
   }
 
@@ -399,11 +399,11 @@ complete_run <- function(file, nrow, ncol, missing_value = -9999,
     }
   }
 
-  if(!quiet) run_time(start, log)
+  if(!quiet) run_time(start, log, log_file)
 
 }
 
-run_time <- function(start, log) {
+run_time <- function(start, log, log_file) {
   stop <- Sys.time()
   runtime <- round(difftime(stop, start, units = "min"), 2)
   message("Run took: ", runtime, " min")
