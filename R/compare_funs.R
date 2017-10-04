@@ -152,7 +152,7 @@ compare <- function(orig, new) {
   all_cols <- all_cols[!(all_cols %in% c("PitRow", "PitCol","OutRow", "OutCol", "InRow", "InCol"))]
   all_cols <- all_cols[!(all_cols %in% c("PreVol", "Stage", "Visited", "Removed"))]
   for(col_name in all_cols){
-    if(!all(dplyr::pull(orig, col_name) == dplyr::pull(new, col_name))) {
+    if(!all(dplyr::pull(orig, col_name) == dplyr::pull(new, col_name), na.rm = TRUE)) {
       msg <- paste0("Not all ", col_name, " the same")
       if(col_name == "ShedArea") if(abs(max(orig$ShedArea - new$ShedArea)) < 5) {msg <- "Shed area not the same, but within 5 cells"; small <- c(small, col_name)}
       if(col_name == "PitArea") if(abs(max(orig$PitArea - new$PitArea)) < 5) {msg <- "Pit area not the same, but within 5 cells"; small <- c(small, col_name)}
