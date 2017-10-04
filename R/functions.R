@@ -261,6 +261,73 @@ edge_pit <- function(a, db) {
   any(is.na(db$elev[a]))
 }
 
+nb_values <- function(db, max_cols, col = "elev", db_sub = NULL, format = "long") {
+
+  if(is.null(db_sub)) db_sub <- db
+
+  for(i in 1:9){
+    if(i == 1) seqno <- db_sub$seqno + (max_cols - 1)
+    if(i == 2) seqno <- db_sub$seqno + max_cols
+    if(i == 3) seqno <- db_sub$seqno + (max_cols + 1)
+    if(i == 4) seqno <- db_sub$seqno - 1
+    if(i == 5) seqno <- db_sub$seqno
+    if(i == 6) seqno <- db_sub$seqno + 1
+    if(i == 7) seqno <- db_sub$seqno - (max_cols + 1)
+    if(i == 8) seqno <- db_sub$seqno - max_cols
+    if(i == 9) seqno <- db_sub$seqno - (max_cols - 1)
+
+
+    seqno[seqno < 1 | seqno > max(db$seqno)] <- NA
+
+    for(a in col) db_sub[, paste0(a, "_n", i)] <- db[seqno, a]
+  }
+
+  if(format == "long") {
+    db_sub <- tidyr::gather(db_sub, n, value, dplyr::matches(paste0("(", paste0(col, collapse = "_n[0-9]{1})|("), "_n[0-9]{1})"))) %>%
+      tidyr::separate(n, into = c("type", "n"), sep = -2, convert = TRUE) %>%
+      dplyr::mutate(n = as.numeric(n)) %>%
+      tidyr::spread(type, value)
+  }
+
+  return(db_sub)
+}
+
+calc_seq <- function(d, max_cols) {
+  if(is.na(d)) return(NA)
+  if(d == 1) return(max_cols - 1)
+  if(d == 2) return(max_cols)
+  if(d == 3) return(max_cols + 1)
+  if(d == 4) return(-1)
+  if(d == 5) return(0)
+  if(d == 6) return(1)
+  if(d == 7) return(-(max_cols + 1))
+  if(d == 8) return(-max_cols)
+  if(d == 9) return(-(max_cols - 1))
+}
+
+flow_values <- function(db, n, col = "elev", db_sub = NULL) {
+  if(is.null(db_sub)) db_sub <- db
+ for(a in col) db_sub[, paste0(a, "_next")] <- db[db_sub$seqno + sapply(db_sub$ldir, calc_seq, n = n), a]
+ return(db_sub)
+}
+
+
+finddir2 <- function(db) {
+  db %>%
+    dplyr::mutate(elev_diff = elev - elev_n) %>%
+    dplyr::mutate(elev_diff = dplyr::if_else(n %in% c(1, 3, 7, 9),
+                                             elev_diff/sqrt(2), elev_diff)) %>%
+    dplyr::group_by(seqno) %>%
+    dplyr::mutate(max_slope = max(elev_diff, na.rm = TRUE),
+                  ldir = n[elev_diff == max_slope & max_slope > 0 & !is.na(elev_diff)][1]) %>%
+    dplyr::ungroup() %>%
+    dplyr::select(-elev_n, -max_slope, -n, -elev_diff) %>%
+    dplyr::distinct() %>%
+    dplyr::mutate(ldir = as.numeric(stringr::str_extract(ldir, "[0-9]{1}")),
+                  ldir = replace(ldir, is.na(ldir) & !is.na(elev), 5),
+                  flatcell = (ldir == 5))
+}
+
 
 # Calculate the direction of flow for an individual cell given its neighbours
 finddir <- function(n, verbose = FALSE){
@@ -292,6 +359,39 @@ finddir <- function(n, verbose = FALSE){
   }
 }
 
+flatout2 <- function(db, verbose = FALSE){
+
+  # Confirm cell is NOT missing (else return NA)
+  if(nrow(n) > 0 && !is.na(n$elev[5])){
+
+    # Add in local flow directions
+    n <- dplyr::left_join(n, dplyr::select(db, seqno, ldir), by = "seqno")
+
+    # Confirm that IS flat (else return old ldir)
+    if(n$ldir[5] == 5) {
+
+      n <- n[!is.na(n$elev), ]
+      n$slope <- n$elev[n$index == 5] - n$elev
+
+      # Find FIRST neighbour with same elevation and valid flow direction that isn't right back
+      new_n <- n[n$slope == 0 & n$ldir !=5 & n$index != (10 - n$ldir) & n$index != 5, ][1, ]
+
+      # new_n <- n %>%
+      #   dplyr::filter(slope == 0,          # Same elevation
+      #                 ldir != 5,           # Isn't flat itself
+      #                 index != 10 - ldir,  # Doesn't flow directly back
+      #                 index != 5)          # Isn't the cell of interest
+      # new_n <- new_n[1, ]
+
+      # If there is a candidate, return the new option, else return the original
+      if(nrow(new_n) > 0 && !is.na(new_n$index)) return(new_n$index)  else return(n$ldir[n$index == 5])
+    } else return(n$ldir[n$index == 5])
+  } else {
+    # If on an edge, return NA
+    return(NA)
+  }
+}
+
 flatout <- function(n, db, verbose = FALSE){
 
   # Confirm cell is NOT missing (else return NA)
@@ -302,10 +402,6 @@ flatout <- function(n, db, verbose = FALSE){
 
     # Confirm that IS flat (else return old ldir)
     if(n$ldir[5] == 5) {
-      if(verbose) matrix(n$seqno, nrow = 3, ncol = 3, byrow = TRUE)
-      if(verbose) matrix(n$elev, nrow = 3, ncol = 3, byrow = TRUE)
-      if(verbose) matrix(n$index, nrow = 3, ncol = 3, byrow = TRUE)
-      if(verbose) matrix(n$ldir, nrow = 3, ncol = 3, byrow = TRUE)
 
       n <- n[!is.na(n$elev), ]
       n$slope <- n$elev[n$index == 5] - n$elev
