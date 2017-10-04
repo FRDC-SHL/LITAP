@@ -1,3 +1,120 @@
+
+#' @export
+calc_ddir2 <- function(db, verbose = FALSE, n_clusters = 7) {
+
+  # Surround in impossible elevation
+  db <- add_buffer(db) %>%
+    dplyr::arrange(seqno) %>%
+    dplyr::mutate(elev_orig = elev) # make a backup of the original elevation data
+
+  # Calculate 8 columns reflecting the elevation of 'shifted' directions (neighbours)
+  db <- nb_values(db, max(db$col), "elev")
+
+  db1 <- finddir2(db) # Calc Flow direction
+
+  # Check for flat plateaus
+  # - get neighbouring directions
+
+  db_flats <- db1 %>%
+    dplyr::filter(flatcell == TRUE) %>%
+    nb_values(db = db1, max_cols = max(db$col), col = c("ldir", "elev"), db_sub = .) %>%
+    dplyr::group_by(seqno)
+
+  end <- FALSE
+  a <- 0
+  while(!end) {
+    if(verbose) message("     - Fixing flat plateaus round ", a <- a + 1, "...")
+
+    # Caclualate change in ldir
+    db_flats <- db_flats %>%
+      dplyr::mutate(elev_diff = elev[1] - elev_n) %>%
+      dplyr::summarize(ldir = n[elev_diff >= 0 & !is.na(elev_diff) &
+                                ldir_n != 5 & !is.na(ldir_n)][1]) %>%
+      dplyr::filter(!is.na(ldir))
+
+    if(nrow(db_flats) == 0) end <- TRUE
+
+    if(!end) {
+      # Change db1
+      db1$ldir[db_flats$seqno] <- db_flats$ldir
+
+      # Recalculate neighbours
+      db_flats <- db1 %>%
+        dplyr::filter(!is.na(ldir) & ldir == 5) %>%
+        nb_values(db = db1, max_cols = max(db$col), col = c("ldir", "elev"), db_sub = .) %>%
+        dplyr::group_by(seqno)
+    }
+  }
+
+  # Deal with flow into depressions (flatin)
+  # - Get the area of the depression, assign middle cell to a slightly lower elevation to break ties
+
+  # Get patches of pit cells
+  db_flats <- db1 %>%
+    dplyr::filter(ldir == 5 & !is.na(ldir)) %>%
+    nb_values(db = db1, max_cols = max(db$col), col = c("seqno", "ldir"), db_sub = .) %>%
+    dplyr::filter(ldir_n == 5 & !is.na(ldir_n) & n != 5) %>%
+    dplyr::mutate(patch = NA) %>%
+    dplyr::arrange(seqno)
+
+  p_n <- 1
+  for(i in 1:nrow(db_flats)) {
+    cell <- db_flats$seqno[i]
+    if(is.na(db_flats$patch[i])) {
+      db_flats$patch[db_flats$seqno == cell] <- p_n
+      p_n <- p_n + 1
+    }
+    p <- db_flats$patch[i]
+    cells_n <- unique(db_flats$seqno[db_flats$seqno_n %in% cell])
+    db_flats$patch[db_flats$seqno %in% cells_n] <- p
+  }
+
+  # Get middle cell in a patch
+  pit_centres <- db_flats %>%
+    dplyr::select(-n, -ldir_n, -seqno_n) %>%
+    dplyr::distinct() %>%
+    dplyr::group_by(patch) %>%
+    dplyr::mutate(centre = list(c(round(median(col)), round(median(row)))),
+                  cell = purrr::map2(col, row, ~c(.x, .y)),
+                  dist = purrr::map2_dbl(centre, cell, ~sqrt(sum((.y - .x)^2))),
+                  dist_min = min(dist, na.rm = TRUE),
+                  n_p = length(seqno)) %>%
+    dplyr::summarize(seqno = seqno[dist == dist_min][1],
+                     n_p = unique(n_p)) %>%
+    dplyr::filter(n_p > 1) %>%
+    dplyr::pull(seqno)
+
+
+  # Assign lower elevation to middle cell
+  db1$elev[pit_centres] <- db1$elev[pit_centres] - 0.1
+  #db_flats$elev[db_flats$seqno %in% pit_centres] <- db_flats$elev[db_flats$seqno %in% pit_centres] - 0.1
+
+  # Recalculate flow directions for all flat cells AND for any cell touching a cell with a new elev
+  new_flow <- db1 %>%
+    dplyr::filter(ldir == 5 & !is.na(ldir)) %>%
+    nb_values(db1, max_cols = max(db$col), col = "seqno", db_sub = .) %>%
+    dplyr::pull(seqno_n) %>%
+    unique() %>%
+    db1[., ] %>%
+    nb_values(db1, max_cols = max(db$col), col = "elev", db_sub = .) %>%
+    finddir2()
+
+  db1$ldir[new_flow$seqno] <- new_flow$ldir
+
+  # Get flow direction (seqno of next cell)
+  db1 <- flow_values(db1, n = max(db$col), col = "seqno") %>%
+    dplyr::rename(drec = seqno_next)
+
+  # Fix circular flow among flat cells
+  # Shouldn't be necessary anymore, as specified lowest cell already?
+
+  # Check for side-by-side pits, replace so one flows into the other
+  # Shouldn't be necessary anymore, as specified lowest cell already?
+
+  return(db1)
+}
+
+
 #' @export
 calc_ddir <- function(db, verbose = FALSE, n_clusters = 7) {
 
