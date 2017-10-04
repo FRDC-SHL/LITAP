@@ -9,6 +9,51 @@ get_track <- function(shed_list, track) {
 }
 
 #' @export
+calc_shed4 <- function(db, verbose = FALSE) {
+
+  npits <- sum(db$ldir == 5, na.rm = TRUE)
+
+  db <- db %>%
+    dplyr::mutate(shedno = NA,
+                  shedno = replace(shedno, ldir == 5 & !is.na(ldir), 1:npits))
+
+  # Assigne each cell to a watershed by climbing UP
+  n1 <- length(db$shedno[!is.na(db$shedno)])
+  n2 <- 0
+  while(n1 != n2){
+    db <- dplyr::mutate(db, shedno = db$shedno[db$drec])
+    n2 <- n1
+    n1 <- length(db$shedno[!is.na(db$shedno)])
+  }
+
+  # Relabel to match top down process
+  shed_order <- db %>%
+    dplyr::arrange(dplyr::desc(elev), seqno) %>%
+    dplyr::filter(!is.na(shedno)) %>%
+    dplyr::pull(shedno) %>%
+    unique()
+
+  db <- dplyr::mutate(db, shedno = as.numeric(as.character(factor(shedno, levels = shed_order, labels = 1:npits))))
+
+  # Calculate upslope flow for each cell by watershed
+  if(verbose) message("  Getting upslope flow and area")
+  db <- db %>%
+    dplyr::mutate(sheds = dplyr::if_else(is.na(shedno), FALSE, TRUE)) %>%
+    dplyr::arrange(dplyr::desc(elev)) %>%
+    tidyr::nest(-shedno, .key = "db_w") %>%
+    dplyr::mutate(db_w = purrr::map2(db_w, shedno, ~get_upslope(.x, .y[1]))) %>%
+    tidyr::unnest(db_w) %>%
+    dplyr::arrange(seqno) %>%
+    dplyr::mutate(initial_shed = shedno) %>%
+    # Calculate upslope area
+    dplyr::mutate(upslope_n = purrr::map_dbl(upslope, ~ifelse(!is.null(.x), length(.x), NA))) %>%
+    dplyr::select(-upslope)
+
+  return(db)
+}
+
+
+#' @export
 calc_shed3 <- function(db, verbose = FALSE) {
 
   db_orig <- db

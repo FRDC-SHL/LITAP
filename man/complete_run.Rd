@@ -6,7 +6,7 @@
 \usage{
 complete_run(file, nrow, ncol, missing_value = -9999, max_area = 10,
   max_depth = 0.5, folder_out = NULL, clean = FALSE, clim = NULL,
-  rlim = NULL, continue = NULL, end = NULL, report = TRUE,
+  rlim = NULL, continue = NULL, end = NULL, log = TRUE, report = TRUE,
   verbose = FALSE, quiet = FALSE)
 }
 \arguments{
@@ -40,6 +40,8 @@ below)}
 \item{end}{Character. If ending a run after a particular step, which step
 (see Details below)}
 
+\item{log}{Logical. Create log file recording progress?}
+
 \item{report}{Logical. Create html report of results?}
 
 \item{verbose}{Logical. Output extra progress messages.}
@@ -57,13 +59,11 @@ For resuming or ending a run, \code{continue} or \code{end} must be
   \enumerate{
     \item \code{directions} (Calculating Directions)
     \item \code{watersheds} (Calculating Watersheds)
-    \item \code{watershed_area} (Calculating Watershed Area
     \item \code{local} (Initial Pit Removal)
     \item \code{pond} (Calculating Pond Shed Statistics - Second Pit Removal)
     \item \code{fill} (Calculating Fill Shed Statistics - Third Pit Removal)
     \item \code{inverted} (Calculating Directions on Inverted DEM)
     \item \code{iwatersheds} (Calculating Inverted Watersheds)
-    \item \code{iwatershed_area} (Calculating Watershed Area)
     \item \code{ilocal} (Initial Inverted Pit Removal)
     \item \code{report} (Create the final report)
   }

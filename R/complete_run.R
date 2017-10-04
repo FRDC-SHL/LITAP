@@ -32,13 +32,11 @@
 #'   \enumerate{
 #'     \item \code{directions} (Calculating Directions)
 #'     \item \code{watersheds} (Calculating Watersheds)
-#'     \item \code{watershed_area} (Calculating Watershed Area
 #'     \item \code{local} (Initial Pit Removal)
 #'     \item \code{pond} (Calculating Pond Shed Statistics - Second Pit Removal)
 #'     \item \code{fill} (Calculating Fill Shed Statistics - Third Pit Removal)
 #'     \item \code{inverted} (Calculating Directions on Inverted DEM)
 #'     \item \code{iwatersheds} (Calculating Inverted Watersheds)
-#'     \item \code{iwatershed_area} (Calculating Watershed Area)
 #'     \item \code{ilocal} (Initial Inverted Pit Removal)
 #'     \item \code{report} (Create the final report)
 #'   }
@@ -69,10 +67,12 @@ complete_run <- function(file, nrow, ncol, missing_value = -9999,
   if(is.null(continue)) continue <- ""
   if(is.null(end)) end <- ""
 
-  cont_options <- c("", "directions", "watersheds", "watershed_area",
+  cont_options <- c("", "directions", "watersheds",
                     "local", "pond", "fill",
-                    "inverted", "iwatersheds", "iwatershed_area",
+                    "inverted", "iwatersheds",
                     "ilocal", "report")
+
+  cont_reg <- c("", "directions", "watersheds", "local", "pond", "fill")
 
   if(!(continue %in% cont_options) | !(end %in% cont_options)) stop("continue/end must be one of '", paste0(cont_options[-1], collapse = "', '"), "'", call. = FALSE)
 
@@ -146,10 +146,16 @@ complete_run <- function(file, nrow, ncol, missing_value = -9999,
   if(!quiet) message("CALCULATING WATERSHEDS")
   if(continue == "watersheds") db_dir <- read_shed(out_locs$backup_out, "backup_dir")
   if(continue %in% c("", "watersheds")) {
+
     sub_start <- Sys.time()
     if(log) write(paste0("Started calculating watersheds at: ", sub_start), file = log_file, append = TRUE)
-    db_shed <- calc_shed4(db_dir)
-    save_all(locs = out_locs, data = list("db" = db_shed), name = "shed")
+
+    db_initial$db <- calc_shed4(db_dir)
+    # Calc stats for vol2fl later
+    db_initial$stats <- pit_stat(db_initial$db) %>%
+      out_stat()
+    save_all(locs = out_locs, data = list("db" = db_initial$db, "stats" = db_initial$stats), name = "initial")
+
     if(log) write(paste0("  Total time: ", round(difftime(Sys.time(), sub_start, units = "min"), 2), "\n"), file = log_file, append = TRUE)
   } else {
     if(!quiet) message("  Skipping")
@@ -158,40 +164,13 @@ complete_run <- function(file, nrow, ncol, missing_value = -9999,
 
   if(end == "watersheds") {
     if(!quiet) run_time(start, log, log_file)
-    return(db_shed)
-  }
-
-  # Calculate watershed area ----------------------------------------------------
-  if(!quiet) message("CALCULATING WATERSHEDS AREA")
-  if(continue == "watershed_area") {
-    db_shed <- read_shed(out_locs$backup_out, "backup_shed")
-  }
-  if(continue %in% c("", "watersheds", "watershed_area")) {
-    sub_start <- Sys.time()
-    if(log) write(paste0("Started calculating watershed area at: ", sub_start), file = log_file, append = TRUE)
-    db_initial <- list()
-    db_initial$db <- calc_ups(db_shed)
-    # Calc stats for vol2fl later
-    db_initial$stats <- pit_stat(db_initial$db) %>%
-      out_stat()
-    save_all(locs = out_locs, data = list("db" = db_initial$db, "stats" = db_initial$stats), name = "initial")
-    if(log) write(paste0("  Total time: ", round(difftime(Sys.time(), sub_start, units = "min"), 2), "\n"), file = log_file, append = TRUE)
-  } else {
-    if(!quiet) message("  Skipping")
-    if(log) write("Skipping watershed area\n", log_file, append = TRUE)
-  }
-
-
-  if(end == "watershed_area") {
-    if(!quiet) run_time(start, log, log_file)
     return(db_initial)
   }
-
 
   # Remove initial pits --------------------------------------------------------
   if(!quiet) message("REMOVING INITIAL PITS")
   if(continue == "local") db_initial <- read_shed(out_locs$backup_out, "backup_initial")
-  if(continue %in% c("", "watersheds", "watershed_area", "local")) {
+  if(continue %in% c("", "watersheds", "local")) {
     sub_start <- Sys.time()
     if(log) write(paste0("Started removing initial pits at: ", sub_start), file = log_file, append = TRUE)
 
@@ -218,7 +197,7 @@ complete_run <- function(file, nrow, ncol, missing_value = -9999,
   # Calc pond Sheds ---------------------------------------------------------
   if(!quiet) message("CALCULATING POND (GLOBAL) WATERSHEDS")
   if(continue == "pond") db_local <- read_shed(out_locs$backup_out, "backup_local")
-  if(continue %in% c("", "watersheds", "watershed_area", "local", "pond")) {
+  if(continue %in% c("", "watersheds", "local", "pond")) {
     sub_start <- Sys.time()
     if(log) write(paste0("Started calculating pond watersheds at: ", sub_start), file = log_file, append = TRUE)
     if(length(unique(db_local$db$shedno[!is.na(db_local$db$shedno)])) > 1){
@@ -249,8 +228,7 @@ complete_run <- function(file, nrow, ncol, missing_value = -9999,
   }
 
   if(!quiet) message("CALCULATING FILL PATTERNS")
-  if(continue %in% c("", "watersheds", "watershed_area", "local",
-                     "pond", "fill")) {
+  if(continue %in% c("", "watersheds", "local", "pond", "fill")) {
     sub_start <- Sys.time()
     if(log) write(paste0("Started calculating fill watersheds at: ", sub_start), file = log_file, append = TRUE)
     if(length(unique(db_local$db$shedno[!is.na(db_local$db$shedno)])) > 1){
@@ -295,8 +273,6 @@ complete_run <- function(file, nrow, ncol, missing_value = -9999,
 
   # Inverted DEM --------------------------------------------------------------
 
-  cont_reg <- c("", "watersheds", "watershed_area", "local",
-                "pond", "fill")
 
   if(!quiet) message("INVERTING DEM")
   if(!quiet) message("CALCULATING INVERTED DIRECTIONS")
@@ -306,9 +282,9 @@ complete_run <- function(file, nrow, ncol, missing_value = -9999,
     if(log) write(paste0("Started calculating inverted directions at: ", sub_start), file = log_file, append = TRUE)
     db_invert <- invert(db_start)
 
-  # Inverted Directions --------------------------------------------------------
+    # Inverted Directions --------------------------------------------------------
 
-    db_idir <- calc_ddir(db_invert, verbose = verbose)
+    db_idir <- calc_ddir2(db_invert, verbose = verbose)
     save_all(locs = out_locs, data = list("db" = db_idir), name = "idir")
     if(log) write(paste0("  Total time: ", round(difftime(Sys.time(), sub_start, units = "min"), 2), "\n"), file = log_file, append = TRUE)
 
@@ -328,8 +304,8 @@ complete_run <- function(file, nrow, ncol, missing_value = -9999,
   if(continue %in% c(cont_reg, "inverted", "iwatersheds")) {
     sub_start <- Sys.time()
     if(log) write(paste0("Started calculating inverted watersheds at: ", sub_start), file = log_file, append = TRUE)
-    db_ished <- calc_shed3(db_idir)
-    save_all(locs = out_locs, data = list("db" = db_ished), name = "ished")
+    db_iinitial <- calc_shed4(db_idir)
+    save_all(locs = out_locs, data = list("db" = db_iinitial), name = "ished")
     if(log) write(paste0("  Total time: ", round(difftime(Sys.time(), sub_start, units = "min"), 2), "\n"), file = log_file, append = TRUE)
   } else {
     if(!quiet) message("  Skipping")
@@ -341,30 +317,11 @@ complete_run <- function(file, nrow, ncol, missing_value = -9999,
     return()
   }
 
-  # Inverted Watershed area-----------------------------------------------------
-  if(!quiet) message("CALCULATING INVERTED WATERSHEDS AREA")
-  if(continue == "iwatershed_area") db_ished <- read_shed(out_locs$backup_out, "backup_ished")
-  if(continue %in% c(cont_reg, "inverted", "iwatersheds", "iwatershed_area")) {
-    sub_start <- Sys.time()
-    if(log) write(paste0("Started calculating inverted watershed area at: ", sub_start), file = log_file, append = TRUE)
-    db_iinitial <- calc_ups(db_ished)
-    save_all(locs = out_locs, data = list("db" = db_iinitial), name = "iinitial")
-    if(log) write(paste0("  Total time: ", round(difftime(Sys.time(), sub_start, units = "min"), 2), "\n"), file = log_file, append = TRUE)
-  } else {
-    if(!quiet) message("  Skipping")
-    if(log) write("Skipping inverted watershed area\n", log_file, append = TRUE)
-  }
-
-  if(end == "iwatershed_area") {
-    if(!quiet) run_time(start, log, log_file)
-    return()
-  }
-
 
   # Invert Remove Initial Pits -----------------------------------------------
   if(!quiet) message("REMOVING INVERTED INITIAL PITS")
   if(continue == "ilocal") db_iinitial <- read_shed(out_locs$backup_out, "backup_iinitial")
-  if(continue %in% c(cont_reg, "inverted", "iwatersheds", "iwatershed_area", "ilocal")) {
+  if(continue %in% c(cont_reg, "inverted", "iwatersheds", "ilocal")) {
     sub_start <- Sys.time()
     if(log) write(paste0("Started inverted pit removal at: ", sub_start), file = log_file, append = TRUE)
 
@@ -386,12 +343,9 @@ complete_run <- function(file, nrow, ncol, missing_value = -9999,
   }
 
 
-
-
-
   # Final Report ------------------------------------------------------------
 
-  if(continue %in% c(cont_reg, "inverted", "iwatersheds", "iwatershed_area", "ilocal", "report")) {
+  if(continue %in% c(cont_reg, "inverted", "iwatersheds", "ilocal", "report")) {
     if(report == TRUE){
       files <- normalizePath(list.files(path = paste0(folder_out, "/final"), full.names = TRUE))
       report_final(file = file, report_loc = folder_out, out_files = files, run = f, nrow = nrow, ncol = ncol,
