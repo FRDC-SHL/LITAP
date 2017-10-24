@@ -2,10 +2,6 @@
 #' @export
 calc_ddir2 <- function(db, verbose = FALSE, n_clusters = 7) {
 
-  # Surround in impossible elevation
-  db <- add_buffer(db) %>%
-    dplyr::arrange(seqno) %>%
-    dplyr::mutate(elev_orig = elev) # make a backup of the original elevation data
 
   # Calculate 8 columns reflecting the elevation of 'shifted' directions (neighbours)
   db <- nb_values(db, max(db$col), "elev")

@@ -100,28 +100,20 @@ complete_run <- function(file, nrow, ncol, missing_value = -9999,
 
   start <- Sys.time()
 
-  db_start <- foreign::read.dbf(paste0(file)) %>%
-    file_prep(nrows = nrow,
-              ncols = ncol,
-              missing_value = missing_value)
+  db_start <- load_file(file, nrow = nrow, ncol = ncol, missing_value = missing_value, clim = clim, rlim = rlim)
 
   if(log) {
+    # File details to log
     write("Run options:", log_file)
     write(paste0("  Dimensions: nrows = ", nrow, "; ncols = ", ncol), log_file, append = TRUE)
-  }
 
-  # if subset
-  if(!is.null(clim) || !is.null(rlim)) {
-    db_start <- db_start %>%
-      dplyr::filter(row >= rlim[1] & row <= rlim[2] & col >= clim[1] & col <= clim[2]) %>%
-      dplyr::mutate(seqno = 1:length(seqno),
-                    row = row - min(row) + 1,
-                    col = col - min(col) + 1)
-    if(log) write(paste0("  Subset: rows ", rlim[1], "-", rlim[2], "; cols ", clim[1], "-", clim[2]),
-                  log_file, append = TRUE)
-  }
+    # Subset to log
+    if(!is.null(clim) || !is.null(rlim)) write(paste0("  Subset: rows ", rlim[1], "-", rlim[2], "; cols ", clim[1], "-", clim[2]),
+                                               log_file, append = TRUE)
 
-  if(log) write(paste0("\nRun started: ", start, "\n"), file = log_file, append = TRUE)
+    # Run start to log
+    write(paste0("\nRun started: ", start, "\n"), file = log_file, append = TRUE)
+  }
 
   # Calculate directions -------------------------------------------------------
   if(!quiet) message("CALCULATING DIRECTIONS")
