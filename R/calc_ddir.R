@@ -1,10 +1,10 @@
 
 #' @export
-calc_ddir2 <- function(db, verbose = FALSE, n_clusters = 7) {
+calc_ddir2 <- function(db, verbose = FALSE) {
 
 
   # Calculate 8 columns reflecting the elevation of 'shifted' directions (neighbours)
-  db <- nb_values(db, max(db$col), "elev")
+  db <- nb_values(db, max_cols = max(db$col), "elev")
 
   db1 <- finddir2(db) # Calc Flow direction
 
@@ -98,8 +98,9 @@ calc_ddir2 <- function(db, verbose = FALSE, n_clusters = 7) {
   db1$ldir[new_flow$seqno] <- new_flow$ldir
 
   # Get flow direction (seqno of next cell)
-  db1 <- flow_values(db1, n = max(db$col), col = "seqno") %>%
+  db1 <- flow_values(db1, max_cols = max(db$col), col = "seqno") %>%
     dplyr::rename(drec = seqno_next)
+
 
   # Fix circular flow among flat cells
   # Shouldn't be necessary anymore, as specified lowest cell already?
