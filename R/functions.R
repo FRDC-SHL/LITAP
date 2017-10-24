@@ -30,6 +30,22 @@ trace_flow2 <- function(cell, db) {
   }
 }
 
+trace_flow3 <- function(cell, db) {
+  track <- cell
+  end <- FALSE
+  if(!is.na(cell)){
+    while(!end){
+      cell <- db$drec_shed[cell] # Get next cells (db must be sorted by seqno!)
+      if(!is.na(cell)) { # Otherwise is an edge cell
+        if(cell %in% track) end <- TRUE # In a circular track or Pit
+        if(cell != track[length(track)]) track <- c(track, cell) # If not simply starting and ending with the same pit cell, keep final cell
+        #if(shed && !is.na(db$shedno[db$seqno == cell])) end <- TRUE # If looking for watersheds, end if meet with one
+      } else end <- TRUE
+    }
+    return(track)
+  }
+}
+
 trace_pits <- function(shedno, w_stats) {
   track <- shedno
   end <- FALSE
@@ -117,13 +133,13 @@ convert_orig <- function(data, type) {
     if("fill_shed" %in% names(data)) {
       data <- dplyr::select(data,
                             SeqNo = seqno, Row = row, Col = col, Elev = elev,
-                            Ddir = ldir, Drec = drec, UpSlope = upslope_n,
+                            Ddir = ldir, Drec = drec, UpSlope = upslope,
                             ShedNo = local_shed, ShedNow = fill_shed, Missing = missing,
                             Edge = edge, Vol2Fl = vol2fl, Mm2Fl = mm2fl, PArea = parea)
     } else {
       data <- dplyr::select(data,
                             SeqNo = seqno, Row = row, Col = col, Elev = elev,
-                            Ddir = ldir, Drec = drec, UpSlope = upslope_n,
+                            Ddir = ldir, Drec = drec, UpSlope = upslope,
                             ShedNo = initial_shed, ShedNow = local_shed, Missing = missing,
                             Edge = edge, Vol2Fl = vol2fl, Mm2Fl = mm2fl, PArea = parea)
     }
@@ -165,7 +181,7 @@ remove_buffer <- function(db, stats = NULL) {
     dplyr::rename(seqno_buffer = seqno,
                   drec_buffer = drec)
 
-  if("upslope" %in% names(db)) db <- dplyr::rename(db, upslope_buffer = upslope)
+  #if("upslope" %in% names(db)) db <- dplyr::rename(db, upslope_buffer = upslope)
 
   db <- db %>%
     dplyr::mutate(row = row - 1, col = col -1,
@@ -248,10 +264,10 @@ nb_values <- function(db, max_cols, col = "elev", db_sub = NULL, format = "long"
   }
 
   if(format == "long") {
-    db_sub <- tidyr::gather(db_sub, n, value, dplyr::matches(paste0("(", paste0(col, collapse = "_n[0-9]{1})|("), "_n[0-9]{1})"))) %>%
-      tidyr::separate(n, into = c("type", "n"), sep = -2, convert = TRUE) %>%
-      dplyr::mutate(n = as.numeric(n)) %>%
-      tidyr::spread(type, value)
+    db_sub <- tidyr::gather(db_sub, n, value, dplyr::matches(paste0("(", paste0(col, collapse = "_n[0-9]{1})|("), "_n[0-9]{1})")))
+    db_sub <- tidyr::separate(db_sub, n, into = c("type", "n"), sep = -2, convert = TRUE)
+    db_sub <- dplyr::mutate(db_sub, n = as.numeric(n))
+    db_sub <- tidyr::spread(db_sub, type, value)
   }
 
   return(db_sub)
@@ -270,9 +286,9 @@ calc_seq <- function(d, max_cols) {
   if(d == 9) return(-(max_cols - 1))
 }
 
-flow_values <- function(db, n, col = "elev", db_sub = NULL) {
+flow_values <- function(db, max_cols, col = "elev", db_sub = NULL) {
   if(is.null(db_sub)) db_sub <- db
- for(a in col) db_sub[, paste0(a, "_next")] <- db[db_sub$seqno + sapply(db_sub$ldir, calc_seq, n = n), a]
+ for(a in col) db_sub[, paste0(a, "_next")] <- db[db_sub$seqno + sapply(db_sub$ldir, calc_seq, max_cols = max_cols), a]
  return(db_sub)
 }
 
