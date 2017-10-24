@@ -53,49 +53,51 @@ calc_ddir2 <- function(db, verbose = FALSE) {
     dplyr::mutate(patch = NA) %>%
     dplyr::arrange(seqno)
 
-  p_n <- 1
-  for(i in 1:nrow(db_flats)) {
-    cell <- db_flats$seqno[i]
-    if(is.na(db_flats$patch[i])) {
-      db_flats$patch[db_flats$seqno == cell] <- p_n
-      p_n <- p_n + 1
+  if(nrow(db_flats) > 0) {
+    p_n <- 1
+    for(i in 1:nrow(db_flats)) {
+      cell <- db_flats$seqno[i]
+      if(is.na(db_flats$patch[i])) {
+        db_flats$patch[db_flats$seqno == cell] <- p_n
+        p_n <- p_n + 1
+      }
+      p <- db_flats$patch[i]
+      cells_n <- unique(db_flats$seqno[db_flats$seqno_n %in% cell])
+      db_flats$patch[db_flats$seqno %in% cells_n] <- p
     }
-    p <- db_flats$patch[i]
-    cells_n <- unique(db_flats$seqno[db_flats$seqno_n %in% cell])
-    db_flats$patch[db_flats$seqno %in% cells_n] <- p
+
+    # Get middle cell in a patch
+    pit_centres <- db_flats %>%
+      dplyr::select(-n, -ldir_n, -seqno_n) %>%
+      dplyr::distinct() %>%
+      dplyr::group_by(patch) %>%
+      dplyr::mutate(centre = list(c(round(median(col)), round(median(row)))),
+                    cell = purrr::map2(col, row, ~c(.x, .y)),
+                    dist = purrr::map2_dbl(centre, cell, ~sqrt(sum((.y - .x)^2))),
+                    dist_min = min(dist, na.rm = TRUE),
+                    n_p = length(seqno)) %>%
+      dplyr::summarize(seqno = seqno[dist == dist_min][1],
+                       n_p = unique(n_p)) %>%
+      dplyr::filter(n_p > 1) %>%
+      dplyr::pull(seqno)
+
+
+    # Assign lower elevation to middle cell
+    db1$elev[pit_centres] <- db1$elev[pit_centres] - 0.1
+    #db_flats$elev[db_flats$seqno %in% pit_centres] <- db_flats$elev[db_flats$seqno %in% pit_centres] - 0.1
+
+    # Recalculate flow directions for all flat cells AND for any cell touching a cell with a new elev
+    new_flow <- db1 %>%
+      dplyr::filter(ldir == 5 & !is.na(ldir)) %>%
+      nb_values(db1, max_cols = max(db$col), col = "seqno", db_sub = .) %>%
+      dplyr::pull(seqno_n) %>%
+      unique() %>%
+      db1[., ] %>%
+      nb_values(db1, max_cols = max(db$col), col = "elev", db_sub = .) %>%
+      finddir2()
+
+    db1$ldir[new_flow$seqno] <- new_flow$ldir
   }
-
-  # Get middle cell in a patch
-  pit_centres <- db_flats %>%
-    dplyr::select(-n, -ldir_n, -seqno_n) %>%
-    dplyr::distinct() %>%
-    dplyr::group_by(patch) %>%
-    dplyr::mutate(centre = list(c(round(median(col)), round(median(row)))),
-                  cell = purrr::map2(col, row, ~c(.x, .y)),
-                  dist = purrr::map2_dbl(centre, cell, ~sqrt(sum((.y - .x)^2))),
-                  dist_min = min(dist, na.rm = TRUE),
-                  n_p = length(seqno)) %>%
-    dplyr::summarize(seqno = seqno[dist == dist_min][1],
-                     n_p = unique(n_p)) %>%
-    dplyr::filter(n_p > 1) %>%
-    dplyr::pull(seqno)
-
-
-  # Assign lower elevation to middle cell
-  db1$elev[pit_centres] <- db1$elev[pit_centres] - 0.1
-  #db_flats$elev[db_flats$seqno %in% pit_centres] <- db_flats$elev[db_flats$seqno %in% pit_centres] - 0.1
-
-  # Recalculate flow directions for all flat cells AND for any cell touching a cell with a new elev
-  new_flow <- db1 %>%
-    dplyr::filter(ldir == 5 & !is.na(ldir)) %>%
-    nb_values(db1, max_cols = max(db$col), col = "seqno", db_sub = .) %>%
-    dplyr::pull(seqno_n) %>%
-    unique() %>%
-    db1[., ] %>%
-    nb_values(db1, max_cols = max(db$col), col = "elev", db_sub = .) %>%
-    finddir2()
-
-  db1$ldir[new_flow$seqno] <- new_flow$ldir
 
   # Get flow direction (seqno of next cell)
   db1 <- flow_values(db1, max_cols = max(db$col), col = "seqno") %>%
