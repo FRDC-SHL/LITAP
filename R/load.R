@@ -4,15 +4,15 @@ load_dem <- function(file, nrow, ncol, missing_value = -9999) {
   db <- foreign::read.dbf(file)
 
   # Check if valid rows/cols
-  if(nrows * ncols != length(db$ELEV)){
+  if(nrow * ncol != length(db$ELEV)){
     stop("Number of rows and columns does not match the total number of cells in the data base, Try again!")
   }
 
   # Arrange as grid
   db <- tibble::data_frame(elev = db$ELEV,
                            seqno = 1:length(elev),
-                           row = sort(rep(1:nrows, length(elev)/nrows)),
-                           col = rep(1:ncols, length(elev)/ncols),
+                           row = sort(rep(1:nrow, length(elev)/nrow)),
+                           col = rep(1:ncol, length(elev)/ncol),
                            missing = elev == missing_value) %>%
     dplyr::mutate(elev = replace(elev, missing, NA))
 
