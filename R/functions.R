@@ -288,8 +288,8 @@ calc_seq <- function(d, max_cols) {
 
 flow_values <- function(db, max_cols, col = "elev", db_sub = NULL) {
   if(is.null(db_sub)) db_sub <- db
- for(a in col) db_sub[, paste0(a, "_next")] <- db[db_sub$seqno + sapply(db_sub$ldir, calc_seq, max_cols = max_cols), a]
- return(db_sub)
+  for(a in col) db_sub[, paste0(a, "_next")] <- db[db_sub$seqno + sapply(db_sub$ldir, calc_seq, max_cols = max_cols), a]
+  return(db_sub)
 }
 
 
