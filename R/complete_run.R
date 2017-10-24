@@ -142,9 +142,11 @@ complete_run <- function(file, nrow, ncol, missing_value = -9999,
     sub_start <- Sys.time()
     if(log) write(paste0("Started calculating watersheds at: ", sub_start), file = log_file, append = TRUE)
 
+    db_initial <- list()
     db_initial$db <- calc_shed4(db_dir)
+
     # Calc stats for vol2fl later
-    db_initial$stats <- pit_stat(db_initial$db) %>%
+    db_initial$stats <- pit_stat1(db_initial$db) %>%
       out_stat()
     save_all(locs = out_locs, data = list("db" = db_initial$db, "stats" = db_initial$stats), name = "initial")
 
@@ -167,10 +169,10 @@ complete_run <- function(file, nrow, ncol, missing_value = -9999,
     if(log) write(paste0("Started removing initial pits at: ", sub_start), file = log_file, append = TRUE)
 
     # Pit removal
-    db_local <- first_pitr(db_initial$db, max_area = max_area, max_depth = max_depth, verbose = verbose)
+    db_local <- first_pitr1(db_initial$db, max_area = max_area, max_depth = max_depth, verbose = verbose)
 
     # Stats
-    stats_local <- pit_stat(db_local) %>%
+    stats_local <- pit_stat1(db_local) %>%
       out_stat()
 
     db_local <- list("db" = db_local, "stats" = stats_local)
@@ -193,7 +195,7 @@ complete_run <- function(file, nrow, ncol, missing_value = -9999,
     sub_start <- Sys.time()
     if(log) write(paste0("Started calculating pond watersheds at: ", sub_start), file = log_file, append = TRUE)
     if(length(unique(db_local$db$shedno[!is.na(db_local$db$shedno)])) > 1){
-      db_pond <- second_pitr(db_local$db, verbose = verbose)
+      db_pond <- second_pitr1(db_local$db, verbose = verbose)
     } else {
       if(!quiet) message("  Only a single watershed: No pond outputs")
       db_pond <- list()
@@ -231,7 +233,7 @@ complete_run <- function(file, nrow, ncol, missing_value = -9999,
 
       db_local <- dplyr::left_join(db_local$db, g_shed, by = "local_shed")
 
-      db_fill <- third_pitr(db_local, verbose = verbose)
+      db_fill <- third_pitr1(db_local, verbose = verbose)
       db_fill$db <- calc_vol2fl(db_fill$db, i_stats = db_initial$stats)
     } else {
       if(!quiet) message("  Only a single watershed: No fill outputs")
@@ -240,6 +242,7 @@ complete_run <- function(file, nrow, ncol, missing_value = -9999,
                                   vol2fl = 0, mm2fl = 0, parea = 0)
       db_fill$stats <- tibble::tibble()
     }
+
     save_all(locs = out_locs, data = list("db" = db_fill$db, "stats" = db_fill$stats), name = "fill")
     if(log) write(paste0("  Total time: ", round(difftime(Sys.time(), sub_start, units = "min"), 2), "\n"), file = log_file, append = TRUE)
 
@@ -265,7 +268,6 @@ complete_run <- function(file, nrow, ncol, missing_value = -9999,
 
   # Inverted DEM --------------------------------------------------------------
 
-
   if(!quiet) message("INVERTING DEM")
   if(!quiet) message("CALCULATING INVERTED DIRECTIONS")
 
@@ -274,7 +276,7 @@ complete_run <- function(file, nrow, ncol, missing_value = -9999,
     if(log) write(paste0("Started calculating inverted directions at: ", sub_start), file = log_file, append = TRUE)
     db_invert <- invert(db_start)
 
-    # Inverted Directions --------------------------------------------------------
+  # Inverted Directions --------------------------------------------------------
 
     db_idir <- calc_ddir2(db_invert, verbose = verbose)
     save_all(locs = out_locs, data = list("db" = db_idir), name = "idir")
@@ -317,11 +319,11 @@ complete_run <- function(file, nrow, ncol, missing_value = -9999,
     sub_start <- Sys.time()
     if(log) write(paste0("Started inverted pit removal at: ", sub_start), file = log_file, append = TRUE)
 
-    db_ilocal <- first_pitr(db_iinitial, max_area = max_area, max_depth = max_depth, verbose = verbose)
+    db_ilocal <- first_pitr1(db_iinitial, max_area = max_area, max_depth = max_depth, verbose = verbose)
     db_ilocal$pond_shed <- db_ilocal$local_shed
 
     if(length(unique(db_ilocal$shedno[!is.na(db_ilocal$shedno)])) > 1) {
-      ipit <- pit_stat(db_ilocal) %>%
+      ipit <- pit_stat1(db_ilocal) %>%
         out_stat() %>%
         dplyr::mutate(edge_pit = FALSE)
     } else ipit <- tibble::tibble()
