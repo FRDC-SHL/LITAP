@@ -641,3 +641,48 @@ get_run <- function(file) {
     unlist(.) %>%
     .[1]
 }
+
+# Return closes direction leading to a particular cell
+get_dir <- function(row, col, row_f, col_f, ldir_opts) {
+  h <- col_f - col
+  v <- row_f - row
+  a <- atan(h/v) * 180/pi
+
+  if(h == 0 & v == 0) {
+    l <- 5
+  } else if(h > 0 & v <= 0) { # Move to Upper right
+    if(a >= 67.5) l <- 6
+    if(a >= 22.5 & a < 67.5) l <- 9
+    if(a < 22.5) l <- 8
+  } else if(h > 0 & v > 0) { # Lower right
+    if(a >= 67.5) l <- 6
+    if(a >= 22.5 & a < 67.5) l <- 3
+    if(a < 22.5) l  <- 2
+  } else if(h <= 0 & v <= 0) { # Upper left
+    if(a >= 67.5) l  <- 4
+    if(a >= 22.5 & a < 67.5) l <- 7
+    if(a < 22.5) l <- 8
+  } else if(h <=0 & v >= 0) { # Lower left
+    if(a >= 67.5) l <- 4
+    if(a >= 22.5 & a < 67.5) l <- 1
+    if(a < 22.5) l <- 2
+  }
+
+  # If best direction not an option, get next best
+  # Prioritorize smaller seqno
+  if(!(l %in% ldir_opts) & l != 5) {
+    closest <- list("1" = c(4, 2, 7, 3, 8, 6, 9),
+                    "2" = c(1, 3, 4, 6, 7, 9, 8),
+                    "3" = c(6, 2, 9, 1, 8, 4, 7),
+                    "4" = c(7, 1, 8, 2, 9, 3, 6),
+                    "6" = c(9, 3, 8, 2, 7, 1, 4),
+                    "7" = c(8, 4, 9, 1, 6, 2, 3),
+                    "8" = c(7, 9, 4, 6, 1, 3, 2),
+                    "9" = c(8, 6, 7, 3, 4, 2, 1))
+
+    c <- closest[as.character(l)][[1]]
+    l <- c[c %in% opts][1]
+  }
+  return(l)
+}
+

@@ -45,6 +45,7 @@ calc_ddir2 <- function(db, verbose = FALSE) {
   # Deal with flow into depressions (flatin)
   # - Get the area of the depression, assign middle cell to a slightly lower elevation to break ties
 
+
   # Get patches of pit cells
   db_flats <- db1 %>%
     dplyr::filter(ldir == 5 & !is.na(ldir)) %>%
@@ -81,28 +82,30 @@ calc_ddir2 <- function(db, verbose = FALSE) {
       dplyr::filter(n_p > 1) %>%
       dplyr::pull(seqno)
 
+    # Recalculate flow directions for all flat cells in a patch towards the center
+    # Iterate over all new flow flat cells until finished
 
-    # Assign lower elevation to middle cell
-    db1$elev[pit_centres] <- db1$elev[pit_centres] - 0.1
-    #db_flats$elev[db_flats$seqno %in% pit_centres] <- db_flats$elev[db_flats$seqno %in% pit_centres] - 0.1
+    # Get directions to pit centers by pit patch
+    db_flats <- db_flats %>%
+      dplyr::group_by(seqno) %>%
+      dplyr::mutate(ldir_opts = list(n)) %>%  # Get only neighbouring pit cells
+      dplyr::select(-n, -ldir_n, -seqno_n) %>%
+      dplyr::distinct() %>%
+      dplyr::mutate(centre = seqno %in% pit_centres) %>%
+      dplyr::group_by(patch) %>%
+      dplyr::mutate(row_f = row[centre][1], col_f = col[centre][1]) %>%
+      dplyr::ungroup() %>%
+      dplyr::mutate(ldir_new = purrr::pmap_dbl(list(row = row, col = col,
+                                                    row_f = row_f, col_f = col_f,
+                                                    ldir_opts = ldir_opts), # make sure only directs to pit cell
+                                           get_dir))
 
-    # Recalculate flow directions for all flat cells AND for any cell touching a cell with a new elev
-    new_flow <- db1 %>%
-      dplyr::filter(ldir == 5 & !is.na(ldir)) %>%
-      nb_values(db1, max_cols = max(db$col), col = "seqno", db_sub = .) %>%
-      dplyr::pull(seqno_n) %>%
-      unique() %>%
-      db1[., ] %>%
-      nb_values(db1, max_cols = max(db$col), col = "elev", db_sub = .) %>%
-      finddir2()
-
-    db1$ldir[new_flow$seqno] <- new_flow$ldir
+    db1$ldir[db_flats$seqno] <- db_flats$ldir_new
   }
 
   # Get flow direction (seqno of next cell)
   db1 <- flow_values(db1, max_cols = max(db$col), col = "seqno") %>%
     dplyr::rename(drec = seqno_next)
-
 
   # Fix circular flow among flat cells
   # Shouldn't be necessary anymore, as specified lowest cell already?
