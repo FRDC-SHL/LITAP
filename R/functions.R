@@ -643,10 +643,10 @@ get_run <- function(file) {
 }
 
 # Return closes direction leading to a particular cell
-get_dir <- function(row, col, row_f, col_f, ldir_opts) {
+get_dir <- function(row, col, row_f, col_f, ldir_opts = 1:9) {
   h <- col_f - col
   v <- row_f - row
-  a <- atan(h/v) * 180/pi
+  a <- atan(abs(h)/abs(v)) * 180/pi
 
   if(h == 0 & v == 0) {
     l <- 5
@@ -681,7 +681,7 @@ get_dir <- function(row, col, row_f, col_f, ldir_opts) {
                     "9" = c(8, 6, 7, 3, 4, 2, 1))
 
     c <- closest[as.character(l)][[1]]
-    l <- c[c %in% opts][1]
+    l <- c[c %in% ldir_opts][1]
   }
   return(l)
 }
