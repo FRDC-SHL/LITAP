@@ -31,7 +31,7 @@ load_tiff <- function(file) {
 load_surfer <- function(file) {
 }
 
-load_file <- function(file, nrow, ncol, missing_value, clim = NULL, rlim = NULL) {
+load_file <- function(file, nrow, ncol, missing_value = -9999, clim = NULL, rlim = NULL) {
 
   # Add in options for different file types
   # - Automatically detect by file extension
@@ -45,6 +45,12 @@ prep_db <- function(db, clim, rlim) {
 
   # Subset
   if(!is.null(clim) || !is.null(rlim)) {
+    if((!is.null(clim) & (!is.numeric(clim) | length(clim) != 2)) |
+       (!is.null(rlim) & (!is.numeric(rlim) | length(rlim) != 2))) {
+         stop("clim and rlim must be each be a vector of two numbers (start/end row/col) or NULL")
+       }
+    if(any(rlim > max(db$row)) | any(clim > max(db$col))) stop("Subset cannot be bigger than data")
+    if(length(rlim[1]:rlim[2]) < 2 | length(clim[1]:clim[2]) < 2) stop("Subset is too small (less than 2x2)")
     db <- db %>%
       dplyr::filter(row >= rlim[1] & row <= rlim[2] & col >= clim[1] & col <= clim[2]) %>%
       dplyr::mutate(seqno = 1:length(seqno),
