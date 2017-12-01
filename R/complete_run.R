@@ -176,7 +176,6 @@ complete_run <- function(file, nrow, ncol, missing_value = -9999,
       out_stat()
 
     db_local <- list("db" = db_local, "stats" = stats_local)
-
     save_all(locs = out_locs, data = db_local, name = "local")
     if(log) write(paste0("  Total time: ", round(difftime(Sys.time(), sub_start, units = "min"), 2), "\n"), file = log_file, append = TRUE)
   } else {
