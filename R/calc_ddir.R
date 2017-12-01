@@ -1,5 +1,4 @@
 
-#' @export
 calc_ddir2 <- function(db, verbose = FALSE) {
 
 
@@ -116,8 +115,6 @@ calc_ddir2 <- function(db, verbose = FALSE) {
   return(db1)
 }
 
-
-#' @export
 calc_ddir <- function(db, verbose = FALSE, n_clusters = 7) {
 
   # Surround in impossible elevation

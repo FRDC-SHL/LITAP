@@ -8,7 +8,6 @@ get_track <- function(shed_list, track) {
   return(t)
 }
 
-#' @export
 calc_shed4 <- function(db, verbose = FALSE) {
 
   db_orig <- db
@@ -71,8 +70,6 @@ calc_shed4 <- function(db, verbose = FALSE) {
   return(db)
 }
 
-
-#' @export
 calc_shed3 <- function(db, verbose = FALSE) {
 
   db_orig <- db
@@ -216,7 +213,6 @@ get_all_flow <- function(db) {
   return(m)
 }
 
-#' @export
 calc_shed2 <- function(db, verbose = FALSE) {
   db_orig <- db %>%
     dplyr::arrange(seqno) %>%
@@ -278,7 +274,6 @@ calc_shed2 <- function(db, verbose = FALSE) {
 }
 
 
-#' @export
 calc_shed <- function(db, verbose = FALSE) {
   db <- db %>%
     dplyr::arrange(dplyr::desc(elev), seqno) %>%
