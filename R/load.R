@@ -67,9 +67,9 @@ prep_db <- function(db, clim, rlim) {
 
   # Note which cells are edge cells
   db <- db %>%
-    nb_values(max_cols = max(db$col), col = "buffer") %>%
+    nb_values(max_cols = max(db$col), col = c("missing", "buffer")) %>%
     dplyr::group_by(seqno) %>%
-    dplyr::summarize(edge_map = any(buffer_n)) %>%
+    dplyr::summarize(edge_map = any(buffer_n) | any(missing_n)) %>%
     dplyr::right_join(db, by = "seqno")
 
   return(db)
