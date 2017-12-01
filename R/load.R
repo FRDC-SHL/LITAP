@@ -31,17 +31,18 @@ load_tiff <- function(file) {
 load_surfer <- function(file) {
 }
 
-load_file <- function(file, nrow, ncol, missing_value = -9999, clim = NULL, rlim = NULL) {
+load_file <- function(file, nrow, ncol, missing_value = -9999,
+                      clim = NULL, rlim = NULL, edge = TRUE) {
 
   # Add in options for different file types
   # - Automatically detect by file extension
   # - Option to override
 
   load_dem(file, nrow, ncol, missing_value) %>%
-   prep_db(clim = clim, rlim = rlim)
+   prep_db(clim = clim, rlim = rlim, edge = edge)
 }
 
-prep_db <- function(db, clim, rlim) {
+prep_db <- function(db, clim, rlim, edge) {
 
   # Subset
   if(!is.null(clim) || !is.null(rlim)) {
@@ -60,17 +61,19 @@ prep_db <- function(db, clim, rlim) {
 
   ##### Add edges
 
-  # Surround in impossible elevation
-  db <- add_buffer(db) %>%
-    dplyr::arrange(seqno) %>%
-    dplyr::mutate(elev_orig = elev) # make a backup of the original elevation data
+  if(edge) {
+    # Surround in impossible elevation
+    db <- add_buffer(db) %>%
+      dplyr::arrange(seqno) %>%
+      dplyr::mutate(elev_orig = elev) # make a backup of the original elevation data
 
-  # Note which cells are edge cells
-  db <- db %>%
-    nb_values(max_cols = max(db$col), col = c("missing", "buffer")) %>%
-    dplyr::group_by(seqno) %>%
-    dplyr::summarize(edge_map = any(buffer_n) | any(missing_n)) %>%
-    dplyr::right_join(db, by = "seqno")
+    # Note which cells are edge cells
+    db <- db %>%
+      nb_values(max_cols = max(db$col), col = c("missing", "buffer")) %>%
+      dplyr::group_by(seqno) %>%
+      dplyr::summarize(edge_map = any(buffer_n) | any(missing_n)) %>%
+      dplyr::right_join(db, by = "seqno")
+  }
 
   return(db)
 }
