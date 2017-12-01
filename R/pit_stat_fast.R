@@ -46,7 +46,7 @@ pit_stat1 <- function(db, w = NULL, verbose = FALSE) {
     db_pits <- db_pits %>%
       nb_values(db, max_cols = max(db$col), col = c("elev", "shedno", "seqno"), db_sub = .)
 
-    pp <- dplyr::filter(db_pits, shedno != shedno_n, elev_n <= elev)
+    pp <- dplyr::filter(db_pits, shedno != shedno_n)
 
     if(length(unique(pp$shedno)) != length(unique(db_pits$shedno[!is.na(db_pits$shedno)]))) {
       pp <- db_pits %>%
@@ -62,8 +62,8 @@ pit_stat1 <- function(db, w = NULL, verbose = FALSE) {
 
     pp <- dplyr::group_by(pp, shedno)
     pp <- dplyr::filter(pp, pour_elev == min(pour_elev, na.rm = TRUE))  # Must be lowest pour point
-    pp <- dplyr::filter(pp, upslope == max(upslope, na.rm = TRUE))     # Must be with maximum upslope contributions
-    pp <- dplyr::filter(pp, elev_n == min(elev_n, na.rm = TRUE))        # Must have lowest pour TO elevation
+    #pp <- dplyr::filter(pp, upslope == max(upslope, na.rm = TRUE))     # Must be with maximum upslope contributions
+    #pp <- dplyr::filter(pp, elev_n == min(elev_n, na.rm = TRUE))        # Must have lowest pour TO elevation
     pp <- dplyr::arrange(pp, shedno, seqno)                            # Sort by ascending seqno
     pp <- dplyr::slice(pp, 1)                                               # Take first one
 
@@ -73,7 +73,7 @@ pit_stat1 <- function(db, w = NULL, verbose = FALSE) {
 
     pp <- pp %>%
       dplyr::select(shedno, in_seqno = seqno, in_row = row, in_col = col, in_elev = elev,
-                    out_seqno = seqno_n, out_row = row_out, out_col = col_out, out_elev = elev_n, out_shed = shedno_n,
+                    out_seqno = seqno_n, out_row = row_out, out_col = col_out, out_elev = elev_n, drains_to = shedno_n,
                     pour_elev)
 
     # Add other calculations
