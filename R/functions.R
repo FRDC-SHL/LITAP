@@ -50,7 +50,7 @@ trace_pits <- function(shedno, w_stats) {
   track <- shedno
   end <- FALSE
   while(!end){
-    shedno <- w_stats$out_shed[w_stats$shedno == shedno] # Get next cells
+    shedno <- w_stats$drains_to[w_stats$shedno == shedno] # Get next cells
     if(shedno %in% track) end <- TRUE # In a circular track
     if(shedno != track[length(track)]) track <- c(track, shedno) # If not simply starting and ending with the same shed
   }
@@ -520,7 +520,7 @@ find_lowest <- function(w, w_stats, final_pits, removed, verbose = FALSE) {
 
       pit1 <- dplyr::filter(w_stats, shedno == wp) %>%
         dplyr::mutate(at_final = FALSE)
-      pit2 <- dplyr::filter(w_stats, shedno == pit1$out_shed) %>%
+      pit2 <- dplyr::filter(w_stats, shedno == pit1$drains_to) %>%
         dplyr::mutate(at_final = FALSE)
 
       if(pit1$pit_elev < lowest$pit_elev) lowest <- pit1

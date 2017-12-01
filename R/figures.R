@@ -27,7 +27,7 @@ plot_pond <- function(file) {
 
   origs %>%
     arrange(becomes, pit_elev, pit_area) %>%
-    select(shedno, pit_elev, shed_area, out_shed, becomes, final)
+    select(shedno, pit_elev, shed_area, drains_to, becomes, final)
 
   final_sheds <- origs$shedno[origs$final == TRUE]
 

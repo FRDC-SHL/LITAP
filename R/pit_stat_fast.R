@@ -109,7 +109,7 @@ pit_stat1 <- function(db, w = NULL, verbose = FALSE) {
                        shed_area = n(),
                        out_elev = NA,
                        out_seqno = NA,
-                       out_shed = NA,
+                       drains_to = NA,
                        out_row = NA,
                        out_col = NA,
                        in_seqno = NA,
@@ -137,7 +137,7 @@ out_stat <- function(pit_stat) {
   pit_stat %>%
     dplyr::select(-dplyr::ends_with("_out")) %>%
     dplyr::left_join(dplyr::select(pit_stat, shedno, edge_pit, pit_elev, pit_seqno, pour_elev),
-                     by = c("out_shed" = "shedno"), suffix = c("", "_out"))
+                     by = c("drains_to" = "shedno"), suffix = c("", "_out"))
 }
 
 

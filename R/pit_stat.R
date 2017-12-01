@@ -51,7 +51,7 @@ get_pour_point2 <- function(db_w, w, db, verbose = FALSE){
           pour_elev <- max(n2$n_elev, n2$elev)
           pp <- tibble::tibble(out_elev = n2$n_elev,
                                out_seqno = n2$n_seqno,
-                               out_shed = n2$n_shedno,
+                               drains_to = n2$n_shedno,
                                out_row = n2$n_row,
                                out_col = n2$n_col,
                                in_seqno = n2$seqno,
@@ -86,7 +86,7 @@ get_pour_point2 <- function(db_w, w, db, verbose = FALSE){
     ## CHECK THIS!!!
     pp <- tibble::tibble(out_elev = db_w$elev[1],
                          out_seqno = db_w$seqno[1],
-                         out_shed = w,
+                         drains_to = w,
                          out_row = db_w$row[1],
                          out_col = db_w$col[1],
                          in_seqno = db_w$seqno[1],
@@ -132,7 +132,7 @@ get_pour_point <- function(db_w, w, db, verbose = FALSE){
             pour_elev <- max(n$elev[a], focal$elev)
             pp <- tibble::tibble(out_elev = n$elev[a],
                                  out_seqno = n$seqno[a],
-                                 out_shed = n$shedno[a],
+                                 drains_to = n$shedno[a],
                                  out_row = n$row[a],
                                  out_col = n$col[a],
                                  in_seqno = focal$seqno,
@@ -227,7 +227,7 @@ pit_stat <- function(db, w = NULL, verbose = FALSE) {
                        shed_area = n(),
                        out_elev = NA,
                        out_seqno = NA,
-                       out_shed = NA,
+                       drains_to = NA,
                        out_row = NA,
                        out_col = NA,
                        in_seqno = NA,
@@ -255,7 +255,7 @@ out_stat <- function(pit_stat) {
   pit_stat %>%
     dplyr::select(-dplyr::ends_with("_out")) %>%
     dplyr::left_join(dplyr::select(pit_stat, shedno, edge_pit, pit_elev, pit_seqno, pour_elev),
-                     by = c("out_shed" = "shedno"), suffix = c("", "_out"))
+                     by = c("drains_to" = "shedno"), suffix = c("", "_out"))
 }
 
 
