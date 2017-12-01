@@ -70,16 +70,61 @@ plot_overflow <- function(file, n = "") {
   }
 }
 
-get_sheds <- function(w, sheds) {
-  done <- FALSE
-  d <- tibble::tibble()
-  while(!done) {
-    #message(paste0(w, collapse = ", "))
-    d_new <- sheds[sheds$becomes %in% w, ]
-    w <- unique(c(w, d_new$shedno))
-    if(nrow(d_new) > nrow(d)) d <- d_new else done <- TRUE
+get_intermediate <- function(dem, sheds) {
+  dem$intermediate_shed <- NA
+  for(i in sheds$shedno) {
+   if(!(i %in% dem$local_shed)) {
+     parents <- sheds$shedno[i == sheds$becomes]
+     cells <- unique(c(dem$seqno[dem$local_shed %in% parents],
+                       dem$seqno[dem$intermediate_shed %in% parents]))
+     dem$intermediate_shed[cells] <- i
+   }
   }
-  return(w)
+  return(dem)
+}
+
+get_sheds <- function(w, stats) {
+  done <- FALSE
+  d <- tibble::tibble(shedno = stats$shedno[stats$becomes == w],
+                      becomes = 20)
+  todo <- d$shedno[!(d$becomes %in% d$shedno)]
+  while(!done) {
+    for(i in todo) {
+      if(nrow(stats[stats$becomes == i,]) > 0) {
+        d <- dplyr::bind_rows(d, tibble::tibble(shedno = stats$shedno[stats$becomes == i], becomes = i))
+      }
+    }
+    if(all(d$shedno[!(d$becomes %in% d$shedno)] == todo)) done <- TRUE else todo <- d$ShedNo[!(d$becomes %in% d$shedno)]
+  }
+  return(d[nrow(d):1, ])
+}
+
+plot_fill_single <- function(sheds, dem) {
+  d <- dem %>%
+    mutate(type = NA,
+           type = case_when(local_shed == sheds$shedno[1] | intermediate_shed == sheds$shedno[1] ~ sheds$shedno[1],
+                            local_shed == sheds$shedno[2] | intermediate_shed == sheds$shedno[2] ~ sheds$shedno[2]))
+
+  labs <- d %>%
+    dplyr::group_by(type) %>%
+    dplyr::summarize(row = median(row), col = median(col))
+
+  flow_plot(dem, type = "elevation") +
+    theme(legend.position = "none") +
+    geom_raster(data = d, aes(fill = type), alpha = 0.8) +
+    geom_text(data = labs, aes(label = type)) +
+    labs(subtitle = paste0(sheds$shedno[1], " + ", sheds$shedno[2], " = ", sheds$becomes[1]),
+         title = sheds$becomes[1])
+}
+
+plot_fill <- function(w, dem, stats) {
+  sheds <- get_sheds(w, stats)
+  dem <- get_intermediate(dem, sheds)
+  g <- list()
+  for(b in unique(sheds$becomes)) {
+    g[[length(g) + 1]] <- plot_fill_single(sheds[sheds$becomes == b,], dem)
+  }
+  gridExtra::arrangeGrob(grobs = g, ncol = 2)
 }
 
 
