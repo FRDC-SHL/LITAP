@@ -11,5 +11,7 @@ report_final <- function(file, report_loc = NULL, out_files, run, max_area, max_
                                   rlim = rlim,
                                   clim = clim),
                     output_file = paste0(run, "_final_report.html"),
-                    output_dir = report_loc)
+                    output_dir = report_loc,
+                    envir = new.env(),
+                    quiet = TRUE)
 }
