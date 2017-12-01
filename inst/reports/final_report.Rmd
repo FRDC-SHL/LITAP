@@ -37,10 +37,11 @@ files <- params$out_files
 library(LITAP)
 library(gridExtra)
 
-dem <- readRDS(stringr::str_subset(files, "_dem_fill.rds"))
-pit <- readRDS(stringr::str_subset(files, paste0(run, "_pit.rds")))
-pond <- readRDS(stringr::str_subset(files, paste0(run, "_pond.rds")))
-fill <- readRDS(stringr::str_subset(files, paste0(run, "_fill.rds")))
+cat(files)
+if(length(stringr::str_subset(files, paste0(run, "_dem_fill.rds"))) > 0) dem <- readRDS(stringr::str_subset(files, paste0(run, "_dem_fill.rds")))
+if(length(stringr::str_subset(files, paste0(run, "_pit.rds"))) > 0) cat(stringr::str_subset(files, paste0(run, "_pit.rds"))) #pit <- readRDS(stringr::str_subset(files, paste0(run, "_pit.rds")))
+if(length(stringr::str_subset(files, paste0(run, "_pond.rds"))) > 0) pond <- readRDS(stringr::str_subset(files, paste0(run, "_pond.rds")))
+if(length(stringr::str_subset(files, paste0(run, "_fill.rds"))) > 0) fill <- readRDS(stringr::str_subset(files, paste0(run, "_fill.rds")))
 ```
 
 ## Details
@@ -84,16 +85,16 @@ grid.arrange(flow_plot(db = dem, type = "relief") + labs(title = "relief"),
 - Pond watersheds represent how the local watersheds overflow into various pond sheds
 
 ```{r flow_plots}
-grid.arrange(flow_plot(db = dem, type = "elevation", shed = TRUE, shed_type = "initial") + 
+grid.arrange(flow_plot(db = dem, type = "elevation", pits = TRUE, shed = TRUE, shed_type = "initial") + 
                labs(title = "Initial Watersheds") +
                theme(plot.margin = unit(c(0, 0, 5 ,0), "mm")),
-             flow_plot(db = dem, type = "elevation", shed = TRUE, shed_type = "local") + 
+             flow_plot(db = dem, type = "elevation", pits = TRUE, shed = TRUE, shed_type = "local") + 
                labs(title = "Local Watersheds")+
                theme(plot.margin = unit(c(0, 0, 5 ,0), "mm")),
-             flow_plot(db = dem, type = "elevation", shed = TRUE, shed_type = "pond") + 
+             flow_plot(db = dem, type = "elevation", pits = TRUE, shed = TRUE, shed_type = "pond") + 
                labs(title = "Pond Watersheds")+
                theme(plot.margin = unit(c(5, 0, 0 ,0), "mm")),
-             flow_plot(db = dem, type = "elevation", shed = TRUE, shed_type = "fill") + 
+             flow_plot(db = dem, type = "elevation", pits = TRUE, shed = TRUE, shed_type = "fill") + 
                labs(title = "Fill Watersheds")+
                theme(plot.margin = unit(c(5, 0, 0 ,0), "mm")),
              ncol = 2)
@@ -108,15 +109,15 @@ __NOTE:__
 
 ### Watershed stats - Pit Table
 ```{r pit_table}
-DT::datatable(pit, rownames = FALSE)
+if(exists("pit")) DT::datatable(pit, rownames = FALSE) else message("No pit table")
 ```
 
 ### Watershed stats - Pond Table
 ```{r pond_table}
-DT::datatable(pond, rownames = FALSE)
+if(exists("pond")) DT::datatable(pond, rownames = FALSE) else message("No pit table")
 ```
 
 ### Watershed stats - Fill Table
 ```{r fill_table}
-DT::datatable(fill, rownames = FALSE, filter = "none", options = list(ordering=F))
+if(exists("fill")) DT::datatable(fill, rownames = FALSE, filter = "none", options = list(ordering=F)) else message("No fill table")
 ```
