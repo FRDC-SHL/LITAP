@@ -224,7 +224,7 @@ pit_stat <- function(db, w = NULL, verbose = FALSE) {
                        pit_seqno = seqno[ldir == 5],
                        pit_row = row[ldir == 5],
                        pit_col = col[ldir == 5],
-                       shed_area = n(),
+                       shed_area = seq_along(pit_vol),
                        out_elev = NA,
                        out_seqno = NA,
                        drains_to = NA,
@@ -292,7 +292,7 @@ vol2fl <- function(db) {
   }
 
   vol_stats <- db %>%
-    dplyr::arrange(elev, desc(upslope_n)) %>%
+    dplyr::arrange(elev, dplyr::desc(upslope_n)) %>%
     dplyr::filter(elev <= pour_elev) %>%
     dplyr::group_by(elev, shed_area) %>%
     dplyr::summarize(total_cells = length(elev)) %>%

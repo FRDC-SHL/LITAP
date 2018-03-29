@@ -81,11 +81,11 @@ pit_stat1 <- function(db, w = NULL, verbose = FALSE) {
       dplyr::filter(shedno %in% w) %>%
       dplyr::left_join(pp, by = "shedno") %>%
       dplyr::group_by(shedno) %>%
-      dplyr::mutate(shed_area = n()) %>%
+      dplyr::mutate(shed_area = seq_along(shedno)) %>%
       dplyr::filter(elev <= pour_elev) %>%
       dplyr::summarize(shed_area = shed_area[1],
                        edge_pit = any(edge_map),
-                       pit_area = n(),
+                       pit_area = seq_along(shed_area),
                        pit_vol = sum(pour_elev - elev),
                        pit_elev = elev[ldir == 5],
                        pit_seqno = seqno[ldir == 5],
@@ -106,7 +106,7 @@ pit_stat1 <- function(db, w = NULL, verbose = FALSE) {
                        pit_seqno = seqno[ldir == 5],
                        pit_row = row[ldir == 5],
                        pit_col = col[ldir == 5],
-                       shed_area = n(),
+                       shed_area = seq_along(pit_vol),
                        out_elev = NA,
                        out_seqno = NA,
                        drains_to = NA,
@@ -142,7 +142,7 @@ out_stat <- function(pit_stat) {
 
 
 
-calc_vol2fl <- function(db, i_stats) {
+calc_vol2fl <- function(db, i_stats, verbose) {
 
   # Where no change in ShedNo from local (or initial?) to ShedNow (pond shed) then all 0's ???
   db <- dplyr::mutate(db, shedno = initial_shed)
@@ -154,7 +154,7 @@ calc_vol2fl <- function(db, i_stats) {
       dplyr::left_join(dplyr::select(i_stats, shedno, pour_elev, shed_area), #add stats
                        by = "shedno") %>%
       tidyr::nest(-shedno) %>%
-      dplyr::mutate(vol = purrr::map(data, vol2fl)) %>%
+      dplyr::mutate(vol = purrr::map(data, vol2fl, verbose = verbose)) %>%
       tidyr::unnest(vol)
     db <- dplyr::left_join(db, vol, by = c("shedno", "elev")) %>%
       mutate_cond(is.na(parea), mm2fl = 0, vol2fl = 0, parea = 0)
@@ -167,14 +167,14 @@ calc_vol2fl <- function(db, i_stats) {
 
 # for each watershed look at slices of elevations, calculate the volumes and add together
 #' @import magrittr
-vol2fl <- function(db) {
+vol2fl <- function(db, verbose) {
 
   if(any(db$shed_area <= 0)) {
     if(verbose) message("Shed area <= 0, is this reasonable?")
   }
 
   vol_stats <- db %>%
-    dplyr::arrange(elev, desc(upslope)) %>%
+    dplyr::arrange(elev, dplyr::desc(upslope)) %>%
     dplyr::filter(elev <= pour_elev) %>%
     dplyr::group_by(elev, shed_area) %>%
     dplyr::summarize(total_cells = length(elev)) %>%
