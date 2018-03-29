@@ -39,7 +39,7 @@ library(gridExtra)
 
 cat(files)
 if(length(stringr::str_subset(files, paste0(run, "_dem_fill.rds"))) > 0) dem <- readRDS(stringr::str_subset(files, paste0(run, "_dem_fill.rds")))
-if(length(stringr::str_subset(files, paste0(run, "_pit.rds"))) > 0) cat(stringr::str_subset(files, paste0(run, "_pit.rds"))) #pit <- readRDS(stringr::str_subset(files, paste0(run, "_pit.rds")))
+if(length(stringr::str_subset(files, paste0(run, "_pit.rds"))) > 0) pit <- readRDS(stringr::str_subset(files, paste0(run, "_pit.rds"))) #cat(stringr::str_subset(files, paste0(run, "_pit.rds"))) 
 if(length(stringr::str_subset(files, paste0(run, "_pond.rds"))) > 0) pond <- readRDS(stringr::str_subset(files, paste0(run, "_pond.rds")))
 if(length(stringr::str_subset(files, paste0(run, "_fill.rds"))) > 0) fill <- readRDS(stringr::str_subset(files, paste0(run, "_fill.rds")))
 ```

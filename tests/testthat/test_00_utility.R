@@ -10,7 +10,7 @@ test_that("get_dir returns correct direction", {
   expect_equal(get_dir(row = 2, col = 2, row_f = 1, col_f = 1), 7)
   expect_equal(get_dir(row = 2, col = 1, row_f = 1, col_f = 1), 8)
   expect_equal(get_dir(row = 2, col = 1, row_f = 1, col_f = 2), 9)
-}
+})
 
 test_that("get_dir returns correct direction given ldir_opts", {
 

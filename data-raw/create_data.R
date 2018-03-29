@@ -7,7 +7,7 @@ d <- load_file("../TestFiles/01_H1/FlowMapR/H10Elev.dbf",
               rlim = ylim, clim = xlim, edge = FALSE) %>%
   dplyr::select(ELEV = elev)
 
-foreign::write.dbf(as.data.frame(d), "./tests/testELEV.dbf")
+foreign::write.dbf(as.data.frame(d), "./inst/extdata/testELEV_mini.dbf")
 
 # Subset Dem for vignettes
 clim <- c(26, 175)
