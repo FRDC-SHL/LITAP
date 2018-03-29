@@ -1,51 +1,178 @@
-load_dem <- function(file, nrow, ncol, missing_value = -9999) {
+load_dem <- function(file) {
+  if(!requireNamespace("foreign", quietly = TRUE)) {
+    stop("Require package 'foreign' to load .dbf files.\n
+         Install with \"install.packages('foreign')\", then try again")
+  } else {
+    # Load file
+    db <- foreign::read.dbf(file)
 
-  # Load
-  db <- foreign::read.dbf(file)
+    # Format names
+    names(db) <- tolower(names(db))
+    names(db) <- stringr::str_replace(names(db), "(elevation)|(z)", "elev")
+    db <- dplyr::select(db, dplyr::matches("(^x$)|(^y$)|(^elev$)"))
 
+    # Sort if x/y present
+    if(ncol(db) > 1 && all(c("x", "y", "elev") %in% names(db))) {
+      return(dplyr::arrange(db, dplyr::desc(y), x))
+    } else if ("elev" %in% names(db)) {
+      return(db)
+    } else {
+      stop("dem files must have at least one column corresponding to 'elevation' (elev, elevation, or z")
+    }
+  }
+}
+
+load_excel <- function(file, ...) {
+  if(!requireNamespace("readxl", quietly = TRUE)) {
+    stop("Require package 'readxl' to load .xlsx or .xls files.\n
+         Install with \"install.packages('readxl')\", then try again")
+  } else {
+    h <- readxl::read_excel(file, n_max = 5, col_names = FALSE)
+    header <- any(stringr::str_detect(h[1,], "[a-zA-Z]+"))
+    db <- readxl::read_excel(file, col_names = header)
+    names(db) <- c("x", "y", "elev")
+    db <- dplyr::arrange(db, dplyr::desc(y), x)
+    return(db)
+  }
+}
+
+load_raster <- function(file) {
+  db <- raster::raster(file) %>%
+    raster::as.data.frame(xy = TRUE) %>%
+    dplyr::arrange(dplyr::desc(y), x)
+  names(db) <- c("x", "y", "elev")
+  db
+}
+
+load_txt <- function(file) {
+  t <- readLines(file, 10)
+  header <- any(stringr::str_detect(t[1], "[a-zA-Z]+"))
+  if(any(stringr::str_detect(t, ","))) sep <- "," else sep <- ""
+
+  utils::read.table(file, header = header, sep = sep,
+                    col.names = c("x", "y", "elev")) %>%
+    dplyr::arrange(dplyr::desc(y), x)
+}
+
+
+#' Load and prep elevation data
+#'
+#' @param file Character. The location of the file containing elevation data.
+#'   See details for accepted file types
+#' @param nrow Numeric. Number of rows in dem file (required for dbf files with
+#'   a single column, but can be automatically assessed from files with x and y
+#'   coordinates.
+#' @param ncol Numeric. Number of columns in dem file (required for dbf files
+#'   with a single column, but can be automatically assessed from files with x
+#'   and y coordinates.
+#' @param missing_value Vector. The number or character string specifying
+#'   missing data.
+#' @param rlim Vector. Two numbers specifying the start and end of a subset of
+#'   rows to extract
+#' @param clim Vector. Two numbers specifying the start and end of a subset of
+#'   columns to extract
+#' @param edge Logical. Whether to add an edge (buffer) around the data
+#'
+#' @return Returns a data frame containing elevation data in a format suitable
+#'   for analysis
+#'
+#' @details All x/y data must be in a format such that greater values indicate
+#'   East or North respectively.
+#'
+#' This function uses file extensions to guess the file type to be loaded.
+#'
+#' \strong{dBase files:}
+#' These files are loaded via the \code{\link[foreign]{read.dbf}} function. They
+#' may have either two or four columns. If two, it is expected to contain an ID
+#' columna and an elevation column, and nrow and ncol arguments must be
+#' supplied. If four, it is expected to contain ID, x, y, and z columns (z =
+#' elevation). Column order matters, column names do not.
+#' \itemize{
+#'   \item dBase files (.dbf)
+#' }
+#'
+#' \strong{Grid file types:}
+#' These file types are loaded via the \code{\link[raster]{raster}} function.
+#' \itemize{
+#'   \item Surfer grid files (.grd)
+#'   \item Esri grid files (binary .adf or ascii .asc)
+#'   \item Geo Tiff (.tif)
+#'   \item Floating point raster files (.flt) (**Note** the companion header,
+#'   .hdr, file must also be present)
+#'   }
+#'
+#' \strong{Text/Spreadsheet file types:}
+#' Data in these files are all assumed to be arranged in three columns
+#' reflecting x, y, and z dimensions (z = elevation).
+#' Column **order** is important.
+#' Column names don't matter, but they should be present.
+#' \itemize{
+#'   \item Text files (.txt, .dat, .csv) are loaded via R base
+#'   \code{link[utils]{read.table}} function.
+#'   \item Excel files (.xls, .xlsx) are loaded via the
+#'   \code{\link[readxl]{read_excel}} function.
+#'   }
+#'
+#' @examples
+#'
+#' @export
+load_file <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
+                      rlim = NULL, clim = NULL, edge = TRUE, verbose = TRUE) {
+
+  ext <- tools::file_ext(file)
+
+  if(ext %in% c("grd", "tif", "adf", "asc", "flt", "")) {
+    if(ext == "" & verbose) message("  Assuming folder representing Arc/Info Binary Grid")
+    db <- load_raster(file)
+  } else if(ext == "dbf") {
+    db <- load_dem(file)
+  } else if(ext %in% c("xlsx", "xls")) {
+    db <- load_excel(file)
+  } else if(ext %in% c("txt", "csv", "dat")) {
+    db <- load_txt(file)
+  } else {
+    stop("Unknown file format", call. = FALSE)
+  }
+
+  if(ncol(db) == 3) {
+    nrow <- length(unique(db$y))
+    ncol <- length(unique(db$x))
+    db <- dplyr::select(db, -x, -y)
+    if(verbose) message("  Detected ", nrow, " rows and ", ncol, " columns")
+  } else if(!is.null(nrow) && !is.null(ncol)) {
+    if(verbose) message("  Using supplied ", nrow, " rows and ", ncol, " columns")
+  } else {
+    stop("dbf files with only one column require nrow and ncol arguments.",
+         call. = FALSE)
+  }
+
+  db_format(db, nrow, ncol, missing_value, verbose) %>%
+    db_prep(clim, rlim, edge, verbose)
+}
+
+db_format <- function(db, nrow, ncol, missing_value = -9999, verbose) {
+  if(verbose) message("  Formating grid")
   # Check if valid rows/cols
-  if(nrow * ncol != length(db$ELEV)){
+  if(nrow * ncol != length(db$elev)){
     stop("Number of rows and columns does not match the total number of cells in the data base, Try again!")
   }
 
   # Arrange as grid
-  db <- tibble::data_frame(elev = db$ELEV,
-                           seqno = 1:length(elev),
-                           row = sort(rep(1:nrow, length(elev)/nrow)),
-                           col = rep(1:ncol, length(elev)/ncol),
-                           missing = elev == missing_value) %>%
+  db <- db %>%
+    dplyr::mutate(seqno = 1:length(elev),
+                  row = sort(rep(1:nrow, length(elev)/nrow)),
+                  col = rep(1:ncol, length(elev)/ncol),
+                  missing = elev == missing_value) %>%
     dplyr::mutate(elev = replace(elev, missing, NA))
 
   return(db)
 }
 
-load_xyz <- function(file) {
-}
-
-load_gridfile <- function(file) {
-}
-
-load_tiff <- function(file) {
-}
-
-load_surfer <- function(file) {
-}
-
-load_file <- function(file, nrow, ncol, missing_value = -9999,
-                      clim = NULL, rlim = NULL, edge = TRUE) {
-
-  # Add in options for different file types
-  # - Automatically detect by file extension
-  # - Option to override
-
-  load_dem(file, nrow, ncol, missing_value) %>%
-   prep_db(clim = clim, rlim = rlim, edge = edge)
-}
-
-prep_db <- function(db, clim, rlim, edge) {
+db_prep <- function(db, clim, rlim, edge, verbose) {
 
   # Subset
   if(!is.null(clim) || !is.null(rlim)) {
+    if(verbose) message("  Subsetting data")
     if((!is.null(clim) & (!is.numeric(clim) | length(clim) != 2)) |
        (!is.null(rlim) & (!is.numeric(rlim) | length(rlim) != 2))) {
          stop("clim and rlim must be each be a vector of two numbers (start/end row/col) or NULL")
@@ -59,20 +186,26 @@ prep_db <- function(db, clim, rlim, edge) {
                     col = col - min(col) + 1)
   }
 
-  ##### Add edges
-
+  # Add edges
   if(edge) {
+
+    if(verbose) message("  Adding buffer")
     # Surround in impossible elevation
     db <- add_buffer(db) %>%
       dplyr::arrange(seqno) %>%
       dplyr::mutate(elev_orig = elev) # make a backup of the original elevation data
 
     # Note which cells are edge cells
-    db <- db %>%
-      nb_values(max_cols = max(db$col), col = c("missing", "buffer")) %>%
-      dplyr::group_by(seqno) %>%
-      dplyr::summarize(edge_map = any(buffer_n) | any(missing_n)) %>%
-      dplyr::right_join(db, by = "seqno")
+    db1 <- nb_values(db, max_cols = max(db$col), col = c("buffer", "missing"),
+                     format = "wide")
+    b_cols <- names(db1)[stringr::str_detect(names(db1), "buffer_n")]
+    m_cols <- names(db1)[stringr::str_detect(names(db1), "missing_n")]
+    db1$buffer_edge <- rowSums(db1[, b_cols], na.rm = TRUE) > 0
+    db1$missing_edge <- rowSums(db1[, m_cols], na.rm = TRUE) > 0
+    db1$edge_map <- rowSums(db1[, c("buffer_edge", "missing_edge")],
+                            na.rm = TRUE) > 0
+
+    db <- dplyr::left_join(db, db1[, c("seqno", "edge_map")], by = "seqno")
   }
 
   return(db)

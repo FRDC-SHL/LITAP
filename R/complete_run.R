@@ -3,9 +3,14 @@
 #' Run an elevation dem file through all functions to caculate watershed flow
 #' and fill patterns
 #'
-#' @param file Character. Elev.dbf dem file
-#' @param nrow Numeric. Number of rows in dem file
-#' @param ncol Numeric. Number of columns in dem file
+#' @param file Character. Elevation dem file (see \code{\link{load_file}} for
+#'   supported file types
+#' @param nrow Numeric. Number of rows in dem file (required for dbf files with
+#'   a single column, but can be automatically assessed from files with x and y
+#'   coordinates.
+#' @param ncol Numeric. Number of columns in dem file (required for dbf files
+#'   with a single column, but can be automatically assessed from files with x
+#'   and y coordinates.
 #' @param missing_value Numeric/Character. Symbols which define missing data
 #' @param max_area Numeric. Largest area of pits to be removed during initial
 #'   pit removal
@@ -26,8 +31,11 @@
 #' @param verbose Logical. Output extra progress messages.
 #' @param quiet Logical. Suppress all messages.
 #'
-#' @details For resuming or ending a run, \code{continue} or \code{end} must be
-#'   one of the following:
+#' @details For information regarding loading other file types see
+#'   \code{\link{load_file}}.
+#'
+#'   For resuming or ending a run, \code{continue} or \code{end} must be one of
+#'   the following:
 #'
 #'   \enumerate{
 #'     \item \code{directions} (Calculating Directions)
@@ -54,7 +62,7 @@
 #'
 #' @import magrittr
 #' @export
-complete_run <- function(file, nrow, ncol, missing_value = -9999,
+complete_run <- function(file, nrow = NULL, ncol =NULL, missing_value = -9999,
                          max_area = 10, max_depth = 0.5,
                          folder_out = NULL, clean = FALSE,
                          clim = NULL, rlim = NULL,
@@ -78,10 +86,10 @@ complete_run <- function(file, nrow, ncol, missing_value = -9999,
 
   # Check for files
   m <- list.files(dirname(file), pattern = basename(file), ignore.case = TRUE)
-  if(length(m) == 0) stop("Cannot find starting elevation dbf file: ", file, call. = FALSE)
-  if(length(m) > 1) stop("More than one match found (note that case ignored) for starting elevation dbf file: ", file, "\nMatches: ", paste0(m, collapse = ", "), call. = FALSE)
+  if(length(m) == 0) stop("Cannot find starting elevation file: ", file, call. = FALSE)
+  if(length(m) > 1) stop("More than one match found (note that case ignored) for starting elevation file: ", file, "\nMatches: ", paste0(m, collapse = ", "), call. = FALSE)
 
-  f <- get_run(file)
+  f <- tools::file_path_sans_ext(basename(file))
 
   if(is.null(folder_out)) folder_out = dirname(file)
 
@@ -100,19 +108,37 @@ complete_run <- function(file, nrow, ncol, missing_value = -9999,
 
   start <- Sys.time()
 
-  db_start <- load_file(file, nrow = nrow, ncol = ncol, missing_value = missing_value, clim = clim, rlim = rlim)
+  db_start <- load_file(file, nrow = nrow, ncol = ncol,
+                        missing_value = missing_value,
+                        clim = clim, rlim = rlim, verbose = verbose)
+
+  ncol_orig <- ncol
+  nrow_orig <- nrow
+  ncol <- max(db_start$col) - 2
+  nrow <- max(db_start$row) - 2
 
   if(log) {
     # File details to log
     write("Run options:", log_file)
-    write(paste0("  Dimensions: nrows = ", nrow, "; ncols = ", ncol), log_file, append = TRUE)
+    write(paste0("  Dimensions: nrows = ", nrow_orig, "; ncols = ", ncol_orig),
+          file = log_file, append = TRUE)
 
     # Subset to log
-    if(!is.null(clim) || !is.null(rlim)) write(paste0("  Subset: rows ", rlim[1], "-", rlim[2], "; cols ", clim[1], "-", clim[2]),
-                                               log_file, append = TRUE)
+    if(!is.null(clim) || !is.null(rlim)) {
+      write(paste0("  Subset: rows ", rlim[1], "-", rlim[2],
+                   "; cols ", clim[1], "-", clim[2]),
+            log_file, append = TRUE)
+    }
 
     # Run start to log
-    write(paste0("\nRun started: ", start, "\n"), file = log_file, append = TRUE)
+    write(paste0("\nRun started: ", start, "\n"),
+          file = log_file, append = TRUE)
+
+    if(is.null(nrow_orig)) {
+      write(paste0("  Dimensions detected: nrows = ", nrow,
+                   "; ncols = ", ncol, "\n"),
+            file = log_file, append = TRUE)
+    }
   }
 
   # Calculate directions -------------------------------------------------------
@@ -234,7 +260,7 @@ complete_run <- function(file, nrow, ncol, missing_value = -9999,
       db_local <- dplyr::left_join(db_local$db, g_shed, by = "local_shed")
 
       db_fill <- third_pitr1(db_local, verbose = verbose)
-      db_fill$db <- calc_vol2fl(db_fill$db, i_stats = db_initial$stats)
+      db_fill$db <- calc_vol2fl(db_fill$db, i_stats = db_initial$stats, verbose = verbose)
     } else {
       if(!quiet) message("  Only a single watershed: No fill outputs")
       db_fill <- list()

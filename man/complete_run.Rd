@@ -4,17 +4,22 @@
 \alias{complete_run}
 \title{Complete Run}
 \usage{
-complete_run(file, nrow, ncol, missing_value = -9999, max_area = 10,
-  max_depth = 0.5, folder_out = NULL, clean = FALSE, clim = NULL,
-  rlim = NULL, continue = NULL, end = NULL, log = TRUE, report = TRUE,
-  verbose = FALSE, quiet = FALSE)
+complete_run(file, nrow = NULL, ncol = NULL, missing_value = -9999,
+  max_area = 10, max_depth = 0.5, folder_out = NULL, clean = FALSE,
+  clim = NULL, rlim = NULL, continue = NULL, end = NULL, log = TRUE,
+  report = TRUE, verbose = FALSE, quiet = FALSE)
 }
 \arguments{
-\item{file}{Character. Elev.dbf dem file}
+\item{file}{Character. Elevation dem file (see \code{\link{load_file}} for
+supported file types}
 
-\item{nrow}{Numeric. Number of rows in dem file}
+\item{nrow}{Numeric. Number of rows in dem file (required for dbf files with
+a single column, but can be automatically assessed from files with x and y
+coordinates.}
 
-\item{ncol}{Numeric. Number of columns in dem file}
+\item{ncol}{Numeric. Number of columns in dem file (required for dbf files
+with a single column, but can be automatically assessed from files with x
+and y coordinates.}
 
 \item{missing_value}{Numeric/Character. Symbols which define missing data}
 
@@ -53,8 +58,11 @@ Run an elevation dem file through all functions to caculate watershed flow
 and fill patterns
 }
 \details{
-For resuming or ending a run, \code{continue} or \code{end} must be
-  one of the following:
+For information regarding loading other file types see
+  \code{\link{load_file}}.
+
+  For resuming or ending a run, \code{continue} or \code{end} must be one of
+  the following:
 
   \enumerate{
     \item \code{directions} (Calculating Directions)
