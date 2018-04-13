@@ -125,7 +125,7 @@ nb_values <- function(db, max_cols, col = "elev", db_sub = NULL, format = "long"
 
   if(format == "long") {
     db_sub <- tidyr::gather(db_sub, n, value, dplyr::matches(paste0("(", paste0(col, collapse = "_n[0-9]{1})|("), "_n[0-9]{1})")))
-    db_sub <- tidyr::separate(db_sub, n, into = c("type", "n"), sep = -2, convert = TRUE)
+    db_sub <- tidyr::separate(db_sub, n, into = c("type", "n"), sep = -1, convert = TRUE)
     db_sub <- dplyr::mutate(db_sub, n = as.numeric(n))
     db_sub <- tidyr::spread(db_sub, type, value)
   }
