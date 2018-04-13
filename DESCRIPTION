@@ -16,7 +16,6 @@ Depends:
 Imports:
     dplyr (>= 0.7.0),
     DT (>= 0.2),
-    foreign (>= 0.8.67),
     ggplot2 (>= 2.2.1),
     gridExtra(>= 2.2.1),
     progress (>= 1.1.2),
@@ -27,7 +26,10 @@ Imports:
     stringr (>= 1.2.0),
     tibble (>= 1.3.3),
     tidyr (>= 0.6.3)
-Suggests: knitr,
+Suggests: 
+    foreign (>= 0.8.67),
+    knitr,
+    readxl,
     testthat
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1
