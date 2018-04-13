@@ -29,10 +29,85 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="reference/index.html">Reference</a>
+  <a href="/index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
 </li>
 <li>
-  <a href="articles/index.html">Articles</a>
+  <a href="articles/LITAP.html">Get Started</a>
+</li>
+<li>
+  <a href="reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
+      <a href="articles/articles/flow_plots.html">Flow Plots</a>
+    </li>
+    <li>
+      <a href="articles/reports/general.html">General Differences</a>
+    </li>
+    <li>
+      <a href="articles/reports/test_021_fast.html">Test - AB provost site (normal)</a>
+    </li>
+    <li>
+      <a href="articles/reports/test_02h_fast.html">Test - AB provost site (high thresh)</a>
+    </li>
+    <li>
+      <a href="articles/reports/test_02z_fast.html">Test - AB provost site (zero thresh)</a>
+    </li>
+    <li>
+      <a href="articles/reports/test_B1h_fast.html">Test - NB Field edge site 4 (high thresh)</a>
+    </li>
+    <li>
+      <a href="articles/reports/test_B1m_fast.html">Test - NB Field edge site 4 (noraml)</a>
+    </li>
+    <li>
+      <a href="articles/reports/test_B1z_fast.html">Test - NB Field edge site 4 (zero thresh)</a>
+    </li>
+    <li>
+      <a href="articles/reports/test_Ec0_fast.html">Test - Manitoba Zero Till Farm (5m unsmoothed) (zero thresh)</a>
+    </li>
+    <li>
+      <a href="articles/reports/test_Eec_fast.html">Test - Manitoba Zero Till Farm (5m unsmoothed) (normal)</a>
+    </li>
+    <li>
+      <a href="articles/reports/test_Eem_fast.html">Test - Manitoba Zero Till Farm (5m unsmoothed) (High thresh)</a>
+    </li>
+    <li>
+      <a href="articles/reports/test_H10_fast.html">Test - Hypothetical Hummocky Low Relief</a>
+    </li>
+    <li>
+      <a href="articles/reports/test_H3h_fast.html">Test - Hypothetical Hummocky Medium Relief (missing)</a>
+    </li>
+    <li>
+      <a href="articles/reports/test_I10_fast.html">Test - Hypothetical Incline Low Relief</a>
+    </li>
+    <li>
+      <a href="articles/reports/test_I3h_fast.html">Test - Hypothetical Incline Medium Relief (missing)</a>
+    </li>
+    <li>
+      <a href="articles/reports/test_R10_fast.html">Test - Hypothetical Rolling Low Relief</a>
+    </li>
+    <li>
+      <a href="articles/reports/test_R3h_fast.html">Test - Hypothetical Rolling Medium Relief (missing)</a>
+    </li>
+    <li>
+      <a href="articles/reports/test_T10_fast.html">Test - Hypothetical Tilted Plane 1 (normal)</a>
+    </li>
+    <li>
+      <a href="articles/reports/test_T20_fast.html">Test - Hypothetical Tilted Plane 2 (failed on original Li program) (normal)</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="news/index.html">News</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -58,10 +133,8 @@
     
     
 <div class="contents">
-<div id="litap" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#litap" class="anchor"></a>LITAP</h1></div>
 <p><strong>Landscape Integrated Terrain Analysis Package (LITAP)</strong> for the analysis of waterflow based on elevation data and pit removals. Based on R. A. (Bob) MacMillan’s FlowMapR program.</p>
+<p>See the companion website for more details: <a href="http://steffilazerte.github.io/LITAP" class="uri">http://steffilazerte.github.io/LITAP</a></p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
@@ -78,20 +151,23 @@ devtools::<span class="kw">install_github</span>(<span class="st">"steffilazerte
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testElev.dem"</span>, <span class="dt">nrow =</span> <span class="dv">100</span>, <span class="dt">ncol =</span> <span class="dv">100</span>, <span class="dt">max_area =</span> <span class="dv">5</span>, <span class="dt">max_depth =</span> <span class="fl">0.2</span>)</code></pre></div>
 <p>As well as the location of output files:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testElev.dem"</span>, <span class="dt">nrow =</span> <span class="dv">100</span>, <span class="dt">ncol =</span> <span class="dv">100</span>, <span class="dt">folder_out =</span> <span class="st">"./Output/"</span>)</code></pre></div>
+<p>LITAP accepts multiple file types (see <code><a href="reference/load_file.html">?load_file</a></code> for details and requirements):</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testElev.csv"</span>)
+<span class="kw"><a href="reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testElev.grd"</span>)
+<span class="kw"><a href="reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testElev.flt"</span>)</code></pre></div>
 </div>
 <div id="output" class="section level2">
 <h2 class="hasAnchor">
 <a href="#output" class="anchor"></a>Output</h2>
-<p>Output files include .rds (R data files) and .csv files in the “Final” folder, .dbf files in the “dbf” folder and backup files (for resuming runs) in teh “Backup” folder. Additionally, an html report summaring the run is included in the output folder</p>
-<p>The .dbf files are designed to imitate the output of the original FlowMapR program (note that the .rds and the .csv files do not).</p>
+<p>Output files include .rds (R data files) and .csv files in the “Final” folder, .dbf files in the “dbf” folder and backup files (for resuming runs) in the “Backup” folder. Additionally, an html report summaring the run is included in the output folder</p>
 <p>See the <a href="http://steffilazerte.github.io/LITAP/">LITAP website</a> hosted on github for more details and examples</p>
-</div>
 </div>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Links</h2>
+    <h2 class="hasAnchor">
+<a href="#sidebar" class="anchor"></a>Links</h2>
 <ul class="list-unstyled">
 <li>Browse source code at <br><a href="https://github.com/steffilazerte/LITAP">https://​github.com/​steffilazerte/​LITAP</a>
 </li>

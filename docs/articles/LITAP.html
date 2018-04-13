@@ -29,10 +29,82 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="..//index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
 </li>
 <li>
-  <a href="../articles/index.html">Articles</a>
+  <a href="../articles/LITAP.html">Get Started</a>
+</li>
+<li>
+  <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
+      <a href="../articles/articles/flow_plots.html">Flow Plots</a>
+    </li>
+    <li>
+      <a href="../articles/reports/general.html">General Differences</a>
+    </li>
+    <li>
+      <a href="../articles/reports/test_021_fast.html">Test - AB provost site (normal)</a>
+    </li>
+    <li>
+      <a href="../articles/reports/test_02h_fast.html">Test - AB provost site (high thresh)</a>
+    </li>
+    <li>
+      <a href="../articles/reports/test_02z_fast.html">Test - AB provost site (zero thresh)</a>
+    </li>
+    <li>
+      <a href="../articles/reports/test_B1h_fast.html">Test - NB Field edge site 4 (high thresh)</a>
+    </li>
+    <li>
+      <a href="../articles/reports/test_B1m_fast.html">Test - NB Field edge site 4 (noraml)</a>
+    </li>
+    <li>
+      <a href="../articles/reports/test_B1z_fast.html">Test - NB Field edge site 4 (zero thresh)</a>
+    </li>
+    <li>
+      <a href="../articles/reports/test_Ec0_fast.html">Test - Manitoba Zero Till Farm (5m unsmoothed) (zero thresh)</a>
+    </li>
+    <li>
+      <a href="../articles/reports/test_Eec_fast.html">Test - Manitoba Zero Till Farm (5m unsmoothed) (normal)</a>
+    </li>
+    <li>
+      <a href="../articles/reports/test_Eem_fast.html">Test - Manitoba Zero Till Farm (5m unsmoothed) (High thresh)</a>
+    </li>
+    <li>
+      <a href="../articles/reports/test_H10_fast.html">Test - Hypothetical Hummocky Low Relief</a>
+    </li>
+    <li>
+      <a href="../articles/reports/test_H3h_fast.html">Test - Hypothetical Hummocky Medium Relief (missing)</a>
+    </li>
+    <li>
+      <a href="../articles/reports/test_I10_fast.html">Test - Hypothetical Incline Low Relief</a>
+    </li>
+    <li>
+      <a href="../articles/reports/test_I3h_fast.html">Test - Hypothetical Incline Medium Relief (missing)</a>
+    </li>
+    <li>
+      <a href="../articles/reports/test_R10_fast.html">Test - Hypothetical Rolling Low Relief</a>
+    </li>
+    <li>
+      <a href="../articles/reports/test_R3h_fast.html">Test - Hypothetical Rolling Medium Relief (missing)</a>
+    </li>
+    <li>
+      <a href="../articles/reports/test_T10_fast.html">Test - Hypothetical Tilted Plane 1 (normal)</a>
+    </li>
+    <li>
+      <a href="../articles/reports/test_T20_fast.html">Test - Hypothetical Tilted Plane 2 (failed on original Li program) (normal)</a>
+    </li>
+  </ul>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -57,7 +129,7 @@
       <h1>Mapping flow: Getting Started</h1>
                         <h4 class="author">Steffi LaZerte</h4>
             
-            <h4 class="date">2017-08-30</h4>
+            <h4 class="date">2018-04-09</h4>
           </div>
 
     
@@ -112,6 +184,16 @@
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testElev.dem"</span>, <span class="dt">nrow =</span> <span class="dv">100</span>, <span class="dt">ncol =</span> <span class="dv">100</span>, <span class="dt">folder_out =</span> <span class="st">"./Output/"</span>, 
     <span class="dt">clean =</span> <span class="ot">TRUE</span>)</code></pre></div>
 </div>
+<div id="different-input-file-types" class="section level2">
+<h2 class="hasAnchor">
+<a href="#different-input-file-types" class="anchor"></a>Different input file types</h2>
+<p>You can use a variety of input file types, provided they fit the format specifications defined in <code><a href="../reference/load_file.html">load_file()</a></code> (<code><a href="../reference/load_file.html">?load_file</a></code> for more details). Among others, the following file types are accepted:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testElev.grd"</span>)  <span class="co"># Grid files</span>
+<span class="kw"><a href="../reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testElev.csv"</span>)  <span class="co"># CSV files</span>
+<span class="kw"><a href="../reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testElev.asc"</span>)  <span class="co"># Ascii Grid files</span>
+<span class="kw"><a href="../reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testElev.flt"</span>)  <span class="co"># Floating point raster files</span>
+<span class="kw"><a href="../reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testElev"</span>)  <span class="co"># ArcGis Gridfile folder (contains .hdr files)</span></code></pre></div>
+</div>
 <div id="subset-of-input-dem" class="section level2">
 <h2 class="hasAnchor">
 <a href="#subset-of-input-dem" class="anchor"></a>Subset of input dem</h2>
@@ -144,13 +226,11 @@
 <ol style="list-style-type: decimal">
 <li><p><strong>Calculating Directions</strong> (<code>directions</code>) Calculating the flow direction of each cell into a neighbouring cell</p></li>
 <li><p><strong>Calculating Watersheds</strong> (<code>watersheds</code>) From the flow directions, combine cells into initial watersheds</p></li>
-<li><p><strong>Calculating Watershed Area</strong> (<code>watershed_area</code>) Calculate the total area of each watershed</p></li>
 <li><p><strong>Initial Pit Removal</strong> (<code>local</code>) Remove pits which are smaller than the maximum area and depth (and which are not edge pits). These pits are removed into neighbouring pits.</p></li>
 <li><p><strong>Calculating Pond Shed Statistics Second Pit Removal)</strong> (<code>pond</code>) Calculate how pits would overflow into each other</p></li>
 <li><p><strong>Calculating Fill Shed Statistics (Third Pit Removal)</strong> (<code>fill</code>)</p></li>
 <li><p><strong>Calculating Directions on Inverted DEM</strong> (<code>inverted</code>) Reverse the elevations of the original DEM file. This will make all troughs into peaks, etc. Then calculate the flow direction of each cell into a neighbouring cell. Because the DEM is inverted, this will track upslope flow</p></li>
 <li><p><strong>Calculating Inverted Watersheds</strong> (<code>iwatersheds</code>) From the flow directions, combine cells into initial watersheds</p></li>
-<li><p><strong>Calculating Inverted Watershed Area</strong> (<code>iwatershed_area</code>) Calculate the total area of each watershed</p></li>
 <li><p><strong>Initial Inverted Pit Removal</strong> (<code>ilocal</code>) Remove pits which are smaller than the maximum area and depth (and which are not edge pits). These pits are removed into neighbouring pits. Calculate watershed statistics on these resulting local pits. Because the DEM is inverted, this will highlight peaks and flow down from these peaks.</p></li>
 </ol>
 </div>
@@ -159,11 +239,13 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
         <div id="tocnav">
-      <h2>Contents</h2>
+      <h2 class="hasAnchor">
+<a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#basic-run">Basic run</a></li>
       <li><a href="#pit-removal-parameters">Pit removal parameters</a></li>
       <li><a href="#output-folders">Output folders</a></li>
+      <li><a href="#different-input-file-types">Different input file types</a></li>
       <li><a href="#subset-of-input-dem">Subset of input dem</a></li>
       <li><a href="#output-messages">Output messages</a></li>
       <li><a href="#resuming-a-run">Resuming a run</a></li>

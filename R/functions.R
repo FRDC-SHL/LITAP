@@ -30,11 +30,27 @@ trace_flow2 <- function(cell, db) {
   }
 }
 
+trace_flow3 <- function(cell, db) {
+  track <- cell
+  end <- FALSE
+  if(!is.na(cell)){
+    while(!end){
+      cell <- db$drec_shed[cell] # Get next cells (db must be sorted by seqno!)
+      if(!is.na(cell)) { # Otherwise is an edge cell
+        if(cell %in% track) end <- TRUE # In a circular track or Pit
+        if(cell != track[length(track)]) track <- c(track, cell) # If not simply starting and ending with the same pit cell, keep final cell
+        #if(shed && !is.na(db$shedno[db$seqno == cell])) end <- TRUE # If looking for watersheds, end if meet with one
+      } else end <- TRUE
+    }
+    return(track)
+  }
+}
+
 trace_pits <- function(shedno, w_stats) {
   track <- shedno
   end <- FALSE
   while(!end){
-    shedno <- w_stats$out_shed[w_stats$shedno == shedno] # Get next cells
+    shedno <- w_stats$drains_to[w_stats$shedno == shedno] # Get next cells
     if(shedno %in% track) end <- TRUE # In a circular track
     if(shedno != track[length(track)]) track <- c(track, shedno) # If not simply starting and ending with the same shed
   }
@@ -42,42 +58,7 @@ trace_pits <- function(shedno, w_stats) {
 }
 
 
-file_prep <- function(db, nrows, ncols, missing_value) {
 
-  if(nrows * ncols != length(db$ELEV)){
-    stop("Number of rows and columns does not match the total number of cells in the data base, Try again!")
-  }
-
-  tibble::data_frame(elev = db$ELEV,
-                     seqno = 1:length(elev),
-                     row = sort(rep(1:nrows, length(elev)/nrows)),
-                     col = rep(1:ncols, length(elev)/ncols),
-                     missing = elev == missing_value) %>%
-    dplyr::mutate(elev = replace(elev, missing, NA))
-}
-
-add_buffer <- function(db) {
-  ncols = max(db$col)
-  nrows = max(db$row)
-
-  buffers <- tibble::data_frame(row = c(rep(1, ncols+2),        #top
-                                        1:(nrows+2),            #left
-                                        1:(nrows+2),            #right
-                                        rep(nrows+2, ncols+2)), #bottom
-                                col = c(1:(ncols+2),            #top
-                                        rep(1, nrows+2),        #left
-                                        rep(ncols+2, nrows+2),  #right
-                                        1:(ncols+2)),           #bottom
-                                buffer = TRUE) %>%
-
-    dplyr::distinct()
-
-  db %>%
-    dplyr::mutate(row = row + 1, col = col + 1, buffer = FALSE) %>%
-    dplyr::bind_rows(buffers) %>%
-    dplyr::arrange(row, col) %>%
-    dplyr::mutate(seqno = 1:length(row))
-}
 
 rename_seqno <- function(x, index) {
   if(length(x) > 0){
@@ -89,146 +70,6 @@ rename_seqno <- function(x, index) {
   return(x)
 }
 
-save_shed <- function(file_out, obj, name){
-  if(stringr::str_detect(name, ".rds$")) readr::write_rds(obj, paste0(file_out, "_", name))
-  if(stringr::str_detect(name, ".csv$")) readr::write_csv(obj, paste0(file_out, "_", name))
-  if(stringr::str_detect(name, ".dbf$")) foreign::write.dbf(obj, paste0(file_out, "_", name))
-}
-
-read_shed <- function(file_out, name){
-  readr::read_rds(paste0(file_out, "_", name , ".rds"))
-}
-
-save_all <- function(locs, data, name) {
-
-  if(all(names(data) == c("db", "stats"))) {
-    save_shed(locs$backup_out, data, paste0("backup_", name, ".rds"))
-  } else if(names(data) == "db") {
-    save_shed(locs$backup_out, data$db, paste0("backup_", name, ".rds"))
-  }
-
-  if(name %in% c("initial", "local", "pond", "fill", "pit", "ilocal")) {
-    if("db" %in% names(data)) {
-      d <- remove_buffer(data$db)
-      d <- d[, lapply(d, class) != "list"] # remove lists
-
-      save_shed(locs$final_out, d, paste0("dem_", name, ".rds"))
-      save_shed(locs$final_out, d, paste0("dem_", name, ".csv"))
-
-      if(name %in% c("fill", "ilocal")) {
-        dbf <- convert_orig(d, type = "dem")
-        name_dbf <- name
-        if(name == "fill") name_dbf <- "dem"
-        if(name == "ilocal") name_dbf <- "idem"
-        save_shed(locs$dbf_out, as.data.frame(dbf), paste0(name_dbf, ".dbf"))
-      }
-    }
-    if("stats" %in% names(data)) {
-      if(nrow(data$stats) > 0) {
-        s <- remove_buffer(data$db, data$stats)
-        save_shed(locs$final_out, s, paste0(name, ".rds"))
-        save_shed(locs$final_out, s, paste0(name, ".csv"))
-
-        if(name %in% c("local", "pond", "fill", "pit", "ilocal")) {
-          name_dbf <- name
-          if(name == "ilocal") name_dbf <- "ipit"
-          dbf <- convert_orig(s, type = "stats")
-          if(any(is.na(dbf))) dbf <- dplyr::mutate_if(dbf, is.na, ~0)
-          save_shed(locs$dbf_out, as.data.frame(dbf), paste0(name_dbf, ".dbf"))
-        }
-      }
-    }
-  }
-}
-
-convert_orig <- function(data, type) {
-  if(type == "dem") {
-    data$edge = FALSE
-    data$missing = is.na(data$elev)
-    if(!("vol2fl" %in% names(data))) data$vol2fl = 0
-    if(!("mm2fl" %in% names(data))) data$mm2fl = 0
-    if(!("parea" %in% names(data))) data$parea = 0
-
-    if("fill_shed" %in% names(data)) {
-      data <- dplyr::select(data,
-                            SeqNo = seqno, Row = row, Col = col, Elev = elev,
-                            Ddir = ldir, Drec = drec, UpSlope = upslope_n,
-                            ShedNo = local_shed, ShedNow = fill_shed, Missing = missing,
-                            Edge = edge, Vol2Fl = vol2fl, Mm2Fl = mm2fl, PArea = parea)
-    } else {
-      data <- dplyr::select(data,
-                            SeqNo = seqno, Row = row, Col = col, Elev = elev,
-                            Ddir = ldir, Drec = drec, UpSlope = upslope_n,
-                            ShedNo = initial_shed, ShedNow = local_shed, Missing = missing,
-                            Edge = edge, Vol2Fl = vol2fl, Mm2Fl = mm2fl, PArea = parea)
-    }
-  }
-  if(type == "stats") {
-    if(!("end_pit" %in% names(data))) data$end_pit <- 0
-    if(!("stage" %in% names(data))) data$stage <- 0
-    if(!("visited" %in% names(data))) data$visited <- FALSE
-    if(!("next_pit" %in% names(data))) data$next_pit <- 0
-    if(!("becomes" %in% names(data))) data$becomes <- 0
-    if(!("final" %in% names(data))) data$final <- FALSE
-    if(!("removed" %in% names(data))) data$removed <- FALSE
-
-    data <- dplyr::select(data,
-                          ShedNo = shedno,
-                          Edge = edge_pit, Final = final, EndPit = end_pit, ShedArea = shed_area,
-                          PitRow = pit_row, PitCol = pit_col, PitRec = pit_seqno,
-                          PitElev = pit_elev,
-                          PourElev = pour_elev, PreVol = pre_vol,
-                          PitVol = pit_vol, Varatio = varatio, PitArea = pit_area,
-                          DrainsTo = out_shed, NextPit = next_pit,
-                          Becomes = becomes, Removed = removed, InRow = in_row,
-                          InCol = in_col, InRec = in_seqno,
-                          InElev = in_elev, OutRow = out_row, OutCol = out_col,
-                          OutRec = out_seqno, OutElev = out_elev,
-                          Stage = stage, Visited = visited)
-  }
-  return(data)
-
-}
-
-
-remove_buffer <- function(db, stats = NULL) {
-
-  # replace seqno
-  db <- db %>%
-    dplyr::filter(!buffer) %>%
-    dplyr::arrange(row, col) %>%
-    dplyr::rename(seqno_buffer = seqno,
-                  drec_buffer = drec)
-
-  if("upslope" %in% names(db)) db <- dplyr::rename(db, upslope_buffer = upslope)
-
-  db <- db %>%
-    dplyr::mutate(row = row - 1, col = col -1,
-                  seqno = 1:length(row))
-
-  # Get index of seqno replacements
-  index <- dplyr::select(db, seqno, seqno_buffer)
-
-  # Stats
-  if(!is.null(stats)){
-   stats <- dplyr::mutate(stats,
-                          pit_row = pit_row - 1, pit_col = pit_col - 1,
-                          pit_seqno = rename_seqno(pit_seqno, index),
-                          out_row = out_row - 1, out_col = out_col - 1,
-                          out_seqno = rename_seqno(out_seqno, index),
-                          in_row = in_row - 1, in_col = in_col - 1,
-                          in_seqno = rename_seqno(in_seqno, index),
-                          pit_seqno_out = rename_seqno(pit_seqno_out, index))
-   return(stats)
-  } else {
-    # Replace drec and upslope with correct cell numbers
-    db <- db %>%
-      dplyr::mutate(drec = rename_seqno(drec_buffer, index))
-      #upslope = purrr::map(upslope_buffer, ~ rename_seqno(.x, index)))
-    return(db)
-  }
-
-}
 
 adj <- function(cell, nrows, ncols, index = NULL) {
   a <- c(cell + seq(-ncols-1, -ncols+1, 1),
@@ -259,6 +100,73 @@ shed_edge <- function(a, db, w) {
 # Cell on the edge of the map?
 edge_pit <- function(a, db) {
   any(is.na(db$elev[a]))
+}
+
+nb_values <- function(db, max_cols, col = "elev", db_sub = NULL, format = "long") {
+
+  if(is.null(db_sub)) db_sub <- db
+
+  for(i in 1:9){
+    if(i == 1) seqno <- db_sub$seqno + (max_cols - 1)
+    if(i == 2) seqno <- db_sub$seqno + max_cols
+    if(i == 3) seqno <- db_sub$seqno + (max_cols + 1)
+    if(i == 4) seqno <- db_sub$seqno - 1
+    if(i == 5) seqno <- db_sub$seqno
+    if(i == 6) seqno <- db_sub$seqno + 1
+    if(i == 7) seqno <- db_sub$seqno - (max_cols + 1)
+    if(i == 8) seqno <- db_sub$seqno - max_cols
+    if(i == 9) seqno <- db_sub$seqno - (max_cols - 1)
+
+
+    seqno[seqno < 1 | seqno > max(db$seqno)] <- NA
+
+    for(a in col) db_sub[, paste0(a, "_n", i)] <- db[seqno, a]
+  }
+
+  if(format == "long") {
+    db_sub <- tidyr::gather(db_sub, n, value, dplyr::matches(paste0("(", paste0(col, collapse = "_n[0-9]{1})|("), "_n[0-9]{1})")))
+    db_sub <- tidyr::separate(db_sub, n, into = c("type", "n"), sep = -1, convert = TRUE)
+    db_sub <- dplyr::mutate(db_sub, n = as.numeric(n))
+    db_sub <- tidyr::spread(db_sub, type, value)
+  }
+
+  return(db_sub)
+}
+
+calc_seq <- function(d, max_cols) {
+  if(is.na(d)) return(NA)
+  if(d == 1) return(max_cols - 1)
+  if(d == 2) return(max_cols)
+  if(d == 3) return(max_cols + 1)
+  if(d == 4) return(-1)
+  if(d == 5) return(0)
+  if(d == 6) return(1)
+  if(d == 7) return(-(max_cols + 1))
+  if(d == 8) return(-max_cols)
+  if(d == 9) return(-(max_cols - 1))
+}
+
+flow_values <- function(db, max_cols, col = "elev", db_sub = NULL) {
+  if(is.null(db_sub)) db_sub <- db
+  for(a in col) db_sub[, paste0(a, "_next")] <- db[db_sub$seqno + sapply(db_sub$ldir, calc_seq, max_cols = max_cols), a]
+  return(db_sub)
+}
+
+
+finddir2 <- function(db) {
+  db %>%
+    dplyr::mutate(elev_diff = elev - elev_n) %>%
+    dplyr::mutate(elev_diff = dplyr::if_else(n %in% c(1, 3, 7, 9),
+                                             elev_diff/sqrt(2), elev_diff)) %>%
+    dplyr::group_by(seqno) %>%
+    dplyr::mutate(max_slope = max(elev_diff, na.rm = TRUE),
+                  ldir = n[elev_diff == max_slope & max_slope > 0 & !is.na(elev_diff)][1]) %>%
+    dplyr::ungroup() %>%
+    dplyr::select(-elev_n, -max_slope, -n, -elev_diff) %>%
+    dplyr::distinct() %>%
+    dplyr::mutate(ldir = as.numeric(stringr::str_extract(ldir, "[0-9]{1}")),
+                  ldir = replace(ldir, is.na(ldir) & !is.na(elev), 5),
+                  flatcell = (ldir == 5))
 }
 
 
@@ -292,6 +200,39 @@ finddir <- function(n, verbose = FALSE){
   }
 }
 
+flatout2 <- function(db, verbose = FALSE){
+
+  # Confirm cell is NOT missing (else return NA)
+  if(nrow(n) > 0 && !is.na(n$elev[5])){
+
+    # Add in local flow directions
+    n <- dplyr::left_join(n, dplyr::select(db, seqno, ldir), by = "seqno")
+
+    # Confirm that IS flat (else return old ldir)
+    if(n$ldir[5] == 5) {
+
+      n <- n[!is.na(n$elev), ]
+      n$slope <- n$elev[n$index == 5] - n$elev
+
+      # Find FIRST neighbour with same elevation and valid flow direction that isn't right back
+      new_n <- n[n$slope == 0 & n$ldir !=5 & n$index != (10 - n$ldir) & n$index != 5, ][1, ]
+
+      # new_n <- n %>%
+      #   dplyr::filter(slope == 0,          # Same elevation
+      #                 ldir != 5,           # Isn't flat itself
+      #                 index != 10 - ldir,  # Doesn't flow directly back
+      #                 index != 5)          # Isn't the cell of interest
+      # new_n <- new_n[1, ]
+
+      # If there is a candidate, return the new option, else return the original
+      if(nrow(new_n) > 0 && !is.na(new_n$index)) return(new_n$index)  else return(n$ldir[n$index == 5])
+    } else return(n$ldir[n$index == 5])
+  } else {
+    # If on an edge, return NA
+    return(NA)
+  }
+}
+
 flatout <- function(n, db, verbose = FALSE){
 
   # Confirm cell is NOT missing (else return NA)
@@ -302,10 +243,6 @@ flatout <- function(n, db, verbose = FALSE){
 
     # Confirm that IS flat (else return old ldir)
     if(n$ldir[5] == 5) {
-      if(verbose) matrix(n$seqno, nrow = 3, ncol = 3, byrow = TRUE)
-      if(verbose) matrix(n$elev, nrow = 3, ncol = 3, byrow = TRUE)
-      if(verbose) matrix(n$index, nrow = 3, ncol = 3, byrow = TRUE)
-      if(verbose) matrix(n$ldir, nrow = 3, ncol = 3, byrow = TRUE)
 
       n <- n[!is.na(n$elev), ]
       n$slope <- n$elev[n$index == 5] - n$elev
@@ -443,7 +380,7 @@ find_lowest <- function(w, w_stats, final_pits, removed, verbose = FALSE) {
 
       pit1 <- dplyr::filter(w_stats, shedno == wp) %>%
         dplyr::mutate(at_final = FALSE)
-      pit2 <- dplyr::filter(w_stats, shedno == pit1$out_shed) %>%
+      pit2 <- dplyr::filter(w_stats, shedno == pit1$drains_to) %>%
         dplyr::mutate(at_final = FALSE)
 
       if(pit1$pit_elev < lowest$pit_elev) lowest <- pit1
@@ -564,3 +501,48 @@ get_run <- function(file) {
     unlist(.) %>%
     .[1]
 }
+
+# Return closes direction leading to a particular cell
+get_dir <- function(row, col, row_f, col_f, ldir_opts = 1:9) {
+  h <- col_f - col
+  v <- row_f - row
+  a <- atan(abs(h)/abs(v)) * 180/pi
+
+  if(h == 0 & v == 0) {
+    l <- 5
+  } else if(h > 0 & v <= 0) { # Move to Upper right
+    if(a >= 67.5) l <- 6
+    if(a >= 22.5 & a < 67.5) l <- 9
+    if(a < 22.5) l <- 8
+  } else if(h > 0 & v > 0) { # Lower right
+    if(a >= 67.5) l <- 6
+    if(a >= 22.5 & a < 67.5) l <- 3
+    if(a < 22.5) l  <- 2
+  } else if(h <= 0 & v <= 0) { # Upper left
+    if(a >= 67.5) l  <- 4
+    if(a >= 22.5 & a < 67.5) l <- 7
+    if(a < 22.5) l <- 8
+  } else if(h <=0 & v >= 0) { # Lower left
+    if(a >= 67.5) l <- 4
+    if(a >= 22.5 & a < 67.5) l <- 1
+    if(a < 22.5) l <- 2
+  }
+
+  # If best direction not an option, get next best
+  # Prioritorize smaller seqno
+  if(!(l %in% ldir_opts) & l != 5) {
+    closest <- list("1" = c(4, 2, 7, 3, 8, 6, 9),
+                    "2" = c(1, 3, 4, 6, 7, 9, 8),
+                    "3" = c(6, 2, 9, 1, 8, 4, 7),
+                    "4" = c(7, 1, 8, 2, 9, 3, 6),
+                    "6" = c(9, 3, 8, 2, 7, 1, 4),
+                    "7" = c(8, 4, 9, 1, 6, 2, 3),
+                    "8" = c(7, 9, 4, 6, 1, 3, 2),
+                    "9" = c(8, 6, 7, 3, 4, 2, 1))
+
+    c <- closest[as.character(l)][[1]]
+    l <- c[c %in% ldir_opts][1]
+  }
+  return(l)
+}
+

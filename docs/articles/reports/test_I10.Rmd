@@ -1,0 +1,234 @@
+---
+title: "Test - Hypothetical Incline Low Relief"
+author: "Steffi LaZerte"
+date: "`r format(Sys.Date())`"
+output: html_document
+---
+
+<style>
+.figure {
+  max-width: 50%;
+  margin: auto;
+}
+.table {
+  width: auto;
+  margin: auto;
+}
+</style>
+
+```{r, include = FALSE}
+
+knitr::opts_chunk$set(fig.width = 12, tidy = TRUE)
+
+library(tidyverse)
+library(gridExtra)
+library(LITAP)
+
+o <- "~/Projects/Business/LandmapR/TestFiles/05_I1/FlowMapR/"
+n <- "~/Projects/Business/LandmapR/Runs/I10/"
+run <- "I10"
+
+# Original Run DEM
+orig_dem_plot <- load_orig(file = paste0(o, run, "dem.dbf"))
+orig_dem <- load_odem(file = paste0(o, run, "dem.dbf"))
+
+# LITAP Runs - DEM FILES
+pond_dem <- load_new(file = paste0(n, "/final/", run, "_dem_pond.rds"))
+fill_dem <- load_new(file = paste0(n, "/final/",run, "_dem_fill.rds"))
+dem <- load_ndem2(file = paste0(n, "/dbf/", run, "_dem.dbf"))
+
+# Original Run - SHED STATS
+orig_pond <- load_ostat(file = paste0(o, run, "pond.dbf"))
+orig_fill <- load_ostat(file = paste0(o, run, "fill.dbf"))
+orig_pit <- load_ostat(file = paste0(o, run, "pit.dbf"))
+
+# LITAP RUNS - SHED STATS
+initial <- load_new(file = paste0(n, "/final/", run, "_initial.rds"))
+local <- load_ndem1(file = paste0(n, "/dbf/", run, "_local.dbf"))
+pond <- load_ndem1(file = paste0(n, "/dbf/", run, "_pond.dbf"))
+fill <- load_ndem1(file = paste0(n, "/dbf/", run, "_fill.dbf"))
+pit <- load_ndem1(file = paste0(n, "/dbf/", run, "_pit.dbf"))
+
+# Original run - Inverted pits
+orig_ipit <- load_ostat(file = paste0(o, run, "ipit.dbf"))
+
+# LITAP RUNS - Inverted pits
+ipit <- load_ndem1(file = paste0(n, "/dbf/", run, "_ipit.dbf"))
+
+idem <- load_new(file = paste0(n, "/final/", run, "_dem_ilocal.rds"))
+orig_idem <- load_orig(file = paste0(o, run, "idem.dbf"))
+
+```
+
+# Details
+
+~ 2.22 min to run  
+
+
+Better matching between the programs compared to Hypothetical Hummocky Relief because no opportunity for selecting alternative watershed, no ties to break.
+
+__Very similar to R10/R30__
+
+
+#### Original Dem (Relief)
+```{r, echo = FALSE, fig.width = 5}
+flow_plot(orig_dem_plot)
+```
+
+#### Original Dem (Elevation)
+```{r, echo = FALSE, fig.width = 5}
+flow_plot(orig_dem_plot, type = "elevation")
+```
+
+
+# Visual Comparison
+
+
+## Original vs. New Local Shed assignment
+
+- The first shed shows initial pits which are removed in the first step of pit removal. This dem doesn't exist in the original program.
+- The next two are the local sheds (shedno) after amalgamating the small ones
+- Sheds are identical
+
+```{r, echo = FALSE}
+grid.arrange(
+  flow_plot(fill_dem, shed = TRUE, shed_type = "initial") +
+    labs(title = "Initial (New)"),
+  flow_plot(orig_dem_plot, shed = TRUE, shed_type = "local") +
+    labs(title = "Original"),
+  flow_plot(fill_dem, shed = TRUE, shed_type = "local") +
+    labs(title = "New"), nrow = 1)
+```
+
+## Original vs. New Fill Shed assignment
+
+- These are the fill sheds, which reflect how sheds combined during the third pit removal process
+- Shapes should be identical to pond filling, just the numbers may be different
+- Sheds are identical
+
+```{r, echo = FALSE}
+grid.arrange(
+  flow_plot(orig_dem_plot, shed = TRUE, shed_type = "fill") +
+    labs(title = "Original"),
+  flow_plot(fill_dem, shed = TRUE, shed_type = "fill") +
+    labs(title = "New"), nrow = 1)
+```
+
+# Numeric Comparison
+
+## Compare pit stats
+
+__Original Pit data__
+
+```{r, echo = FALSE}
+DT::datatable(orig_pit)
+```
+
+__New Pit data__
+
+```{r, echo = FALSE}
+DT::datatable(pit)
+```
+
+__Differences__
+
+```{r}
+c <- compare(pit, orig_pit)
+```
+
+- Pretty much the same for all important values
+
+```{r}
+pit[c$PitVol,] %>% select(ShedNo, ShedArea, PitVol, Varatio)
+orig_pit[c$PitVol,] %>% select(ShedNo, ShedArea, PitVol, Varatio)
+```
+
+
+
+## Compare pond stats
+
+__Original Pond data__
+
+```{r, echo = FALSE}
+DT::datatable(orig_pond)
+```
+ __New Pond data__
+```{r, echo = FALSE}
+DT::datatable(pond)
+```
+
+```{r}
+pond <- pond %>% arrange(ShedNo)
+orig_pond <- orig_pond %>% arrange(ShedNo)
+c <- compare(pond, orig_pond)
+```
+
+- Pretty much the same for all important values
+
+```{r}
+pond[c$PitVol,] %>% select(ShedNo, ShedArea, PitVol, Varatio)
+orig_pond[c$PitVol,] %>% select(ShedNo, ShedArea, PitVol, Varatio)
+```
+
+
+## Compare fill stats
+
+__Original Fill data__
+
+```{r, echo = FALSE}
+DT::datatable(orig_fill)
+```
+
+__New Fill data__
+
+```{r, echo = FALSE}
+DT::datatable(fill)
+```
+
+- Order of pit filling is the same 
+
+__Differences__
+
+```{r}
+c <- compare(fill, orig_fill)
+```
+
+- Pretty much the same for all important values
+- PreVol/Removed/Stage/Visited not used by LITAP
+
+```{r}
+fill[c$PitVol,] %>% select(ShedNo, ShedArea, PitVol, Varatio)
+orig_fill[c$PitVol,] %>% select(ShedNo, ShedArea, PitVol, Varatio)
+```
+
+
+## Inverted DEM
+Black dots indicate pits, or, as this is inverted, peaks.
+
+Here peaks are in different places, but likely due to selection based on ties (as the entire dem is the same elevation in a given column)
+
+```{r, echo = FALSE}
+grid.arrange(
+  flow_plot(orig_idem, shed = TRUE, shed_type = "fill", pits = TRUE) +
+    labs(title = "Original"),
+  flow_plot(idem, shed = TRUE, shed_type = "local", pits = TRUE) +
+    labs(title = "New"), nrow = 1)
+```
+
+```{r}
+ipit <- arrange(ipit, ShedNo)
+orig_ipit <- arrange(orig_ipit, ShedNo)
+```
+
+```{r}
+c <- compare(ipit, orig_ipit)
+```
+
+- Pit vol off by a small amount and Varatio
+- Small differences in exact pit location (off by one cell at most)
+- Drains To not used by FlowMapR
+
+```{r}
+ipit[c$PitVol,] %>% select(ShedNo, ShedArea, PitVol, Varatio)
+orig_ipit[c$PitVol,] %>% select(ShedNo, ShedArea, PitVol, Varatio)
+```

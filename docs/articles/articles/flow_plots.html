@@ -29,10 +29,82 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../../reference/index.html">Reference</a>
+  <a href="../..//index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
 </li>
 <li>
-  <a href="../../articles/index.html">Articles</a>
+  <a href="../../articles/LITAP.html">Get Started</a>
+</li>
+<li>
+  <a href="../../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
+      <a href="../../articles/articles/flow_plots.html">Flow Plots</a>
+    </li>
+    <li>
+      <a href="../../articles/reports/general.html">General Differences</a>
+    </li>
+    <li>
+      <a href="../../articles/reports/test_021_fast.html">Test - AB provost site (normal)</a>
+    </li>
+    <li>
+      <a href="../../articles/reports/test_02h_fast.html">Test - AB provost site (high thresh)</a>
+    </li>
+    <li>
+      <a href="../../articles/reports/test_02z_fast.html">Test - AB provost site (zero thresh)</a>
+    </li>
+    <li>
+      <a href="../../articles/reports/test_B1h_fast.html">Test - NB Field edge site 4 (high thresh)</a>
+    </li>
+    <li>
+      <a href="../../articles/reports/test_B1m_fast.html">Test - NB Field edge site 4 (noraml)</a>
+    </li>
+    <li>
+      <a href="../../articles/reports/test_B1z_fast.html">Test - NB Field edge site 4 (zero thresh)</a>
+    </li>
+    <li>
+      <a href="../../articles/reports/test_Ec0_fast.html">Test - Manitoba Zero Till Farm (5m unsmoothed) (zero thresh)</a>
+    </li>
+    <li>
+      <a href="../../articles/reports/test_Eec_fast.html">Test - Manitoba Zero Till Farm (5m unsmoothed) (normal)</a>
+    </li>
+    <li>
+      <a href="../../articles/reports/test_Eem_fast.html">Test - Manitoba Zero Till Farm (5m unsmoothed) (High thresh)</a>
+    </li>
+    <li>
+      <a href="../../articles/reports/test_H10_fast.html">Test - Hypothetical Hummocky Low Relief</a>
+    </li>
+    <li>
+      <a href="../../articles/reports/test_H3h_fast.html">Test - Hypothetical Hummocky Medium Relief (missing)</a>
+    </li>
+    <li>
+      <a href="../../articles/reports/test_I10_fast.html">Test - Hypothetical Incline Low Relief</a>
+    </li>
+    <li>
+      <a href="../../articles/reports/test_I3h_fast.html">Test - Hypothetical Incline Medium Relief (missing)</a>
+    </li>
+    <li>
+      <a href="../../articles/reports/test_R10_fast.html">Test - Hypothetical Rolling Low Relief</a>
+    </li>
+    <li>
+      <a href="../../articles/reports/test_R3h_fast.html">Test - Hypothetical Rolling Medium Relief (missing)</a>
+    </li>
+    <li>
+      <a href="../../articles/reports/test_T10_fast.html">Test - Hypothetical Tilted Plane 1 (normal)</a>
+    </li>
+    <li>
+      <a href="../../articles/reports/test_T20_fast.html">Test - Hypothetical Tilted Plane 2 (failed on original Li program) (normal)</a>
+    </li>
+  </ul>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -57,7 +129,7 @@
       <h1>Flow Plots</h1>
                         <h4 class="author">Steffi LaZerte</h4>
             
-            <h4 class="date">2017-08-30</h4>
+            <h4 class="date">2018-04-09</h4>
           </div>
 
     
@@ -79,28 +151,30 @@
 <pre><code>## Loading required package: magrittr</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">files &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">"extdata"</span>, <span class="st">"final"</span>, <span class="dt">package =</span> <span class="st">"LITAP"</span>)
 <span class="kw">list.files</span>(files, <span class="dt">full.names =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<pre><code>##  [1] "/home/steffi/R/x86_64-pc-linux-gnu-library/3.4/LITAP/extdata/final/test_dem_fill.csv"   
-##  [2] "/home/steffi/R/x86_64-pc-linux-gnu-library/3.4/LITAP/extdata/final/test_dem_fill.rds"   
-##  [3] "/home/steffi/R/x86_64-pc-linux-gnu-library/3.4/LITAP/extdata/final/test_dem_ilocal.csv" 
-##  [4] "/home/steffi/R/x86_64-pc-linux-gnu-library/3.4/LITAP/extdata/final/test_dem_ilocal.rds" 
-##  [5] "/home/steffi/R/x86_64-pc-linux-gnu-library/3.4/LITAP/extdata/final/test_dem_initial.csv"
-##  [6] "/home/steffi/R/x86_64-pc-linux-gnu-library/3.4/LITAP/extdata/final/test_dem_initial.rds"
-##  [7] "/home/steffi/R/x86_64-pc-linux-gnu-library/3.4/LITAP/extdata/final/test_dem_local.csv"  
-##  [8] "/home/steffi/R/x86_64-pc-linux-gnu-library/3.4/LITAP/extdata/final/test_dem_local.rds"  
-##  [9] "/home/steffi/R/x86_64-pc-linux-gnu-library/3.4/LITAP/extdata/final/test_dem_pit.csv"    
-## [10] "/home/steffi/R/x86_64-pc-linux-gnu-library/3.4/LITAP/extdata/final/test_dem_pit.rds"    
-## [11] "/home/steffi/R/x86_64-pc-linux-gnu-library/3.4/LITAP/extdata/final/test_dem_pond.csv"   
-## [12] "/home/steffi/R/x86_64-pc-linux-gnu-library/3.4/LITAP/extdata/final/test_dem_pond.rds"   
-## [13] "/home/steffi/R/x86_64-pc-linux-gnu-library/3.4/LITAP/extdata/final/test_fill.csv"       
-## [14] "/home/steffi/R/x86_64-pc-linux-gnu-library/3.4/LITAP/extdata/final/test_fill.rds"       
-## [15] "/home/steffi/R/x86_64-pc-linux-gnu-library/3.4/LITAP/extdata/final/test_ilocal.csv"     
-## [16] "/home/steffi/R/x86_64-pc-linux-gnu-library/3.4/LITAP/extdata/final/test_ilocal.rds"     
-## [17] "/home/steffi/R/x86_64-pc-linux-gnu-library/3.4/LITAP/extdata/final/test_local.csv"      
-## [18] "/home/steffi/R/x86_64-pc-linux-gnu-library/3.4/LITAP/extdata/final/test_local.rds"      
-## [19] "/home/steffi/R/x86_64-pc-linux-gnu-library/3.4/LITAP/extdata/final/test_pit.csv"        
-## [20] "/home/steffi/R/x86_64-pc-linux-gnu-library/3.4/LITAP/extdata/final/test_pit.rds"        
-## [21] "/home/steffi/R/x86_64-pc-linux-gnu-library/3.4/LITAP/extdata/final/test_pond.csv"       
-## [22] "/home/steffi/R/x86_64-pc-linux-gnu-library/3.4/LITAP/extdata/final/test_pond.rds"</code></pre>
+<pre><code>##  [1] "/home/steffi/R/x86_64-pc-linux-gnu-library/3.4/LITAP/extdata/final/testELEV_dem_fill.csv"   
+##  [2] "/home/steffi/R/x86_64-pc-linux-gnu-library/3.4/LITAP/extdata/final/testELEV_dem_fill.rds"   
+##  [3] "/home/steffi/R/x86_64-pc-linux-gnu-library/3.4/LITAP/extdata/final/testELEV_dem_ilocal.csv" 
+##  [4] "/home/steffi/R/x86_64-pc-linux-gnu-library/3.4/LITAP/extdata/final/testELEV_dem_ilocal.rds" 
+##  [5] "/home/steffi/R/x86_64-pc-linux-gnu-library/3.4/LITAP/extdata/final/testELEV_dem_initial.csv"
+##  [6] "/home/steffi/R/x86_64-pc-linux-gnu-library/3.4/LITAP/extdata/final/testELEV_dem_initial.rds"
+##  [7] "/home/steffi/R/x86_64-pc-linux-gnu-library/3.4/LITAP/extdata/final/testELEV_dem_local.csv"  
+##  [8] "/home/steffi/R/x86_64-pc-linux-gnu-library/3.4/LITAP/extdata/final/testELEV_dem_local.rds"  
+##  [9] "/home/steffi/R/x86_64-pc-linux-gnu-library/3.4/LITAP/extdata/final/testELEV_dem_pit.csv"    
+## [10] "/home/steffi/R/x86_64-pc-linux-gnu-library/3.4/LITAP/extdata/final/testELEV_dem_pit.rds"    
+## [11] "/home/steffi/R/x86_64-pc-linux-gnu-library/3.4/LITAP/extdata/final/testELEV_dem_pond.csv"   
+## [12] "/home/steffi/R/x86_64-pc-linux-gnu-library/3.4/LITAP/extdata/final/testELEV_dem_pond.rds"   
+## [13] "/home/steffi/R/x86_64-pc-linux-gnu-library/3.4/LITAP/extdata/final/testELEV_fill.csv"       
+## [14] "/home/steffi/R/x86_64-pc-linux-gnu-library/3.4/LITAP/extdata/final/testELEV_fill.rds"       
+## [15] "/home/steffi/R/x86_64-pc-linux-gnu-library/3.4/LITAP/extdata/final/testELEV_ilocal.csv"     
+## [16] "/home/steffi/R/x86_64-pc-linux-gnu-library/3.4/LITAP/extdata/final/testELEV_ilocal.rds"     
+## [17] "/home/steffi/R/x86_64-pc-linux-gnu-library/3.4/LITAP/extdata/final/testELEV_initial.csv"    
+## [18] "/home/steffi/R/x86_64-pc-linux-gnu-library/3.4/LITAP/extdata/final/testELEV_initial.rds"    
+## [19] "/home/steffi/R/x86_64-pc-linux-gnu-library/3.4/LITAP/extdata/final/testELEV_local.csv"      
+## [20] "/home/steffi/R/x86_64-pc-linux-gnu-library/3.4/LITAP/extdata/final/testELEV_local.rds"      
+## [21] "/home/steffi/R/x86_64-pc-linux-gnu-library/3.4/LITAP/extdata/final/testELEV_pit.csv"        
+## [22] "/home/steffi/R/x86_64-pc-linux-gnu-library/3.4/LITAP/extdata/final/testELEV_pit.rds"        
+## [23] "/home/steffi/R/x86_64-pc-linux-gnu-library/3.4/LITAP/extdata/final/testELEV_pond.csv"       
+## [24] "/home/steffi/R/x86_64-pc-linux-gnu-library/3.4/LITAP/extdata/final/testELEV_pond.rds"</code></pre>
 <p>We will load the rds file (R data files) for the relevant dems. Note that in each of these dem files, the only thing that differs is how the watersheds are almalgamated, and the different flow directions to make this happen.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">initial_dem &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="kw">list.files</span>(files, <span class="dt">pattern =</span> <span class="st">"dem_initial.rds"</span>, <span class="dt">full.names =</span> <span class="ot">TRUE</span>))
 local_dem &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="kw">list.files</span>(files, <span class="dt">pattern =</span> <span class="st">"dem_local.rds"</span>, <span class="dt">full.names =</span> <span class="ot">TRUE</span>))
@@ -108,7 +182,7 @@ pond_dem &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span cla
 fill_dem &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="kw">list.files</span>(files, <span class="dt">pattern =</span> <span class="st">"dem_fill.rds"</span>, <span class="dt">full.names =</span> <span class="ot">TRUE</span>))
 inverted_dem &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="kw">list.files</span>(files, <span class="dt">pattern =</span> <span class="st">"dem_ilocal.rds"</span>, <span class="dt">full.names =</span> <span class="ot">TRUE</span>))
 
-local_stats &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="kw">list.files</span>(files, <span class="dt">pattern =</span> <span class="st">"test_local.rds"</span>, <span class="dt">full.names =</span> <span class="ot">TRUE</span>))</code></pre></div>
+local_stats &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="kw">list.files</span>(files, <span class="dt">pattern =</span> <span class="st">"testELEV_local.rds"</span>, <span class="dt">full.names =</span> <span class="ot">TRUE</span>))</code></pre></div>
 <div id="basic-maps" class="section level2">
 <h2 class="hasAnchor">
 <a href="#basic-maps" class="anchor"></a>Basic maps</h2>
@@ -239,7 +313,8 @@ local_stats &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span 
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
         <div id="tocnav">
-      <h2>Contents</h2>
+      <h2 class="hasAnchor">
+<a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#basic-maps">Basic maps</a></li>
       <li><a href="#subsets">Subsets</a></li>

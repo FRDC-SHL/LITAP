@@ -4,17 +4,22 @@
 \alias{complete_run}
 \title{Complete Run}
 \usage{
-complete_run(file, nrow, ncol, missing_value = -9999, max_area = 10,
-  max_depth = 0.5, folder_out = NULL, clean = FALSE, clim = NULL,
-  rlim = NULL, continue = NULL, end = NULL, report = TRUE,
-  verbose = FALSE, quiet = FALSE)
+complete_run(file, nrow = NULL, ncol = NULL, missing_value = -9999,
+  max_area = 10, max_depth = 0.5, folder_out = NULL, clean = FALSE,
+  clim = NULL, rlim = NULL, continue = NULL, end = NULL, log = TRUE,
+  report = TRUE, verbose = FALSE, quiet = FALSE)
 }
 \arguments{
-\item{file}{Character. Elev.dbf dem file}
+\item{file}{Character. Elevation dem file (see \code{\link{load_file}} for
+supported file types}
 
-\item{nrow}{Numeric. Number of rows in dem file}
+\item{nrow}{Numeric. Number of rows in dem file (required for dbf files with
+a single column, but can be automatically assessed from files with x and y
+coordinates.}
 
-\item{ncol}{Numeric. Number of columns in dem file}
+\item{ncol}{Numeric. Number of columns in dem file (required for dbf files
+with a single column, but can be automatically assessed from files with x
+and y coordinates.}
 
 \item{missing_value}{Numeric/Character. Symbols which define missing data}
 
@@ -28,7 +33,7 @@ pit removal}
 location of dem file if not specified}
 
 \item{clean}{Logical. Remove all backup files and output files from previous
-runs?}
+runs in this folder?}
 
 \item{clim}{Numeric vector. Column limits if specifying a subset of the dem}
 
@@ -39,6 +44,8 @@ below)}
 
 \item{end}{Character. If ending a run after a particular step, which step
 (see Details below)}
+
+\item{log}{Logical. Create log file recording progress?}
 
 \item{report}{Logical. Create html report of results?}
 
@@ -51,19 +58,20 @@ Run an elevation dem file through all functions to caculate watershed flow
 and fill patterns
 }
 \details{
-For resuming or ending a run, \code{continue} or \code{end} must be
-  one of the following:
+For information regarding loading other file types see
+  \code{\link{load_file}}.
+
+  For resuming or ending a run, \code{continue} or \code{end} must be one of
+  the following:
 
   \enumerate{
     \item \code{directions} (Calculating Directions)
     \item \code{watersheds} (Calculating Watersheds)
-    \item \code{watershed_area} (Calculating Watershed Area
     \item \code{local} (Initial Pit Removal)
     \item \code{pond} (Calculating Pond Shed Statistics - Second Pit Removal)
     \item \code{fill} (Calculating Fill Shed Statistics - Third Pit Removal)
     \item \code{inverted} (Calculating Directions on Inverted DEM)
     \item \code{iwatersheds} (Calculating Inverted Watersheds)
-    \item \code{iwatershed_area} (Calculating Watershed Area)
     \item \code{ilocal} (Initial Inverted Pit Removal)
     \item \code{report} (Create the final report)
   }

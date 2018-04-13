@@ -8,7 +8,68 @@ get_track <- function(shed_list, track) {
   return(t)
 }
 
-#' @export
+calc_shed4 <- function(db, verbose = FALSE) {
+
+  db_orig <- db
+
+  npits <- sum(db$ldir == 5, na.rm = TRUE)
+
+  db <- db %>%
+    dplyr::mutate(shedno = NA,
+                  shedno = replace(shedno, ldir == 5 & !is.na(ldir), 1:npits)) %>%
+    dplyr::select(seqno, elev, drec, shedno)
+
+  # Assigne each cell to a watershed by climbing UP
+  n1 <- length(db$shedno[!is.na(db$shedno)])
+  n2 <- 0
+  while(n1 != n2){
+    db <- dplyr::mutate(db, shedno = db$shedno[db$drec])
+    n2 <- n1
+    n1 <- length(db$shedno[!is.na(db$shedno)])
+  }
+
+  # Relabel to match top down process
+  shed_order <- db %>%
+    dplyr::arrange(dplyr::desc(elev), seqno) %>%
+    dplyr::filter(!is.na(shedno)) %>%
+    dplyr::pull(shedno) %>%
+    unique()
+  db <- dplyr::mutate(db, shedno = as.numeric(as.character(factor(shedno, levels = shed_order, labels = 1:npits))))
+
+  # Create sub-watershed seqno's for quicker referencing
+  db <- db %>%
+    dplyr::arrange(seqno) %>%
+    dplyr::group_by(shedno) %>%
+    dplyr::mutate(seqno_shed = 1:length(seqno)) %>%
+    dplyr::ungroup()
+  db$drec_shed <- db$seqno_shed[db$drec]
+
+  # Calculate upslope flow for each cell by watershed
+  if(verbose) message("  Getting upslope flow and area")
+  db <- db %>%
+    dplyr::arrange(dplyr::desc(elev), seqno) %>%
+    dplyr::mutate(upslope = 0) %>%
+    tidyr::nest(-shedno, .key = "db_w") %>%
+    dplyr::mutate(db_w = purrr::map2(db_w, shedno, ~get_upslope3(.x, .y[1]))) %>%
+    tidyr::unnest(db_w) %>%
+    dplyr::arrange(seqno) %>%
+    dplyr::mutate(initial_shed = shedno)
+
+  # Merge with original data
+  db <- dplyr::left_join(db, db_orig, by = c("seqno", "elev", "drec"))
+
+  # Calculate ridge lines
+  db <- db %>%
+    dplyr::select(seqno, initial_shed, buffer) %>%
+    nb_values(max_cols = max(db$col), col = "initial_shed") %>%
+    dplyr::filter(buffer == FALSE) %>%
+    dplyr::group_by(seqno) %>%
+    dplyr::summarize(ridge = length(unique(initial_shed_n[!is.na(initial_shed_n)])) > 1) %>%
+    dplyr::right_join(db, by = "seqno")
+
+  return(db)
+}
+
 calc_shed3 <- function(db, verbose = FALSE) {
 
   db_orig <- db
@@ -88,28 +149,70 @@ calc_shed3 <- function(db, verbose = FALSE) {
 
 get_upslope <- function(db_w, w){
   db_w$upslope <- NA
+  db_ref <- dplyr::arrange(db_w, seqno_shed)
   if(!is.na(w)) {
-    for(cell in db_w$seqno){
-      # If no shedno yet
-      if(is.na(db_w$upslope[db_w$seqno == cell])){
 
-        track <- trace_flow(cell, db_w)
+    for(cell in db_w$seqno_shed){
+      # If no shedno yet
+      if(is.na(db_ref$upslope[cell])){
+
+        track <- trace_flow3(cell, db_ref)
 
         up_new <- lapply(1:length(track), function(x) track[1:which(track == track[x])])
-        up_old <- db_w$upslope[match(track, db_w$seqno)]
+        up_old <- db_ref$upslope[track]
         for(i in 1:length(track)) up_new[[i]] <- na_omit(unique(c(up_new[[i]], up_old[[i]])))
-        db_w$upslope[match(track, db_w$seqno)] <- up_new
+        db_ref$upslope[track] <- up_new
       }
     }
   }
-  return(db_w)
+  return(db_ref)
 }
 
+get_upslope2 <- function(db_w, w){
+  db_ref <- dplyr::arrange(db_w, seqno_shed)
+  if(!is.na(w)) {
+    for(cell in db_w$seqno_shed){
+      if(db_ref$upslope[cell] == 0){
+        track <- trace_flow3(cell, db_ref)
+        up_new <- 1:length(track)
+        up_current <- db_ref$upslope[track]
+        up_new[up_current != 0] <- dplyr::last(up_new[up_current == 0])
+        db_ref$upslope[track] <- db_ref$upslope[track] + up_new
+      }
+    }
+  }
+  return(db_ref)
+}
 
+get_upslope3 <- function(db_w, w){
+  db_ref <- dplyr::arrange(db_w, seqno_shed)
+  flow <- get_all_flow(db_ref)
 
+  if(!is.na(w)) {
+    for(cell in db_w$seqno_shed){
+      if(db_ref$upslope[cell] == 0){
+        track <- na_omit(flow[cell, ])
+        up_new <- 1:length(track)
+        up_current <- db_ref$upslope[track]
+        up_new[up_current != 0] <- dplyr::last(up_new[up_current == 0])
+        db_ref$upslope[track] <- db_ref$upslope[track] + up_new
+      }
+    }
+  }
+  return(db_ref)
+}
 
+get_all_flow <- function(db) {
+  db$drec_shed[db$drec_shed == db$seqno_shed] <- NA
+  m <- matrix(db$seqno_shed, ncol = 1)
+  end <- FALSE
+  while(!end){
+    m <- cbind(m, db$drec_shed[m[,ncol(m)]])
+    if(all(is.na(m[,ncol(m)]))) end <- TRUE
+  }
+  return(m)
+}
 
-#' @export
 calc_shed2 <- function(db, verbose = FALSE) {
   db_orig <- db %>%
     dplyr::arrange(seqno) %>%
@@ -171,7 +274,6 @@ calc_shed2 <- function(db, verbose = FALSE) {
 }
 
 
-#' @export
 calc_shed <- function(db, verbose = FALSE) {
   db <- db %>%
     dplyr::arrange(dplyr::desc(elev), seqno) %>%
