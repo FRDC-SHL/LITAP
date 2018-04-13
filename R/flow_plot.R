@@ -43,12 +43,6 @@ flow_plot <- function(db, type = "relief", dir = FALSE, seqno = FALSE, highlight
     if(!is.null(rlim)) stats <- dplyr::filter(stats, out_row >= rlim[1], out_row <= rlim[2], in_row >= rlim[1], in_row <= rlim[2])
   }
 
-
-  # if(!is.null(upslope)) {
-  #   a <- db$upslope[db$seqno == upslope][[1]]
-  #   db <- dplyr::mutate(db, area = seqno %in% a)
-  # }
-
   if(type == "relief") {
     r <- raster::raster(nrows = length(unique(db$row)),
                         ncols = length(unique(db$col)),
