@@ -64,9 +64,9 @@ flow_plot <- function(db, type = "relief", dir = FALSE, seqno = FALSE, highlight
   #if("ldir" %in% names(db)) db <- dplyr::mutate(db, elev = replace(elev, ldir == 5, NA))
   if(dir) {
     if(is.null(upslope_threshold)) upslope_threshold <- 0
-    if(!("upslope_n" %in% names(db))) db$upslope_n <- Inf
+    if(!("upslope" %in% names(db))) db$upslope <- Inf
     db_dir <- db %>%
-      dplyr::filter(upslope_n >= upslope_threshold) %>%
+      dplyr::filter(upslope >= upslope_threshold) %>%
       dplyr::mutate(xloc = ifelse(ldir %in% c(1,4,7), -1, ifelse(ldir %in% c(3,6,9), 1, 0)),
                     xend = col + xloc,
                     yloc = ifelse(ldir %in% c(7, 8, 9), -1, ifelse(ldir %in% c(1,2,3), 1, 0)),
