@@ -1,3 +1,0 @@
-shedno,shed_area,edge_pit,pit_area,pit_vol,pit_elev,pit_seqno,pit_row,pit_col,pre_vol,varatio,in_seqno,in_row,in_col,in_elev,out_seqno,out_row,out_col,out_elev,drains_to,pour_elev,edge_pit_out,pit_elev_out,pit_seqno_out,pour_elev_out
-1,110,TRUE,64,9.437600000000003,99.5782,112,11,2,0,85.79636363636367,13,2,2,100,2,1,2,99.9938,2,100,TRUE,99.9938,2,100
-2,11,TRUE,3,0.006200000000006867,99.9938,2,1,2,0,0.5636363636369879,1,1,1,100,13,2,2,100,1,100,TRUE,99.5782,112,100
