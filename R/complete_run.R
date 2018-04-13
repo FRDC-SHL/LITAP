@@ -101,7 +101,9 @@ complete_run <- function(file, nrow = NULL, ncol =NULL, missing_value = -9999,
   if(log) log_file <- paste0(folder_out, "/", f, ".log")
 
   lapply(out_locs, function(x) {if(!dir.exists(x)) dir.create(x)})
-  if(clean) lapply(out_locs, function(x) file.remove(list.files(x, pattern = f, full.names = TRUE)))
+
+  if(clean) lapply(out_locs, function(x) file.remove(list.files(x,
+                                                                full.names = TRUE)))
   out_locs <- lapply(out_locs, function(x) paste0(x, f))
 
   if(log && file.exists(log_file)) file.remove(log_file)
@@ -364,7 +366,6 @@ complete_run <- function(file, nrow = NULL, ncol =NULL, missing_value = -9999,
 
 
   # Final Report ------------------------------------------------------------
-
   if(continue %in% c(cont_reg, "inverted", "iwatersheds", "ilocal", "report")) {
     if(report == TRUE){
       files <- normalizePath(list.files(path = paste0(folder_out, "/final"), full.names = TRUE))
