@@ -1,0 +1,235 @@
+---
+title: "Test - Hypothetical Hummocky Medium Relief - Missing values"
+author: "Steffi LaZerte"
+date: "`r format(Sys.Date())`"
+output: html_document
+---
+
+<style>
+.figure {
+  max-width: 50%;
+  margin: auto;
+}
+.table {
+  width: auto;
+  margin: auto;
+}
+</style>
+
+```{r, include = FALSE}
+
+knitr::opts_chunk$set(fig.width = 12, tidy = TRUE)
+
+library(tidyverse)
+library(gridExtra)
+library(LITAP)
+
+o <- "~/Projects/Business/LandmapR/TestFiles/02_H3/MissingValue_FlowMapR/"
+n <- "~/Projects/Business/LandmapR/Runs/H3h/"
+run <- "H3h"
+
+# Original Run DEM
+orig_dem_plot <- load_orig(file = paste0(o, run, "dem.dbf"))
+orig_dem <- load_odem(file = paste0(o, run, "dem.dbf"))
+
+# LITAP Runs - DEM FILES
+pond_dem <- load_new(file = paste0(n, "/final/", run, "_dem_pond.rds"))
+fill_dem <- load_new(file = paste0(n, "/final/",run, "_dem_fill.rds"))
+dem <- load_ndem2(file = paste0(n, "/dbf/", run, "_dem.dbf"))
+
+# Original Run - SHED STATS
+orig_pond <- load_ostat(file = paste0(o, run, "pond.dbf"))
+orig_fill <- load_ostat(file = paste0(o, run, "fill.dbf"))
+orig_pit <- load_ostat(file = paste0(o, run, "pit.dbf"))
+
+# LITAP RUNS - SHED STATS
+initial <- load_new(file = paste0(n, "/final/", run, "_initial.rds"))
+local <- load_ndem1(file = paste0(n, "/dbf/", run, "_local.dbf"))
+pond <- load_ndem1(file = paste0(n, "/dbf/", run, "_pond.dbf"))
+fill <- load_ndem1(file = paste0(n, "/dbf/", run, "_fill.dbf"))
+pit <- load_ndem1(file = paste0(n, "/dbf/", run, "_pit.dbf"))
+
+# Original run - Inverted pits
+orig_ipit <- load_ostat(file = paste0(o, run, "ipit.dbf"))
+
+# LITAP RUNS - Inverted pits
+ipit <- load_ndem1(file = paste0(n, "/dbf/", run, "_ipit.dbf"))
+
+idem <- load_new(file = paste0(n, "/final/", run, "_dem_ilocal.rds"))
+orig_idem <- load_orig(file = paste0(o, run, "idem.dbf"))
+
+```
+
+# Details
+
+** THESE RESULTS ARE IDENTICAL TO H10 **
+
+2.22 min to run
+
+
+#### Original Dem (Relief)
+```{r, echo = FALSE, fig.width = 5}
+flow_plot(orig_dem_plot, missing = -9999)
+```
+
+#### Original Dem (Elevation)
+```{r, echo = FALSE, fig.width = 5}
+flow_plot(orig_dem_plot, type = "elevation", missing = -9999)
+```
+
+
+# Visual Comparison
+
+## Original vs. New Local Shed assignment
+
+- The first shed shows initial pits which are removed in the first step of pit removal. This dem doesn't exist in the original program.
+- The next two are the local sheds (shedno) after amalgamating the small ones
+- Sheds are identical except that in original, missing values get a shed of 0 whereas they're marked as NA in LITAP
+
+
+```{r, echo = FALSE}
+grid.arrange(
+  flow_plot(fill_dem, shed = TRUE, shed_type = "initial") +
+    labs(title = "Initial (New)"),
+  flow_plot(orig_dem_plot, shed = TRUE, shed_type = "local") +
+    labs(title = "Original"),
+  flow_plot(fill_dem, shed = TRUE, shed_type = "local") +
+    labs(title = "New"), nrow = 1)
+```
+
+## Original vs. New Fill Shed assignment
+
+- These are the fill sheds, which reflect how sheds combined during the third pit removal process
+- Shapes should be identical to pond filling, just the numbers may be different
+- Sheds are identical except that in original, missing values get a shed of 0 whereas they're marked as NA in LITAP
+
+```{r, echo = FALSE}
+grid.arrange(
+  flow_plot(orig_dem_plot, shed = TRUE, shed_type = "fill") +
+    labs(title = "Original"),
+  flow_plot(fill_dem, shed = TRUE, shed_type = "fill") +
+    labs(title = "New"), nrow = 1)
+```
+
+# Numeric Comparison
+
+## Compare pond stats
+
+__Original Pond data__
+
+```{r, echo = FALSE}
+DT::datatable(orig_pond)
+```
+ __New Pond data__
+```{r, echo = FALSE}
+DT::datatable(pond)
+```
+
+__Differences__
+
+```{r}
+pond <- arrange(pond, ShedNo)
+orig_pond <- arrange(orig_pond, ShedNo)
+c <- compare(pond, orig_pond)
+```
+
+- Most important values (pit area, pit vol, varatio) are identical, or only different by a small degree
+- Nextpit is often incorrect (not sure why)
+- Exact location of pourpoint between two watersheds is sometimes off by a cell or two (out rec and in rec)
+
+- DrainsTo off in one case, almost certainly due to tie breaking (going west instead of south)
+
+```{r}
+pond[c$DrainsTo,] %>% select(ShedNo, PitRec, PourElev, DrainsTo, OutElev, Becomes)
+orig_pond[c$DrainsTo,] %>% select(ShedNo, PitRec, PourElev, DrainsTo, OutElev, Becomes)
+```
+
+- Two `becomes` are switched, also due to tie breaking in order of filling?
+```{r}
+pond[c$Becomes,] %>% select(ShedNo, PitRec, PourElev, DrainsTo, OutElev, Becomes)
+orig_pond[c$Becomes,] %>% select(ShedNo, PitRec, PourElev, DrainsTo, OutElev, Becomes)
+```
+
+- But in the end, all become 19 anyway, does it matter?
+```{r}
+pond %>% filter(ShedNo %in% c(18,19)) %>% select(ShedNo, PitRec, PourElev, DrainsTo, OutElev, Becomes)
+orig_pond %>% filter(ShedNo %in% c(18,19)) %>% select(ShedNo, PitRec, PourElev, DrainsTo, OutElev, Becomes)
+```
+
+
+## Compare fill stats
+
+__Original Fill data__
+
+```{r, echo = FALSE}
+DT::datatable(orig_fill)
+```
+
+__New Fill data__
+
+```{r, echo = FALSE}
+DT::datatable(fill)
+```
+
+- Order of pit filling is the same
+
+__Differences__
+
+```{r}
+fill <- arrange(fill, ShedNo)
+orig_fill <- arrange(orig_fill, ShedNo)
+c <- compare(fill, orig_fill)
+```
+
+- All important values (pit area, pit vol, varatio, becomes) are identical, or only different by a small degree
+- Out sheds (DrainsTo) not all the same... does this matter?
+
+
+## Compare pit stats
+
+__Original Pit data__
+
+```{r, echo = FALSE}
+DT::datatable(orig_pit)
+```
+
+__New Pit data__
+
+```{r, echo = FALSE}
+DT::datatable(pit)
+```
+
+__Differences__
+
+```{r}
+c <- compare(pit, orig_pit)
+```
+
+Same conclusions as above
+
+
+## Inverted DEM
+Black dots indicate pits, or, as this is inverted, peaks
+
+```{r, echo = FALSE}
+grid.arrange(
+  flow_plot(orig_idem, shed = TRUE, shed_type = "fill", pits = TRUE) +
+    labs(title = "Original"),
+  flow_plot(idem, shed = TRUE, shed_type = "local", pits = TRUE) +
+    labs(title = "New"), nrow = 1)
+```
+
+```{r}
+ipit <- arrange(ipit, ShedNo)
+orig_ipit <- arrange(orig_ipit, ShedNo)
+c <- compare(ipit, orig_ipit)
+```
+
+- All values close if not identical
+- Pit and Shed areas off by a small amount, eads to small differences in pit volume and varatio
+- Drains too different in that all match except those in the original that are assigned zero?
+
+```{r}
+ipit[c$DrainsTo,] %>% select(ShedNo, PourElev, PitRec, OutRec, DrainsTo)
+orig_ipit[c$DrainsTo,] %>% select(ShedNo, PourElev, PitRec, OutRec, DrainsTo)
+```

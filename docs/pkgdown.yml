@@ -1,0 +1,25 @@
+urls:
+  reference: http://hadley.github.io/pkgdown/reference
+  article: http://hadley.github.io/pkgdown/articles
+articles:
+  flow_plots: articles/flow_plots.html
+  LITAP: LITAP.html
+  general: reports/general.html
+  test_021_fast: reports/test_021_fast.html
+  test_02h_fast: reports/test_02h_fast.html
+  test_02z_fast: reports/test_02z_fast.html
+  test_B1h_fast: reports/test_B1h_fast.html
+  test_B1m_fast: reports/test_B1m_fast.html
+  test_B1z_fast: reports/test_B1z_fast.html
+  test_Ec0_fast: reports/test_Ec0_fast.html
+  test_Eec_fast: reports/test_Eec_fast.html
+  test_Eem_fast: reports/test_Eem_fast.html
+  test_H10_fast: reports/test_H10_fast.html
+  test_H3h_fast: reports/test_H3h_fast.html
+  test_I10_fast: reports/test_I10_fast.html
+  test_I3h_fast: reports/test_I3h_fast.html
+  test_R10_fast: reports/test_R10_fast.html
+  test_R3h_fast: reports/test_R3h_fast.html
+  test_T10_fast: reports/test_T10_fast.html
+  test_T20_fast: reports/test_T20_fast.html
+

@@ -1,13 +1,11 @@
 ---
-title: "README"
-author: Steffi LaZerte
+title: "LITAP"
+output: github_document
 ---
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(fig.width = 15, fig.height = 10, tidy = TRUE, eval = FALSE)
 ```
-
-# LITAP
 
 __Landscape Integrated Terrain Analysis Package (LITAP)__ for the analysis of waterflow based on elevation data and pit removals. Based on R. A. (Bob) MacMillan's FlowMapR program.
 
@@ -42,10 +40,17 @@ As well as the location of output files:
 complete_run(file = "testElev.dem", nrow = 100, ncol = 100, folder_out = "./Output/")
 ```
 
+LITAP accepts multiple file types (see `?load_file` for details and requirements):
+
+```{r}
+complete_run(file = "testElev.csv")
+complete_run(file = "testElev.grd")
+complete_run(file = "testElev.flt")
+```
+
+
 ## Output
 
-Output files include .rds (R data files) and .csv files in the "Final" folder, .dbf files in the "dbf" folder and backup files (for resuming runs) in teh "Backup" folder. Additionally, an html report summaring the run is included in the output folder
-
-The .dbf files are designed to imitate the output of the original FlowMapR program (note that the .rds and the .csv files do not).
+Output files include .rds (R data files) and .csv files in the "Final" folder, .dbf files in the "dbf" folder and backup files (for resuming runs) in the "Backup" folder. Additionally, an html report summaring the run is included in the output folder
 
 See the [LITAP website](http://steffilazerte.github.io/LITAP/) hosted on github for more details and examples
