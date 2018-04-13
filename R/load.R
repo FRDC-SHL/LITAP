@@ -81,7 +81,8 @@ load_txt <- function(file) {
 #'   rows to extract
 #' @param clim Vector. Two numbers specifying the start and end of a subset of
 #'   columns to extract
-#' @param edge Logical. Whether to add an edge (buffer) around the data
+#' @param edge Logical. Whether to add an edge (buffer) around the data.
+#' @param verbose Logical. Output extra progress messages.
 #'
 #' @return Returns a data frame containing elevation data in a format suitable
 #'   for analysis

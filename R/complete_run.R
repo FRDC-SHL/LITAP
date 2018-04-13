@@ -19,7 +19,7 @@
 #' @param folder_out Charater. Folder to store output files. Defaults to
 #'   location of dem file if not specified
 #' @param clean Logical. Remove all backup files and output files from previous
-#'   runs?
+#'   runs in this folder?
 #' @param clim Numeric vector. Column limits if specifying a subset of the dem
 #' @param rlim Numeric vector. Row limits if specifying a subset of the dem
 #' @param continue Character. If resuming a run, where to resume (see Details

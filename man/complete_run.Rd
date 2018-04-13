@@ -33,7 +33,7 @@ pit removal}
 location of dem file if not specified}
 
 \item{clean}{Logical. Remove all backup files and output files from previous
-runs?}
+runs in this folder?}
 
 \item{clim}{Numeric vector. Column limits if specifying a subset of the dem}
 

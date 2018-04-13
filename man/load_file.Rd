@@ -28,7 +28,9 @@ rows to extract}
 \item{clim}{Vector. Two numbers specifying the start and end of a subset of
 columns to extract}
 
-\item{edge}{Logical. Whether to add an edge (buffer) around the data}
+\item{edge}{Logical. Whether to add an edge (buffer) around the data.}
+
+\item{verbose}{Logical. Output extra progress messages.}
 }
 \value{
 Returns a data frame containing elevation data in a format suitable
@@ -44,11 +46,13 @@ All x/y data must be in a format such that greater values indicate
 This function uses file extensions to guess the file type to be loaded.
 
 \strong{dBase files:}
-These files are loaded via the \code{\link[foreign]{read.dbf}} function. They
-may have either two or four columns. If two, it is expected to contain an ID
-columna and an elevation column, and nrow and ncol arguments must be
-supplied. If four, it is expected to contain ID, x, y, and z columns (z =
-elevation). Column order matters, column names do not.
+These files are loaded via the \code{\link[foreign]{read.dbf}} function.
+Columns must be named and must have a valid name (case doesn't not matter).
+X/Y coordinates are optional and must be named as "x", "lon", "long",
+"longitude", or "y", "lat", "latitude". Elevation columns can be "elev",
+"elevation", or "z". If no "x" and "y" columns are suppled, \code{nrow} and
+\code{ncol} arguments must be supplied. Column names matter, column order
+does not. Extra columns, if present, are ignored.
 \itemize{
   \item dBase files (.dbf)
 }
@@ -65,9 +69,8 @@ These file types are loaded via the \code{\link[raster]{raster}} function.
 
 \strong{Text/Spreadsheet file types:}
 Data in these files are all assumed to be arranged in three columns
-reflecting x, y, and z dimensions (z = elevation).
-Column **order** is important.
-Column names don't matter, but they should be present.
+reflecting x, y, and z dimensions (z = elevation). Column **order** is
+important. Column names don't matter, but they should be present.
 \itemize{
   \item Text files (.txt, .dat, .csv) are loaded via R base
   \code{link[utils]{read.table}} function.
