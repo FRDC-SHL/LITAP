@@ -28,16 +28,16 @@ test_that("Grid files load and prep", {
   skip_on_appveyor()
   skip_on_travis()
   file <- "../../../Data/FES4 Input files/FES04_9n3_Original_SurferGrid.grd"
-  expect_silent(d <- load_raster(file))
-  expect_equal(nrow(d), 434421)
-  expect_equivalent(min(d$elev), 204.5368, tolerance = 0.00001)
-  expect_equivalent(max(d$elev), 233.1556, tolerance = 0.00001)
+  expect_silent(d_raw <<- load_raster(file))
+  expect_equal(nrow(d_raw), 434421)
+  expect_equivalent(min(d_raw$elev), 204.5368, tolerance = 0.00001)
+  expect_equivalent(max(d_raw$elev), 233.1556, tolerance = 0.00001)
 
   expect_silent(d <- load_file(file, verbose = FALSE))
   expect_values(d)
 })
 
-d_raw <- load_raster("../../../Data/FES4 Input files/FES04_9n3_Original_SurferGrid.grd")
+#d_raw <- load_raster("../../../Data/FES4 Input files/FES04_9n3_Original_SurferGrid.grd")
 
 test_that("AscII Grid files load and prep", {
   skip_on_cran()
@@ -45,10 +45,10 @@ test_that("AscII Grid files load and prep", {
   skip_on_travis()
   file <- "../../../Data/FES4 Input files/FES04_SuferGridAscII.grd"
   # Weird warning only produced in test_that env ?
-  expect_error(expect_message(d <- load_raster(file), NA), NA)
+  suppressWarnings(expect_error(expect_message(d <- load_raster(file), NA), NA))
   expect_equivalent(d_raw, d, tolerance = 0.00001)
 
-  expect_error(expect_message(d <- load_file(file, verbose = FALSE), NA), NA)
+  suppressWarnings(expect_error(expect_message(d <- load_file(file, verbose = FALSE), NA), NA))
   expect_values(d)
 })
 
