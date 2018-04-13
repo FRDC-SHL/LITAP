@@ -8,8 +8,18 @@ load_dem <- function(file) {
 
     # Format names
     names(db) <- tolower(names(db))
-    names(db) <- stringr::str_replace(names(db), "(elevation)|(z)", "elev")
+    names(db) <- stringr::str_replace(names(db), "(^elevation$)|(^z$)", "elev")
+    names(db) <- stringr::str_replace(names(db), "(^latitude$)|(^lat$)", "y")
+    names(db) <- stringr::str_replace(names(db), "(^longitude$)|(^lon$)|(^long$)", "x")
     db <- dplyr::select(db, dplyr::matches("(^x$)|(^y$)|(^elev$)"))
+
+    if(ncol(db) < 1) stop("No valid column names (see ?load_file for more ",
+                          "details on valid names)", call. = FALSE)
+
+    if(!("elev" %in% names(db))) stop("No valid elevation column (must be ",
+                                      "named either \"z\", \"elev\" or ",
+                                      "\"elevation\", case does not matter)",
+                                      call. = FALSE)
 
     # Sort if x/y present
     if(ncol(db) > 1 && all(c("x", "y", "elev") %in% names(db))) {
@@ -82,11 +92,13 @@ load_txt <- function(file) {
 #' This function uses file extensions to guess the file type to be loaded.
 #'
 #' \strong{dBase files:}
-#' These files are loaded via the \code{\link[foreign]{read.dbf}} function. They
-#' may have either two or four columns. If two, it is expected to contain an ID
-#' columna and an elevation column, and nrow and ncol arguments must be
-#' supplied. If four, it is expected to contain ID, x, y, and z columns (z =
-#' elevation). Column order matters, column names do not.
+#' These files are loaded via the \code{\link[foreign]{read.dbf}} function.
+#' Columns must be named and must have a valid name (case doesn't not matter).
+#' X/Y coordinates are optional and must be named as "x", "lon", "long",
+#' "longitude", or "y", "lat", "latitude". Elevation columns can be "elev",
+#' "elevation", or "z". If no "x" and "y" columns are suppled, \code{nrow} and
+#' \code{ncol} arguments must be supplied. Column names matter, column order
+#' does not. Extra columns, if present, are ignored.
 #' \itemize{
 #'   \item dBase files (.dbf)
 #' }
@@ -103,9 +115,8 @@ load_txt <- function(file) {
 #'
 #' \strong{Text/Spreadsheet file types:}
 #' Data in these files are all assumed to be arranged in three columns
-#' reflecting x, y, and z dimensions (z = elevation).
-#' Column **order** is important.
-#' Column names don't matter, but they should be present.
+#' reflecting x, y, and z dimensions (z = elevation). Column **order** is
+#' important. Column names don't matter, but they should be present.
 #' \itemize{
 #'   \item Text files (.txt, .dat, .csv) are loaded via R base
 #'   \code{link[utils]{read.table}} function.
@@ -119,7 +130,7 @@ load_txt <- function(file) {
 load_file <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
                       rlim = NULL, clim = NULL, edge = TRUE, verbose = TRUE) {
 
-  ext <- tools::file_ext(file)
+  ext <- tolower(tools::file_ext(file))
 
   if(ext %in% c("grd", "tif", "adf", "asc", "flt", "")) {
     if(ext == "" & verbose) message("  Assuming folder representing Arc/Info Binary Grid")
