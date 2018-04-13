@@ -19,8 +19,9 @@
         "fill_shed", "final", "group1", "group2", "group3", "group4", "highlight",
         "in_col", "in_elev", "in_row", "in_seqno", "initial_shed", "initial_shed_n", "last_elev",
         "ldir_opts", "max_slope", "median", "min_elev_n", "missing_n",
-        "mm2fl", "mutate", "n1", "n2", "n3", "n4", "n_elev", "n_seqno", "n_shedno", "shedno",
+        "mm2fl", "mutate", "n", "n1", "n2", "n3", "n4", "n_elev", "n_seqno", "n_shedno", "shedno",
         'shedno_n', 'removed', "relief",
+        "x", "y", "elev", "type", "col_out",
         # piping requires '.' at times
         ".")
 
