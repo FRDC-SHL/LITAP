@@ -73,6 +73,19 @@ To clean up any old files before conducting a new run, use `clean = TRUE`. __Car
 complete_run(file = "testElev.dem", nrow = 100, ncol = 100, folder_out = "./Output/", clean = TRUE)
 ```
 
+## Different input file types
+
+You can use a variety of input file types, provided they fit the format specifications defined in `load_file()` (`?load_file` for more details). Among others, the following file types are accepted:
+
+```{r}
+complete_run(file = "testElev.grd") # Grid files
+complete_run(file = "testElev.csv") # CSV files
+complete_run(file = "testElev.asc") # Ascii Grid files
+complete_run(file = "testElev.flt") # Floating point raster files
+complete_run(file = "testElev")     # ArcGis Gridfile folder (contains .hdr files)
+```
+
+
 ## Subset of input dem
 
 To conduct a run on only a subset of the dem you can specify row and column limits (`rlim` and `clim` respectively):
