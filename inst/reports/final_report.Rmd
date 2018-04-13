@@ -37,11 +37,11 @@ files <- params$out_files
 library(LITAP)
 library(gridExtra)
 
-cat(files)
+#cat(files)
 if(length(stringr::str_subset(files, paste0(run, "_dem_fill.rds"))) > 0) dem <- readRDS(stringr::str_subset(files, paste0(run, "_dem_fill.rds")))
-if(length(stringr::str_subset(files, paste0(run, "_pit.rds"))) > 0) pit <- readRDS(stringr::str_subset(files, paste0(run, "_pit.rds"))) #cat(stringr::str_subset(files, paste0(run, "_pit.rds"))) 
-if(length(stringr::str_subset(files, paste0(run, "_pond.rds"))) > 0) pond <- readRDS(stringr::str_subset(files, paste0(run, "_pond.rds")))
-if(length(stringr::str_subset(files, paste0(run, "_fill.rds"))) > 0) fill <- readRDS(stringr::str_subset(files, paste0(run, "_fill.rds")))
+if(length(stringr::str_subset(files, paste0(run, "_pit.rds"))) > 0) pit <- readRDS(stringr::str_subset(files, paste0(run, "_pit.rds"))) else pit <- NULL #cat(stringr::str_subset(files, paste0(run, "_pit.rds"))) 
+if(length(stringr::str_subset(files, paste0(run, "_pond.rds"))) > 0) pond <- readRDS(stringr::str_subset(files, paste0(run, "_pond.rds"))) else pond <- NULL
+if(length(stringr::str_subset(files, paste0(run, "_fill.rds"))) > 0) fill <- readRDS(stringr::str_subset(files, paste0(run, "_fill.rds"))) else fill <- NULL
 ```
 
 ## Details
@@ -109,15 +109,15 @@ __NOTE:__
 
 ### Watershed stats - Pit Table
 ```{r pit_table}
-if(exists("pit")) DT::datatable(pit, rownames = FALSE) else message("No pit table")
+if(!is.null(pit)) DT::datatable(pit, rownames = FALSE) else message("No pit table")
 ```
 
 ### Watershed stats - Pond Table
 ```{r pond_table}
-if(exists("pond")) DT::datatable(pond, rownames = FALSE) else message("No pit table")
+if(!is.null(pond)) DT::datatable(pond, rownames = FALSE) else message("No pit table")
 ```
 
 ### Watershed stats - Fill Table
 ```{r fill_table}
-if(exists("fill")) DT::datatable(fill, rownames = FALSE, filter = "none", options = list(ordering=F)) else message("No fill table")
+if(!is.null(fill)) DT::datatable(fill, rownames = FALSE, filter = "none", options = list(ordering=F)) else message("No fill table")
 ```
