@@ -36,7 +36,7 @@ pond_dem <- readRDS(list.files(files, pattern = "dem_pond.rds", full.names = TRU
 fill_dem <- readRDS(list.files(files, pattern = "dem_fill.rds", full.names = TRUE))
 inverted_dem <- readRDS(list.files(files, pattern = "dem_ilocal.rds", full.names = TRUE))
 
-local_stats <- readRDS(list.files(files, pattern = "test_local.rds", full.names = TRUE))
+local_stats <- readRDS(list.files(files, pattern = "testELEV_local.rds", full.names = TRUE))
 ```
 
 ## Basic maps
