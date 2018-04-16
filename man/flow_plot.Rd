@@ -44,5 +44,6 @@ points.}
 \item{missing}{Character. What is the value of missing data? Defaults to NA}
 }
 \description{
-Plots water flow and watersheds
+Plots water flow and watersheds. See the flow_plot article/vignette for
+examples.
 }

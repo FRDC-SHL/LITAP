@@ -37,7 +37,10 @@ Returns a data frame containing elevation data in a format suitable
   for analysis
 }
 \description{
-Load and prep elevation data
+This function is used by \code{\link{complete_run}} to load input files and
+prepare them for analysis. It can also be used to load input files
+independently for plotting with \code{\link{flow_plot}} and/or
+trouble-shooting.
 }
 \details{
 All x/y data must be in a format such that greater values indicate

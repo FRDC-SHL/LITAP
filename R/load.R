@@ -67,6 +67,11 @@ load_txt <- function(file) {
 
 #' Load and prep elevation data
 #'
+#' This function is used by \code{\link{complete_run}} to load input files and
+#' prepare them for analysis. It can also be used to load input files
+#' independently for plotting with \code{\link{flow_plot}} and/or
+#' trouble-shooting.
+#'
 #' @param file Character. The location of the file containing elevation data.
 #'   See details for accepted file types
 #' @param nrow Numeric. Number of rows in dem file (required for dbf files with
