@@ -1,6 +1,7 @@
 #' Create plots of water flow
 #'
-#' Plots water flow and watersheds
+#' Plots water flow and watersheds. See the flow_plot article/vignette for
+#' examples.
 #'
 #' @param db Data frame. Cell by cell data on the elevation of the watershed.
 #'   Output by LITAP's \code{complete_run()} function.

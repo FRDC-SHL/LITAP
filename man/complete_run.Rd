@@ -10,8 +10,8 @@ complete_run(file, nrow = NULL, ncol = NULL, missing_value = -9999,
   report = TRUE, verbose = FALSE, quiet = FALSE)
 }
 \arguments{
-\item{file}{Character. Elevation dem file (see \code{\link{load_file}} for
-supported file types}
+\item{file}{Character. Elevation file (see \code{\link{load_file}} for
+supported file types.}
 
 \item{nrow}{Numeric. Number of rows in dem file (required for dbf files with
 a single column, but can be automatically assessed from files with x and y
@@ -54,8 +54,8 @@ below)}
 \item{quiet}{Logical. Suppress all messages.}
 }
 \description{
-Run an elevation dem file through all functions to caculate watershed flow
-and fill patterns
+Run an elevation file through all functions to calculate watershed flow and
+fill patterns.
 }
 \details{
 For information regarding loading other file types see
