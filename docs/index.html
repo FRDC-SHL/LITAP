@@ -151,7 +151,7 @@ devtools::<span class="kw">install_github</span>(<span class="st">"steffilazerte
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testElev.dem"</span>, <span class="dt">nrow =</span> <span class="dv">100</span>, <span class="dt">ncol =</span> <span class="dv">100</span>, <span class="dt">max_area =</span> <span class="dv">5</span>, <span class="dt">max_depth =</span> <span class="fl">0.2</span>)</code></pre></div>
 <p>As well as the location of output files:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testElev.dem"</span>, <span class="dt">nrow =</span> <span class="dv">100</span>, <span class="dt">ncol =</span> <span class="dv">100</span>, <span class="dt">folder_out =</span> <span class="st">"./Output/"</span>)</code></pre></div>
-<p>LITAP accepts multiple file types (see <code><a href="reference/load_file.html">?load_file</a></code> for details and requirements):</p>
+<p>LITAP accepts multiple file types and can automatically assess the number of rows and columns, depending on the type (see <code><a href="reference/load_file.html">?load_file</a></code> for details and requirements):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testElev.csv"</span>)
 <span class="kw"><a href="reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testElev.grd"</span>)
 <span class="kw"><a href="reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testElev.flt"</span>)</code></pre></div>
@@ -159,7 +159,7 @@ devtools::<span class="kw">install_github</span>(<span class="st">"steffilazerte
 <div id="output" class="section level2">
 <h2 class="hasAnchor">
 <a href="#output" class="anchor"></a>Output</h2>
-<p>Output files include .rds (R data files) and .csv files in the “Final” folder, .dbf files in the “dbf” folder and backup files (for resuming runs) in the “Backup” folder. Additionally, an html report summaring the run is included in the output folder</p>
+<p>Output files include .rds (R data files) and .csv files in the “Final” folder, .dbf files in the “dbf” folder and backup files (for resuming runs) in the “Backup” folder. Additionally, an html report summaring the run is included in the output folder.</p>
 <p>See the <a href="http://steffilazerte.github.io/LITAP/">LITAP website</a> hosted on github for more details and examples</p>
 </div>
 </div>
