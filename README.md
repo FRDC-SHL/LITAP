@@ -36,7 +36,7 @@ As well as the location of output files:
 complete_run(file = "testElev.dem", nrow = 100, ncol = 100, folder_out = "./Output/")
 ```
 
-LITAP accepts multiple file types (see `?load_file` for details and requirements):
+LITAP accepts multiple file types and can automatically assess the number of rows and columns, depending on the type (see `?load_file` for details and requirements):
 
 ``` r
 complete_run(file = "testElev.csv")
@@ -47,6 +47,6 @@ complete_run(file = "testElev.flt")
 Output
 ------
 
-Output files include .rds (R data files) and .csv files in the "Final" folder, .dbf files in the "dbf" folder and backup files (for resuming runs) in the "Backup" folder. Additionally, an html report summaring the run is included in the output folder
+Output files include .rds (R data files) and .csv files in the "Final" folder, .dbf files in the "dbf" folder and backup files (for resuming runs) in the "Backup" folder. Additionally, an html report summaring the run is included in the output folder.
 
 See the [LITAP website](http://steffilazerte.github.io/LITAP/) hosted on github for more details and examples
