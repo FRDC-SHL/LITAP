@@ -130,8 +130,6 @@ load_txt <- function(file) {
 #'   \code{\link[readxl]{read_excel}} function.
 #'   }
 #'
-#' @examples
-#'
 #' @export
 load_file <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
                       rlim = NULL, clim = NULL, edge = TRUE, verbose = TRUE) {
