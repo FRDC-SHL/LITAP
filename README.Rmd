@@ -4,7 +4,7 @@ output: github_document
 ---
 
 ```{r, include = FALSE}
-knitr::opts_chunk$set(fig.width = 15, fig.height = 10, tidy = TRUE, eval = FALSE)
+knitr::opts_chunk$set(fig.width = 15, fig.height = 10, tidy = TRUE, eval = TRUE)
 ```
 
 __Landscape Integrated Terrain Analysis Package (LITAP)__ for the analysis of waterflow based on elevation data and pit removals. Based on R. A. (Bob) MacMillan's FlowMapR program.
@@ -15,42 +15,75 @@ See the companion website for more details: <http://steffilazerte.github.io/LITA
 
 Use the `devtools` package to directly install R packages from github:
 
-```{r}
+```{r, eval = FALSE}
 install.packages("devtools") # If not already installed
 devtools::install_github("steffilazerte/LITAP") 
 ```
 
+## Example files
+
+LITAP comes with several example files (`testELEV.dbf` and `testELEV_mini.dbf`). These are found in the "extdata" folder inside the LITAP package folder. If you are unsure where this folder is, use the function `system.file()`:
+
+```{r, eval = FALSE}
+system.file("extdata", package = "LITAP")
+```
+
+Now you can copy and paste these files to your working folder to try out the following examples.
+
+
+```{r, echo = FALSE}
+file.copy(system.file("extdata", "testELEV.dbf", package = "LITAP"), ".")
+```
+
 ## Basic Usage
 
-Must specify the dem file and the number of rows and columns:
+Load the package:
+```{r}
+library(LITAP)
+```
+
+First, specify the dem file and the number of rows and columns:
 
 ```{r}
-complete_run(file = "testElev.dem", nrow = 100, ncol = 100)
+complete_run(file = "testELEV.dbf", nrow = 150, ncol = 150)
 ```
 
 Can also specify pit removal parameters:
 
 ```{r}
-complete_run(file = "testElev.dem", nrow = 100, ncol = 100, 
+complete_run(file = "testELEV.dbf", nrow = 150, ncol = 150, 
              max_area = 5, max_depth = 0.2)
 ```
 
 As well as the location of output files:
 ```{r}
-complete_run(file = "testElev.dem", nrow = 100, ncol = 100, folder_out = "./Output/")
+complete_run(file = "testELEV.dbf", nrow = 150, ncol = 150, folder_out = "./Output/")
 ```
+
+## Multiple file types
 
 LITAP accepts multiple file types and can automatically assess the number of rows and columns, depending on the type (see `?load_file` for details and requirements):
 
-```{r}
-complete_run(file = "testElev.csv")
-complete_run(file = "testElev.grd")
-complete_run(file = "testElev.flt")
+```{r, eval = FALSE}
+complete_run(file = "testELEV.csv")
+complete_run(file = "testELEV.grd")
+complete_run(file = "testELEV.flt")
 ```
 
 
 ## Output
 
-Output files include .rds (R data files) and .csv files in the "Final" folder, .dbf files in the "dbf" folder and backup files (for resuming runs) in the "Backup" folder. Additionally, an html report summaring the run is included in the output folder.
+Output files include .rds (R data files) and .csv files in the "Final" folder, .dbf files in the "dbf" folder and backup files (for resuming runs) in the "Backup" folder. Additionally, an html report summaring the run is included in the output folder (`testELEV_final_report.html`).
 
 See the [LITAP website](http://steffilazerte.github.io/LITAP/) hosted on github for more details and examples
+
+```{r, include = FALSE}
+file.remove(list.files("./final/", full.names = TRUE))
+file.remove(list.files("./backup/", full.names = TRUE))
+file.remove(list.files("./dbf/", full.names = TRUE))
+file.remove("testELEV.dbf", "testELEV.log", "testELEV_final_report.html", 
+            "final", "backup", "dbf")
+file.remove(list.files("./Output/", recursive = TRUE, full.names = TRUE))
+file.remove(list.files("./Output/", full.names = TRUE, include.dirs = TRUE))
+file.remove("./Output")
+```

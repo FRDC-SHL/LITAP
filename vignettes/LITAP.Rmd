@@ -9,6 +9,12 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+```{r, include = FALSE}
+# rmarkdown::pdf_document
+# rmarkdown::html_vignette
+knitr::opts_chunk$set(fig.width = 15, fig.height = 10, tidy = TRUE, eval = FALSE)
+```
+
 <style>
 .figure {
   max-width: 100%;
@@ -19,11 +25,6 @@ vignette: >
   margin: auto;
 }
 </style>
-
-
-```{r, include = FALSE}
-knitr::opts_chunk$set(fig.width = 15, fig.height = 10, tidy = TRUE, eval = FALSE)
-```
 
 ## Basic run
 
@@ -36,7 +37,7 @@ library(LITAP)
 The only required parameters are the location of the dem file (`file`) and the number of rows and the number of columns (`nrow` and `ncol`) in the dem file.
 
 ```{r}
-complete_run(file = "testElev.dem", nrow = 100, ncol = 100)
+complete_run(file = "testELEV.dem", nrow = 150, ncol = 150)
 ```
 
 ## Pit removal parameters
@@ -47,7 +48,7 @@ The maximum size of initial watersheds which will be removed in the first step c
 - `max_depth` represents the maximum depth of a pit (difference between the elevation of the pour point and the elevation of the pit centre) of a watershed to be removed in the initial step
 
 ```{r}
-complete_run(file = "testElev.dem", nrow = 100, ncol = 100, 
+complete_run(file = "testELEV.dem", nrow = 150, ncol = 150, 
              max_area = 5, max_depth = 0.2)
 ```
 
@@ -64,25 +65,25 @@ LITAP will automatically prepend the run name according to the input file (e.g. 
 You can specify where these output folders/files should be saved with `folder_out`. Otherwise the folders will be created in the folder of the original Elev.dem file, which may not be desirable. Note that folder locations are relative to working directory of the R session.
 
 ```{r}
-complete_run(file = "testElev.dem", nrow = 100, ncol = 100, folder_out = "./Output/")
+complete_run(file = "testELEV.dem", nrow = 150, ncol = 150, folder_out = "./Output/")
 ```
 
 To clean up any old files before conducting a new run, use `clean = TRUE`. __Careful, this will remove all backup files from previous runs making it impossible to resume a run!__
 
 ```{r}
-complete_run(file = "testElev.dem", nrow = 100, ncol = 100, folder_out = "./Output/", clean = TRUE)
+complete_run(file = "testELEV.dem", nrow = 150, ncol = 150, folder_out = "./Output/", clean = TRUE)
 ```
 
 ## Different input file types
 
 You can use a variety of input file types, provided they fit the format specifications defined in `load_file()` (`?load_file` for more details). Among others, the following file types are accepted:
 
-```{r}
-complete_run(file = "testElev.grd") # Grid files
-complete_run(file = "testElev.csv") # CSV files
-complete_run(file = "testElev.asc") # Ascii Grid files
-complete_run(file = "testElev.flt") # Floating point raster files
-complete_run(file = "testElev")     # ArcGis Gridfile folder (contains .hdr files)
+```{r, eval = FALSE}
+complete_run(file = "testELEV.grd") # Grid files
+complete_run(file = "testELEV.csv") # CSV files
+complete_run(file = "testELEV.asc") # Ascii Grid files
+complete_run(file = "testELEV.flt") # Floating point raster files
+complete_run(file = "testELEV")     # ArcGis Gridfile folder (contains .hdr files)
 ```
 
 
@@ -91,7 +92,7 @@ complete_run(file = "testElev")     # ArcGis Gridfile folder (contains .hdr file
 To conduct a run on only a subset of the dem you can specify row and column limits (`rlim` and `clim` respectively):
 
 ```{r}
-complete_run(file = "testElev.dem", nrow = 100, ncol = 100, 
+complete_run(file = "testELEV.dem", nrow = 150, ncol = 150, 
              rlim = c(50,100), clim = c(50,100))
 ```
 
@@ -100,13 +101,13 @@ complete_run(file = "testElev.dem", nrow = 100, ncol = 100,
 To prevent detailed output, use `verbose = FALSE`:
 
 ```{r}
-complete_run(file = "testElev.dem", nrow = 100, ncol = 100, verbose = FALSE)
+complete_run(file = "testELEV.dem", nrow = 150, ncol = 150, verbose = FALSE)
 ```
 
 To prevent all output, use `quiet = TRUE`:
 
 ```{r}
-complete_run(file = "testElev.dem", nrow = 100, ncol = 100, quiet = TRUE)
+complete_run(file = "testELEV.dem", nrow = 150, ncol = 150, quiet = TRUE)
 ```
 
 ## Resuming a run
@@ -116,14 +117,14 @@ Each run of LITAP goes through 10 steps. A run can be halted or resumed at step 
 For example, to start with calculating pond statistics (step 5) and continue to the end of the run:
 
 ```{r}
-complete_run(file = "testElev.dem", nrow = 100, ncol = 100, 
+complete_run(file = "testELEV.dem", nrow = 150, ncol = 150, 
              continue = "pond")
 ```
 
 Or to start with pond statistics and to end just after calculating fill statistics (step 6):
 
 ```{r}
-complete_run(file = "testElev.dem", nrow = 100, ncol = 100, 
+complete_run(file = "testELEV.dem", nrow = 150, ncol = 150, 
              continue = "pond", end = "fill")
 ```
 

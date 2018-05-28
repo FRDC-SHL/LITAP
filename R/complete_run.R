@@ -52,11 +52,13 @@
 #' @examples
 #' \dontrun{
 #' # Basic Run
-
-#' complete_run(file = "testElev.dbf", nrow = 100, ncol = 100)
+#'
+#' # (Find test files in extdata folder)
+#'
+#' complete_run(file = "testELEV.dbf", nrow = 150, ncol = 150)
 #'
 #' # Specify parameters for initial pit removal
-#' complete_run(file = "testElev.dbf", nrow = 100, ncol = 100,
+#' complete_run(file = "testELEV.dbf", nrow = 150, ncol = 150,
 #'              max_area = 5, max_depth = 2)
 #' }
 #'
