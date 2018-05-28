@@ -142,24 +142,69 @@
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">"devtools"</span>)  <span class="co"># If not already installed</span>
 devtools::<span class="kw">install_github</span>(<span class="st">"steffilazerte/LITAP"</span>)</code></pre></div>
 </div>
+<div id="example-files" class="section level2">
+<h2 class="hasAnchor">
+<a href="#example-files" class="anchor"></a>Example files</h2>
+<p>LITAP comes with several example files (<code>testELEV.dbf</code> and <code>testELEV_mini.dbf</code>). These are found in the “extdata” folder inside the LITAP package folder. If you are unsure where this folder is, use the function <code>system.file()</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">system.file</span>(<span class="st">"extdata"</span>, <span class="dt">package =</span> <span class="st">"LITAP"</span>)</code></pre></div>
+<p>Now you can copy and paste these files to your working folder to try out the following examples.</p>
+<pre><code>## [1] TRUE</code></pre>
+</div>
 <div id="basic-usage" class="section level2">
 <h2 class="hasAnchor">
 <a href="#basic-usage" class="anchor"></a>Basic Usage</h2>
-<p>Must specify the dem file and the number of rows and columns:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testElev.dem"</span>, <span class="dt">nrow =</span> <span class="dv">100</span>, <span class="dt">ncol =</span> <span class="dv">100</span>)</code></pre></div>
+<p>Load the package:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(LITAP)</code></pre></div>
+<pre><code>## Loading required package: magrittr</code></pre>
+<p>First, specify the dem file and the number of rows and columns:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testELEV.dbf"</span>, <span class="dt">nrow =</span> <span class="dv">150</span>, <span class="dt">ncol =</span> <span class="dv">150</span>)</code></pre></div>
+<pre><code>## CALCULATING DIRECTIONS</code></pre>
+<pre><code>## CALCULATING WATERSHEDS</code></pre>
+<pre><code>## REMOVING INITIAL PITS</code></pre>
+<pre><code>## CALCULATING POND (GLOBAL) WATERSHEDS</code></pre>
+<pre><code>## CALCULATING FILL PATTERNS</code></pre>
+<pre><code>## INVERTING DEM</code></pre>
+<pre><code>## CALCULATING INVERTED DIRECTIONS</code></pre>
+<pre><code>## CALCULATING INVERTED WATERSHEDS</code></pre>
+<pre><code>## REMOVING INVERTED INITIAL PITS</code></pre>
+<pre><code>## Run took: 0.36 min</code></pre>
 <p>Can also specify pit removal parameters:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testElev.dem"</span>, <span class="dt">nrow =</span> <span class="dv">100</span>, <span class="dt">ncol =</span> <span class="dv">100</span>, <span class="dt">max_area =</span> <span class="dv">5</span>, <span class="dt">max_depth =</span> <span class="fl">0.2</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testELEV.dbf"</span>, <span class="dt">nrow =</span> <span class="dv">150</span>, <span class="dt">ncol =</span> <span class="dv">150</span>, <span class="dt">max_area =</span> <span class="dv">5</span>, <span class="dt">max_depth =</span> <span class="fl">0.2</span>)</code></pre></div>
+<pre><code>## CALCULATING DIRECTIONS</code></pre>
+<pre><code>## CALCULATING WATERSHEDS</code></pre>
+<pre><code>## REMOVING INITIAL PITS</code></pre>
+<pre><code>## CALCULATING POND (GLOBAL) WATERSHEDS</code></pre>
+<pre><code>## CALCULATING FILL PATTERNS</code></pre>
+<pre><code>## INVERTING DEM</code></pre>
+<pre><code>## CALCULATING INVERTED DIRECTIONS</code></pre>
+<pre><code>## CALCULATING INVERTED WATERSHEDS</code></pre>
+<pre><code>## REMOVING INVERTED INITIAL PITS</code></pre>
+<pre><code>## Run took: 0.31 min</code></pre>
 <p>As well as the location of output files:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testElev.dem"</span>, <span class="dt">nrow =</span> <span class="dv">100</span>, <span class="dt">ncol =</span> <span class="dv">100</span>, <span class="dt">folder_out =</span> <span class="st">"./Output/"</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testELEV.dbf"</span>, <span class="dt">nrow =</span> <span class="dv">150</span>, <span class="dt">ncol =</span> <span class="dv">150</span>, <span class="dt">folder_out =</span> <span class="st">"./Output/"</span>)</code></pre></div>
+<pre><code>## CALCULATING DIRECTIONS</code></pre>
+<pre><code>## CALCULATING WATERSHEDS</code></pre>
+<pre><code>## REMOVING INITIAL PITS</code></pre>
+<pre><code>## CALCULATING POND (GLOBAL) WATERSHEDS</code></pre>
+<pre><code>## CALCULATING FILL PATTERNS</code></pre>
+<pre><code>## INVERTING DEM</code></pre>
+<pre><code>## CALCULATING INVERTED DIRECTIONS</code></pre>
+<pre><code>## CALCULATING INVERTED WATERSHEDS</code></pre>
+<pre><code>## REMOVING INVERTED INITIAL PITS</code></pre>
+<pre><code>## Run took: 0.29 min</code></pre>
+</div>
+<div id="multiple-file-types" class="section level2">
+<h2 class="hasAnchor">
+<a href="#multiple-file-types" class="anchor"></a>Multiple file types</h2>
 <p>LITAP accepts multiple file types and can automatically assess the number of rows and columns, depending on the type (see <code><a href="reference/load_file.html">?load_file</a></code> for details and requirements):</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testElev.csv"</span>)
-<span class="kw"><a href="reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testElev.grd"</span>)
-<span class="kw"><a href="reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testElev.flt"</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testELEV.csv"</span>)
+<span class="kw"><a href="reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testELEV.grd"</span>)
+<span class="kw"><a href="reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testELEV.flt"</span>)</code></pre></div>
 </div>
 <div id="output" class="section level2">
 <h2 class="hasAnchor">
 <a href="#output" class="anchor"></a>Output</h2>
-<p>Output files include .rds (R data files) and .csv files in the “Final” folder, .dbf files in the “dbf” folder and backup files (for resuming runs) in the “Backup” folder. Additionally, an html report summaring the run is included in the output folder.</p>
+<p>Output files include .rds (R data files) and .csv files in the “Final” folder, .dbf files in the “dbf” folder and backup files (for resuming runs) in the “Backup” folder. Additionally, an html report summaring the run is included in the output folder (<code>testELEV_final_report.html</code>).</p>
 <p>See the <a href="http://steffilazerte.github.io/LITAP/">LITAP website</a> hosted on github for more details and examples</p>
 </div>
 </div>

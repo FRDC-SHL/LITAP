@@ -106,6 +106,9 @@
     </li>
   </ul>
 </li>
+<li>
+  <a href="../../news/index.html">News</a>
+</li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
@@ -129,7 +132,7 @@
       <h1>Flow Plots</h1>
                         <h4 class="author">Steffi LaZerte</h4>
             
-            <h4 class="date">2018-04-09</h4>
+            <h4 class="date">2018-05-28</h4>
           </div>
 
     
@@ -146,7 +149,7 @@
 }
 </style>
 <p>Flow plots are simply a way of visualizing what LITAP is doing under the hood.</p>
-<p>In the following examples, we will be using the output from the supplied “testELEV.dbf”. You can find these files in the LITAP folder by using the <code>system.file()</code> function:</p>
+<p>In the following examples, we will be using the output from complete run on the supplied “testELEV.dbf”. You can find these files in the LITAP folder by using the <code>system.file()</code> function:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(LITAP)</code></pre></div>
 <pre><code>## Loading required package: magrittr</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">files &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">"extdata"</span>, <span class="st">"final"</span>, <span class="dt">package =</span> <span class="st">"LITAP"</span>)
@@ -175,6 +178,7 @@
 ## [22] "/home/steffi/R/x86_64-pc-linux-gnu-library/3.4/LITAP/extdata/final/testELEV_pit.rds"        
 ## [23] "/home/steffi/R/x86_64-pc-linux-gnu-library/3.4/LITAP/extdata/final/testELEV_pond.csv"       
 ## [24] "/home/steffi/R/x86_64-pc-linux-gnu-library/3.4/LITAP/extdata/final/testELEV_pond.rds"</code></pre>
+<p>These files were created using the <code><a href="../../reference/complete_run.html">complete_run()</a></code> function (see the <a href="../LITAP.html">Getting Started Vignette</a>)</p>
 <p>We will load the rds file (R data files) for the relevant dems. Note that in each of these dem files, the only thing that differs is how the watersheds are almalgamated, and the different flow directions to make this happen.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">initial_dem &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="kw">list.files</span>(files, <span class="dt">pattern =</span> <span class="st">"dem_initial.rds"</span>, <span class="dt">full.names =</span> <span class="ot">TRUE</span>))
 local_dem &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="kw">list.files</span>(files, <span class="dt">pattern =</span> <span class="st">"dem_local.rds"</span>, <span class="dt">full.names =</span> <span class="ot">TRUE</span>))
@@ -188,17 +192,17 @@ local_stats &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span 
 <a href="#basic-maps" class="anchor"></a>Basic maps</h2>
 <p>By default, the <code><a href="../../reference/flow_plot.html">flow_plot()</a></code> function displays relief maps, using the <code>terrain()</code> and <code>hillShade()</code> functions from the <code>raster</code> package. Note the outer border of dark grey, this represents unknown cells, as the relief calculations do not work on cells without neighbours.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/flow_plot.html">flow_plot</a></span>(initial_dem)</code></pre></div>
-<p><img src="flow_plots_files/figure-html/unnamed-chunk-3-1.png" width="672"></p>
+<p><img src="flow_plots_files/figure-html/unnamed-chunk-4-1.png" width="90%"></p>
 <p>Alternatively, you can plot elevation data directly.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/flow_plot.html">flow_plot</a></span>(initial_dem, <span class="dt">type =</span> <span class="st">"elevation"</span>)</code></pre></div>
-<p><img src="flow_plots_files/figure-html/unnamed-chunk-4-1.png" width="672"></p>
+<p><img src="flow_plots_files/figure-html/unnamed-chunk-6-1.png" width="90%"></p>
 </div>
 <div id="subsets" class="section level2">
 <h2 class="hasAnchor">
 <a href="#subsets" class="anchor"></a>Subsets</h2>
 <p>You can zoom in on a particular area of interest by specifying row and column limits:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/flow_plot.html">flow_plot</a></span>(initial_dem, <span class="dt">type =</span> <span class="st">"elevation"</span>, <span class="dt">rlim =</span> <span class="kw">c</span>(<span class="dv">20</span>, <span class="dv">30</span>), <span class="dt">clim =</span> <span class="kw">c</span>(<span class="dv">35</span>, <span class="dv">45</span>))</code></pre></div>
-<p><img src="flow_plots_files/figure-html/unnamed-chunk-5-1.png" width="672"></p>
+<p><img src="flow_plots_files/figure-html/unnamed-chunk-8-1.png" width="90%"></p>
 </div>
 <div id="cell-numbering" class="section level2">
 <h2 class="hasAnchor">
@@ -206,11 +210,11 @@ local_stats &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span 
 <p>You can number the cells in a plot with <code>seqno = TRUE</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/flow_plot.html">flow_plot</a></span>(initial_dem, <span class="dt">type =</span> <span class="st">"elevation"</span>, <span class="dt">rlim =</span> <span class="kw">c</span>(<span class="dv">20</span>, <span class="dv">30</span>), <span class="dt">clim =</span> <span class="kw">c</span>(<span class="dv">35</span>, <span class="dv">45</span>), 
           <span class="dt">seqno =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<p><img src="flow_plots_files/figure-html/unnamed-chunk-6-1.png" width="672"></p>
+<p><img src="flow_plots_files/figure-html/unnamed-chunk-10-1.png" width="90%"></p>
 <p>If you’re only interested in certain cells, specify which ones with <code>cells = c()</code> and <code>highlight = TRUE</code></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/flow_plot.html">flow_plot</a></span>(initial_dem, <span class="dt">type =</span> <span class="st">"elevation"</span>, <span class="dt">rlim =</span> <span class="kw">c</span>(<span class="dv">20</span>, <span class="dv">30</span>), <span class="dt">clim =</span> <span class="kw">c</span>(<span class="dv">35</span>, <span class="dv">45</span>), 
           <span class="dt">seqno =</span> <span class="ot">TRUE</span>, <span class="dt">cells =</span> <span class="kw">c</span>(<span class="dv">3187</span>:<span class="dv">3193</span>, <span class="dv">3336</span>:<span class="dv">3343</span>), <span class="dt">highlight =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<p><img src="flow_plots_files/figure-html/unnamed-chunk-7-1.png" width="672"></p>
+<p><img src="flow_plots_files/figure-html/unnamed-chunk-12-1.png" width="90%"></p>
 </div>
 <div id="flow-directions" class="section level2">
 <h2 class="hasAnchor">
@@ -218,41 +222,41 @@ local_stats &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span 
 <p>You can plot individual flow directions with <code>dir = TRUE</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/flow_plot.html">flow_plot</a></span>(initial_dem, <span class="dt">type =</span> <span class="st">"elevation"</span>, <span class="dt">rlim =</span> <span class="kw">c</span>(<span class="dv">20</span>, <span class="dv">30</span>), <span class="dt">clim =</span> <span class="kw">c</span>(<span class="dv">35</span>, <span class="dv">45</span>), 
           <span class="dt">dir =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<p><img src="flow_plots_files/figure-html/unnamed-chunk-8-1.png" width="672"></p>
+<p><img src="flow_plots_files/figure-html/unnamed-chunk-14-1.png" width="90%"></p>
 <p>In combination with cell numbers</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/flow_plot.html">flow_plot</a></span>(initial_dem, <span class="dt">type =</span> <span class="st">"elevation"</span>, <span class="dt">rlim =</span> <span class="kw">c</span>(<span class="dv">20</span>, <span class="dv">30</span>), <span class="dt">clim =</span> <span class="kw">c</span>(<span class="dv">35</span>, <span class="dv">45</span>), 
           <span class="dt">dir =</span> <span class="ot">TRUE</span>, <span class="dt">seqno =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<p><img src="flow_plots_files/figure-html/unnamed-chunk-9-1.png" width="672"></p>
+<p><img src="flow_plots_files/figure-html/unnamed-chunk-16-1.png" width="90%"></p>
 <p>Only for certain cells (this will show the entire flow path that a given cell is on)</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/flow_plot.html">flow_plot</a></span>(initial_dem, <span class="dt">type =</span> <span class="st">"elevation"</span>, <span class="dt">rlim =</span> <span class="kw">c</span>(<span class="dv">20</span>, <span class="dv">30</span>), <span class="dt">clim =</span> <span class="kw">c</span>(<span class="dv">35</span>, <span class="dv">45</span>), 
           <span class="dt">dir =</span> <span class="ot">TRUE</span>, <span class="dt">cells =</span> <span class="kw">c</span>(<span class="dv">3187</span>:<span class="dv">3193</span>, <span class="dv">3336</span>:<span class="dv">3343</span>))</code></pre></div>
-<p><img src="flow_plots_files/figure-html/unnamed-chunk-10-1.png" width="672"></p>
+<p><img src="flow_plots_files/figure-html/unnamed-chunk-18-1.png" width="90%"></p>
 <p>Only for certain cells and show cell numbers</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/flow_plot.html">flow_plot</a></span>(initial_dem, <span class="dt">type =</span> <span class="st">"elevation"</span>, <span class="dt">rlim =</span> <span class="kw">c</span>(<span class="dv">20</span>, <span class="dv">30</span>), <span class="dt">clim =</span> <span class="kw">c</span>(<span class="dv">35</span>, <span class="dv">45</span>), 
           <span class="dt">dir =</span> <span class="ot">TRUE</span>, <span class="dt">seqno =</span> <span class="ot">TRUE</span>, <span class="dt">cells =</span> <span class="kw">c</span>(<span class="dv">3187</span>:<span class="dv">3193</span>, <span class="dv">3336</span>:<span class="dv">3343</span>))</code></pre></div>
-<p><img src="flow_plots_files/figure-html/unnamed-chunk-11-1.png" width="672"></p>
+<p><img src="flow_plots_files/figure-html/unnamed-chunk-20-1.png" width="90%"></p>
 <p>Highlight the cells of interest</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/flow_plot.html">flow_plot</a></span>(initial_dem, <span class="dt">type =</span> <span class="st">"elevation"</span>, <span class="dt">rlim =</span> <span class="kw">c</span>(<span class="dv">20</span>, <span class="dv">30</span>), <span class="dt">clim =</span> <span class="kw">c</span>(<span class="dv">35</span>, <span class="dv">45</span>), 
           <span class="dt">dir =</span> <span class="ot">TRUE</span>, <span class="dt">seqno =</span> <span class="ot">TRUE</span>, <span class="dt">cells =</span> <span class="kw">c</span>(<span class="dv">3187</span>:<span class="dv">3193</span>, <span class="dv">3336</span>:<span class="dv">3343</span>), <span class="dt">highlight =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<p><img src="flow_plots_files/figure-html/unnamed-chunk-12-1.png" width="672"></p>
+<p><img src="flow_plots_files/figure-html/unnamed-chunk-22-1.png" width="90%"></p>
 </div>
 <div id="flow-directions-by-upslope-area" class="section level2">
 <h2 class="hasAnchor">
 <a href="#flow-directions-by-upslope-area" class="anchor"></a>Flow directions by upslope area</h2>
 <p>You can filter the flow directions to show only those with an upslope area greater than some threshold:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/flow_plot.html">flow_plot</a></span>(initial_dem, <span class="dt">type =</span> <span class="st">"elevation"</span>, <span class="dt">dir =</span> <span class="ot">TRUE</span>, <span class="dt">upslope_threshold =</span> <span class="dv">500</span>)</code></pre></div>
-<p><img src="flow_plots_files/figure-html/unnamed-chunk-13-1.png" width="672"></p>
+<p><img src="flow_plots_files/figure-html/unnamed-chunk-24-1.png" width="90%"></p>
 <div id="comparing-different-upslope-thresholds" class="section level3">
 <h3 class="hasAnchor">
 <a href="#comparing-different-upslope-thresholds" class="anchor"></a>Comparing different upslope thresholds:</h3>
-<p><img src="flow_plots_files/figure-html/unnamed-chunk-14-1.png" width="672"></p>
+<p><img src="flow_plots_files/figure-html/unnamed-chunk-26-1.png" width="90%"></p>
 </div>
 <div id="ridge-lines" class="section level3">
 <h3 class="hasAnchor">
 <a href="#ridge-lines" class="anchor"></a>Ridge Lines</h3>
 <p>To look at ridge lines, use the inverted dem files</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/flow_plot.html">flow_plot</a></span>(inverted_dem, <span class="dt">type =</span> <span class="st">"elevation"</span>, <span class="dt">dir =</span> <span class="ot">TRUE</span>, <span class="dt">upslope_threshold =</span> <span class="dv">250</span>)</code></pre></div>
-<p><img src="flow_plots_files/figure-html/unnamed-chunk-15-1.png" width="672"></p>
+<p><img src="flow_plots_files/figure-html/unnamed-chunk-28-1.png" width="90%"></p>
 </div>
 </div>
 <div id="watersheds" class="section level2">
@@ -260,13 +264,13 @@ local_stats &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span 
 <a href="#watersheds" class="anchor"></a>Watersheds</h2>
 <p>You can also highlight watersheds</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/flow_plot.html">flow_plot</a></span>(<span class="dt">db =</span> initial_dem, <span class="dt">type =</span> <span class="st">"elevation"</span>, <span class="dt">shed =</span> <span class="ot">TRUE</span>, <span class="dt">shed_type =</span> <span class="st">"initial"</span>)</code></pre></div>
-<p><img src="flow_plots_files/figure-html/unnamed-chunk-16-1.png" width="672"></p>
+<p><img src="flow_plots_files/figure-html/unnamed-chunk-30-1.png" width="90%"></p>
 <div id="watershed-pits" class="section level3">
 <h3 class="hasAnchor">
 <a href="#watershed-pits" class="anchor"></a>Watershed pits</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/flow_plot.html">flow_plot</a></span>(<span class="dt">db =</span> initial_dem, <span class="dt">type =</span> <span class="st">"elevation"</span>, <span class="dt">shed =</span> <span class="ot">TRUE</span>, <span class="dt">shed_type =</span> <span class="st">"initial"</span>, 
           <span class="dt">pits =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<p><img src="flow_plots_files/figure-html/unnamed-chunk-17-1.png" width="672"></p>
+<p><img src="flow_plots_files/figure-html/unnamed-chunk-32-1.png" width="90%"></p>
 </div>
 <div id="comparing-watersheds-at-different-stages-of-pit-removal" class="section level3">
 <h3 class="hasAnchor">
@@ -277,35 +281,35 @@ local_stats &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span 
 <li>Pond = looking at overflow in 2nd pit removal process</li>
 <li>Fill = looking at overflow in a second way in 3rd pit removal process</li>
 </ul>
-<p><img src="flow_plots_files/figure-html/unnamed-chunk-18-1.png" width="672"></p>
+<p><img src="flow_plots_files/figure-html/unnamed-chunk-34-1.png" width="90%"></p>
 </div>
 <div id="watersheds-by-flow-paths" class="section level3">
 <h3 class="hasAnchor">
 <a href="#watersheds-by-flow-paths" class="anchor"></a>Watersheds by flow paths</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/flow_plot.html">flow_plot</a></span>(<span class="dt">db =</span> initial_dem, <span class="dt">type =</span> <span class="st">"elevation"</span>, <span class="dt">shed =</span> <span class="ot">TRUE</span>, 
           <span class="dt">shed_type =</span> <span class="st">"initial"</span>, <span class="dt">dir =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<p><img src="flow_plots_files/figure-html/unnamed-chunk-19-1.png" width="672"></p>
+<p><img src="flow_plots_files/figure-html/unnamed-chunk-36-1.png" width="90%"></p>
 <p>Subsets still apply</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/flow_plot.html">flow_plot</a></span>(<span class="dt">db =</span> initial_dem, <span class="dt">type =</span> <span class="st">"elevation"</span>, <span class="dt">shed =</span> <span class="ot">TRUE</span>, 
           <span class="dt">rlim =</span> <span class="kw">c</span>(<span class="dv">30</span>,<span class="dv">60</span>), <span class="dt">clim =</span> <span class="kw">c</span>(<span class="dv">45</span>,<span class="dv">75</span>),
           <span class="dt">shed_type =</span> <span class="st">"initial"</span>, <span class="dt">dir =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<p><img src="flow_plots_files/figure-html/unnamed-chunk-20-1.png" width="672"></p>
+<p><img src="flow_plots_files/figure-html/unnamed-chunk-38-1.png" width="90%"></p>
 </div>
 <div id="look-at-how-watersheds-combined-in-the-upper-right-corner" class="section level3">
 <h3 class="hasAnchor">
 <a href="#look-at-how-watersheds-combined-in-the-upper-right-corner" class="anchor"></a>Look at how watersheds combined in the upper right corner</h3>
-<p><img src="flow_plots_files/figure-html/unnamed-chunk-21-1.png" width="672"></p>
+<p><img src="flow_plots_files/figure-html/unnamed-chunk-39-1.png" width="90%"></p>
 </div>
 <div id="look-at-pour-points" class="section level3">
 <h3 class="hasAnchor">
 <a href="#look-at-pour-points" class="anchor"></a>Look at pour points</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/flow_plot.html">flow_plot</a></span>(<span class="dt">db =</span> local_dem, <span class="dt">type =</span> <span class="st">"elevation"</span>, <span class="dt">shed =</span> <span class="ot">TRUE</span>, <span class="dt">shed_type =</span> <span class="st">"local"</span>, 
           <span class="dt">stats =</span> local_stats)</code></pre></div>
-<p><img src="flow_plots_files/figure-html/unnamed-chunk-22-1.png" width="672"></p>
+<p><img src="flow_plots_files/figure-html/unnamed-chunk-41-1.png" width="90%"></p>
 <p>Take a closer look</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/flow_plot.html">flow_plot</a></span>(<span class="dt">db =</span> local_dem, <span class="dt">type =</span> <span class="st">"elevation"</span>, <span class="dt">shed =</span> <span class="ot">TRUE</span>, <span class="dt">shed_type =</span> <span class="st">"local"</span>,
           <span class="dt">rlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">40</span>), <span class="dt">clim =</span> <span class="kw">c</span>(<span class="dv">110</span>, <span class="dv">150</span>), <span class="dt">stats =</span> local_stats)</code></pre></div>
-<p><img src="flow_plots_files/figure-html/unnamed-chunk-23-1.png" width="672"></p>
+<p><img src="flow_plots_files/figure-html/unnamed-chunk-43-1.png" width="90%"></p>
 </div>
 </div>
 </div>

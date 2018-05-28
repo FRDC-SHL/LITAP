@@ -106,6 +106,9 @@
     </li>
   </ul>
 </li>
+<li>
+  <a href="../news/index.html">News</a>
+</li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
@@ -129,7 +132,7 @@
       <h1>Mapping flow: Getting Started</h1>
                         <h4 class="author">Steffi LaZerte</h4>
             
-            <h4 class="date">2018-04-09</h4>
+            <h4 class="date">2018-05-28</h4>
           </div>
 
     
@@ -151,7 +154,7 @@
 <p>First load the LITAP package:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(LITAP)</code></pre></div>
 <p>The only required parameters are the location of the dem file (<code>file</code>) and the number of rows and the number of columns (<code>nrow</code> and <code>ncol</code>) in the dem file.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testElev.dem"</span>, <span class="dt">nrow =</span> <span class="dv">100</span>, <span class="dt">ncol =</span> <span class="dv">100</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testELEV.dem"</span>, <span class="dt">nrow =</span> <span class="dv">150</span>, <span class="dt">ncol =</span> <span class="dv">150</span>)</code></pre></div>
 </div>
 <div id="pit-removal-parameters" class="section level2">
 <h2 class="hasAnchor">
@@ -163,7 +166,7 @@
 <li>
 <code>max_depth</code> represents the maximum depth of a pit (difference between the elevation of the pour point and the elevation of the pit centre) of a watershed to be removed in the initial step</li>
 </ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testElev.dem"</span>, <span class="dt">nrow =</span> <span class="dv">100</span>, <span class="dt">ncol =</span> <span class="dv">100</span>, <span class="dt">max_area =</span> <span class="dv">5</span>, <span class="dt">max_depth =</span> <span class="fl">0.2</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testELEV.dem"</span>, <span class="dt">nrow =</span> <span class="dv">150</span>, <span class="dt">ncol =</span> <span class="dv">150</span>, <span class="dt">max_area =</span> <span class="dv">5</span>, <span class="dt">max_depth =</span> <span class="fl">0.2</span>)</code></pre></div>
 </div>
 <div id="output-folders" class="section level2">
 <h2 class="hasAnchor">
@@ -179,44 +182,44 @@
 </ul>
 <p>LITAP will automatically prepend the run name according to the input file (e.g. in these examples it would be “test”)</p>
 <p>You can specify where these output folders/files should be saved with <code>folder_out</code>. Otherwise the folders will be created in the folder of the original Elev.dem file, which may not be desirable. Note that folder locations are relative to working directory of the R session.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testElev.dem"</span>, <span class="dt">nrow =</span> <span class="dv">100</span>, <span class="dt">ncol =</span> <span class="dv">100</span>, <span class="dt">folder_out =</span> <span class="st">"./Output/"</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testELEV.dem"</span>, <span class="dt">nrow =</span> <span class="dv">150</span>, <span class="dt">ncol =</span> <span class="dv">150</span>, <span class="dt">folder_out =</span> <span class="st">"./Output/"</span>)</code></pre></div>
 <p>To clean up any old files before conducting a new run, use <code>clean = TRUE</code>. <strong>Careful, this will remove all backup files from previous runs making it impossible to resume a run!</strong></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testElev.dem"</span>, <span class="dt">nrow =</span> <span class="dv">100</span>, <span class="dt">ncol =</span> <span class="dv">100</span>, <span class="dt">folder_out =</span> <span class="st">"./Output/"</span>, 
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testELEV.dem"</span>, <span class="dt">nrow =</span> <span class="dv">150</span>, <span class="dt">ncol =</span> <span class="dv">150</span>, <span class="dt">folder_out =</span> <span class="st">"./Output/"</span>, 
     <span class="dt">clean =</span> <span class="ot">TRUE</span>)</code></pre></div>
 </div>
 <div id="different-input-file-types" class="section level2">
 <h2 class="hasAnchor">
 <a href="#different-input-file-types" class="anchor"></a>Different input file types</h2>
 <p>You can use a variety of input file types, provided they fit the format specifications defined in <code><a href="../reference/load_file.html">load_file()</a></code> (<code><a href="../reference/load_file.html">?load_file</a></code> for more details). Among others, the following file types are accepted:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testElev.grd"</span>)  <span class="co"># Grid files</span>
-<span class="kw"><a href="../reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testElev.csv"</span>)  <span class="co"># CSV files</span>
-<span class="kw"><a href="../reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testElev.asc"</span>)  <span class="co"># Ascii Grid files</span>
-<span class="kw"><a href="../reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testElev.flt"</span>)  <span class="co"># Floating point raster files</span>
-<span class="kw"><a href="../reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testElev"</span>)  <span class="co"># ArcGis Gridfile folder (contains .hdr files)</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testELEV.grd"</span>)  <span class="co"># Grid files</span>
+<span class="kw"><a href="../reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testELEV.csv"</span>)  <span class="co"># CSV files</span>
+<span class="kw"><a href="../reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testELEV.asc"</span>)  <span class="co"># Ascii Grid files</span>
+<span class="kw"><a href="../reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testELEV.flt"</span>)  <span class="co"># Floating point raster files</span>
+<span class="kw"><a href="../reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testELEV"</span>)  <span class="co"># ArcGis Gridfile folder (contains .hdr files)</span></code></pre></div>
 </div>
 <div id="subset-of-input-dem" class="section level2">
 <h2 class="hasAnchor">
 <a href="#subset-of-input-dem" class="anchor"></a>Subset of input dem</h2>
 <p>To conduct a run on only a subset of the dem you can specify row and column limits (<code>rlim</code> and <code>clim</code> respectively):</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testElev.dem"</span>, <span class="dt">nrow =</span> <span class="dv">100</span>, <span class="dt">ncol =</span> <span class="dv">100</span>, <span class="dt">rlim =</span> <span class="kw">c</span>(<span class="dv">50</span>, <span class="dv">100</span>), 
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testELEV.dem"</span>, <span class="dt">nrow =</span> <span class="dv">150</span>, <span class="dt">ncol =</span> <span class="dv">150</span>, <span class="dt">rlim =</span> <span class="kw">c</span>(<span class="dv">50</span>, <span class="dv">100</span>), 
     <span class="dt">clim =</span> <span class="kw">c</span>(<span class="dv">50</span>, <span class="dv">100</span>))</code></pre></div>
 </div>
 <div id="output-messages" class="section level2">
 <h2 class="hasAnchor">
 <a href="#output-messages" class="anchor"></a>Output messages</h2>
 <p>To prevent detailed output, use <code>verbose = FALSE</code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testElev.dem"</span>, <span class="dt">nrow =</span> <span class="dv">100</span>, <span class="dt">ncol =</span> <span class="dv">100</span>, <span class="dt">verbose =</span> <span class="ot">FALSE</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testELEV.dem"</span>, <span class="dt">nrow =</span> <span class="dv">150</span>, <span class="dt">ncol =</span> <span class="dv">150</span>, <span class="dt">verbose =</span> <span class="ot">FALSE</span>)</code></pre></div>
 <p>To prevent all output, use <code>quiet = TRUE</code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testElev.dem"</span>, <span class="dt">nrow =</span> <span class="dv">100</span>, <span class="dt">ncol =</span> <span class="dv">100</span>, <span class="dt">quiet =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testELEV.dem"</span>, <span class="dt">nrow =</span> <span class="dv">150</span>, <span class="dt">ncol =</span> <span class="dv">150</span>, <span class="dt">quiet =</span> <span class="ot">TRUE</span>)</code></pre></div>
 </div>
 <div id="resuming-a-run" class="section level2">
 <h2 class="hasAnchor">
 <a href="#resuming-a-run" class="anchor"></a>Resuming a run</h2>
 <p>Each run of LITAP goes through 10 steps. A run can be halted or resumed at step by specifying the corresponding variable.</p>
 <p>For example, to start with calculating pond statistics (step 5) and continue to the end of the run:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testElev.dem"</span>, <span class="dt">nrow =</span> <span class="dv">100</span>, <span class="dt">ncol =</span> <span class="dv">100</span>, <span class="dt">continue =</span> <span class="st">"pond"</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testELEV.dem"</span>, <span class="dt">nrow =</span> <span class="dv">150</span>, <span class="dt">ncol =</span> <span class="dv">150</span>, <span class="dt">continue =</span> <span class="st">"pond"</span>)</code></pre></div>
 <p>Or to start with pond statistics and to end just after calculating fill statistics (step 6):</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testElev.dem"</span>, <span class="dt">nrow =</span> <span class="dv">100</span>, <span class="dt">ncol =</span> <span class="dv">100</span>, <span class="dt">continue =</span> <span class="st">"pond"</span>, 
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/complete_run.html">complete_run</a></span>(<span class="dt">file =</span> <span class="st">"testELEV.dem"</span>, <span class="dt">nrow =</span> <span class="dv">150</span>, <span class="dt">ncol =</span> <span class="dv">150</span>, <span class="dt">continue =</span> <span class="st">"pond"</span>, 
     <span class="dt">end =</span> <span class="st">"fill"</span>)</code></pre></div>
 </div>
 <div id="steps" class="section level2">

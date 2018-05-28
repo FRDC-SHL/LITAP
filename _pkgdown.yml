@@ -9,4 +9,5 @@ articles:
   - title: Reports
     desc: Reports comparing the output of original FlowMapR runs with LITAP runs
     contents:
+    - general
     - starts_with("test_")
