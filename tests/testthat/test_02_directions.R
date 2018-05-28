@@ -3,7 +3,7 @@ f <- load_file(system.file("extdata", "testELEV.dbf", package = "LITAP"), nrow =
 
 test_that("Sub-functions", {
   # Directions
-  expect_silent(d <- calc_ddir2(f))
+  expect_message(d <- calc_ddir2(f), NA)
   expect_equal_to_reference(d, "test_calc_ddir.rds")
 
   # Watersheds"
@@ -29,7 +29,7 @@ test_that("Sub-functions", {
   expect_equal_to_reference(d, "test_iinitial.rds")
 
   # Inverted directions
-  expect_silent(d <- calc_ddir2(d))
+  expect_message(d <- calc_ddir2(d), NA)
   expect_equal_to_reference(d, "test_iddir.rds")
 
   # Inverted Watersheds
