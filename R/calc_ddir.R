@@ -89,7 +89,7 @@ calc_ddir2 <- function(db, verbose = FALSE) {
       dplyr::group_by(seqno) %>%
       dplyr::mutate(ldir_opts = list(n)) %>%  # Get only neighbouring pit cells
       dplyr::select(-n, -ldir_n, -seqno_n) %>%
-      dplyr::distinct() %>%
+      dplyr::distinct(seqno, .keep_all = TRUE) %>%
       dplyr::mutate(centre = seqno %in% pit_centres) %>%
       dplyr::group_by(patch) %>%
       dplyr::mutate(row_f = row[centre][1], col_f = col[centre][1]) %>%
