@@ -1,8 +1,7 @@
 
 calc_ddir2 <- function(db, verbose = FALSE) {
 
-
-  # Calculate 8 columns reflecting the elevation of 'shifted' directions (neighbours)
+  # Calculate elevation of 'shifted' directions (neighbours)
   db <- nb_values(db, max_cols = max(db$col), "elev")
 
   db1 <- finddir2(db) # Calc Flow direction
@@ -20,7 +19,7 @@ calc_ddir2 <- function(db, verbose = FALSE) {
   while(!end) {
     if(verbose) message("     - Fixing flat plateaus round ", a <- a + 1, "...")
 
-    # Caclualate change in ldir
+    # Calculate change in ldir
     db_flats <- db_flats %>%
       dplyr::mutate(elev_diff = elev[1] - elev_n) %>%
       dplyr::summarize(ldir = n[elev_diff >= 0 & !is.na(elev_diff) &
@@ -63,7 +62,10 @@ calc_ddir2 <- function(db, verbose = FALSE) {
       }
       p <- db_flats$patch[i]
       cells_n <- unique(db_flats$seqno[db_flats$seqno_n %in% cell])
+      p_old <- unique(db_flats$patch[db_flats$seqno %in% cells_n])
+      p_old <- p_old[!is.na(p_old) & p_old != p]
       db_flats$patch[db_flats$seqno %in% cells_n] <- p
+      if(length(p_old) > 0) db_flats$patch[db_flats$patch %in% p_old] <- p
     }
 
     # Get middle cell in a patch
@@ -97,7 +99,7 @@ calc_ddir2 <- function(db, verbose = FALSE) {
       dplyr::mutate(ldir_new = purrr::pmap_dbl(list(row = row, col = col,
                                                     row_f = row_f, col_f = col_f,
                                                     ldir_opts = ldir_opts), # make sure only directs to pit cell
-                                           get_dir))
+                                               get_dir))
 
     db1$ldir[db_flats$seqno] <- db_flats$ldir_new
   }
