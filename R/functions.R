@@ -155,9 +155,10 @@ flow_values <- function(db, max_cols, col = "elev", db_sub = NULL) {
 
 finddir2 <- function(db) {
   db %>%
-    dplyr::mutate(elev_diff = elev - elev_n) %>%
+    dplyr::mutate(elev_diff = as.double(elev - elev_n)) %>%
     dplyr::mutate(elev_diff = dplyr::if_else(n %in% c(1, 3, 7, 9),
-                                             elev_diff/sqrt(2), elev_diff)) %>%
+                                             elev_diff/sqrt(2),
+                                             elev_diff)) %>%
     dplyr::group_by(seqno) %>%
     dplyr::mutate(max_slope = max(elev_diff, na.rm = TRUE),
                   ldir = n[elev_diff == max_slope & max_slope > 0 & !is.na(elev_diff)][1]) %>%
