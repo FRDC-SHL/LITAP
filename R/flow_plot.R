@@ -32,6 +32,10 @@ flow_plot <- function(db, type = "relief", dir = FALSE, seqno = FALSE, highlight
                       cells = NULL, clim = NULL, rlim = NULL,
                       stats = NULL, missing = NA) {
 
+  if(!type %in% c("relief", "elevation", "elev")) {
+    stop("type must be either 'relief' or 'elevation' ('elev' also accepted)")
+  } else if(type == "elev") type <- "elevation"
+
   db_orig <- db
 
   if(!is.na(missing)) db <- mutate_cond(db, elev == missing, elev = NA)
