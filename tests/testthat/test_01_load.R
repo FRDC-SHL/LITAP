@@ -134,9 +134,9 @@ test_that("DEM files prepared", {
 
 test_that("Prep DB correct subset/buffer/edge", {
   for(i in 1:3) {
-    rlim <- sample(0:147, 1)
+    rlim <- sample(1:147, 1)
     rlim <- c(rlim, sample((rlim+2):150, 1))
-    clim <- sample(0:147, 1)
+    clim <- sample(1:147, 1)
     clim <- c(clim, sample((clim+2):150, 1))
 
     expect_silent(d <- load_file(f, nrow = 150, ncol = 150,
