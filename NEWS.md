@@ -1,3 +1,7 @@
+# LITAP 0.2.1 (2018-06-04)
+
+- Minor bug fixes relating to fixing large flat pits
+
 # LITAP 0.2.0 (2018-04-13)
 
 - Major speed improvements, in some cases as much as 30x faster!
