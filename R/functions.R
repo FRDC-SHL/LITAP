@@ -59,7 +59,7 @@ trace_pits <- function(shedno, w_stats) {
 
 
 
-
+# Relabel seqno
 rename_seqno <- function(x, index) {
   if(length(x) > 0){
     x <- dplyr::as_tibble(x) %>%
@@ -102,6 +102,9 @@ edge_pit <- function(a, db) {
   any(is.na(db$elev[a]))
 }
 
+# Calculate which cells are neighbouring and pull the neighbouring values into
+# extra columns for vectorized operations
+# Data MUST be arranged by seqno
 nb_values <- function(db, max_cols, col = "elev", db_sub = NULL, format = "long") {
 
   if(is.null(db_sub)) db_sub <- db
@@ -116,7 +119,6 @@ nb_values <- function(db, max_cols, col = "elev", db_sub = NULL, format = "long"
     if(i == 7) seqno <- db_sub$seqno - (max_cols + 1)
     if(i == 8) seqno <- db_sub$seqno - max_cols
     if(i == 9) seqno <- db_sub$seqno - (max_cols - 1)
-
 
     seqno[seqno < 1 | seqno > max(db$seqno)] <- NA
 

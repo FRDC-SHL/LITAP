@@ -5,9 +5,9 @@
 \title{Create plots of water flow}
 \usage{
 flow_plot(db, type = "relief", dir = FALSE, seqno = FALSE,
-  highlight = FALSE, shed = FALSE, shed_type = "shedno", pits = FALSE,
-  upslope_threshold = NULL, cells = NULL, clim = NULL, rlim = NULL,
-  stats = NULL, missing = NA)
+  highlight = FALSE, shed = FALSE, shed_type = "shedno",
+  pits = FALSE, upslope_threshold = NULL, cells = NULL,
+  clim = NULL, rlim = NULL, stats = NULL, missing = NA)
 }
 \arguments{
 \item{db}{Data frame. Cell by cell data on the elevation of the watershed.

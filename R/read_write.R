@@ -108,8 +108,9 @@ remove_buffer <- function(db, stats = NULL) {
   db <- db %>%
     dplyr::filter(!buffer) %>%
     dplyr::arrange(row, col) %>%
-    dplyr::rename(seqno_buffer = seqno,
-                  drec_buffer = drec)
+    dplyr::rename(seqno_buffer = seqno)
+
+  if("drec" %in% names(db)) db <- dplyr::rename(db, drec_buffer = drec)
 
   #if("upslope" %in% names(db)) db <- dplyr::rename(db, upslope_buffer = upslope)
 
@@ -133,9 +134,12 @@ remove_buffer <- function(db, stats = NULL) {
     return(stats)
   } else {
     # Replace drec and upslope with correct cell numbers
-    db <- db %>%
-      dplyr::mutate(drec = rename_seqno(drec_buffer, index))
-    #upslope = purrr::map(upslope_buffer, ~ rename_seqno(.x, index)))
+
+    if("drec" %in% names(db)) {
+      db <- db %>%
+        dplyr::mutate(drec = rename_seqno(drec_buffer, index))
+    }
+      #upslope = purrr::map(upslope_buffer, ~ rename_seqno(.x, index)))
     return(db)
   }
 

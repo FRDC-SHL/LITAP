@@ -6,8 +6,8 @@
 \usage{
 complete_run(file, nrow = NULL, ncol = NULL, missing_value = -9999,
   max_area = 10, max_depth = 0.5, folder_out = NULL, clean = FALSE,
-  clim = NULL, rlim = NULL, continue = NULL, end = NULL, log = TRUE,
-  report = TRUE, verbose = FALSE, quiet = FALSE)
+  clim = NULL, rlim = NULL, continue = NULL, end = NULL,
+  log = TRUE, report = TRUE, verbose = FALSE, quiet = FALSE)
 }
 \arguments{
 \item{file}{Character. Elevation file (see \code{\link{load_file}} for
