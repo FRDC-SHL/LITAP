@@ -1,8 +1,59 @@
-# SEQNO
-# QAREA
-# QWETI
-# LNQAREA
-# NEW_ASP
+
+
+#' Calculate form
+#'
+#' This function takes backup data frame output from [complete_run()] and
+#' calculates form, wetness indices, reflief and stream/crest lengths (among
+#' other metrics). It is based on FormMapR.
+#'
+#' @param db   Data frame. Backup db pond file
+#' @param idb  Data frame. Backup inverted db local file
+#' @param grid Numeric.    Grid size
+#' @param resume Character. From which stage should the run be resumed?
+#' @param verbose Logical. Print progress messages?
+#'
+#' @details Output files are saved the working directory.
+#'
+#' @examples
+#'
+#' \dontrun{
+#' db <- readr::read_rds("./backup/021_backup_pond.rds")$db
+#' idb <- readr::read_rds("./backup/021_backup_ilocal.rds")$db
+#'
+#' form_mapper(db, idb, grid = 5)
+#' }
+#'
+#' @export
+
+form_mapper <- function(db, idb, grid, resume = NULL, verbose = TRUE) {
+
+
+
+
+  if(is.null(resume)){
+    message("Form")
+    db_form <- calc_form(db, grid)
+    message("Weti")
+    db_weti <- calc_weti(db, grid, verbose = verbose)
+    db_form <- dplyr::full_join(db_form, db_weti)
+    readr::write_csv(db_form, "form.csv")
+    resume <- "relz"
+  }
+
+  if(resume == "relz"){
+    message("Relz")
+    db_relz <- calc_relz(db, idb, verbose = verbose)
+    readr::write_csv(db_relz, "relz.csv")
+    resume <- "length"
+  }
+
+  if(resume == "length") {
+    message("Length")
+    db_relz <- readr::read_csv("relz.csv")
+    db_length <- calc_length(db, db_relz)
+    readr::write_csv(db_length, "len.csv")
+  }
+}
 
 # Based on FormMapR calc_form: Computes slope, aspect & curvatures
 calc_form <- function(db, grid = 10) {
