@@ -4,7 +4,7 @@
 \alias{form_mapper}
 \title{Calculate form}
 \usage{
-form_mapper(db, idb, grid)
+form_mapper(db, idb, grid, resume = NULL, verbose = TRUE)
 }
 \arguments{
 \item{db}{Data frame. Backup db pond file}
@@ -12,6 +12,10 @@ form_mapper(db, idb, grid)
 \item{idb}{Data frame. Backup inverted db local file}
 
 \item{grid}{Numeric.    Grid size}
+
+\item{resume}{Character. From which stage should the run be resumed?}
+
+\item{verbose}{Logical. Print progress messages?}
 }
 \description{
 This function takes backup data frame output from [complete_run()] and
