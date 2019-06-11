@@ -81,11 +81,11 @@ pit_stat1 <- function(db, w = NULL, verbose = FALSE) {
       dplyr::filter(shedno %in% w) %>%
       dplyr::left_join(pp, by = "shedno") %>%
       dplyr::group_by(shedno) %>%
-      dplyr::mutate(shed_area = seq_along(shedno)) %>%
+      dplyr::mutate(shed_area = length(shedno)) %>%
       dplyr::filter(elev <= pour_elev) %>%
       dplyr::summarize(shed_area = shed_area[1],
                        edge_pit = any(edge_map),
-                       pit_area = seq_along(shed_area),
+                       pit_area = length(shedno),
                        pit_vol = sum(pour_elev - elev),
                        pit_elev = elev[ldir == 5],
                        pit_seqno = seqno[ldir == 5],
