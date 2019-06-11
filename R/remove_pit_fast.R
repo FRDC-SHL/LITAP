@@ -35,7 +35,7 @@ first_pitr1 <- function(db, max_area = 10, max_depth = 0.5, verbose = FALSE) {
         sheds <- c(w_rm$shedno, w_rm$drains_to)
         if(verbose) message("    Combining watersheds ", paste0(sheds, collapse = " and "))
 
-        db <- remove_pit1(w_rm, w_stats, db)
+        db <- remove_pit1(w_rm, w_stats, db, update_elev = TRUE)
 
         # Update shed statistics but only for the two sheds involved
         w_stats <- w_stats %>%
@@ -282,12 +282,10 @@ third_pitr1 <- function(db, verbose = FALSE) {
   return(list("db" = db, "stats" = fill))
 }
 
-remove_pit1 <- function(w_rm, w_stats, db, verbose = FALSE) {
+remove_pit1 <- function(w_rm, w_stats, db, update_elev = FALSE, verbose = FALSE) {
 
   w_rm <- w_rm %>%
     dplyr::mutate(direction = ifelse(pit_elev >= pit_elev_out, "out", "in"))
-
-  if(!is.character(w_rm$direction)) browser()
 
   if(w_rm$direction == "out"){
     w_rm <- dplyr::select(w_rm,
@@ -359,6 +357,12 @@ remove_pit1 <- function(w_rm, w_stats, db, verbose = FALSE) {
   # db <- db %>%
   #   # Calculate upslope area
   #   dplyr::mutate(upslope = purrr::map_dbl(upslope, ~ifelse(!is.null(.x), length(.x), NA)))
+
+  # Update elevation of db (FlowMapR_2009.txt line 1964)
+  if(update_elev) {
+    db$elev[db$shedno == w_rm$shedno & db$elev < w_rm$pour_elev &
+              !is.na(db$shedno) & !is.na(db$elev)] <- w_rm$pour_elev
+  }
 
   db <- db %>%
     # Update watershed number

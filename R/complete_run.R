@@ -304,7 +304,10 @@ complete_run <- function(file, nrow = NULL, ncol =NULL, missing_value = -9999,
   if(continue %in%  c(cont_reg, "inverted")) {
     sub_start <- Sys.time()
     if(log) write(paste0("Started calculating inverted directions at: ", sub_start), file = log_file, append = TRUE)
-    db_invert <- invert(db_start)
+
+    db_invert <- read_shed(out_locs$backup_out, "backup_local")$db %>%
+      dplyr::select(elev, seqno, row, col, missing, buffer, elev_orig, edge_map) %>%
+      invert()
 
   # Inverted Directions --------------------------------------------------------
 
