@@ -17,7 +17,7 @@
 #' @examples
 #'
 #' \dontrun{
-#' db <- readr::read_rds("./backup/021_backup_pond.rds")$db
+#' db <- readr::read_rds("./backup/021_backup_fill.rds")$db
 #' idb <- readr::read_rds("./backup/021_backup_ilocal.rds")$db
 #'
 #' form_mapper(db, idb, grid = 5)
@@ -27,15 +27,16 @@
 
 form_mapper <- function(db, idb, grid, resume = NULL, verbose = TRUE) {
 
-
-
-
   if(is.null(resume)){
     message("Form")
     db_form <- calc_form(db, grid)
     message("Weti")
     db_weti <- calc_weti(db, grid, verbose = verbose)
-    db_form <- dplyr::full_join(db_form, db_weti)
+    db_form <- dplyr::full_join(db_form, db_weti) %>%
+      dplyr::mutate(lnqarea = dplyr::if_else(aspect > -1, log(qarea), 0),
+                    new_asp = dplyr::if_else(aspect > -1, aspect + 45, 0),
+                    new_asp = dplyr::if_else(new_asp > 360,
+                                             new_asp -360, new_asp))
     readr::write_csv(db_form, "form.csv")
     resume <- "relz"
   }
@@ -75,7 +76,12 @@ calc_form <- function(db, grid = 10) {
                                                   prof_aspect + 90),
                      prof = prof_plan(prof_aspect, elev_n, grid),
                      plan = prof_plan(plan_aspect, elev_n, grid)) %>%
-    dplyr::select(seqno, slope_pct, slope_deg, aspect, prof, plan)
+    dplyr::select(seqno, slope_pct, slope_deg, aspect, prof, plan) %>%
+    dplyr::mutate(slope_pct = round(slope_pct, 3),
+                  slope_deg = round(slope_deg, 3),
+                  aspect = round(aspect),
+                  prof = round(prof, 3),
+                  plan = round(plan, 3))
 
   # Join back in to db
   db <- dplyr::left_join(db, details, by = "seqno")
