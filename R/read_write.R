@@ -135,7 +135,7 @@ remove_buffer <- function(db, stats = NULL) {
   } else {
     # Replace drec and upslope with correct cell numbers
 
-    if("drec" %in% names(db)) {
+    if("drec_buffer" %in% names(db)) {
       db <- db %>%
         dplyr::mutate(drec = rename_seqno(drec_buffer, index))
     }
