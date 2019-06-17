@@ -36,6 +36,7 @@ files <- params$out_files
 
 library(LITAP)
 library(gridExtra)
+library(ggplot2)
 
 #cat(files)
 if(length(stringr::str_subset(files, paste0(run, "_dem_fill.rds"))) > 0) dem <- readRDS(stringr::str_subset(files, paste0(run, "_dem_fill.rds")))
