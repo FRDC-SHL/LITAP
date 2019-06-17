@@ -1,7 +1,8 @@
-#' Complete Run
+#' Map flow through the landscape
 #'
 #' Run an elevation file through all functions to calculate watershed flow and
-#' fill patterns.
+#' fill patterns. Based on FlowMapR by R. A. (Bob) MacMillan, LandMapper
+#' Environmental Solutions.
 #'
 #' @param file Character. Elevation file (see \code{\link{load_file}} for
 #'   supported file types.
@@ -16,25 +17,19 @@
 #'   pit removal
 #' @param max_depth Numeric. Largest depth of pits to be removed during initial
 #'   pit removal
-#' @param folder_out Charater. Folder to store output files. Defaults to
-#'   location of dem file if not specified
+#' @param folder_out Charater. Folder to store output files. Defaults to folder
+#'   in the same location and with the same name as the dem file
 #' @param clean Logical. Remove all backup files and output files from previous
 #'   runs in this folder?
 #' @param clim Numeric vector. Column limits if specifying a subset of the dem
 #' @param rlim Numeric vector. Row limits if specifying a subset of the dem
-#' @param continue Character. If resuming a run, where to resume (see Details
-#'   below)
-#' @param end Character. If ending a run after a particular step, which step
-#'   (see Details below)
-#' @param report Logical. Create html report of results?
-#' @param log Logical. Create log file recording progress?
-#' @param verbose Logical. Output extra progress messages.
-#' @param quiet Logical. Suppress all messages.
+#'
+#' @inheritParams args
 #'
 #' @details For information regarding loading other file types see
 #'   \code{\link{load_file}}.
 #'
-#'   For resuming or ending a run, \code{continue} or \code{end} must be one of
+#'   For resuming or ending a run, \code{resume} or \code{end} must be one of
 #'   the following:
 #'
 #'   \enumerate{
@@ -55,26 +50,25 @@
 #'
 #' # (Find test files in extdata folder)
 #'
-#' complete_run(file = "testELEV.dbf", nrow = 150, ncol = 150)
+#' flow_mapper(file = "./inst/extdata/testELEV.dbf", nrow = 150, ncol = 150)
 #'
 #' # Specify parameters for initial pit removal
-#' complete_run(file = "testELEV.dbf", nrow = 150, ncol = 150,
+#' flow_mapper(file = "testELEV.dbf", nrow = 150, ncol = 150,
 #'              max_area = 5, max_depth = 2)
 #' }
 #'
-#' @import magrittr
 #' @export
-complete_run <- function(file, nrow = NULL, ncol =NULL, missing_value = -9999,
-                         max_area = 10, max_depth = 0.5,
-                         folder_out = NULL, clean = FALSE,
-                         clim = NULL, rlim = NULL,
-                         continue = NULL, end = NULL,
-                         log = TRUE, report = TRUE,
-                         verbose = FALSE, quiet = FALSE) {
+flow_mapper <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
+                        max_area = 10, max_depth = 0.5,
+                        folder_out = NULL, clean = FALSE,
+                        clim = NULL, rlim = NULL,
+                        resume = NULL, end = NULL,
+                        log = TRUE, report = TRUE,
+                        verbose = FALSE, quiet = FALSE) {
 
   if(quiet) verbose <- FALSE
 
-  if(is.null(continue)) continue <- ""
+  if(is.null(resume)) resume <- ""
   if(is.null(end)) end <- ""
 
   cont_options <- c("", "directions", "watersheds",
@@ -84,7 +78,10 @@ complete_run <- function(file, nrow = NULL, ncol =NULL, missing_value = -9999,
 
   cont_reg <- c("", "directions", "watersheds", "local", "pond", "fill")
 
-  if(!(continue %in% cont_options) | !(end %in% cont_options)) stop("continue/end must be one of '", paste0(cont_options[-1], collapse = "', '"), "'", call. = FALSE)
+  if(!(resume %in% cont_options) | !(end %in% cont_options)) {
+    stop("resume/end must be one of '",
+         paste0(cont_options[-1], collapse = "', '"), "'", call. = FALSE)
+  }
 
   # Check for files
   m <- list.files(dirname(file), pattern = basename(file), ignore.case = TRUE)
@@ -93,20 +90,17 @@ complete_run <- function(file, nrow = NULL, ncol =NULL, missing_value = -9999,
 
   f <- tools::file_path_sans_ext(basename(file))
 
-  if(is.null(folder_out)) folder_out = dirname(file)
-
+  if(is.null(folder_out)) folder_out <- dirname(file)
   if(!dir.exists(folder_out)) dir.create(folder_out)
-  out_locs <- list("backup_out" = paste0(folder_out, "/backup/"),
-                   "final_out" = paste0(folder_out, "/final/"),
-                   "dbf_out" = paste0(folder_out, "/dbf/"))
 
+  out_locs <- locs_create(folder_out, f)
+
+  # Setup Log
   if(log) log_file <- paste0(folder_out, "/", f, ".log")
 
-  lapply(out_locs, function(x) {if(!dir.exists(x)) dir.create(x)})
-
+  # Clean records
   if(clean) lapply(out_locs, function(x) file.remove(list.files(x,
                                                                 full.names = TRUE)))
-  out_locs <- lapply(out_locs, function(x) paste0(x, f))
 
   if(log && file.exists(log_file)) file.remove(log_file)
 
@@ -147,7 +141,7 @@ complete_run <- function(file, nrow = NULL, ncol =NULL, missing_value = -9999,
 
   # Calculate directions -------------------------------------------------------
   if(!quiet) message("CALCULATING DIRECTIONS")
-  if(continue == "" | continue == "directions") {
+  if(resume == "" | resume == "directions") {
     sub_start <- Sys.time()
     if(log) write(paste0("Started calculating directions at: ", sub_start), file = log_file, append = TRUE)
     db_dir <- calc_ddir2(db_start, verbose = verbose)
@@ -166,8 +160,8 @@ complete_run <- function(file, nrow = NULL, ncol =NULL, missing_value = -9999,
 
   # Calculate watersheds -------------------------------------------------------
   if(!quiet) message("CALCULATING WATERSHEDS")
-  if(continue == "watersheds") db_dir <- read_shed(out_locs$backup_out, "backup_dir")
-  if(continue %in% c("", "watersheds")) {
+  if(resume == "watersheds") db_dir <- read_shed(out_locs$backup_out, "backup_dir")
+  if(resume %in% c("", "watersheds")) {
 
     sub_start <- Sys.time()
     if(log) write(paste0("Started calculating watersheds at: ", sub_start), file = log_file, append = TRUE)
@@ -175,9 +169,15 @@ complete_run <- function(file, nrow = NULL, ncol =NULL, missing_value = -9999,
     db_initial <- list()
     db_initial$db <- calc_shed4(db_dir)
 
-    # Calc stats for vol2fl later
     db_initial$stats <- pit_stat1(db_initial$db) %>%
       out_stat()
+
+    # Calc stats for first vol2fl
+    db_initial$db <- calc_vol2fl(db = db_initial$db,
+                                 i_stats = db_initial$stats,
+                                 verbose = verbose)
+
+    # Save
     save_all(locs = out_locs, data = list("db" = db_initial$db, "stats" = db_initial$stats), name = "initial")
 
     if(log) write(paste0("  Total time: ", round(difftime(Sys.time(), sub_start, units = "min"), 2), "\n"), file = log_file, append = TRUE)
@@ -193,8 +193,8 @@ complete_run <- function(file, nrow = NULL, ncol =NULL, missing_value = -9999,
 
   # Remove initial pits --------------------------------------------------------
   if(!quiet) message("REMOVING INITIAL PITS")
-  if(continue == "local") db_initial <- read_shed(out_locs$backup_out, "backup_initial")
-  if(continue %in% c("", "watersheds", "local")) {
+  if(resume == "local") db_initial <- read_shed(out_locs$backup_out, "backup_initial")
+  if(resume %in% c("", "watersheds", "local")) {
     sub_start <- Sys.time()
     if(log) write(paste0("Started removing initial pits at: ", sub_start), file = log_file, append = TRUE)
 
@@ -220,12 +220,12 @@ complete_run <- function(file, nrow = NULL, ncol =NULL, missing_value = -9999,
 
   # Calc pond Sheds ---------------------------------------------------------
   if(!quiet) message("CALCULATING POND (GLOBAL) WATERSHEDS")
-  if(continue == "pond") db_local <- read_shed(out_locs$backup_out, "backup_local")
-  if(continue %in% c("", "watersheds", "local", "pond")) {
+  if(resume == "pond") db_local <- read_shed(out_locs$backup_out, "backup_local")
+  if(resume %in% c("", "watersheds", "local", "pond")) {
     sub_start <- Sys.time()
     if(log) write(paste0("Started calculating pond watersheds at: ", sub_start), file = log_file, append = TRUE)
     if(length(unique(db_local$db$shedno[!is.na(db_local$db$shedno)])) > 1){
-      db_pond <- second_pitr1(db_local$db, verbose = verbose)
+      db_pond <- second_pitr1(db_local$db, verbose = verbose) #also 2nd vol2fl and parea
     } else {
       if(!quiet) message("  Only a single watershed: No pond outputs")
       db_pond <- list()
@@ -245,26 +245,24 @@ complete_run <- function(file, nrow = NULL, ncol =NULL, missing_value = -9999,
   }
 
   # Calc fill sheds ---------------------------------------------------------
-  if(continue == "fill") {
+  if(resume == "fill") {
     db_initial <- read_shed(out_locs$backup_out, "backup_initial")
     db_local <- read_shed(out_locs$backup_out, "backup_local")
     db_pond <- read_shed(out_locs$backup_out, "backup_pond")
   }
 
   if(!quiet) message("CALCULATING FILL PATTERNS")
-  if(continue %in% c("", "watersheds", "local", "pond", "fill")) {
+  if(resume %in% c("", "watersheds", "local", "pond", "fill")) {
     sub_start <- Sys.time()
     if(log) write(paste0("Started calculating fill watersheds at: ", sub_start), file = log_file, append = TRUE)
     if(length(unique(db_local$db$shedno[!is.na(db_local$db$shedno)])) > 1){
-      # Add pond sheds to local sheds
-      g_shed <- db_pond$db %>%
-        dplyr::select(local_shed, pond_shed) %>%
-        dplyr::distinct()
 
-      db_local <- dplyr::left_join(db_local$db, g_shed, by = "local_shed")
+      # Add pond sheds details to local sheds
+      db_local$db[, c("pond_shed", "vol2fl", "mm2fl", "parea")] <-
+        db_pond$db[, c("pond_shed", "vol2fl", "mm2fl", "parea")]
 
-      db_fill <- third_pitr1(db_local, verbose = verbose)
-      db_fill$db <- calc_vol2fl(db_fill$db, i_stats = db_initial$stats, verbose = verbose)
+      db_fill <- third_pitr1(db_local$db, verbose = verbose) # calc 2nd mm2fl as progresses
+
     } else {
       if(!quiet) message("  Only a single watershed: No fill outputs")
       db_fill <- list()
@@ -301,7 +299,7 @@ complete_run <- function(file, nrow = NULL, ncol =NULL, missing_value = -9999,
   if(!quiet) message("INVERTING DEM")
   if(!quiet) message("CALCULATING INVERTED DIRECTIONS")
 
-  if(continue %in%  c(cont_reg, "inverted")) {
+  if(resume %in%  c(cont_reg, "inverted")) {
     sub_start <- Sys.time()
     if(log) write(paste0("Started calculating inverted directions at: ", sub_start), file = log_file, append = TRUE)
 
@@ -327,8 +325,8 @@ complete_run <- function(file, nrow = NULL, ncol =NULL, missing_value = -9999,
 
   # Inverted Watersheds --------------------------------------------------------
   if(!quiet) message("CALCULATING INVERTED WATERSHEDS")
-  if(continue == "iwatersheds") db_idir <- read_shed(out_locs$backup_out, "backup_idir")
-  if(continue %in% c(cont_reg, "inverted", "iwatersheds")) {
+  if(resume == "iwatersheds") db_idir <- read_shed(out_locs$backup_out, "backup_idir")
+  if(resume %in% c(cont_reg, "inverted", "iwatersheds")) {
     sub_start <- Sys.time()
     if(log) write(paste0("Started calculating inverted watersheds at: ", sub_start), file = log_file, append = TRUE)
     db_iinitial <- calc_shed4(db_idir)
@@ -347,8 +345,8 @@ complete_run <- function(file, nrow = NULL, ncol =NULL, missing_value = -9999,
 
   # Invert Remove Initial Pits -----------------------------------------------
   if(!quiet) message("REMOVING INVERTED INITIAL PITS")
-  if(continue == "ilocal") db_iinitial <- read_shed(out_locs$backup_out, "backup_iinitial")
-  if(continue %in% c(cont_reg, "inverted", "iwatersheds", "ilocal")) {
+  if(resume == "ilocal") db_iinitial <- read_shed(out_locs$backup_out, "backup_iinitial")
+  if(resume %in% c(cont_reg, "inverted", "iwatersheds", "ilocal")) {
     sub_start <- Sys.time()
     if(log) write(paste0("Started inverted pit removal at: ", sub_start), file = log_file, append = TRUE)
 
@@ -371,7 +369,7 @@ complete_run <- function(file, nrow = NULL, ncol =NULL, missing_value = -9999,
 
 
   # Final Report ------------------------------------------------------------
-  if(continue %in% c(cont_reg, "inverted", "iwatersheds", "ilocal", "report")) {
+  if(resume %in% c(cont_reg, "inverted", "iwatersheds", "ilocal", "report")) {
     if(report == TRUE){
       files <- normalizePath(list.files(path = paste0(folder_out, "/final"), full.names = TRUE))
       report_final(file = file, report_loc = folder_out, out_files = files, run = f, nrow = nrow, ncol = ncol,

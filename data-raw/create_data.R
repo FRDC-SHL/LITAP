@@ -23,5 +23,5 @@ d <- load_file("../TestFiles/11_Ab02PV/FlowMapR/021ELEV.DBF",
 foreign::write.dbf(as.data.frame(d), "./inst/extdata/testELEV.dbf")
 
 # Run to get output of subset dem for vignettes
-complete_run(file = "./inst/extdata/testELEV.dbf", nrow = 150, ncol = 150,
-             max_area = 1, max_depth = 0.1)
+flow_mapper(file = "./inst/extdata/testELEV.dbf", nrow = 150, ncol = 150,
+            max_area = 1, max_depth = 0.1)

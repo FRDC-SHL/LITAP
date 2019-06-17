@@ -4,7 +4,7 @@
 #' examples.
 #'
 #' @param db Data frame. Cell by cell data on the elevation of the watershed.
-#'   Output by LITAP's \code{complete_run()} function.
+#'   Output by LITAP's \code{flow_mapper()} function.
 #' @param type Character. Either relief or elevation. Defaults to relief.
 #' @param dir Logical. Include flow directions?
 #' @param seqno Logical. Include cell numbering?

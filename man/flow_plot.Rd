@@ -11,7 +11,7 @@ flow_plot(db, type = "relief", dir = FALSE, seqno = FALSE,
 }
 \arguments{
 \item{db}{Data frame. Cell by cell data on the elevation of the watershed.
-Output by LITAP's \code{complete_run()} function.}
+Output by LITAP's \code{flow_mapper()} function.}
 
 \item{type}{Character. Either relief or elevation. Defaults to relief.}
 

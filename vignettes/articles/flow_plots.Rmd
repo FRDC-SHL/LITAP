@@ -40,7 +40,7 @@ files <- system.file("extdata", "final", package = "LITAP")
 list.files(files, full.names = TRUE)
 ```
 
-These files were created using the `complete_run()` function (see the [Getting Started Vignette](../LITAP.html))
+These files were created using the `flow_mapper()` function (see the [Getting Started Vignette](../LITAP.html))
 
 
 We will load the rds file (R data files) for the relevant dems. Note that in each of these dem files, the only thing that differs is how the watersheds are almalgamated, and the different flow directions to make this happen.
