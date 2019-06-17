@@ -144,3 +144,11 @@ remove_buffer <- function(db, stats = NULL) {
   }
 
 }
+
+locs_create <- function(folder_out, f) {
+  out_locs <- list("backup_out" = paste0(folder_out, "/backup/"),
+                   "final_out" = paste0(folder_out, "/final/"),
+                   "dbf_out" = paste0(folder_out, "/dbf/"))
+  lapply(out_locs, function(x) {if(!dir.exists(x)) dir.create(x)})
+  lapply(out_locs, function(x) paste0(x, f))
+}
