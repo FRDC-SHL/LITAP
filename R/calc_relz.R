@@ -111,7 +111,9 @@ calc_pit <- function(db) {
     dplyr::full_join(dplyr::select(db, seqno, shedno, elev), ., by = "shedno") %>%
     dplyr::mutate(z2pit = elev - pit_elev,
                   z2pit = replace(z2pit, z2pit < 0, 0),
-                  n2pit = dplyr::if_else(is.na(shedno), 0, as.numeric(NA)))
+                  n2pit = dplyr::if_else(is.na(shedno), 0, as.numeric(NA)),
+                  cum_area = 0,
+                  cum_elev = dplyr::if_else(is.na(shedno), 0, as.numeric(NA)))
 
   seqno_order <- dplyr::arrange(db, upslope, dplyr::desc(elev)) %>%
     dplyr::pull(seqno)
