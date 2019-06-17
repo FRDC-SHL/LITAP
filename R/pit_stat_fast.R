@@ -1,5 +1,4 @@
 
-#' @import magrittr
 pit_stat1 <- function(db, w = NULL, verbose = FALSE) {
 
   if(length(unique(db$shedno[!is.na(db$shedno)])) > 1){ # If more than one watershed
@@ -132,7 +131,6 @@ pit_stat1 <- function(db, w = NULL, verbose = FALSE) {
   return(stats)
 }
 
-#' @import magrittr
 out_stat <- function(pit_stat) {
   pit_stat %>%
     dplyr::select(-dplyr::ends_with("_out")) %>%
@@ -166,7 +164,6 @@ calc_vol2fl <- function(db, i_stats, verbose) {
 }
 
 # for each watershed look at slices of elevations, calculate the volumes and add together
-#' @import magrittr
 vol2fl <- function(db, verbose) {
 
   if(any(db$shed_area <= 0)) {

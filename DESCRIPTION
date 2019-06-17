@@ -11,13 +11,13 @@ Encoding: UTF-8
 LazyData: true
 URL: https://github.com/steffilazerte/LITAP
 Depends:
-    R (>= 3.3),
-    magrittr(>= 1.5)
+    R (>= 3.3)
 Imports:
     dplyr (>= 0.7.0),
     DT (>= 0.2),
     ggplot2 (>= 2.2.1),
     gridExtra(>= 2.2.1),
+    magrittr(>= 1.5),
     progress (>= 1.1.2),
     purrr (>= 0.2.2.2),
     raster(>= 2.5.8),

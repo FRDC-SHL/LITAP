@@ -328,7 +328,6 @@ flatin <- function(n, db, verbose = FALSE) {
   } else return(NA)
 }
 
-#' @import magrittr
 neighbour_pit <- function(n, db, verbose = FALSE) {
 
   # Add in local flow directions
@@ -497,7 +496,6 @@ most_n <- function(n1, n2, n3, n4) {
 }
 
 
-#' @import magrittr
 get_run <- function(file) {
   basename(file) %>%
     stringr::str_split(stringr::regex("Elev", ignore_case = TRUE)) %>%

@@ -1,4 +1,3 @@
-#' @import magrittr
 get_pour_point2 <- function(db_w, w, db, verbose = FALSE){
 
   if(verbose)  message("      - Watershed ", w)
@@ -101,7 +100,6 @@ get_pour_point2 <- function(db_w, w, db, verbose = FALSE){
   return(tibble::tibble(pits = list(pits), pour_point = list(pp)))
 }
 
-#' @import magrittr
 get_pour_point <- function(db_w, w, db, verbose = FALSE){
 
   if(verbose)  message("  - Watershed number ", w)
@@ -166,7 +164,6 @@ get_pour_point <- function(db_w, w, db, verbose = FALSE){
 }
 
 
-#' @import magrittr
 pit_stat <- function(db, w = NULL, verbose = FALSE) {
   db <- db %>%
     dplyr::mutate(edge_cell = purrr::map_lgl(adjacent, ~edge_pit(a = .x, db = db)))
@@ -250,7 +247,6 @@ pit_stat <- function(db, w = NULL, verbose = FALSE) {
   return(stats)
 }
 
-#' @import magrittr
 out_stat <- function(pit_stat) {
   pit_stat %>%
     dplyr::select(-dplyr::ends_with("_out")) %>%
@@ -284,7 +280,6 @@ calc_vol2fl <- function(db, i_stats) {
 }
 
 # for each watershed look at slices of elevations, calculate the volumes and add together
-#' @import magrittr
 vol2fl <- function(db) {
 
   if(any(db$shed_area <= 0)) {

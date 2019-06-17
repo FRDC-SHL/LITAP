@@ -58,7 +58,6 @@ first_pitr <- function(db, max_area = 10, max_depth = 0.5, verbose = FALSE) {
   return(db)
 }
 
-#' @import magrittr
 second_pitr <- function(db, verbose = FALSE) {
 
   # Working with local_shed
