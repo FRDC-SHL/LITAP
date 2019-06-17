@@ -142,14 +142,17 @@ out_stat <- function(pit_stat) {
 
 calc_vol2fl <- function(db, i_stats, verbose) {
 
-  # Where no change in ShedNo from local (or initial?) to ShedNow (pond shed) then all 0's ???
+  # According to DEMProces.cpp (C++ flowmapr), Edge pits are skipped
+  i_stats <- dplyr::filter(i_stats, edge_pit == FALSE)
+
   db <- dplyr::mutate(db, shedno = initial_shed)
-  vol <- db[, lapply(db, class) != "list"] %>% # remove lists
-    dplyr::filter(!is.na(shedno), local_shed != pond_shed)
+
+  vol <- db[, lapply(db, class) != "list"]  %>% # remove lists
+    dplyr::filter(!is.na(shedno))
 
   if(nrow(vol) > 0) {
     vol <- vol %>%
-      dplyr::left_join(dplyr::select(i_stats, shedno, pour_elev, shed_area), #add stats
+      dplyr::right_join(dplyr::select(i_stats, shedno, pour_elev, shed_area), #add stats
                        by = "shedno") %>%
       tidyr::nest(-shedno) %>%
       dplyr::mutate(vol = purrr::map(data, vol2fl, verbose = verbose)) %>%
@@ -160,7 +163,7 @@ calc_vol2fl <- function(db, i_stats, verbose) {
     db <- dplyr::mutate(db, vol2fl = 0, mm2fl = 0, parea = 0)
   }
 
-  return(db)
+  db
 }
 
 # for each watershed look at slices of elevations, calculate the volumes and add together
@@ -181,16 +184,18 @@ vol2fl <- function(db, verbose) {
                   last_elev = replace(last_elev, last_elev == 0, elev[last_elev == 0]),
                   elev_diff = (elev - last_elev) * 1000,
                   vol2fl = NA)
-                  #curr_vol = (elev_diff * (total_cells - 1)),
-                  #vol2fl = 0.1 + cumsum(curr_vol))
+  #curr_vol = (elev_diff * (total_cells - 1)),
+  #vol2fl = 0.1 + cumsum(curr_vol))
 
-  for(i in 1:nrow(vol_stats)) {
-    prev <- vol_stats$vol2fl[i-1]
-    if(length(prev) == 0) prev <- 0.1
-    vol_stats$vol2fl[i] <-  prev + (vol_stats$elev_diff[i] * (vol_stats$parea[i] - 1))
+  if(nrow(vol_stats) > 0) {
+    for(i in 1:nrow(vol_stats)) {
+      prev <- vol_stats$vol2fl[i-1]
+      if(length(prev) == 0) prev <- 0.1
+      vol_stats$vol2fl[i] <-  prev + (vol_stats$elev_diff[i] * (vol_stats$parea[i]-1))
+    }
   }
 
-  vol_stats <- vol_stats %>%
+  vol_stats %>%
     dplyr::mutate(mm2fl = dplyr::if_else(shed_area > 0,
                                          vol2fl/shed_area,
                                          vol2fl/1)) %>%
@@ -198,6 +203,4 @@ vol2fl <- function(db, verbose) {
 
   # db <- dplyr::left_join(db, vol_stats, by = "elev") %>%
   #   mutate_cond(is.na(parea), mm2fl = 0, vol2fl = 0, parea = 0)
-
-  return(vol_stats)
 }

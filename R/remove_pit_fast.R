@@ -153,6 +153,25 @@ second_pitr1 <- function(db, verbose = FALSE) {
       pond$next_pit[pond$removed == FALSE & pond$final == FALSE &
                      (pond$next_pit == w_focal$shedno | pond$next_pit == w_drain$shedno)] <- new_shed
 
+      # Calc second vol2mm etc.
+      vol <- db %>%
+        dplyr::filter(shedno == new_shed) %>%
+        dplyr::left_join(dplyr::select(w_stats, shedno, pour_elev, shed_area),
+                         by = "shedno") %>%
+        vol2fl(., verbose = verbose) %>%
+        dplyr::mutate(shedno = new_shed)
+
+      # Only replace cells with new overflows (i.e. elev must be in vol)
+      db_new <- dplyr::filter(db, shedno == new_shed, elev %in% vol$elev,
+                              parea == 0) %>%  # Only replace ones with no info
+        dplyr::select(-vol2fl, -mm2fl, -parea) %>%
+        dplyr::left_join(vol, by = c("shedno", "elev")) %>%
+        mutate_cond(is.na(parea), mm2fl = 0, vol2fl = 0, parea = 0) %>%
+        dplyr::arrange(seqno)
+
+      db[db_new$seqno, c("vol2fl", "parea")] <-
+        db_new[, c("vol2fl", "parea")]
+
     } else {
       if(verbose) message("  Watersheds ", w_focal$shedno, " and ", w_drain$shedno, " are FINAL sheds")
       final_pits <- unique(c(final_pits, w_rm$shedno, w_rm$drains_to))
@@ -208,7 +227,8 @@ third_pitr1 <- function(db, verbose = FALSE) {
 
     if(w_focal$end_pit == w_drain$end_pit) {
       new_shed <- max(db$shedno, na.rm = TRUE) + 1
-      if(verbose) message("  Combining sheds ", w_focal$shedno, " and ", w_drain$shedno, " to new shed ", new_shed)
+      if(verbose) message("  Combining sheds ", w_focal$shedno, " and ",
+                          w_drain$shedno, " to new shed ", new_shed)
 
       db <- remove_pit1(w_focal, w_stats, db) %>%
         dplyr::mutate(shedno = replace(shedno,
@@ -249,6 +269,17 @@ third_pitr1 <- function(db, verbose = FALSE) {
         dplyr::bind_rows(fill, .)
 
       finished <- c(finished, w_focal$shedno, w_drain$shedno)
+
+      # Update mm2fl
+      db_new <- db %>%
+        dplyr::filter(shedno == new_shed, vol2fl != 0) %>%
+        dplyr::left_join(dplyr::select(w_stats, shedno, shed_area),
+                         by = "shedno") %>%
+        dplyr::filter(mm2fl < w_focal$varatio) %>%
+        dplyr::mutate(mm2fl = vol2fl/shed_area)
+
+      db[db_new$seqno, "mm2fl"] <-
+        db_new[, "mm2fl"]
 
     } else {
       finished <- c(finished, w_focal$shedno)
