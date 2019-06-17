@@ -78,16 +78,17 @@ For information regarding loading other file types see
   }
 }
 \examples{
-\dontrun{
 # Basic Run
-
-# (Find test files in extdata folder)
-
-flow_mapper(file = "./inst/extdata/testELEV.dbf", nrow = 150, ncol = 150)
+flow_mapper(file = system.file("extdata", "testELEV.dbf", package = "LITAP"),
+            folder_out = "./testELEV/", nrow = 150, ncol = 150)
 
 # Specify parameters for initial pit removal
-flow_mapper(file = "testELEV.dbf", nrow = 150, ncol = 150,
-             max_area = 5, max_depth = 2)
-}
+flow_mapper(file = system.file("extdata", "testELEV.dbf", package = "LITAP"),
+            folder_out = "./testELEV/", nrow = 150, ncol = 150,
+            max_area = 5, max_depth = 2)
+
+# Clean up (remove created folder and output)
+unlink("./testELEV/", recursive = TRUE)
+
 
 }
