@@ -24,7 +24,7 @@ save_output <- function(locs, out_format,
 
       if("stats" %in% names(data) && nrow(data$stats) > 0) {
         s <- remove_buffer(data$db, data$stats)
-        save_shed(locs$final, s, paste0("stats_", name, ".", out_format))
+        save_shed(locs[[where]], s, paste0("stats_", name, ".", out_format))
       }
     }
   }
