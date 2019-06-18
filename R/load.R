@@ -231,15 +231,15 @@ add_buffer <- function(db) {
   ncols = max(db$col)
   nrows = max(db$row)
 
-  buffers <- tibble::data_frame(row = c(rep(1, ncols+2),        #top
-                                        1:(nrows+2),            #left
-                                        1:(nrows+2),            #right
-                                        rep(nrows+2, ncols+2)), #bottom
-                                col = c(1:(ncols+2),            #top
-                                        rep(1, nrows+2),        #left
-                                        rep(ncols+2, nrows+2),  #right
-                                        1:(ncols+2)),           #bottom
-                                buffer = TRUE) %>%
+  buffers <- tibble::tibble(row = c(rep(1, ncols+2),        #top
+                                    1:(nrows+2),            #left
+                                    1:(nrows+2),            #right
+                                    rep(nrows+2, ncols+2)), #bottom
+                            col = c(1:(ncols+2),            #top
+                                    rep(1, nrows+2),        #left
+                                    rep(ncols+2, nrows+2),  #right
+                                    1:(ncols+2)),           #bottom
+                            buffer = TRUE) %>%
 
     dplyr::distinct()
 
