@@ -87,6 +87,10 @@ flow_mapper <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
   f <- tools::file_path_sans_ext(basename(file))
 
   if(is.null(out_folder)) out_folder <- dirname(file)
+  if(!dir.exists(out_folder)) {
+    stop("The location '", out_folder, "' doesn't exist. ",
+         "Please specify an existing folder", call. = FALSE)
+  }
   out_folder <- file.path(out_folder, f)
 
   if(!dir.exists(out_folder)) dir.create(out_folder)
