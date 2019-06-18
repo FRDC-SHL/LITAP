@@ -22,8 +22,5 @@ test_that("Quiet is quiet and that runs resume and end as they should", {
   }
 
   temp <- list.files(dir, full.names = TRUE, recursive = TRUE)
-  file.remove(temp)
-  file.remove(paste0(dir, "/backup/"))
-  file.remove(paste0(dir, "/final/"))
-  file.remove(paste0(dir, "/dbf/"))
+  unlink(temp, recursive = TRUE)
 })

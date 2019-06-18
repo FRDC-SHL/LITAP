@@ -15,7 +15,7 @@ test_that("DEM files load", {
   # skip_on_appveyor()
   # skip_on_travis()
 
-  # file <- "../../../Data/FES4 Input files/FES04Elev.DBF"
+  # file <- "./FES4 Input files/FES04Elev.DBF"
   # expect_silent(d <- load_dem(file))
 
   file <- system.file("extdata", "testELEV.dbf", package = "LITAP")
@@ -27,7 +27,7 @@ test_that("Grid files load and prep", {
   skip_on_cran()
   skip_on_appveyor()
   skip_on_travis()
-  file <- "../../../Data/FES4 Input files/FES04_9n3_Original_SurferGrid.grd"
+  file <- "./FES4 Input files/FES04_9n3_Original_SurferGrid.grd"
   expect_silent(d_raw <<- load_raster(file))
   expect_equal(nrow(d_raw), 434421)
   expect_equivalent(min(d_raw$elev), 204.5368, tolerance = 0.00001)
@@ -37,13 +37,13 @@ test_that("Grid files load and prep", {
   expect_values(d)
 })
 
-#d_raw <- load_raster("../../../Data/FES4 Input files/FES04_9n3_Original_SurferGrid.grd")
+#d_raw <- load_raster("./FES4 Input files/FES04_9n3_Original_SurferGrid.grd")
 
 test_that("AscII Grid files load and prep", {
   skip_on_cran()
   skip_on_appveyor()
   skip_on_travis()
-  file <- "../../../Data/FES4 Input files/FES04_SuferGridAscII.grd"
+  file <- "./FES4 Input files/FES04_SuferGridAscII.grd"
   # Weird warning only produced in test_that env ?
   suppressWarnings(expect_error(expect_message(d <- load_raster(file), NA), NA))
   expect_equivalent(d_raw, d, tolerance = 0.00001)
@@ -57,13 +57,13 @@ test_that("ArcGis files load", {
   skip_on_cran()
   skip_on_appveyor()
   skip_on_travis()
-  file <- "../../../Data/FES4 Input files/FES04_ARCGRID"
+  file <- "./FES4 Input files/FES04_ARCGRID"
   expect_silent(d <- load_raster(file))
   expect_equivalent(d_raw, d, tolerance = 0.00001)  ## PROBLEM!
   expect_silent(d <- load_file(file, verbose = FALSE))
   expect_values(d)
 
-  file <- "../../../Data/FES4 Input files/FES04_ArcAscIIGrid.asc"
+  file <- "./FES4 Input files/FES04_ArcAscIIGrid.asc"
   expect_silent(d <- load_raster(file))
   expect_equivalent(d_raw, d, tolerance = 0.00001)
   expect_silent(d <- load_file(file, verbose = FALSE))
@@ -74,7 +74,7 @@ test_that("GeoTif files load", {
   skip_on_cran()
   skip_on_appveyor()
   skip_on_travis()
-  file <- "../../../Data/FES4 Input files/FES04_GeoTiff.tif"
+  file <- "./FES4 Input files/FES04_GeoTiff.tif"
   expect_silent(d <- load_raster(file))
   expect_equivalent(d_raw, d, tolerance = 0.00001)
   expect_silent(d <- load_file(file, verbose = FALSE))
@@ -85,7 +85,7 @@ test_that("Float Grid files laod", {
   skip_on_cran()
   skip_on_appveyor()
   skip_on_travis()
-  file <- "../../../Data/FES4 Input files/FloatGrid.flt"
+  file <- "./FES4 Input files/FloatGrid.flt"
   expect_silent(d <- load_raster(file))
   expect_equivalent(d_raw, d, tolerance = 0.00001)
   expect_silent(d <- load_file(file, verbose = FALSE))
@@ -97,13 +97,13 @@ test_that("Text files load", {
   skip_on_appveyor()
   skip_on_travis()
 
-  file <- "../../../Data/FES4 Input files/FES04_XYZGrid.dat"
+  file <- "./FES4 Input files/FES04_XYZGrid.dat"
   expect_silent(d <- load_txt(file))
   expect_equivalent(d_raw, d, tolerance = 0.00001)
   expect_silent(d <- load_file(file, verbose = FALSE))
   expect_values(d)
 
-  file <- "../../../Data/FES4 Input files/FES04_XYZ.dat"
+  file <- "./FES4 Input files/FES04_XYZ.dat"
   expect_silent(d <- load_txt(file))
   expect_equivalent(d_raw, d, tolerance = 0.00001)
   expect_silent(d <- load_file(file, verbose = FALSE))
@@ -114,7 +114,7 @@ test_that("Excel files load", {
   skip_on_cran()
   skip_on_appveyor()
   skip_on_travis()
-  file <- "../../../Data/FES4 Input files/FES04_XYZ.xlsx"
+  file <- "./FES4 Input files/FES04_XYZ.xlsx"
   expect_silent(d <- load_excel(file))
   expect_equivalent(d_raw, d, tolerance = 0.00001)
   expect_silent(d <- load_file(file, verbose = FALSE))
