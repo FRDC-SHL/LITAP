@@ -7,18 +7,22 @@ save_backup <- function(locs, data, name) {
 }
 
 save_output <- function(locs, out_format,
-                        which = c("local", "pond", "fill", "pit", "ilocal")) {
+                        which = c("local", "pond", "fill", "pit", "ilocal"),
+                        where = "flow", add_db = NULL) {
   for(name in which) {
     if(file.exists(paste0(locs[["backup"]], "_", name , ".rds"))) {
       data <- read_shed(locs[["backup"]], name)
 
       if(name %in% c("fill", "ilocal", "form", "weti", "relz", "len")) {
-        # fill = dem, ilocal = idem
-        save_shed(locs$final, data$db,
+        if("db" %in% names(data)) data <- data$db
+        if(!is.null(add_db)) {
+          suppressMessages(data <- dplyr::left_join(data, add_db))
+        }
+        save_shed(locs[[where]], data,
                   paste0("dem_", name, ".", out_format), clean = TRUE)
       }
 
-      if(nrow(data$stats) > 0) {
+      if("stats" %in% names(data) && nrow(data$stats) > 0) {
         s <- remove_buffer(data$db, data$stats)
         save_shed(locs$final, s, paste0("stats_", name, ".", out_format))
       }
@@ -135,7 +139,7 @@ remove_buffer <- function(db, stats = NULL) {
 
 }
 
-locs_create <- function(folder_out, f, which = c("backup", "final")) {
+locs_create <- function(folder_out, f, which = c("backup", "flow")) {
   out_locs <- list()
   for(i in which) out_locs[i] <- file.path(folder_out, i)
   lapply(out_locs, function(x) {if(!dir.exists(x)) dir.create(x)})
