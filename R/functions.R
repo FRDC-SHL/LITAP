@@ -62,7 +62,7 @@ trace_pits <- function(shedno, w_stats) {
 # Relabel seqno
 rename_seqno <- function(x, index) {
   if(length(x) > 0){
-    x <- dplyr::as_tibble(x) %>%
+    x <- tibble::enframe(x, name = NULL) %>%
       dplyr::rename(seqno_buffer = value) %>%
       dplyr::left_join(index, by = "seqno_buffer") %>%
       dplyr::pull(seqno)
