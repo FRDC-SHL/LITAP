@@ -48,6 +48,11 @@ check_resume <- function(resume, end, resume_options) {
   }
 }
 
+check_grid <- function(grid) {
+  if(missing(grid) || !is.numeric(grid) || grid < 0){
+    stop("'grid' must be a number greater than 0", call. = FALSE)
+  }
+}
 
 run_time <- function(start, log_file, quiet) {
   stop <- Sys.time()
