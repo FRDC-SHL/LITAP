@@ -112,7 +112,9 @@ trace_wetness <- function(db_n_sub, db_c) {
                                       .data$qarea / 0.0001),
                   new_qa = dplyr::if_else(status == "higher",
                                           .data$qc * -1 * .data$tan2_f,     # -1 because calc from lower cell's perspective
-                                          .data$qarea))
+                                          .data$qarea),
+                  elev_diff = replace(elev_diff, status != "higher", 0),
+                  cell_t = replace(cell_t, status != "higher", 0))
 
   temp_qc <- temp_n %>%
     dplyr::group_by(seqno_n) %>%
@@ -127,7 +129,7 @@ trace_wetness <- function(db_n_sub, db_c) {
                      d = sum(diag) + sum(count_d),
                      o = sum(!diag) + sum(count_o),
                      t = d + o,
-                     elev_sum = sum(elev_sum) + sum(elev_diff))
+                     elev_sum = sum(elev_diff) + sum(elev_sum))
 
   # Add these cell totals to all the previous totals already calculated for this lower cell
   db_c[db_c$seqno %in% temp_n$seqno, c("cell_t", "count_d", "count_o", "elev_sum", "qarea")] <-
