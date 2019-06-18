@@ -37,7 +37,8 @@ load_excel <- function(file, ...) {
     stop("Require package 'readxl' to load .xlsx or .xls files.\n
          Install with \"install.packages('readxl')\", then try again")
   } else {
-    h <- readxl::read_excel(file, n_max = 5, col_names = FALSE)
+    h <- readxl::read_excel(file, n_max = 5,
+                            col_names = FALSE, .name_repair = "minimal")
     header <- any(stringr::str_detect(h[1,], "[a-zA-Z]+"))
     db <- readxl::read_excel(file, col_names = header)
     names(db) <- c("x", "y", "elev")
