@@ -444,18 +444,6 @@ divide <- function(db, size = 12){
   db$group4 <- NA
   db$group4[(db$row > (size/2)) & (db$col > (size/2))] <- db$group1[db$row < (max(db$row) - ((size/2) - 1)) & db$col < (max(db$col) - ((size/2) - 1))]
 
-
-  # ggplot(db, aes(x = row, y = col)) +
-  #   geom_rect(xmin = 0, xmax = max(db$row), ymax = 0, ymin = max(db$col)) +
-  #   geom_raster(aes(fill = group1)) +
-  #   geom_point(x = 10, y = 72)
-  #
-  #  ggplot(db, aes(x = row, y = col)) +
-  #    geom_rect(xmin = 0, xmax = max(db$row), ymax = 0, ymin = max(db$col)) +
-  #    geom_raster(aes(fill = group2)) +
-  #    geom_point(x = 10, y = 72)
-
-
   db_group1 <- db %>%
     dplyr::select(group1, seqno, elev) %>%
     dplyr::group_by(group1) %>%
