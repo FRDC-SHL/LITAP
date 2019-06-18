@@ -5,9 +5,10 @@
 \title{Map flow through the landscape}
 \usage{
 flow_mapper(file, nrow = NULL, ncol = NULL, missing_value = -9999,
-  max_area = 10, max_depth = 0.5, folder_out = NULL, clean = FALSE,
-  clim = NULL, rlim = NULL, resume = NULL, end = NULL,
-  log = TRUE, report = TRUE, verbose = FALSE, quiet = FALSE)
+  max_area = 10, max_depth = 0.5, out_folder = NULL,
+  out_format = "rds", clean = FALSE, clim = NULL, rlim = NULL,
+  resume = NULL, end = NULL, log = TRUE, report = TRUE,
+  verbose = FALSE, quiet = FALSE)
 }
 \arguments{
 \item{file}{Character. Elevation file (see \code{\link{load_file}} for
@@ -29,7 +30,7 @@ pit removal}
 \item{max_depth}{Numeric. Largest depth of pits to be removed during initial
 pit removal}
 
-\item{folder_out}{Charater. Folder to store output files. Defaults to folder
+\item{out_folder}{Charater. Folder to store output files. Defaults to folder
 in the same location and with the same name as the dem file}
 
 \item{clean}{Logical. Remove all backup files and output files from previous
@@ -80,15 +81,14 @@ For information regarding loading other file types see
 \examples{
 # Basic Run
 flow_mapper(file = system.file("extdata", "testELEV.dbf", package = "LITAP"),
-            folder_out = "./testELEV/", nrow = 150, ncol = 150)
+           out_folder = "./testELEV/", nrow = 150, ncol = 150)
 
 # Specify parameters for initial pit removal
 flow_mapper(file = system.file("extdata", "testELEV.dbf", package = "LITAP"),
-            folder_out = "./testELEV/", nrow = 150, ncol = 150,
+            out_folder = "./testELEV/", nrow = 150, ncol = 150,
             max_area = 5, max_depth = 2)
 
 # Clean up (remove created folder and output)
 unlink("./testELEV/", recursive = TRUE)
-
 
 }

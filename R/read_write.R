@@ -1,46 +1,36 @@
-save_all <- function(locs, data, name) {
-
-  if(all(names(data) == c("db", "stats"))) {
-    save_shed(locs$backup_out, data, paste0("backup_", name, ".rds"))
+save_backup <- function(locs, data, name) {
+  if(is.data.frame(data) || (is.list(data) && all(names(data) == c("db", "stats")))) {
+    save_shed(locs$backup, data, paste0(name, ".rds"))
   } else if(names(data) == "db") {
-    save_shed(locs$backup_out, data$db, paste0("backup_", name, ".rds"))
+    save_shed(locs$backup, data$db, paste0(name, ".rds"))
   }
+}
 
-  if(name %in% c("initial", "local", "pond", "fill", "pit", "ilocal")) {
-    if("db" %in% names(data)) {
-      d <- remove_buffer(data$db)
-      d <- d[, lapply(d, class) != "list"] # remove lists
+save_output <- function(locs, out_format,
+                        which = c("local", "pond", "fill", "pit", "ilocal")) {
+  for(name in which) {
+    if(file.exists(paste0(locs[["backup"]], "_", name , ".rds"))) {
+      data <- read_shed(locs[["backup"]], name)
 
-      save_shed(locs$final_out, d, paste0("dem_", name, ".rds"))
-      save_shed(locs$final_out, d, paste0("dem_", name, ".csv"))
-
-      if(name %in% c("fill", "ilocal")) {
-        dbf <- convert_orig(d, type = "dem")
-        name_dbf <- name
-        if(name == "fill") name_dbf <- "dem"
-        if(name == "ilocal") name_dbf <- "idem"
-        save_shed(locs$dbf_out, as.data.frame(dbf), paste0(name_dbf, ".dbf"))
+      if(name %in% c("fill", "ilocal", "form", "weti", "relz", "len")) {
+        # fill = dem, ilocal = idem
+        save_shed(locs$final, data$db,
+                  paste0("dem_", name, ".", out_format), clean = TRUE)
       }
-    }
-    if("stats" %in% names(data)) {
+
       if(nrow(data$stats) > 0) {
         s <- remove_buffer(data$db, data$stats)
-        save_shed(locs$final_out, s, paste0(name, ".rds"))
-        save_shed(locs$final_out, s, paste0(name, ".csv"))
-
-        if(name %in% c("local", "pond", "fill", "pit", "ilocal")) {
-          name_dbf <- name
-          if(name == "ilocal") name_dbf <- "ipit"
-          dbf <- convert_orig(s, type = "stats")
-          if(any(is.na(dbf))) dbf <- dplyr::mutate_if(dbf, dplyr::funs(all(is.na(.))), dplyr::funs(return(0)))
-          save_shed(locs$dbf_out, as.data.frame(dbf), paste0(name_dbf, ".dbf"))
-        }
+        save_shed(locs$final, s, paste0("stats_", name, ".", out_format))
       }
     }
   }
 }
 
-save_shed <- function(file_out, obj, name){
+save_shed <- function(file_out, obj, name, clean = FALSE){
+  if(clean) {
+    obj <- remove_buffer(obj)
+    obj <- obj[, lapply(obj, class) != "list"] # remove lists
+  }
   if(stringr::str_detect(name, ".rds$")) readr::write_rds(obj, paste0(file_out, "_", name))
   if(stringr::str_detect(name, ".csv$")) readr::write_csv(obj, paste0(file_out, "_", name))
   if(stringr::str_detect(name, ".dbf$")) foreign::write.dbf(obj, paste0(file_out, "_", name))
@@ -145,10 +135,9 @@ remove_buffer <- function(db, stats = NULL) {
 
 }
 
-locs_create <- function(folder_out, f) {
-  out_locs <- list("backup_out" = paste0(folder_out, "/backup/"),
-                   "final_out" = paste0(folder_out, "/final/"),
-                   "dbf_out" = paste0(folder_out, "/dbf/"))
+locs_create <- function(folder_out, f, which = c("backup", "final")) {
+  out_locs <- list()
+  for(i in which) out_locs[i] <- file.path(folder_out, i)
   lapply(out_locs, function(x) {if(!dir.exists(x)) dir.create(x)})
-  lapply(out_locs, function(x) paste0(x, f))
+  lapply(out_locs, function(x) file.path(x, f))
 }
