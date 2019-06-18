@@ -86,7 +86,9 @@ flow_mapper <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
 
   f <- tools::file_path_sans_ext(basename(file))
 
-  if(is.null(out_folder)) out_folder <- tools::file_path_sans_ext(file)
+  if(is.null(out_folder)) out_folder <- dirname(file)
+  out_folder <- file.path(out_folder, f)
+
   if(!dir.exists(out_folder)) dir.create(out_folder)
 
   out_locs <- locs_create(out_folder, f)
