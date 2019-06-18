@@ -4,13 +4,18 @@
 \alias{form_mapper}
 \title{Map form and relief of the landscape}
 \usage{
-form_mapper(folder, grid, resume = NULL, end = NULL, log = TRUE,
+form_mapper(folder, grid, str_val = 10000, ridge_val = 10000,
+  out_format = "rds", resume = NULL, end = NULL, log = TRUE,
   report = TRUE, verbose = FALSE, quiet = FALSE)
 }
 \arguments{
 \item{folder}{Character. Location of [flow_mapper()] output}
 
 \item{grid}{Numeric. Grid size for the original dem}
+
+\item{str_val}{Numeric. Definition of a stream (number of upslope cells)}
+
+\item{ridge_val}{Numeric. Definition of a ridge (number of downslope cells)}
 
 \item{resume}{Character. From which stage should the run be resumed? (see
 Details below)}
@@ -33,18 +38,23 @@ other metrics).  Based on FormMapR by R. A. (Bob) MacMillan, LandMapper
 Environmental Solutions.
 }
 \details{
-Runs can be resumed at the "relief" step or the "length" step.
+For resuming or ending a run, \code{resume} or \code{end} must be
+  one of the following:
 
-  For resuming or ending a run, \code{resume} or \code{end} must be one of
-  the following:
-
-  1. `relief` (Calculating Relief Derivitives)
-  2. `length` (Calculating Slope Length)
+  1. `weti` (Calculating Wetness Indices)
+  2. `relief` (Calculating Relief Derivitives)
+  3. `length` (Calculating Slope Length)
 }
 \examples{
 
-\dontrun{
-form_mapper(folder = "my_runs/021/", grid = 5)
-}
+# First need to run flow_mapper()
+flow_mapper(file = system.file("extdata", "testELEV.dbf", package = "LITAP"),
+           out_folder = "./testELEV/", nrow = 150, ncol = 150)
+
+# Now can run form_mapper()
+form_mapper(folder = "./testELEV/", grid = 5)
+
+# Clean up (remove all output)
+unlink("./testELEV/", recursive = TRUE)
 
 }
