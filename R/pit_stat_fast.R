@@ -150,13 +150,14 @@ calc_vol2fl <- function(db, i_stats, verbose) {
   vol <- db[, lapply(db, class) != "list"]  %>% # remove lists
     dplyr::filter(!is.na(shedno))
 
-  if(nrow(vol) > 0) {
+  if(nrow(vol) > 0 & nrow(i_stats) > 0) {
     vol <- vol %>%
       dplyr::right_join(dplyr::select(i_stats, shedno, pour_elev, shed_area), #add stats
                        by = "shedno") %>%
       tidyr::nest(-shedno) %>%
       dplyr::mutate(vol = purrr::map(data, vol2fl, verbose = verbose)) %>%
       tidyr::unnest(vol)
+
     db <- dplyr::left_join(db, vol, by = c("shedno", "elev")) %>%
       mutate_cond(is.na(parea), mm2fl = 0, vol2fl = 0, parea = 0)
   } else {
