@@ -5,6 +5,7 @@ calc_form <- function(db, grid = 10) {
 
   # slope, aspect, prof, plan
   details <- db %>%
+    dplyr::select(seqno, elev) %>%
     nb_values(max_cols = max(db$col)) %>%
     dplyr::mutate(elev_n = elev_n * 100) %>%
     dplyr::group_by(seqno) %>%
@@ -28,7 +29,8 @@ calc_form <- function(db, grid = 10) {
                   plan = round(plan, 3))
 
   # Join back in to db
-  db <- dplyr::left_join(db, details, by = "seqno")
+  db <- dplyr::left_join(dplyr::select(db, seqno, row, col),
+                         details, by = "seqno")
 
   # First/last rows and cols get adjacent values
   vals <- c("slope_pct", "slope_deg", "aspect", "prof", "plan")

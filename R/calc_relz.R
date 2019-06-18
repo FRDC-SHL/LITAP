@@ -3,30 +3,31 @@
 calc_relz <- function(db, idb, str_val = 10000, ridge_val = 10000, verbose = TRUE) {
 
   if(verbose) message("Calculating streams")
-  temp1 <- db %>%
+  streams <- db %>%
     dplyr::mutate(shedno = fill_shed) %>%
     calc_stream(str_val = str_val, verbose = verbose)
 
-  temp2 <- calc_pit(db)
+  str2pits <- calc_pit(db)
 
   if(verbose) message("Calculating ridges")
-  temp3 <- calc_stream(idb, str_val = ridge_val, verbose = verbose) %>%
+  ridges <- calc_stream(idb, str_val = ridge_val, verbose = verbose) %>%
     dplyr::rename(cr_row = str_row, cr_col = str_col, cr_elev = str_elev,
                   z2cr = z2st, n2cr = n2st) %>%
     dplyr::mutate(cr_elev = max(db$elev, na.rm = TRUE) - cr_elev) #Convert back to orig elev
 
-  temp4 <- calc_pit(idb) %>%
+  ridge2pits <- calc_pit(idb) %>%
     dplyr::rename(peak_seqno = pit_seqno, peak_row = pit_row, peak_col = pit_col,
                   peak_elev = pit_elev, z2peak = z2pit, n2peak = n2pit) %>%
     dplyr::mutate(peak_elev = max(db$elev, na.rm = TRUE) - peak_elev)
 
-  temp <- dplyr::left_join(temp1, temp2) %>%
-    dplyr::left_join(temp3) %>%
-    dplyr::left_join(temp4) %>%
-    dplyr::left_join(dplyr::select(db, seqno, row, col, buffer, fill_shed))
+  all <- dplyr::left_join(streams, str2pits, by = "seqno") %>%
+    dplyr::left_join(ridges, by = "seqno") %>%
+    dplyr::left_join(ridge2pits, by = "seqno") %>%
+    dplyr::left_join(dplyr::select(db, seqno, elev, row, col, buffer, fill_shed),
+                     by = "seqno")
 
   if(verbose) message("Calculating relief")
-  calc_relief(temp)
+  calc_relief(all)
 }
 
 # To speed this up, consider breaking by watershed, or by flow-to-a-pit groups
@@ -46,7 +47,9 @@ calc_stream <- function(db, str_val = 10000, verbose = TRUE) {
   relz <- data.frame(seqno = db$seqno,
                      str_row = 0, str_col = 0, str_elev = 0,
                      z2st = 0, n2st = 0)
-  db_temp <- dplyr::arrange(db, shedno, dplyr::desc(elev), upslope)
+
+  db_temp <- dplyr::select(db, seqno, row, col, elev, upslope, shedno) %>%
+    dplyr::arrange(shedno, dplyr::desc(elev), upslope)
 
   seqno_order <- db_temp$seqno
 
@@ -111,9 +114,7 @@ calc_pit <- function(db) {
     dplyr::full_join(dplyr::select(db, seqno, shedno, elev), ., by = "shedno") %>%
     dplyr::mutate(z2pit = elev - pit_elev,
                   z2pit = replace(z2pit, z2pit < 0, 0),
-                  n2pit = dplyr::if_else(is.na(shedno), 0, as.numeric(NA)),
-                  cum_area = 0,
-                  cum_elev = dplyr::if_else(is.na(shedno), 0, as.numeric(NA)))
+                  n2pit = dplyr::if_else(is.na(shedno), 0, as.numeric(NA)))
 
   seqno_order <- dplyr::arrange(db, upslope, dplyr::desc(elev)) %>%
     dplyr::pull(seqno)
@@ -125,7 +126,7 @@ calc_pit <- function(db) {
     track <- trace_flow2(i, db)
     temp$n2pit[track] <- seq(length(track) - 1, along.with = track, by = -1)
   }
-  temp
+  dplyr::select(temp, -shedno, -elev)
 }
 
 # calcrelief3
