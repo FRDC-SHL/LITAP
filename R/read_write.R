@@ -14,11 +14,11 @@ save_output <- function(locs, out_format,
       data <- read_shed(locs[["backup"]], name)
 
       if(name %in% c("fill", "ilocal", "form", "weti", "relz", "len")) {
-        if("db" %in% names(data)) data <- data$db
+        if("db" %in% names(data)) db <- data$db
         if(!is.null(add_db)) {
-          suppressMessages(data <- dplyr::left_join(data, add_db))
+          suppressMessages(db <- dplyr::left_join(db, add_db))
         }
-        save_shed(locs[[where]], data,
+        save_shed(locs[[where]], db,
                   paste0("dem_", name, ".", out_format), clean = TRUE)
       }
 
