@@ -97,15 +97,16 @@ flow_mapper <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
 
   out_locs <- locs_create(out_folder, f)
 
+  # Clean records
+  if(clean) lapply(stringr::str_remove(out_locs, paste0(f, "$")),
+                   function(x) file.remove(list.files(x, full.names = TRUE,
+                                                      recursive = TRUE)))
+
   # Setup Log
   if(log) {
     log_file <- paste0(out_folder, "/", f, "_flow.log")
     if(file.exists(log_file)) file.remove(log_file)
   } else log_file <- FALSE
-
-  # Clean records
-  if(clean) lapply(out_locs,
-                   function(x) file.remove(list.files(x, full.names = TRUE)))
 
   start <- Sys.time()
 
