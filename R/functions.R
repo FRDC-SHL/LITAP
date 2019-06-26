@@ -341,16 +341,6 @@ neighbour_pit <- function(n, db, verbose = FALSE) {
   if(nrow(n) != 0) return(n[1,])
 }
 
-calc_upslope <- function(cell, db) {
-  new_upslope <- db %>%
-    dplyr::filter(drec == cell) %>%
-    .$upslope %>%
-    list(., cell) %>%
-    unlist() %>%
-    unique()
-  return(new_upslope)
-}
-
 # G. Grothendieck
 # https://stackoverflow.com/a/34096575/3362144
 

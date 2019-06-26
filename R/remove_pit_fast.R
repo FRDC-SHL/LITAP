@@ -378,16 +378,6 @@ remove_pit1 <- function(w_rm, w_stats, db, update_elev = FALSE, verbose = FALSE)
   # Add to new shed upslope
   db$upslope[new_flow[-(1:which(new_flow == w_rm$in_seqno))]] <- db$upslope[new_flow[-(1:which(new_flow == w_rm$in_seqno))]] + new_upslope[length(new_upslope)]
 
-  # for(i in 1:length(new_flow)) {
-  #   db <- db %>%
-  #     mutate_cond(seqno == new_flow[i],
-  #                 upslope = purrr::map(seqno, ~ calc_upslope(.x, db)))
-  # }
-  #
-  # db <- db %>%
-  #   # Calculate upslope area
-  #   dplyr::mutate(upslope = purrr::map_dbl(upslope, ~ifelse(!is.null(.x), length(.x), NA)))
-
   # Update elevation of db (FlowMapR_2009.txt line 1964)
   if(update_elev) {
     db$elev[db$shedno == w_rm$shedno & db$elev < w_rm$pour_elev &
