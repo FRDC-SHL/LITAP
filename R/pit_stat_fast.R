@@ -6,7 +6,7 @@ pit_stat1 <- function(db, w = NULL, verbose = FALSE) {
     # Subset watersheds
     if(is.null(w)) w <- unique(db$shedno)
 
-    if(verbose) message("    Assessing pour points: ", appendLF = is.null(w))
+    if(verbose) message("    Assessing pour points ", appendLF = is.null(w))
 
     # For each watershed calculate the pour_point (details of the point at which tip to another watershed)
 
