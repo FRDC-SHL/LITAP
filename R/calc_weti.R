@@ -93,7 +93,7 @@ calc_weti <- function(db, grid = 5, verbose = FALSE) {
     dplyr::mutate(qweti = dplyr::if_else(qc > 1, log(qc), log(1 + qc)),
                   qweti = round(qweti, 3))
 
-  dplyr::full_join(db_weti, db, by = c("seqno")) %>%
+  dplyr::full_join(db_weti, db, by = c("seqno", "drec")) %>%
     dplyr::arrange(seqno)
 }
 
