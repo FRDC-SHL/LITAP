@@ -7,7 +7,12 @@ output: github_document
 knitr::opts_chunk$set(fig.width = 15, fig.height = 10, tidy = TRUE, eval = TRUE)
 ```
 
-__Landscape Integrated Terrain Analysis Package (LITAP)__ for the analysis of waterflow based on elevation data and pit removals. Based on R. A. (Bob) MacMillan's FlowMapR program.
+__Landscape Integrated Terrain Analysis Package (LITAP)__ for the analysis of waterflow based on elevation data and pit removals. Based on R. A. (Bob) MacMillan's LandMapR suite of programs.
+
+Currently LITAP includes functions
+
+- `flow_mapper()` - based on FlowMapR
+- `form_mapper()` - based on FormMapR
 
 See the companion website for more details: <http://steffilazerte.github.io/LITAP>
 
@@ -35,12 +40,13 @@ Now you can copy and paste these files to your working folder to try out the fol
 file.copy(system.file("extdata", "testELEV.dbf", package = "LITAP"), ".")
 ```
 
-## Basic Usage
+## Basic Usage: `flow_mapper()`
 
 Load the package:
 ```{r}
 library(LITAP)
 ```
+
 
 First, specify the dem file and the number of rows and columns:
 
@@ -57,7 +63,21 @@ flow_mapper(file = "testELEV.dbf", nrow = 150, ncol = 150,
 
 As well as the location of output files:
 ```{r}
-flow_mapper(file = "testELEV.dbf", nrow = 150, ncol = 150, folder_out = "./Output/")
+flow_mapper(file = "testELEV.dbf", nrow = 150, ncol = 150, out_folder = "./Output/")
+```
+
+## Basic Usage: `form_mapper()`
+
+`form_mapper()` uses output from `flow_mapper()` and requires a grid size.
+
+```{r}
+form_mapper(folder = "./Output/testELEV/", grid = 5)
+```
+
+Optionally, users can also define channels and ridges according to the number of up-/down-slope cells that flow through the cell in question.
+
+```{r}
+form_mapper(folder = "./Output/testELEV/", str_val = 10000, ridge_val = 10000)
 ```
 
 ## Multiple file types
@@ -70,20 +90,13 @@ flow_mapper(file = "testELEV.grd")
 flow_mapper(file = "testELEV.flt")
 ```
 
-
 ## Output
 
-Output files include .rds (R data files) and .csv files in the "Final" folder, .dbf files in the "dbf" folder and backup files (for resuming runs) in the "Backup" folder. Additionally, an html report summaring the run is included in the output folder (`testELEV_final_report.html`).
+Output files can be .csv, .dbf, or .rds (R data files) in the output folders "flow" and "form" (respectively). Backup files (for `form_mapper()` and for resuming runs) are stored in the "Backup" folder. Additionally, an html report summaring the `flow_mapper()` run is included in the output folder (`testELEV_final_report.html`).
 
 See the [LITAP website](http://steffilazerte.github.io/LITAP/) hosted on github for more details and examples
 
 ```{r, include = FALSE}
-file.remove(list.files("./final/", full.names = TRUE))
-file.remove(list.files("./backup/", full.names = TRUE))
-file.remove(list.files("./dbf/", full.names = TRUE))
-file.remove("testELEV.dbf", "testELEV.log", "testELEV_final_report.html", 
-            "final", "backup", "dbf")
-file.remove(list.files("./Output/", recursive = TRUE, full.names = TRUE))
-file.remove(list.files("./Output/", full.names = TRUE, include.dirs = TRUE))
-file.remove("./Output")
+unlink("./testELEV")
+unlink("./Output/testELEV")
 ```
