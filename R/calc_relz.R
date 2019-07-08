@@ -1,6 +1,7 @@
 # Relief calculations type 3
 
-calc_relz <- function(db, idb, str_val = 10000, ridge_val = 10000, verbose = TRUE) {
+calc_relz <- function(db, idb, str_val = 10000, ridge_val = 10000,
+                      verbose = FALSE) {
 
   if(verbose) message("Calculating streams")
   streams <- db %>%

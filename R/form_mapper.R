@@ -83,7 +83,7 @@ form_mapper <- function(folder, grid, str_val = 10000, ridge_val = 10000,
     sub_start <- Sys.time()
     write_start(task, sub_start, log_file)
 
-    db_form <- calc_form(db, grid)
+    db_form <- calc_form(db, grid, verbose = verbose)
     save_backup(locs = out_locs, data = db_form, name = "form")
     rm(db_form)
     write_time(sub_start, log_file)

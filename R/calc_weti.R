@@ -1,6 +1,6 @@
 # FormMapR: Procedure to compute wetness index as per Quinn et all., 1991
 
-calc_weti <- function(db, grid = 5, verbose = TRUE) {
+calc_weti <- function(db, grid = 5, verbose = FALSE) {
 
   l1 <- grid * 0.5    # orthogonal
   l2 <- grid * 0.354  # diagonal  (hypothenus = sqrt(0.5^2 + 0.5^2) / 2)

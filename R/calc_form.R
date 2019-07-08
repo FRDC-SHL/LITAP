@@ -1,7 +1,7 @@
 
 
 # Based on FormMapR calc_form: Computes slope, aspect & curvatures
-calc_form <- function(db, grid = 10) {
+calc_form <- function(db, grid = 10, verbose = FALSE) {
 
   # slope, aspect, prof, plan
   details <- db %>%
