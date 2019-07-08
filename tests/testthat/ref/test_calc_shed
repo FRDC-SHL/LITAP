@@ -1,0 +1,704 @@
+    seqno ridge shedno    elev drec seqno_shed drec_shed upslope initial_shed
+150   150    NA     NA      NA   NA        150        NA       0           NA
+151   151    NA     NA      NA   NA        151        NA       0           NA
+152   152    NA     NA      NA   NA        152        NA       0           NA
+153   153    NA     NA      NA   NA        153        NA       0           NA
+154   154 FALSE      4 675.500  306          1        50     301            4
+155   155 FALSE      4 675.676  154          2         1     300            4
+156   156 FALSE      4 675.822  155          3         2     299            4
+157   157 FALSE      4 675.924  156          4         3     298            4
+158   158 FALSE      4 675.986  157          5         4     297            4
+159   159 FALSE      4 676.018  158          6         5     292            4
+160   160 FALSE      4 676.034  159          7         6     284            4
+161   161 FALSE      4 676.058  160          8         7     276            4
+162   162 FALSE      4 676.109  161          9         8     258            4
+163   163 FALSE      4 676.204  162         10         9     257            4
+164   164 FALSE      4 676.335  163         11        10     256            4
+165   165 FALSE      4 676.479  164         12        11     255            4
+166   166 FALSE      4 676.620  165         13        12     254            4
+167   167 FALSE      4 676.754  166         14        13     253            4
+168   168 FALSE      4 676.874  167         15        14     252            4
+169   169 FALSE      4 676.979  168         16        15     251            4
+170   170 FALSE      4 677.082  169         17        16     250            4
+171   171 FALSE      4 677.181  170         18        17     249            4
+172   172 FALSE      4 677.264  171         19        18     248            4
+173   173 FALSE      4 677.332  172         20        19     247            4
+174   174 FALSE      4 677.385  173         21        20     246            4
+175   175 FALSE      4 677.422  174         22        21     245            4
+176   176 FALSE      4 677.445  175         23        22     244            4
+177   177 FALSE      4 677.461  176         24        23     237            4
+178   178 FALSE      4 677.470  177         25        24     236            4
+179   179 FALSE      4 677.478  178         26        25     228            4
+180   180 FALSE      4 677.491  179         27        26     220            4
+181   181 FALSE      4 677.512  180         28        27     212            4
+182   182 FALSE      4 677.541  181         29        28     199            4
+183   183 FALSE      4 677.574  182         30        29     192            4
+184   184 FALSE      4 677.613  183         31        30     185            4
+185   185 FALSE      4 677.660  184         32        31     178            4
+186   186 FALSE      4 677.719  185         33        32     165            4
+187   187 FALSE      4 677.806  186         34        33     152            4
+188   188 FALSE      4 677.929  187         35        34     139            4
+189   189 FALSE      4 678.083  188         36        35     125            4
+190   190 FALSE      4 678.256  189         37        36     110            4
+191   191 FALSE      4 678.440  190         38        37      92            4
+192   192 FALSE      4 678.614  191         39        38      76            4
+193   193 FALSE      4 678.760  192         40        39      62            4
+194   194 FALSE      4 678.875  193         41        40      50            4
+195   195 FALSE      4 678.962  194         42        41      39            4
+196   196 FALSE      4 679.017  195         43        42      29            4
+197   197 FALSE      4 679.054  196         44        43      21            4
+198   198 FALSE      4 679.082  197         45        44      20            4
+199   199 FALSE      4 679.105  198         46        45      18            4
+200   200 FALSE      4 679.124  199         47        46      13            4
+201   201 FALSE      4 679.139  200         48        47      10            4
+202   202  TRUE      4 679.146  201         49        48       6            4
+203   203  TRUE      3 679.143  204          1         2       7            3
+204   204 FALSE      3 679.136  205          2         3      16            3
+205   205 FALSE      3 679.124  206          3         4      29            3
+206   206 FALSE      3 679.111  207          4         5      44            3
+207   207 FALSE      3 679.099  208          5         6      61            3
+208   208 FALSE      3 679.088  209          6         7      75            3
+209   209 FALSE      3 679.074  210          7         8      87            3
+210   210 FALSE      3 679.059  211          8         9      97            3
+211   211 FALSE      3 679.047  212          9        10     106            3
+212   212 FALSE      3 679.044  212         10        10     487            3
+213   213 FALSE      3 679.055  212         11        10     373            3
+214   214 FALSE      3 679.085  213         12        11     362            3
+215   215 FALSE      3 679.132  214         13        12     342            3
+216   216 FALSE      3 679.193  215         14        13     138            3
+217   217 FALSE      3 679.253  216         15        14     135            3
+218   218 FALSE      3 679.302  217         16        15     133            3
+219   219 FALSE      3 679.335  218         17        16     132            3
+220   220 FALSE      3 679.356  219         18        17     127            3
+221   221 FALSE      3 679.373  220         19        18     115            3
+222   222 FALSE      3 679.402  221         20        19     104            3
+223   223 FALSE      3 679.450  222         21        20      62            3
+224   224 FALSE      3 679.521  223         22        21      53            3
+225   225 FALSE      3 679.608  224         23        22      46            3
+226   226 FALSE      3 679.699  225         24        23      39            3
+227   227 FALSE      3 679.784  226         25        24      32            3
+228   228 FALSE      3 679.862  227         26        25      25            3
+229   229 FALSE      3 679.930  228         27        26      18            3
+230   230 FALSE      3 679.992  229         28        27      11            3
+231   231 FALSE      3 680.047  230         29        28      10            3
+232   232 FALSE      3 680.087  231         30        29       5            3
+233   233  TRUE      3 680.109  232         31        30       3            3
+234   234  TRUE      5 680.106  235          1         2       4            5
+235   235 FALSE      5 680.072  236          2         3      10            5
+236   236 FALSE      5 680.004  237          3         4      11            5
+237   237 FALSE      5 679.908  238          4         5      13            5
+238   238 FALSE      5 679.788  239          5         6      16            5
+239   239 FALSE      5 679.648  240          6         7      20            5
+240   240 FALSE      5 679.503  241          7         8      25            5
+241   241 FALSE      5 679.365  242          8         9      31            5
+242   242 FALSE      5 679.235  243          9        10      38            5
+243   243 FALSE      5 679.119  244         10        11      44            5
+244   244 FALSE      5 679.017  245         11        12      48            5
+245   245 FALSE      5 678.922  246         12        13      49            5
+246   246 FALSE      5 678.826  247         13        14      50            5
+247   247 FALSE      5 678.728  248         14        15      51            5
+248   248 FALSE      5 678.621  249         15        16      52            5
+249   249 FALSE      5 678.506  250         16        17      53            5
+250   250 FALSE      5 678.385  251         17        18      54            5
+251   251 FALSE      5 678.266  252         18        19      55            5
+252   252 FALSE      5 678.157  253         19        20      56            5
+253   253 FALSE      5 678.058  254         20        21      57            5
+254   254 FALSE      5 677.966  255         21        22      58            5
+255   255 FALSE      5 677.880  256         22        23      59            5
+256   256 FALSE      5 677.787  257         23        24      60            5
+257   257 FALSE      5 677.678  258         24        25      61            5
+258   258 FALSE      5 677.557  259         25        26      62            5
+259   259 FALSE      5 677.422  260         26        27      78            5
+260   260 FALSE      5 677.273  261         27        28      88            5
+261   261 FALSE      5 677.127  262         28        29      97            5
+262   262 FALSE      5 676.993  263         29        30     520            5
+263   263 FALSE      5 676.875  264         30        31     542            5
+264   264 FALSE      5 676.782  265         31        32     617            5
+265   265 FALSE      5 676.717  266         32        33     628            5
+266   266 FALSE      5 676.672  267         33        34     639            5
+267   267 FALSE      5 676.638  268         34        35     649            5
+268   268 FALSE      5 676.615  269         35        36     658            5
+269   269 FALSE      5 676.588  270         36        37     666            5
+270   270 FALSE      5 676.550  271         37        38     673            5
+271   271 FALSE      5 676.494  272         38        39     674            5
+272   272 FALSE      5 676.407  273         39        40     676            5
+273   273 FALSE      5 676.277  274         40        41     682            5
+274   274 FALSE      5 676.112  275         41        42     685            5
+275   275 FALSE      5 675.932  276         42        43     689            5
+276   276 FALSE      5 675.756  277         43        44     694            5
+277   277 FALSE      5 675.614  278         44        45     695            5
+278   278 FALSE      5 675.529  279         45        46     713            5
+279   279 FALSE      5 675.499  279         46        46    1215            5
+280   280 FALSE      5 675.514  279         47        46     196            5
+281   281 FALSE      5 675.554  280         48        47     184            5
+282   282 FALSE      5 675.604  281         49        48     143            5
+283   283 FALSE      5 675.652  282         50        49     138            5
+284   284 FALSE      5 675.702  283         51        50     131            5
+285   285 FALSE      5 675.759  284         52        51     127            5
+286   286 FALSE      5 675.829  285         53        52     123            5
+287   287 FALSE      5 675.914  286         54        53     111            5
+288   288 FALSE      5 676.010  287         55        54     101            5
+289   289 FALSE      5 676.104  288         56        55      92            5
+290   290 FALSE      5 676.195  289         57        56      84            5
+291   291 FALSE      5 676.286  290         58        57      73            5
+292   292 FALSE      5 676.378  291         59        58      66            5
+293   293 FALSE      5 676.477  292         60        59      53            5
+294   294 FALSE      5 676.596  293         61        60      12            5
+295   295 FALSE      5 676.726  294         62        61       5            5
+296   296 FALSE      5 676.856  295         63        62       4            5
+297   297 FALSE      5 676.983  296         64        63       3            5
+298   298 FALSE      5 677.097  297         65        64       2            5
+299   299 FALSE      5 677.181  298         66        65       1            5
+300   300  TRUE      5 677.226  451         67       133       1            5
+301   301  TRUE     15 677.228  454          1         5       1           15
+302   302 FALSE     15 677.182  303          2         3       1           15
+303   303 FALSE     15 677.093  455          3         6       2           15
+304   304    NA     NA      NA   NA        154        NA       0           NA
+305   305    NA     NA      NA   NA        155        NA       0           NA
+306   306 FALSE      4 675.479  458         50        99     309            4
+307   307 FALSE      4 675.672  306         51        50       7            4
+308   308 FALSE      4 675.833  307         52        51       6            4
+309   309 FALSE      4 675.946  308         53        52       5            4
+310   310 FALSE      4 676.016  309         54        53       4            4
+311   311 FALSE      4 676.052  158         55         5       4            4
+312   312 FALSE      4 676.069  159         56         6       7            4
+313   313 FALSE      4 676.089  160         57         7       7            4
+314   314 FALSE      4 676.135  161         58         8      17            4
+315   315 FALSE      4 676.222  314         59        58      10            4
+316   316 FALSE      4 676.343  315         60        59       9            4
+317   317 FALSE      4 676.476  316         61        60       8            4
+318   318 FALSE      4 676.608  317         62        61       7            4
+319   319 FALSE      4 676.734  318         63        62       6            4
+320   320 FALSE      4 676.848  319         64        63       5            4
+321   321 FALSE      4 676.950  320         65        64       4            4
+322   322 FALSE      4 677.052  321         66        65       3            4
+323   323 FALSE      4 677.151  322         67        66       2            4
+324   324 FALSE      4 677.237  323         68        67       1            4
+325   325 FALSE      4 677.311  476         69       117       1            4
+326   326 FALSE      4 677.374  477         70       118       3            4
+327   327 FALSE      4 677.423  326         71        70       2            4
+328   328 FALSE      4 677.461  327         72        71       1            4
+329   329 FALSE      4 677.492  176         73        23       6            4
+330   330 FALSE      4 677.516  178         74        25       7            4
+331   331 FALSE      4 677.538  179         75        26       7            4
+332   332 FALSE      4 677.564  180         76        27       7            4
+333   333 FALSE      4 677.598  181         77        28      12            4
+334   334 FALSE      4 677.639  182         78        29       6            4
+335   335 FALSE      4 677.686  183         79        30       6            4
+336   336 FALSE      4 677.736  184         80        31       6            4
+337   337 FALSE      4 677.789  185         81        32       6            4
+338   338 FALSE      4 677.851  185         82        32       6            4
+339   339 FALSE      4 677.935  186         83        33      12            4
+340   340 FALSE      4 678.051  187         84        34      12            4
+341   341 FALSE      4 678.194  188         85        35      13            4
+342   342 FALSE      4 678.355  189         86        36      14            4
+343   343 FALSE      4 678.526  190         87        37      17            4
+344   344 FALSE      4 678.689  191         88        38      15            4
+345   345 FALSE      4 678.824  192         89        39      13            4
+346   346 FALSE      4 678.934  193         90        40      11            4
+347   347 FALSE      4 679.017  194         91        41      10            4
+348   348 FALSE      4 679.076  195         92        42       9            4
+349   349 FALSE      4 679.120  196         93        43       7            4
+350   350 FALSE      4 679.160  198         94        45       1            4
+351   351 FALSE      4 679.197  199         95        46       4            4
+352   352 FALSE      4 679.231  200         96        47       2            4
+353   353 FALSE      4 679.260  201         97        48       3            4
+354   354  TRUE      4 679.277  202         98        49       5            4
+355   355  TRUE      3 679.283  203         32         1       6            3
+356   356 FALSE      3 679.281  204         33         2       8            3
+357   357 FALSE      3 679.272  205         34         3      12            3
+358   358 FALSE      3 679.260  206         35         4      14            3
+359   359 FALSE      3 679.246  207         36         5      16            3
+360   360 FALSE      3 679.233  208         37         6      13            3
+361   361 FALSE      3 679.216  209         38         7      11            3
+362   362 FALSE      3 679.198  210         39         8       9            3
+363   363 FALSE      3 679.185  211         40         9       8            3
+364   364 FALSE      3 679.181  212         41        10       7            3
+365   365 FALSE      3 679.191  213         42        11      10            3
+366   366 FALSE      3 679.218  214         43        12      19            3
+367   367 FALSE      3 679.261  215         44        13     200            3
+368   368 FALSE      3 679.317  215         45        13       3            3
+369   369 FALSE      3 679.372  216         46        14       2            3
+370   370 FALSE      3 679.417  217         47        15       1            3
+371   371 FALSE      3 679.448  219         48        17       4            3
+372   372 FALSE      3 679.466  220         49        18      11            3
+373   373 FALSE      3 679.481  221         50        19      10            3
+374   374 FALSE      3 679.505  222         51        20      34            3
+375   375 FALSE      3 679.550  222         52        20       7            3
+376   376 FALSE      3 679.617  223         53        21       8            3
+377   377 FALSE      3 679.701  224         54        22       6            3
+378   378 FALSE      3 679.790  225         55        23       6            3
+379   379 FALSE      3 679.875  226         56        24       6            3
+380   380 FALSE      3 679.956  227         57        25       6            3
+381   381 FALSE      3 680.032  228         58        26       6            3
+382   382 FALSE      3 680.107  229         59        27       6            3
+383   383 FALSE      3 680.180  231         60        29       4            3
+384   384 FALSE      3 680.242  232         61        30       1            3
+385   385  TRUE      3 680.286  233         62        31       2            3
+386   386  TRUE      5 680.305  234         68         1       3            5
+387   387 FALSE      5 680.288  235         69         2       5            5
+388   388 FALSE      5 680.233  237         70         4       1            5
+389   389 FALSE      5 680.145  238         71         5       2            5
+390   390 FALSE      5 680.026  239         72         6       3            5
+391   391 FALSE      5 679.877  240         73         7       4            5
+392   392 FALSE      5 679.714  241         74         8       5            5
+393   393 FALSE      5 679.548  242         75         9       6            5
+394   394 FALSE      5 679.382  243         76        10       5            5
+395   395 FALSE      5 679.228  244         77        11       3            5
+396   396 FALSE      5 679.090  397         78        79       1            5
+397   397 FALSE      5 678.965  398         79        80       2            5
+398   398 FALSE      5 678.847  399         80        81       3            5
+399   399 FALSE      5 678.732  400         81        82       4            5
+400   400 FALSE      5 678.614  401         82        83       5            5
+401   401 FALSE      5 678.493  402         83        84       6            5
+402   402 FALSE      5 678.368  403         84        85       7            5
+403   403 FALSE      5 678.245  404         85        86       8            5
+404   404 FALSE      5 678.133  405         86        87       9            5
+405   405 FALSE      5 678.034  406         87        88      10            5
+406   406 FALSE      5 677.945  407         88        89      11            5
+407   407 FALSE      5 677.866  408         89        90      12            5
+408   408 FALSE      5 677.786  409         90        91      13            5
+409   409 FALSE      5 677.695  410         91        92      14            5
+410   410 FALSE      5 677.597  259         92        26      15            5
+411   411 FALSE      5 677.487  260         93        27       9            5
+412   412 FALSE      5 677.365  261         94        28       8            5
+413   413 FALSE      5 677.243  262         95        29     422            5
+414   414 FALSE      5 677.129  263         96        30      21            5
+415   415 FALSE      5 677.026  264         97        31      35            5
+416   416 FALSE      5 676.940  264         98        31      39            5
+417   417 FALSE      5 676.876  265         99        32      10            5
+418   418 FALSE      5 676.826  266        100        33      10            5
+419   419 FALSE      5 676.786  267        101        34       9            5
+420   420 FALSE      5 676.757  268        102        35       8            5
+421   421 FALSE      5 676.730  269        103        36       7            5
+422   422 FALSE      5 676.696  270        104        37       6            5
+423   423 FALSE      5 676.647  272        105        39       1            5
+424   424 FALSE      5 676.568  273        106        40       5            5
+425   425 FALSE      5 676.436  274        107        41       2            5
+426   426 FALSE      5 676.259  275        108        42       3            5
+427   427 FALSE      5 676.058  276        109        43       4            5
+428   428 FALSE      5 675.855  429        110       111       9            5
+429   429 FALSE      5 675.684  278        111        45      17            5
+430   430 FALSE      5 675.575  279        112        46       5            5
+431   431 FALSE      5 675.531  279        113        46      14            5
+432   432 FALSE      5 675.539  279        114        46     286            5
+433   433 FALSE      5 675.581  280        115        47      11            5
+434   434 FALSE      5 675.639  281        116        48      40            5
+435   435 FALSE      5 675.697  282        117        49       4            5
+436   436 FALSE      5 675.757  283        118        50       6            5
+437   437 FALSE      5 675.825  284        119        51       3            5
+438   438 FALSE      5 675.904  285        120        52       3            5
+439   439 FALSE      5 675.996  286        121        53      11            5
+440   440 FALSE      5 676.099  287        122        54       9            5
+441   441 FALSE      5 676.198  288        123        55       8            5
+442   442 FALSE      5 676.290  289        124        56       7            5
+443   443 FALSE      5 676.377  290        125        57      10            5
+444   444 FALSE      5 676.460  291        126        58       6            5
+445   445 FALSE      5 676.545  292        127        59      12            5
+446   446 FALSE      5 676.644  293        128        60      40            5
+447   447 FALSE      5 676.754  294        129        61       6            5
+448   448 FALSE      5 676.866  447        130       129       5            5
+449   449 FALSE      5 676.979  448        131       130       4            5
+450   450 FALSE      5 677.081  449        132       131       3            5
+451   451 FALSE      5 677.156  450        133       132       2            5
+452   452  TRUE      5 677.196  603        134       200       1            5
+453   453  TRUE     15 677.197  606          4         8       1           15
+454   454 FALSE     15 677.155  455          5         6       2           15
+455   455 FALSE     15 677.076  607          6         9       5           15
+456   456    NA     NA      NA   NA        156        NA       0           NA
+457   457    NA     NA      NA   NA        157        NA       0           NA
+458   458 FALSE      4 675.443  610         99       148     314            4
+459   459 FALSE      4 675.653  458        100        99       4            4
+460   460 FALSE      4 675.831  459        101       100       3            4
+461   461 FALSE      4 675.960  460        102       101       2            4
+462   462 FALSE      4 676.043  461        103       102       1            4
+463   463 FALSE      4 676.089  310        104        54       3            4
+464   464 FALSE      4 676.110  311        105        55       3            4
+465   465 FALSE      4 676.128  312        106        56       6            4
+466   466 FALSE      4 676.167  313        107        57       6            4
+467   467 FALSE      4 676.241  314        108        58       6            4
+468   468 FALSE      4 676.347  467        109       108       5            4
+469   469 FALSE      4 676.465  468        110       109       4            4
+470   470 FALSE      4 676.585  469        111       110       3            4
+471   471 FALSE      4 676.703  470        112       111       2            4
+472   472 FALSE      4 676.812  471        113       112       1            4
+473   473 FALSE      4 676.913  624        114       162       1            4
+474   474 FALSE      4 677.015  625        115       163       1            4
+475   475 FALSE      4 677.116  626        116       164       1            4
+476   476 FALSE      4 677.204  627        117       165       2            4
+477   477 FALSE      4 677.283  628        118       166       4            4
+478   478 FALSE      4 677.354  629        119       167       1            4
+479   479 FALSE      4 677.413  630        120       168       3            4
+480   480 FALSE      4 677.465  479        121       120       2            4
+481   481 FALSE      4 677.512  480        122       121       1            4
+482   482 FALSE      4 677.551  329        123        73       5            4
+483   483 FALSE      4 677.586  330        124        74       6            4
+484   484 FALSE      4 677.625  331        125        75       6            4
+485   485 FALSE      4 677.670  332        126        76       6            4
+486   486 FALSE      4 677.722  333        127        77      11            4
+487   487 FALSE      4 677.780  334        128        78       5            4
+488   488 FALSE      4 677.841  335        129        79       5            4
+489   489 FALSE      4 677.903  336        130        80       5            4
+490   490 FALSE      4 677.971  337        131        81       5            4
+491   491 FALSE      4 678.057  338        132        82       5            4
+492   492 FALSE      4 678.169  339        133        83      11            4
+493   493 FALSE      4 678.305  340        134        84      11            4
+494   494 FALSE      4 678.454  341        135        85      12            4
+495   495 FALSE      4 678.611  342        136        86      13            4
+496   496 FALSE      4 678.759  343        137        87      16            4
+497   497 FALSE      4 678.881  344        138        88      14            4
+498   498 FALSE      4 678.982  345        139        89      12            4
+499   499 FALSE      4 679.062  346        140        90      10            4
+500   500 FALSE      4 679.124  347        141        91       9            4
+    row col missing buffer elev_orig edge_map ldir flatcell
+150   1 150      NA   TRUE        NA     TRUE   NA       NA
+151   1 151      NA   TRUE        NA     TRUE   NA       NA
+152   1 152      NA   TRUE        NA     TRUE   NA       NA
+153   2   1      NA   TRUE        NA     TRUE   NA       NA
+154   2   2   FALSE  FALSE   675.500     TRUE    2    FALSE
+155   2   3   FALSE  FALSE   675.676     TRUE    4    FALSE
+156   2   4   FALSE  FALSE   675.822     TRUE    4    FALSE
+157   2   5   FALSE  FALSE   675.924     TRUE    4    FALSE
+158   2   6   FALSE  FALSE   675.986     TRUE    4    FALSE
+159   2   7   FALSE  FALSE   676.018     TRUE    4    FALSE
+160   2   8   FALSE  FALSE   676.034     TRUE    4    FALSE
+161   2   9   FALSE  FALSE   676.058     TRUE    4    FALSE
+162   2  10   FALSE  FALSE   676.109     TRUE    4    FALSE
+163   2  11   FALSE  FALSE   676.204     TRUE    4    FALSE
+164   2  12   FALSE  FALSE   676.335     TRUE    4    FALSE
+165   2  13   FALSE  FALSE   676.479     TRUE    4    FALSE
+166   2  14   FALSE  FALSE   676.620     TRUE    4    FALSE
+167   2  15   FALSE  FALSE   676.754     TRUE    4    FALSE
+168   2  16   FALSE  FALSE   676.874     TRUE    4    FALSE
+169   2  17   FALSE  FALSE   676.979     TRUE    4    FALSE
+170   2  18   FALSE  FALSE   677.082     TRUE    4    FALSE
+171   2  19   FALSE  FALSE   677.181     TRUE    4    FALSE
+172   2  20   FALSE  FALSE   677.264     TRUE    4    FALSE
+173   2  21   FALSE  FALSE   677.332     TRUE    4    FALSE
+174   2  22   FALSE  FALSE   677.385     TRUE    4    FALSE
+175   2  23   FALSE  FALSE   677.422     TRUE    4    FALSE
+176   2  24   FALSE  FALSE   677.445     TRUE    4    FALSE
+177   2  25   FALSE  FALSE   677.461     TRUE    4    FALSE
+178   2  26   FALSE  FALSE   677.470     TRUE    4    FALSE
+179   2  27   FALSE  FALSE   677.478     TRUE    4    FALSE
+180   2  28   FALSE  FALSE   677.491     TRUE    4    FALSE
+181   2  29   FALSE  FALSE   677.512     TRUE    4    FALSE
+182   2  30   FALSE  FALSE   677.541     TRUE    4    FALSE
+183   2  31   FALSE  FALSE   677.574     TRUE    4    FALSE
+184   2  32   FALSE  FALSE   677.613     TRUE    4    FALSE
+185   2  33   FALSE  FALSE   677.660     TRUE    4    FALSE
+186   2  34   FALSE  FALSE   677.719     TRUE    4    FALSE
+187   2  35   FALSE  FALSE   677.806     TRUE    4    FALSE
+188   2  36   FALSE  FALSE   677.929     TRUE    4    FALSE
+189   2  37   FALSE  FALSE   678.083     TRUE    4    FALSE
+190   2  38   FALSE  FALSE   678.256     TRUE    4    FALSE
+191   2  39   FALSE  FALSE   678.440     TRUE    4    FALSE
+192   2  40   FALSE  FALSE   678.614     TRUE    4    FALSE
+193   2  41   FALSE  FALSE   678.760     TRUE    4    FALSE
+194   2  42   FALSE  FALSE   678.875     TRUE    4    FALSE
+195   2  43   FALSE  FALSE   678.962     TRUE    4    FALSE
+196   2  44   FALSE  FALSE   679.017     TRUE    4    FALSE
+197   2  45   FALSE  FALSE   679.054     TRUE    4    FALSE
+198   2  46   FALSE  FALSE   679.082     TRUE    4    FALSE
+199   2  47   FALSE  FALSE   679.105     TRUE    4    FALSE
+200   2  48   FALSE  FALSE   679.124     TRUE    4    FALSE
+201   2  49   FALSE  FALSE   679.139     TRUE    4    FALSE
+202   2  50   FALSE  FALSE   679.146     TRUE    4    FALSE
+203   2  51   FALSE  FALSE   679.143     TRUE    6    FALSE
+204   2  52   FALSE  FALSE   679.136     TRUE    6    FALSE
+205   2  53   FALSE  FALSE   679.124     TRUE    6    FALSE
+206   2  54   FALSE  FALSE   679.111     TRUE    6    FALSE
+207   2  55   FALSE  FALSE   679.099     TRUE    6    FALSE
+208   2  56   FALSE  FALSE   679.088     TRUE    6    FALSE
+209   2  57   FALSE  FALSE   679.074     TRUE    6    FALSE
+210   2  58   FALSE  FALSE   679.059     TRUE    6    FALSE
+211   2  59   FALSE  FALSE   679.047     TRUE    6    FALSE
+212   2  60   FALSE  FALSE   679.044     TRUE    5     TRUE
+213   2  61   FALSE  FALSE   679.055     TRUE    4    FALSE
+214   2  62   FALSE  FALSE   679.085     TRUE    4    FALSE
+215   2  63   FALSE  FALSE   679.132     TRUE    4    FALSE
+216   2  64   FALSE  FALSE   679.193     TRUE    4    FALSE
+217   2  65   FALSE  FALSE   679.253     TRUE    4    FALSE
+218   2  66   FALSE  FALSE   679.302     TRUE    4    FALSE
+219   2  67   FALSE  FALSE   679.335     TRUE    4    FALSE
+220   2  68   FALSE  FALSE   679.356     TRUE    4    FALSE
+221   2  69   FALSE  FALSE   679.373     TRUE    4    FALSE
+222   2  70   FALSE  FALSE   679.402     TRUE    4    FALSE
+223   2  71   FALSE  FALSE   679.450     TRUE    4    FALSE
+224   2  72   FALSE  FALSE   679.521     TRUE    4    FALSE
+225   2  73   FALSE  FALSE   679.608     TRUE    4    FALSE
+226   2  74   FALSE  FALSE   679.699     TRUE    4    FALSE
+227   2  75   FALSE  FALSE   679.784     TRUE    4    FALSE
+228   2  76   FALSE  FALSE   679.862     TRUE    4    FALSE
+229   2  77   FALSE  FALSE   679.930     TRUE    4    FALSE
+230   2  78   FALSE  FALSE   679.992     TRUE    4    FALSE
+231   2  79   FALSE  FALSE   680.047     TRUE    4    FALSE
+232   2  80   FALSE  FALSE   680.087     TRUE    4    FALSE
+233   2  81   FALSE  FALSE   680.109     TRUE    4    FALSE
+234   2  82   FALSE  FALSE   680.106     TRUE    6    FALSE
+235   2  83   FALSE  FALSE   680.072     TRUE    6    FALSE
+236   2  84   FALSE  FALSE   680.004     TRUE    6    FALSE
+237   2  85   FALSE  FALSE   679.908     TRUE    6    FALSE
+238   2  86   FALSE  FALSE   679.788     TRUE    6    FALSE
+239   2  87   FALSE  FALSE   679.648     TRUE    6    FALSE
+240   2  88   FALSE  FALSE   679.503     TRUE    6    FALSE
+241   2  89   FALSE  FALSE   679.365     TRUE    6    FALSE
+242   2  90   FALSE  FALSE   679.235     TRUE    6    FALSE
+243   2  91   FALSE  FALSE   679.119     TRUE    6    FALSE
+244   2  92   FALSE  FALSE   679.017     TRUE    6    FALSE
+245   2  93   FALSE  FALSE   678.922     TRUE    6    FALSE
+246   2  94   FALSE  FALSE   678.826     TRUE    6    FALSE
+247   2  95   FALSE  FALSE   678.728     TRUE    6    FALSE
+248   2  96   FALSE  FALSE   678.621     TRUE    6    FALSE
+249   2  97   FALSE  FALSE   678.506     TRUE    6    FALSE
+250   2  98   FALSE  FALSE   678.385     TRUE    6    FALSE
+251   2  99   FALSE  FALSE   678.266     TRUE    6    FALSE
+252   2 100   FALSE  FALSE   678.157     TRUE    6    FALSE
+253   2 101   FALSE  FALSE   678.058     TRUE    6    FALSE
+254   2 102   FALSE  FALSE   677.966     TRUE    6    FALSE
+255   2 103   FALSE  FALSE   677.880     TRUE    6    FALSE
+256   2 104   FALSE  FALSE   677.787     TRUE    6    FALSE
+257   2 105   FALSE  FALSE   677.678     TRUE    6    FALSE
+258   2 106   FALSE  FALSE   677.557     TRUE    6    FALSE
+259   2 107   FALSE  FALSE   677.422     TRUE    6    FALSE
+260   2 108   FALSE  FALSE   677.273     TRUE    6    FALSE
+261   2 109   FALSE  FALSE   677.127     TRUE    6    FALSE
+262   2 110   FALSE  FALSE   676.993     TRUE    6    FALSE
+263   2 111   FALSE  FALSE   676.875     TRUE    6    FALSE
+264   2 112   FALSE  FALSE   676.782     TRUE    6    FALSE
+265   2 113   FALSE  FALSE   676.717     TRUE    6    FALSE
+266   2 114   FALSE  FALSE   676.672     TRUE    6    FALSE
+267   2 115   FALSE  FALSE   676.638     TRUE    6    FALSE
+268   2 116   FALSE  FALSE   676.615     TRUE    6    FALSE
+269   2 117   FALSE  FALSE   676.588     TRUE    6    FALSE
+270   2 118   FALSE  FALSE   676.550     TRUE    6    FALSE
+271   2 119   FALSE  FALSE   676.494     TRUE    6    FALSE
+272   2 120   FALSE  FALSE   676.407     TRUE    6    FALSE
+273   2 121   FALSE  FALSE   676.277     TRUE    6    FALSE
+274   2 122   FALSE  FALSE   676.112     TRUE    6    FALSE
+275   2 123   FALSE  FALSE   675.932     TRUE    6    FALSE
+276   2 124   FALSE  FALSE   675.756     TRUE    6    FALSE
+277   2 125   FALSE  FALSE   675.614     TRUE    6    FALSE
+278   2 126   FALSE  FALSE   675.529     TRUE    6    FALSE
+279   2 127   FALSE  FALSE   675.499     TRUE    5     TRUE
+280   2 128   FALSE  FALSE   675.514     TRUE    4    FALSE
+281   2 129   FALSE  FALSE   675.554     TRUE    4    FALSE
+282   2 130   FALSE  FALSE   675.604     TRUE    4    FALSE
+283   2 131   FALSE  FALSE   675.652     TRUE    4    FALSE
+284   2 132   FALSE  FALSE   675.702     TRUE    4    FALSE
+285   2 133   FALSE  FALSE   675.759     TRUE    4    FALSE
+286   2 134   FALSE  FALSE   675.829     TRUE    4    FALSE
+287   2 135   FALSE  FALSE   675.914     TRUE    4    FALSE
+288   2 136   FALSE  FALSE   676.010     TRUE    4    FALSE
+289   2 137   FALSE  FALSE   676.104     TRUE    4    FALSE
+290   2 138   FALSE  FALSE   676.195     TRUE    4    FALSE
+291   2 139   FALSE  FALSE   676.286     TRUE    4    FALSE
+292   2 140   FALSE  FALSE   676.378     TRUE    4    FALSE
+293   2 141   FALSE  FALSE   676.477     TRUE    4    FALSE
+294   2 142   FALSE  FALSE   676.596     TRUE    4    FALSE
+295   2 143   FALSE  FALSE   676.726     TRUE    4    FALSE
+296   2 144   FALSE  FALSE   676.856     TRUE    4    FALSE
+297   2 145   FALSE  FALSE   676.983     TRUE    4    FALSE
+298   2 146   FALSE  FALSE   677.097     TRUE    4    FALSE
+299   2 147   FALSE  FALSE   677.181     TRUE    4    FALSE
+300   2 148   FALSE  FALSE   677.226     TRUE    1    FALSE
+301   2 149   FALSE  FALSE   677.228     TRUE    3    FALSE
+302   2 150   FALSE  FALSE   677.182     TRUE    6    FALSE
+303   2 151   FALSE  FALSE   677.093     TRUE    2    FALSE
+304   2 152      NA   TRUE        NA     TRUE   NA       NA
+305   3   1      NA   TRUE        NA     TRUE   NA       NA
+306   3   2   FALSE  FALSE   675.479     TRUE    2    FALSE
+307   3   3   FALSE  FALSE   675.672    FALSE    4    FALSE
+308   3   4   FALSE  FALSE   675.833    FALSE    4    FALSE
+309   3   5   FALSE  FALSE   675.946    FALSE    4    FALSE
+310   3   6   FALSE  FALSE   676.016    FALSE    4    FALSE
+311   3   7   FALSE  FALSE   676.052    FALSE    7    FALSE
+312   3   8   FALSE  FALSE   676.069    FALSE    7    FALSE
+313   3   9   FALSE  FALSE   676.089    FALSE    7    FALSE
+314   3  10   FALSE  FALSE   676.135    FALSE    7    FALSE
+315   3  11   FALSE  FALSE   676.222    FALSE    4    FALSE
+316   3  12   FALSE  FALSE   676.343    FALSE    4    FALSE
+317   3  13   FALSE  FALSE   676.476    FALSE    4    FALSE
+318   3  14   FALSE  FALSE   676.608    FALSE    4    FALSE
+319   3  15   FALSE  FALSE   676.734    FALSE    4    FALSE
+320   3  16   FALSE  FALSE   676.848    FALSE    4    FALSE
+321   3  17   FALSE  FALSE   676.950    FALSE    4    FALSE
+322   3  18   FALSE  FALSE   677.052    FALSE    4    FALSE
+323   3  19   FALSE  FALSE   677.151    FALSE    4    FALSE
+324   3  20   FALSE  FALSE   677.237    FALSE    4    FALSE
+325   3  21   FALSE  FALSE   677.311    FALSE    1    FALSE
+326   3  22   FALSE  FALSE   677.374    FALSE    1    FALSE
+327   3  23   FALSE  FALSE   677.423    FALSE    4    FALSE
+328   3  24   FALSE  FALSE   677.461    FALSE    4    FALSE
+329   3  25   FALSE  FALSE   677.492    FALSE    7    FALSE
+330   3  26   FALSE  FALSE   677.516    FALSE    8    FALSE
+331   3  27   FALSE  FALSE   677.538    FALSE    8    FALSE
+332   3  28   FALSE  FALSE   677.564    FALSE    8    FALSE
+333   3  29   FALSE  FALSE   677.598    FALSE    8    FALSE
+334   3  30   FALSE  FALSE   677.639    FALSE    8    FALSE
+335   3  31   FALSE  FALSE   677.686    FALSE    8    FALSE
+336   3  32   FALSE  FALSE   677.736    FALSE    8    FALSE
+337   3  33   FALSE  FALSE   677.789    FALSE    8    FALSE
+338   3  34   FALSE  FALSE   677.851    FALSE    7    FALSE
+339   3  35   FALSE  FALSE   677.935    FALSE    7    FALSE
+340   3  36   FALSE  FALSE   678.051    FALSE    7    FALSE
+341   3  37   FALSE  FALSE   678.194    FALSE    7    FALSE
+342   3  38   FALSE  FALSE   678.355    FALSE    7    FALSE
+343   3  39   FALSE  FALSE   678.526    FALSE    7    FALSE
+344   3  40   FALSE  FALSE   678.689    FALSE    7    FALSE
+345   3  41   FALSE  FALSE   678.824    FALSE    7    FALSE
+346   3  42   FALSE  FALSE   678.934    FALSE    7    FALSE
+347   3  43   FALSE  FALSE   679.017    FALSE    7    FALSE
+348   3  44   FALSE  FALSE   679.076    FALSE    7    FALSE
+349   3  45   FALSE  FALSE   679.120    FALSE    7    FALSE
+350   3  46   FALSE  FALSE   679.160    FALSE    8    FALSE
+351   3  47   FALSE  FALSE   679.197    FALSE    8    FALSE
+352   3  48   FALSE  FALSE   679.231    FALSE    8    FALSE
+353   3  49   FALSE  FALSE   679.260    FALSE    8    FALSE
+354   3  50   FALSE  FALSE   679.277    FALSE    8    FALSE
+355   3  51   FALSE  FALSE   679.283    FALSE    8    FALSE
+356   3  52   FALSE  FALSE   679.281    FALSE    8    FALSE
+357   3  53   FALSE  FALSE   679.272    FALSE    8    FALSE
+358   3  54   FALSE  FALSE   679.260    FALSE    8    FALSE
+359   3  55   FALSE  FALSE   679.246    FALSE    8    FALSE
+360   3  56   FALSE  FALSE   679.233    FALSE    8    FALSE
+361   3  57   FALSE  FALSE   679.216    FALSE    8    FALSE
+362   3  58   FALSE  FALSE   679.198    FALSE    8    FALSE
+363   3  59   FALSE  FALSE   679.185    FALSE    8    FALSE
+364   3  60   FALSE  FALSE   679.181    FALSE    8    FALSE
+365   3  61   FALSE  FALSE   679.191    FALSE    8    FALSE
+366   3  62   FALSE  FALSE   679.218    FALSE    8    FALSE
+367   3  63   FALSE  FALSE   679.261    FALSE    8    FALSE
+368   3  64   FALSE  FALSE   679.317    FALSE    7    FALSE
+369   3  65   FALSE  FALSE   679.372    FALSE    7    FALSE
+370   3  66   FALSE  FALSE   679.417    FALSE    7    FALSE
+371   3  67   FALSE  FALSE   679.448    FALSE    8    FALSE
+372   3  68   FALSE  FALSE   679.466    FALSE    8    FALSE
+373   3  69   FALSE  FALSE   679.481    FALSE    8    FALSE
+374   3  70   FALSE  FALSE   679.505    FALSE    8    FALSE
+375   3  71   FALSE  FALSE   679.550    FALSE    7    FALSE
+376   3  72   FALSE  FALSE   679.617    FALSE    7    FALSE
+377   3  73   FALSE  FALSE   679.701    FALSE    7    FALSE
+378   3  74   FALSE  FALSE   679.790    FALSE    7    FALSE
+379   3  75   FALSE  FALSE   679.875    FALSE    7    FALSE
+380   3  76   FALSE  FALSE   679.956    FALSE    7    FALSE
+381   3  77   FALSE  FALSE   680.032    FALSE    7    FALSE
+382   3  78   FALSE  FALSE   680.107    FALSE    7    FALSE
+383   3  79   FALSE  FALSE   680.180    FALSE    8    FALSE
+384   3  80   FALSE  FALSE   680.242    FALSE    8    FALSE
+385   3  81   FALSE  FALSE   680.286    FALSE    8    FALSE
+386   3  82   FALSE  FALSE   680.305    FALSE    8    FALSE
+387   3  83   FALSE  FALSE   680.288    FALSE    8    FALSE
+388   3  84   FALSE  FALSE   680.233    FALSE    9    FALSE
+389   3  85   FALSE  FALSE   680.145    FALSE    9    FALSE
+390   3  86   FALSE  FALSE   680.026    FALSE    9    FALSE
+391   3  87   FALSE  FALSE   679.877    FALSE    9    FALSE
+392   3  88   FALSE  FALSE   679.714    FALSE    9    FALSE
+393   3  89   FALSE  FALSE   679.548    FALSE    9    FALSE
+394   3  90   FALSE  FALSE   679.382    FALSE    9    FALSE
+395   3  91   FALSE  FALSE   679.228    FALSE    9    FALSE
+396   3  92   FALSE  FALSE   679.090    FALSE    6    FALSE
+397   3  93   FALSE  FALSE   678.965    FALSE    6    FALSE
+398   3  94   FALSE  FALSE   678.847    FALSE    6    FALSE
+399   3  95   FALSE  FALSE   678.732    FALSE    6    FALSE
+400   3  96   FALSE  FALSE   678.614    FALSE    6    FALSE
+401   3  97   FALSE  FALSE   678.493    FALSE    6    FALSE
+402   3  98   FALSE  FALSE   678.368    FALSE    6    FALSE
+403   3  99   FALSE  FALSE   678.245    FALSE    6    FALSE
+404   3 100   FALSE  FALSE   678.133    FALSE    6    FALSE
+405   3 101   FALSE  FALSE   678.034    FALSE    6    FALSE
+406   3 102   FALSE  FALSE   677.945    FALSE    6    FALSE
+407   3 103   FALSE  FALSE   677.866    FALSE    6    FALSE
+408   3 104   FALSE  FALSE   677.786    FALSE    6    FALSE
+409   3 105   FALSE  FALSE   677.695    FALSE    6    FALSE
+410   3 106   FALSE  FALSE   677.597    FALSE    9    FALSE
+411   3 107   FALSE  FALSE   677.487    FALSE    9    FALSE
+412   3 108   FALSE  FALSE   677.365    FALSE    9    FALSE
+413   3 109   FALSE  FALSE   677.243    FALSE    9    FALSE
+414   3 110   FALSE  FALSE   677.129    FALSE    9    FALSE
+415   3 111   FALSE  FALSE   677.026    FALSE    9    FALSE
+416   3 112   FALSE  FALSE   676.940    FALSE    8    FALSE
+417   3 113   FALSE  FALSE   676.876    FALSE    8    FALSE
+418   3 114   FALSE  FALSE   676.826    FALSE    8    FALSE
+419   3 115   FALSE  FALSE   676.786    FALSE    8    FALSE
+420   3 116   FALSE  FALSE   676.757    FALSE    8    FALSE
+421   3 117   FALSE  FALSE   676.730    FALSE    8    FALSE
+422   3 118   FALSE  FALSE   676.696    FALSE    8    FALSE
+423   3 119   FALSE  FALSE   676.647    FALSE    9    FALSE
+424   3 120   FALSE  FALSE   676.568    FALSE    9    FALSE
+425   3 121   FALSE  FALSE   676.436    FALSE    9    FALSE
+426   3 122   FALSE  FALSE   676.259    FALSE    9    FALSE
+427   3 123   FALSE  FALSE   676.058    FALSE    9    FALSE
+428   3 124   FALSE  FALSE   675.855    FALSE    6    FALSE
+429   3 125   FALSE  FALSE   675.684    FALSE    9    FALSE
+430   3 126   FALSE  FALSE   675.575    FALSE    9    FALSE
+431   3 127   FALSE  FALSE   675.531    FALSE    8    FALSE
+432   3 128   FALSE  FALSE   675.539    FALSE    7    FALSE
+433   3 129   FALSE  FALSE   675.581    FALSE    7    FALSE
+434   3 130   FALSE  FALSE   675.639    FALSE    7    FALSE
+435   3 131   FALSE  FALSE   675.697    FALSE    7    FALSE
+436   3 132   FALSE  FALSE   675.757    FALSE    7    FALSE
+437   3 133   FALSE  FALSE   675.825    FALSE    7    FALSE
+438   3 134   FALSE  FALSE   675.904    FALSE    7    FALSE
+439   3 135   FALSE  FALSE   675.996    FALSE    7    FALSE
+440   3 136   FALSE  FALSE   676.099    FALSE    7    FALSE
+441   3 137   FALSE  FALSE   676.198    FALSE    7    FALSE
+442   3 138   FALSE  FALSE   676.290    FALSE    7    FALSE
+443   3 139   FALSE  FALSE   676.377    FALSE    7    FALSE
+444   3 140   FALSE  FALSE   676.460    FALSE    7    FALSE
+445   3 141   FALSE  FALSE   676.545    FALSE    7    FALSE
+446   3 142   FALSE  FALSE   676.644    FALSE    7    FALSE
+447   3 143   FALSE  FALSE   676.754    FALSE    7    FALSE
+448   3 144   FALSE  FALSE   676.866    FALSE    4    FALSE
+449   3 145   FALSE  FALSE   676.979    FALSE    4    FALSE
+450   3 146   FALSE  FALSE   677.081    FALSE    4    FALSE
+451   3 147   FALSE  FALSE   677.156    FALSE    4    FALSE
+452   3 148   FALSE  FALSE   677.196    FALSE    1    FALSE
+453   3 149   FALSE  FALSE   677.197    FALSE    3    FALSE
+454   3 150   FALSE  FALSE   677.155    FALSE    6    FALSE
+455   3 151   FALSE  FALSE   677.076     TRUE    2    FALSE
+456   3 152      NA   TRUE        NA     TRUE   NA       NA
+457   4   1      NA   TRUE        NA     TRUE   NA       NA
+458   4   2   FALSE  FALSE   675.443     TRUE    2    FALSE
+459   4   3   FALSE  FALSE   675.653    FALSE    4    FALSE
+460   4   4   FALSE  FALSE   675.831    FALSE    4    FALSE
+461   4   5   FALSE  FALSE   675.960    FALSE    4    FALSE
+462   4   6   FALSE  FALSE   676.043    FALSE    4    FALSE
+463   4   7   FALSE  FALSE   676.089    FALSE    7    FALSE
+464   4   8   FALSE  FALSE   676.110    FALSE    7    FALSE
+465   4   9   FALSE  FALSE   676.128    FALSE    7    FALSE
+466   4  10   FALSE  FALSE   676.167    FALSE    7    FALSE
+467   4  11   FALSE  FALSE   676.241    FALSE    7    FALSE
+468   4  12   FALSE  FALSE   676.347    FALSE    4    FALSE
+469   4  13   FALSE  FALSE   676.465    FALSE    4    FALSE
+470   4  14   FALSE  FALSE   676.585    FALSE    4    FALSE
+471   4  15   FALSE  FALSE   676.703    FALSE    4    FALSE
+472   4  16   FALSE  FALSE   676.812    FALSE    4    FALSE
+473   4  17   FALSE  FALSE   676.913    FALSE    1    FALSE
+474   4  18   FALSE  FALSE   677.015    FALSE    1    FALSE
+475   4  19   FALSE  FALSE   677.116    FALSE    1    FALSE
+476   4  20   FALSE  FALSE   677.204    FALSE    1    FALSE
+477   4  21   FALSE  FALSE   677.283    FALSE    1    FALSE
+478   4  22   FALSE  FALSE   677.354    FALSE    1    FALSE
+479   4  23   FALSE  FALSE   677.413    FALSE    1    FALSE
+480   4  24   FALSE  FALSE   677.465    FALSE    4    FALSE
+481   4  25   FALSE  FALSE   677.512    FALSE    4    FALSE
+482   4  26   FALSE  FALSE   677.551    FALSE    7    FALSE
+483   4  27   FALSE  FALSE   677.586    FALSE    7    FALSE
+484   4  28   FALSE  FALSE   677.625    FALSE    7    FALSE
+485   4  29   FALSE  FALSE   677.670    FALSE    7    FALSE
+486   4  30   FALSE  FALSE   677.722    FALSE    7    FALSE
+487   4  31   FALSE  FALSE   677.780    FALSE    7    FALSE
+488   4  32   FALSE  FALSE   677.841    FALSE    7    FALSE
+489   4  33   FALSE  FALSE   677.903    FALSE    7    FALSE
+490   4  34   FALSE  FALSE   677.971    FALSE    7    FALSE
+491   4  35   FALSE  FALSE   678.057    FALSE    7    FALSE
+492   4  36   FALSE  FALSE   678.169    FALSE    7    FALSE
+493   4  37   FALSE  FALSE   678.305    FALSE    7    FALSE
+494   4  38   FALSE  FALSE   678.454    FALSE    7    FALSE
+495   4  39   FALSE  FALSE   678.611    FALSE    7    FALSE
+496   4  40   FALSE  FALSE   678.759    FALSE    7    FALSE
+497   4  41   FALSE  FALSE   678.881    FALSE    7    FALSE
+498   4  42   FALSE  FALSE   678.982    FALSE    7    FALSE
+499   4  43   FALSE  FALSE   679.062    FALSE    7    FALSE
+500   4  44   FALSE  FALSE   679.124    FALSE    7    FALSE

@@ -1,0 +1,1760 @@
+       seqno drec.x in_t out_t     qarea      cell_t    count_d     count_o
+150      150    149   -1     1 683.33983 21933528958 7295039848 14638489110
+151      151    150   -1     1 470.08324  4868794904 1617497497  3251297407
+152      152    151   -1     1 309.83206   840791909  278874882   561917027
+153      153    152   -1     1 188.61486   101927600   33729049    68198551
+154      154    153   -1     1  99.09435     6644442    2190849     4453593
+155      155    154   -1     1  36.95765           9          0           9
+156      156     NA   NA    NA        NA          NA         NA          NA
+157      157     NA   NA    NA        NA          NA         NA          NA
+158      158     NA   NA    NA        NA          NA         NA          NA
+159      159     NA   NA    NA        NA          NA         NA          NA
+160      160     NA   NA    NA        NA          NA         NA          NA
+161      161     NA   NA    NA        NA          NA         NA          NA
+162      162     NA   NA    NA        NA          NA         NA          NA
+163      163     NA   NA    NA        NA          NA         NA          NA
+164      164     NA   NA    NA        NA          NA         NA          NA
+165      165     NA   NA    NA        NA          NA         NA          NA
+166      166     NA   NA    NA        NA          NA         NA          NA
+167      167     NA   NA    NA        NA          NA         NA          NA
+168      168     NA   NA    NA        NA          NA         NA          NA
+169      169     NA   NA    NA        NA          NA         NA          NA
+NA        NA     NA   NA    NA        NA          NA         NA          NA
+NA.1      NA     NA   NA    NA        NA          NA         NA          NA
+NA.2      NA     NA   NA    NA        NA          NA         NA          NA
+NA.3      NA     NA   NA    NA        NA          NA         NA          NA
+NA.4      NA     NA   NA    NA        NA          NA         NA          NA
+NA.5      NA     NA   NA    NA        NA          NA         NA          NA
+NA.6      NA     NA   NA    NA        NA          NA         NA          NA
+NA.7      NA     NA   NA    NA        NA          NA         NA          NA
+NA.8      NA     NA   NA    NA        NA          NA         NA          NA
+NA.9      NA     NA   NA    NA        NA          NA         NA          NA
+NA.10     NA     NA   NA    NA        NA          NA         NA          NA
+NA.11     NA     NA   NA    NA        NA          NA         NA          NA
+NA.12     NA     NA   NA    NA        NA          NA         NA          NA
+NA.13     NA     NA   NA    NA        NA          NA         NA          NA
+NA.14     NA     NA   NA    NA        NA          NA         NA          NA
+NA.15     NA     NA   NA    NA        NA          NA         NA          NA
+NA.16     NA     NA   NA    NA        NA          NA         NA          NA
+NA.17     NA     NA   NA    NA        NA          NA         NA          NA
+NA.18     NA     NA   NA    NA        NA          NA         NA          NA
+NA.19     NA     NA   NA    NA        NA          NA         NA          NA
+NA.20     NA     NA   NA    NA        NA          NA         NA          NA
+NA.21     NA     NA   NA    NA        NA          NA         NA          NA
+NA.22     NA     NA   NA    NA        NA          NA         NA          NA
+NA.23     NA     NA   NA    NA        NA          NA         NA          NA
+NA.24     NA     NA   NA    NA        NA          NA         NA          NA
+NA.25     NA     NA   NA    NA        NA          NA         NA          NA
+NA.26     NA     NA   NA    NA        NA          NA         NA          NA
+NA.27     NA     NA   NA    NA        NA          NA         NA          NA
+NA.28     NA     NA   NA    NA        NA          NA         NA          NA
+NA.29     NA     NA   NA    NA        NA          NA         NA          NA
+NA.30     NA     NA   NA    NA        NA          NA         NA          NA
+NA.31     NA     NA   NA    NA        NA          NA         NA          NA
+NA.32     NA     NA   NA    NA        NA          NA         NA          NA
+NA.33     NA     NA   NA    NA        NA          NA         NA          NA
+NA.34     NA     NA   NA    NA        NA          NA         NA          NA
+NA.35     NA     NA   NA    NA        NA          NA         NA          NA
+NA.36     NA     NA   NA    NA        NA          NA         NA          NA
+NA.37     NA     NA   NA    NA        NA          NA         NA          NA
+NA.38     NA     NA   NA    NA        NA          NA         NA          NA
+NA.39     NA     NA   NA    NA        NA          NA         NA          NA
+NA.40     NA     NA   NA    NA        NA          NA         NA          NA
+NA.41     NA     NA   NA    NA        NA          NA         NA          NA
+NA.42     NA     NA   NA    NA        NA          NA         NA          NA
+NA.43     NA     NA   NA    NA        NA          NA         NA          NA
+NA.44     NA     NA   NA    NA        NA          NA         NA          NA
+NA.45     NA     NA   NA    NA        NA          NA         NA          NA
+NA.46     NA     NA   NA    NA        NA          NA         NA          NA
+NA.47     NA     NA   NA    NA        NA          NA         NA          NA
+NA.48     NA     NA   NA    NA        NA          NA         NA          NA
+NA.49     NA     NA   NA    NA        NA          NA         NA          NA
+NA.50     NA     NA   NA    NA        NA          NA         NA          NA
+NA.51     NA     NA   NA    NA        NA          NA         NA          NA
+NA.52     NA     NA   NA    NA        NA          NA         NA          NA
+NA.53     NA     NA   NA    NA        NA          NA         NA          NA
+NA.54     NA     NA   NA    NA        NA          NA         NA          NA
+NA.55     NA     NA   NA    NA        NA          NA         NA          NA
+NA.56     NA     NA   NA    NA        NA          NA         NA          NA
+NA.57     NA     NA   NA    NA        NA          NA         NA          NA
+NA.58     NA     NA   NA    NA        NA          NA         NA          NA
+NA.59     NA     NA   NA    NA        NA          NA         NA          NA
+NA.60     NA     NA   NA    NA        NA          NA         NA          NA
+NA.61     NA     NA   NA    NA        NA          NA         NA          NA
+NA.62     NA     NA   NA    NA        NA          NA         NA          NA
+NA.63     NA     NA   NA    NA        NA          NA         NA          NA
+NA.64     NA     NA   NA    NA        NA          NA         NA          NA
+NA.65     NA     NA   NA    NA        NA          NA         NA          NA
+NA.66     NA     NA   NA    NA        NA          NA         NA          NA
+NA.67     NA     NA   NA    NA        NA          NA         NA          NA
+NA.68     NA     NA   NA    NA        NA          NA         NA          NA
+NA.69     NA     NA   NA    NA        NA          NA         NA          NA
+NA.70     NA     NA   NA    NA        NA          NA         NA          NA
+NA.71     NA     NA   NA    NA        NA          NA         NA          NA
+NA.72     NA     NA   NA    NA        NA          NA         NA          NA
+NA.73     NA     NA   NA    NA        NA          NA         NA          NA
+NA.74     NA     NA   NA    NA        NA          NA         NA          NA
+NA.75     NA     NA   NA    NA        NA          NA         NA          NA
+NA.76     NA     NA   NA    NA        NA          NA         NA          NA
+NA.77     NA     NA   NA    NA        NA          NA         NA          NA
+NA.78     NA     NA   NA    NA        NA          NA         NA          NA
+NA.79     NA     NA   NA    NA        NA          NA         NA          NA
+NA.80     NA     NA   NA    NA        NA          NA         NA          NA
+NA.81     NA     NA   NA    NA        NA          NA         NA          NA
+NA.82     NA     NA   NA    NA        NA          NA         NA          NA
+NA.83     NA     NA   NA    NA        NA          NA         NA          NA
+NA.84     NA     NA   NA    NA        NA          NA         NA          NA
+NA.85     NA     NA   NA    NA        NA          NA         NA          NA
+NA.86     NA     NA   NA    NA        NA          NA         NA          NA
+NA.87     NA     NA   NA    NA        NA          NA         NA          NA
+NA.88     NA     NA   NA    NA        NA          NA         NA          NA
+NA.89     NA     NA   NA    NA        NA          NA         NA          NA
+NA.90     NA     NA   NA    NA        NA          NA         NA          NA
+NA.91     NA     NA   NA    NA        NA          NA         NA          NA
+NA.92     NA     NA   NA    NA        NA          NA         NA          NA
+NA.93     NA     NA   NA    NA        NA          NA         NA          NA
+NA.94     NA     NA   NA    NA        NA          NA         NA          NA
+NA.95     NA     NA   NA    NA        NA          NA         NA          NA
+NA.96     NA     NA   NA    NA        NA          NA         NA          NA
+NA.97     NA     NA   NA    NA        NA          NA         NA          NA
+NA.98     NA     NA   NA    NA        NA          NA         NA          NA
+NA.99     NA     NA   NA    NA        NA          NA         NA          NA
+NA.100    NA     NA   NA    NA        NA          NA         NA          NA
+NA.101    NA     NA   NA    NA        NA          NA         NA          NA
+NA.102    NA     NA   NA    NA        NA          NA         NA          NA
+NA.103    NA     NA   NA    NA        NA          NA         NA          NA
+NA.104    NA     NA   NA    NA        NA          NA         NA          NA
+NA.105    NA     NA   NA    NA        NA          NA         NA          NA
+NA.106    NA     NA   NA    NA        NA          NA         NA          NA
+NA.107    NA     NA   NA    NA        NA          NA         NA          NA
+NA.108    NA     NA   NA    NA        NA          NA         NA          NA
+NA.109    NA     NA   NA    NA        NA          NA         NA          NA
+NA.110    NA     NA   NA    NA        NA          NA         NA          NA
+NA.111    NA     NA   NA    NA        NA          NA         NA          NA
+NA.112    NA     NA   NA    NA        NA          NA         NA          NA
+NA.113    NA     NA   NA    NA        NA          NA         NA          NA
+NA.114    NA     NA   NA    NA        NA          NA         NA          NA
+NA.115    NA     NA   NA    NA        NA          NA         NA          NA
+NA.116    NA     NA   NA    NA        NA          NA         NA          NA
+NA.117    NA     NA   NA    NA        NA          NA         NA          NA
+NA.118    NA     NA   NA    NA        NA          NA         NA          NA
+NA.119    NA     NA   NA    NA        NA          NA         NA          NA
+NA.120    NA     NA   NA    NA        NA          NA         NA          NA
+NA.121    NA     NA   NA    NA        NA          NA         NA          NA
+NA.122    NA     NA   NA    NA        NA          NA         NA          NA
+NA.123    NA     NA   NA    NA        NA          NA         NA          NA
+NA.124    NA     NA   NA    NA        NA          NA         NA          NA
+NA.125    NA     NA   NA    NA        NA          NA         NA          NA
+NA.126    NA     NA   NA    NA        NA          NA         NA          NA
+NA.127    NA     NA   NA    NA        NA          NA         NA          NA
+NA.128    NA     NA   NA    NA        NA          NA         NA          NA
+NA.129    NA     NA   NA    NA        NA          NA         NA          NA
+NA.130    NA     NA   NA    NA        NA          NA         NA          NA
+NA.131    NA     NA   NA    NA        NA          NA         NA          NA
+NA.132    NA     NA   NA    NA        NA          NA         NA          NA
+NA.133    NA     NA   NA    NA        NA          NA         NA          NA
+NA.134    NA     NA   NA    NA        NA          NA         NA          NA
+NA.135    NA     NA   NA    NA        NA          NA         NA          NA
+NA.136    NA     NA   NA    NA        NA          NA         NA          NA
+NA.137    NA     NA   NA    NA        NA          NA         NA          NA
+NA.138    NA     NA   NA    NA        NA          NA         NA          NA
+NA.139    NA     NA   NA    NA        NA          NA         NA          NA
+NA.140    NA     NA   NA    NA        NA          NA         NA          NA
+NA.141    NA     NA   NA    NA        NA          NA         NA          NA
+NA.142    NA     NA   NA    NA        NA          NA         NA          NA
+NA.143    NA     NA   NA    NA        NA          NA         NA          NA
+NA.144    NA     NA   NA    NA        NA          NA         NA          NA
+NA.145    NA     NA   NA    NA        NA          NA         NA          NA
+NA.146    NA     NA   NA    NA        NA          NA         NA          NA
+NA.147    NA     NA   NA    NA        NA          NA         NA          NA
+NA.148    NA     NA   NA    NA        NA          NA         NA          NA
+NA.149    NA     NA   NA    NA        NA          NA         NA          NA
+NA.150    NA     NA   NA    NA        NA          NA         NA          NA
+NA.151    NA     NA   NA    NA        NA          NA         NA          NA
+NA.152    NA     NA   NA    NA        NA          NA         NA          NA
+NA.153    NA     NA   NA    NA        NA          NA         NA          NA
+NA.154    NA     NA   NA    NA        NA          NA         NA          NA
+NA.155    NA     NA   NA    NA        NA          NA         NA          NA
+NA.156    NA     NA   NA    NA        NA          NA         NA          NA
+NA.157    NA     NA   NA    NA        NA          NA         NA          NA
+NA.158    NA     NA   NA    NA        NA          NA         NA          NA
+NA.159    NA     NA   NA    NA        NA          NA         NA          NA
+NA.160    NA     NA   NA    NA        NA          NA         NA          NA
+NA.161    NA     NA   NA    NA        NA          NA         NA          NA
+NA.162    NA     NA   NA    NA        NA          NA         NA          NA
+NA.163    NA     NA   NA    NA        NA          NA         NA          NA
+NA.164    NA     NA   NA    NA        NA          NA         NA          NA
+NA.165    NA     NA   NA    NA        NA          NA         NA          NA
+NA.166    NA     NA   NA    NA        NA          NA         NA          NA
+NA.167    NA     NA   NA    NA        NA          NA         NA          NA
+NA.168    NA     NA   NA    NA        NA          NA         NA          NA
+NA.169    NA     NA   NA    NA        NA          NA         NA          NA
+NA.170    NA     NA   NA    NA        NA          NA         NA          NA
+NA.171    NA     NA   NA    NA        NA          NA         NA          NA
+NA.172    NA     NA   NA    NA        NA          NA         NA          NA
+NA.173    NA     NA   NA    NA        NA          NA         NA          NA
+NA.174    NA     NA   NA    NA        NA          NA         NA          NA
+NA.175    NA     NA   NA    NA        NA          NA         NA          NA
+NA.176    NA     NA   NA    NA        NA          NA         NA          NA
+NA.177    NA     NA   NA    NA        NA          NA         NA          NA
+NA.178    NA     NA   NA    NA        NA          NA         NA          NA
+NA.179    NA     NA   NA    NA        NA          NA         NA          NA
+NA.180    NA     NA   NA    NA        NA          NA         NA          NA
+NA.181    NA     NA   NA    NA        NA          NA         NA          NA
+NA.182    NA     NA   NA    NA        NA          NA         NA          NA
+NA.183    NA     NA   NA    NA        NA          NA         NA          NA
+NA.184    NA     NA   NA    NA        NA          NA         NA          NA
+NA.185    NA     NA   NA    NA        NA          NA         NA          NA
+NA.186    NA     NA   NA    NA        NA          NA         NA          NA
+NA.187    NA     NA   NA    NA        NA          NA         NA          NA
+NA.188    NA     NA   NA    NA        NA          NA         NA          NA
+NA.189    NA     NA   NA    NA        NA          NA         NA          NA
+NA.190    NA     NA   NA    NA        NA          NA         NA          NA
+NA.191    NA     NA   NA    NA        NA          NA         NA          NA
+NA.192    NA     NA   NA    NA        NA          NA         NA          NA
+NA.193    NA     NA   NA    NA        NA          NA         NA          NA
+NA.194    NA     NA   NA    NA        NA          NA         NA          NA
+NA.195    NA     NA   NA    NA        NA          NA         NA          NA
+NA.196    NA     NA   NA    NA        NA          NA         NA          NA
+NA.197    NA     NA   NA    NA        NA          NA         NA          NA
+NA.198    NA     NA   NA    NA        NA          NA         NA          NA
+NA.199    NA     NA   NA    NA        NA          NA         NA          NA
+NA.200    NA     NA   NA    NA        NA          NA         NA          NA
+NA.201    NA     NA   NA    NA        NA          NA         NA          NA
+NA.202    NA     NA   NA    NA        NA          NA         NA          NA
+NA.203    NA     NA   NA    NA        NA          NA         NA          NA
+NA.204    NA     NA   NA    NA        NA          NA         NA          NA
+NA.205    NA     NA   NA    NA        NA          NA         NA          NA
+NA.206    NA     NA   NA    NA        NA          NA         NA          NA
+NA.207    NA     NA   NA    NA        NA          NA         NA          NA
+NA.208    NA     NA   NA    NA        NA          NA         NA          NA
+NA.209    NA     NA   NA    NA        NA          NA         NA          NA
+NA.210    NA     NA   NA    NA        NA          NA         NA          NA
+NA.211    NA     NA   NA    NA        NA          NA         NA          NA
+NA.212    NA     NA   NA    NA        NA          NA         NA          NA
+NA.213    NA     NA   NA    NA        NA          NA         NA          NA
+NA.214    NA     NA   NA    NA        NA          NA         NA          NA
+NA.215    NA     NA   NA    NA        NA          NA         NA          NA
+NA.216    NA     NA   NA    NA        NA          NA         NA          NA
+NA.217    NA     NA   NA    NA        NA          NA         NA          NA
+NA.218    NA     NA   NA    NA        NA          NA         NA          NA
+NA.219    NA     NA   NA    NA        NA          NA         NA          NA
+NA.220    NA     NA   NA    NA        NA          NA         NA          NA
+NA.221    NA     NA   NA    NA        NA          NA         NA          NA
+NA.222    NA     NA   NA    NA        NA          NA         NA          NA
+NA.223    NA     NA   NA    NA        NA          NA         NA          NA
+NA.224    NA     NA   NA    NA        NA          NA         NA          NA
+NA.225    NA     NA   NA    NA        NA          NA         NA          NA
+NA.226    NA     NA   NA    NA        NA          NA         NA          NA
+NA.227    NA     NA   NA    NA        NA          NA         NA          NA
+NA.228    NA     NA   NA    NA        NA          NA         NA          NA
+NA.229    NA     NA   NA    NA        NA          NA         NA          NA
+NA.230    NA     NA   NA    NA        NA          NA         NA          NA
+NA.231    NA     NA   NA    NA        NA          NA         NA          NA
+NA.232    NA     NA   NA    NA        NA          NA         NA          NA
+NA.233    NA     NA   NA    NA        NA          NA         NA          NA
+NA.234    NA     NA   NA    NA        NA          NA         NA          NA
+NA.235    NA     NA   NA    NA        NA          NA         NA          NA
+NA.236    NA     NA   NA    NA        NA          NA         NA          NA
+NA.237    NA     NA   NA    NA        NA          NA         NA          NA
+NA.238    NA     NA   NA    NA        NA          NA         NA          NA
+NA.239    NA     NA   NA    NA        NA          NA         NA          NA
+NA.240    NA     NA   NA    NA        NA          NA         NA          NA
+NA.241    NA     NA   NA    NA        NA          NA         NA          NA
+NA.242    NA     NA   NA    NA        NA          NA         NA          NA
+NA.243    NA     NA   NA    NA        NA          NA         NA          NA
+NA.244    NA     NA   NA    NA        NA          NA         NA          NA
+NA.245    NA     NA   NA    NA        NA          NA         NA          NA
+NA.246    NA     NA   NA    NA        NA          NA         NA          NA
+NA.247    NA     NA   NA    NA        NA          NA         NA          NA
+NA.248    NA     NA   NA    NA        NA          NA         NA          NA
+NA.249    NA     NA   NA    NA        NA          NA         NA          NA
+NA.250    NA     NA   NA    NA        NA          NA         NA          NA
+NA.251    NA     NA   NA    NA        NA          NA         NA          NA
+NA.252    NA     NA   NA    NA        NA          NA         NA          NA
+NA.253    NA     NA   NA    NA        NA          NA         NA          NA
+NA.254    NA     NA   NA    NA        NA          NA         NA          NA
+NA.255    NA     NA   NA    NA        NA          NA         NA          NA
+NA.256    NA     NA   NA    NA        NA          NA         NA          NA
+NA.257    NA     NA   NA    NA        NA          NA         NA          NA
+NA.258    NA     NA   NA    NA        NA          NA         NA          NA
+NA.259    NA     NA   NA    NA        NA          NA         NA          NA
+NA.260    NA     NA   NA    NA        NA          NA         NA          NA
+NA.261    NA     NA   NA    NA        NA          NA         NA          NA
+NA.262    NA     NA   NA    NA        NA          NA         NA          NA
+NA.263    NA     NA   NA    NA        NA          NA         NA          NA
+NA.264    NA     NA   NA    NA        NA          NA         NA          NA
+NA.265    NA     NA   NA    NA        NA          NA         NA          NA
+NA.266    NA     NA   NA    NA        NA          NA         NA          NA
+NA.267    NA     NA   NA    NA        NA          NA         NA          NA
+NA.268    NA     NA   NA    NA        NA          NA         NA          NA
+NA.269    NA     NA   NA    NA        NA          NA         NA          NA
+NA.270    NA     NA   NA    NA        NA          NA         NA          NA
+NA.271    NA     NA   NA    NA        NA          NA         NA          NA
+NA.272    NA     NA   NA    NA        NA          NA         NA          NA
+NA.273    NA     NA   NA    NA        NA          NA         NA          NA
+NA.274    NA     NA   NA    NA        NA          NA         NA          NA
+NA.275    NA     NA   NA    NA        NA          NA         NA          NA
+NA.276    NA     NA   NA    NA        NA          NA         NA          NA
+NA.277    NA     NA   NA    NA        NA          NA         NA          NA
+NA.278    NA     NA   NA    NA        NA          NA         NA          NA
+NA.279    NA     NA   NA    NA        NA          NA         NA          NA
+NA.280    NA     NA   NA    NA        NA          NA         NA          NA
+NA.281    NA     NA   NA    NA        NA          NA         NA          NA
+NA.282    NA     NA   NA    NA        NA          NA         NA          NA
+NA.283    NA     NA   NA    NA        NA          NA         NA          NA
+NA.284    NA     NA   NA    NA        NA          NA         NA          NA
+NA.285    NA     NA   NA    NA        NA          NA         NA          NA
+NA.286    NA     NA   NA    NA        NA          NA         NA          NA
+NA.287    NA     NA   NA    NA        NA          NA         NA          NA
+NA.288    NA     NA   NA    NA        NA          NA         NA          NA
+NA.289    NA     NA   NA    NA        NA          NA         NA          NA
+NA.290    NA     NA   NA    NA        NA          NA         NA          NA
+NA.291    NA     NA   NA    NA        NA          NA         NA          NA
+NA.292    NA     NA   NA    NA        NA          NA         NA          NA
+NA.293    NA     NA   NA    NA        NA          NA         NA          NA
+NA.294    NA     NA   NA    NA        NA          NA         NA          NA
+NA.295    NA     NA   NA    NA        NA          NA         NA          NA
+NA.296    NA     NA   NA    NA        NA          NA         NA          NA
+NA.297    NA     NA   NA    NA        NA          NA         NA          NA
+NA.298    NA     NA   NA    NA        NA          NA         NA          NA
+NA.299    NA     NA   NA    NA        NA          NA         NA          NA
+NA.300    NA     NA   NA    NA        NA          NA         NA          NA
+NA.301    NA     NA   NA    NA        NA          NA         NA          NA
+NA.302    NA     NA   NA    NA        NA          NA         NA          NA
+NA.303    NA     NA   NA    NA        NA          NA         NA          NA
+NA.304    NA     NA   NA    NA        NA          NA         NA          NA
+NA.305    NA     NA   NA    NA        NA          NA         NA          NA
+NA.306    NA     NA   NA    NA        NA          NA         NA          NA
+NA.307    NA     NA   NA    NA        NA          NA         NA          NA
+NA.308    NA     NA   NA    NA        NA          NA         NA          NA
+NA.309    NA     NA   NA    NA        NA          NA         NA          NA
+NA.310    NA     NA   NA    NA        NA          NA         NA          NA
+NA.311    NA     NA   NA    NA        NA          NA         NA          NA
+NA.312    NA     NA   NA    NA        NA          NA         NA          NA
+NA.313    NA     NA   NA    NA        NA          NA         NA          NA
+NA.314    NA     NA   NA    NA        NA          NA         NA          NA
+NA.315    NA     NA   NA    NA        NA          NA         NA          NA
+NA.316    NA     NA   NA    NA        NA          NA         NA          NA
+NA.317    NA     NA   NA    NA        NA          NA         NA          NA
+NA.318    NA     NA   NA    NA        NA          NA         NA          NA
+NA.319    NA     NA   NA    NA        NA          NA         NA          NA
+NA.320    NA     NA   NA    NA        NA          NA         NA          NA
+NA.321    NA     NA   NA    NA        NA          NA         NA          NA
+NA.322    NA     NA   NA    NA        NA          NA         NA          NA
+NA.323    NA     NA   NA    NA        NA          NA         NA          NA
+NA.324    NA     NA   NA    NA        NA          NA         NA          NA
+NA.325    NA     NA   NA    NA        NA          NA         NA          NA
+NA.326    NA     NA   NA    NA        NA          NA         NA          NA
+NA.327    NA     NA   NA    NA        NA          NA         NA          NA
+NA.328    NA     NA   NA    NA        NA          NA         NA          NA
+NA.329    NA     NA   NA    NA        NA          NA         NA          NA
+NA.330    NA     NA   NA    NA        NA          NA         NA          NA
+           elev_sum sumtanbl         qc  qweti shedno ridge     elev drec.y
+150    9.190054e+08  0.02050 33333.6505 10.414      1 FALSE  99.6737    149
+151    2.038940e+08  0.02550 18434.6370  9.822      1 FALSE  99.7247    150
+152    3.518488e+07  0.02980 10397.0491  9.249      1 FALSE  99.7843    151
+153    4.261034e+06  0.03345  5638.7104  8.637      1 FALSE  99.8512    152
+154    2.773451e+05  0.03625  2733.6373  7.913      1 FALSE  99.9237    153
+155    4.218000e-01  0.03815   968.7456  6.876      1 FALSE 100.0000    154
+156              NA       NA         NA     NA     NA    NA       NA     NA
+157              NA       NA         NA     NA     NA    NA       NA     NA
+158              NA       NA         NA     NA     NA    NA       NA     NA
+159              NA       NA         NA     NA     NA    NA       NA     NA
+160              NA       NA         NA     NA     NA    NA       NA     NA
+161              NA       NA         NA     NA     NA    NA       NA     NA
+162              NA       NA         NA     NA     NA    NA       NA     NA
+163              NA       NA         NA     NA     NA    NA       NA     NA
+164              NA       NA         NA     NA     NA    NA       NA     NA
+165              NA       NA         NA     NA     NA    NA       NA     NA
+166              NA       NA         NA     NA     NA    NA       NA     NA
+167              NA       NA         NA     NA     NA    NA       NA     NA
+168              NA       NA         NA     NA     NA    NA       NA     NA
+169              NA       NA         NA     NA     NA    NA       NA     NA
+NA               NA       NA         NA     NA     NA    NA       NA     NA
+NA.1             NA       NA         NA     NA     NA    NA       NA     NA
+NA.2             NA       NA         NA     NA     NA    NA       NA     NA
+NA.3             NA       NA         NA     NA     NA    NA       NA     NA
+NA.4             NA       NA         NA     NA     NA    NA       NA     NA
+NA.5             NA       NA         NA     NA     NA    NA       NA     NA
+NA.6             NA       NA         NA     NA     NA    NA       NA     NA
+NA.7             NA       NA         NA     NA     NA    NA       NA     NA
+NA.8             NA       NA         NA     NA     NA    NA       NA     NA
+NA.9             NA       NA         NA     NA     NA    NA       NA     NA
+NA.10            NA       NA         NA     NA     NA    NA       NA     NA
+NA.11            NA       NA         NA     NA     NA    NA       NA     NA
+NA.12            NA       NA         NA     NA     NA    NA       NA     NA
+NA.13            NA       NA         NA     NA     NA    NA       NA     NA
+NA.14            NA       NA         NA     NA     NA    NA       NA     NA
+NA.15            NA       NA         NA     NA     NA    NA       NA     NA
+NA.16            NA       NA         NA     NA     NA    NA       NA     NA
+NA.17            NA       NA         NA     NA     NA    NA       NA     NA
+NA.18            NA       NA         NA     NA     NA    NA       NA     NA
+NA.19            NA       NA         NA     NA     NA    NA       NA     NA
+NA.20            NA       NA         NA     NA     NA    NA       NA     NA
+NA.21            NA       NA         NA     NA     NA    NA       NA     NA
+NA.22            NA       NA         NA     NA     NA    NA       NA     NA
+NA.23            NA       NA         NA     NA     NA    NA       NA     NA
+NA.24            NA       NA         NA     NA     NA    NA       NA     NA
+NA.25            NA       NA         NA     NA     NA    NA       NA     NA
+NA.26            NA       NA         NA     NA     NA    NA       NA     NA
+NA.27            NA       NA         NA     NA     NA    NA       NA     NA
+NA.28            NA       NA         NA     NA     NA    NA       NA     NA
+NA.29            NA       NA         NA     NA     NA    NA       NA     NA
+NA.30            NA       NA         NA     NA     NA    NA       NA     NA
+NA.31            NA       NA         NA     NA     NA    NA       NA     NA
+NA.32            NA       NA         NA     NA     NA    NA       NA     NA
+NA.33            NA       NA         NA     NA     NA    NA       NA     NA
+NA.34            NA       NA         NA     NA     NA    NA       NA     NA
+NA.35            NA       NA         NA     NA     NA    NA       NA     NA
+NA.36            NA       NA         NA     NA     NA    NA       NA     NA
+NA.37            NA       NA         NA     NA     NA    NA       NA     NA
+NA.38            NA       NA         NA     NA     NA    NA       NA     NA
+NA.39            NA       NA         NA     NA     NA    NA       NA     NA
+NA.40            NA       NA         NA     NA     NA    NA       NA     NA
+NA.41            NA       NA         NA     NA     NA    NA       NA     NA
+NA.42            NA       NA         NA     NA     NA    NA       NA     NA
+NA.43            NA       NA         NA     NA     NA    NA       NA     NA
+NA.44            NA       NA         NA     NA     NA    NA       NA     NA
+NA.45            NA       NA         NA     NA     NA    NA       NA     NA
+NA.46            NA       NA         NA     NA     NA    NA       NA     NA
+NA.47            NA       NA         NA     NA     NA    NA       NA     NA
+NA.48            NA       NA         NA     NA     NA    NA       NA     NA
+NA.49            NA       NA         NA     NA     NA    NA       NA     NA
+NA.50            NA       NA         NA     NA     NA    NA       NA     NA
+NA.51            NA       NA         NA     NA     NA    NA       NA     NA
+NA.52            NA       NA         NA     NA     NA    NA       NA     NA
+NA.53            NA       NA         NA     NA     NA    NA       NA     NA
+NA.54            NA       NA         NA     NA     NA    NA       NA     NA
+NA.55            NA       NA         NA     NA     NA    NA       NA     NA
+NA.56            NA       NA         NA     NA     NA    NA       NA     NA
+NA.57            NA       NA         NA     NA     NA    NA       NA     NA
+NA.58            NA       NA         NA     NA     NA    NA       NA     NA
+NA.59            NA       NA         NA     NA     NA    NA       NA     NA
+NA.60            NA       NA         NA     NA     NA    NA       NA     NA
+NA.61            NA       NA         NA     NA     NA    NA       NA     NA
+NA.62            NA       NA         NA     NA     NA    NA       NA     NA
+NA.63            NA       NA         NA     NA     NA    NA       NA     NA
+NA.64            NA       NA         NA     NA     NA    NA       NA     NA
+NA.65            NA       NA         NA     NA     NA    NA       NA     NA
+NA.66            NA       NA         NA     NA     NA    NA       NA     NA
+NA.67            NA       NA         NA     NA     NA    NA       NA     NA
+NA.68            NA       NA         NA     NA     NA    NA       NA     NA
+NA.69            NA       NA         NA     NA     NA    NA       NA     NA
+NA.70            NA       NA         NA     NA     NA    NA       NA     NA
+NA.71            NA       NA         NA     NA     NA    NA       NA     NA
+NA.72            NA       NA         NA     NA     NA    NA       NA     NA
+NA.73            NA       NA         NA     NA     NA    NA       NA     NA
+NA.74            NA       NA         NA     NA     NA    NA       NA     NA
+NA.75            NA       NA         NA     NA     NA    NA       NA     NA
+NA.76            NA       NA         NA     NA     NA    NA       NA     NA
+NA.77            NA       NA         NA     NA     NA    NA       NA     NA
+NA.78            NA       NA         NA     NA     NA    NA       NA     NA
+NA.79            NA       NA         NA     NA     NA    NA       NA     NA
+NA.80            NA       NA         NA     NA     NA    NA       NA     NA
+NA.81            NA       NA         NA     NA     NA    NA       NA     NA
+NA.82            NA       NA         NA     NA     NA    NA       NA     NA
+NA.83            NA       NA         NA     NA     NA    NA       NA     NA
+NA.84            NA       NA         NA     NA     NA    NA       NA     NA
+NA.85            NA       NA         NA     NA     NA    NA       NA     NA
+NA.86            NA       NA         NA     NA     NA    NA       NA     NA
+NA.87            NA       NA         NA     NA     NA    NA       NA     NA
+NA.88            NA       NA         NA     NA     NA    NA       NA     NA
+NA.89            NA       NA         NA     NA     NA    NA       NA     NA
+NA.90            NA       NA         NA     NA     NA    NA       NA     NA
+NA.91            NA       NA         NA     NA     NA    NA       NA     NA
+NA.92            NA       NA         NA     NA     NA    NA       NA     NA
+NA.93            NA       NA         NA     NA     NA    NA       NA     NA
+NA.94            NA       NA         NA     NA     NA    NA       NA     NA
+NA.95            NA       NA         NA     NA     NA    NA       NA     NA
+NA.96            NA       NA         NA     NA     NA    NA       NA     NA
+NA.97            NA       NA         NA     NA     NA    NA       NA     NA
+NA.98            NA       NA         NA     NA     NA    NA       NA     NA
+NA.99            NA       NA         NA     NA     NA    NA       NA     NA
+NA.100           NA       NA         NA     NA     NA    NA       NA     NA
+NA.101           NA       NA         NA     NA     NA    NA       NA     NA
+NA.102           NA       NA         NA     NA     NA    NA       NA     NA
+NA.103           NA       NA         NA     NA     NA    NA       NA     NA
+NA.104           NA       NA         NA     NA     NA    NA       NA     NA
+NA.105           NA       NA         NA     NA     NA    NA       NA     NA
+NA.106           NA       NA         NA     NA     NA    NA       NA     NA
+NA.107           NA       NA         NA     NA     NA    NA       NA     NA
+NA.108           NA       NA         NA     NA     NA    NA       NA     NA
+NA.109           NA       NA         NA     NA     NA    NA       NA     NA
+NA.110           NA       NA         NA     NA     NA    NA       NA     NA
+NA.111           NA       NA         NA     NA     NA    NA       NA     NA
+NA.112           NA       NA         NA     NA     NA    NA       NA     NA
+NA.113           NA       NA         NA     NA     NA    NA       NA     NA
+NA.114           NA       NA         NA     NA     NA    NA       NA     NA
+NA.115           NA       NA         NA     NA     NA    NA       NA     NA
+NA.116           NA       NA         NA     NA     NA    NA       NA     NA
+NA.117           NA       NA         NA     NA     NA    NA       NA     NA
+NA.118           NA       NA         NA     NA     NA    NA       NA     NA
+NA.119           NA       NA         NA     NA     NA    NA       NA     NA
+NA.120           NA       NA         NA     NA     NA    NA       NA     NA
+NA.121           NA       NA         NA     NA     NA    NA       NA     NA
+NA.122           NA       NA         NA     NA     NA    NA       NA     NA
+NA.123           NA       NA         NA     NA     NA    NA       NA     NA
+NA.124           NA       NA         NA     NA     NA    NA       NA     NA
+NA.125           NA       NA         NA     NA     NA    NA       NA     NA
+NA.126           NA       NA         NA     NA     NA    NA       NA     NA
+NA.127           NA       NA         NA     NA     NA    NA       NA     NA
+NA.128           NA       NA         NA     NA     NA    NA       NA     NA
+NA.129           NA       NA         NA     NA     NA    NA       NA     NA
+NA.130           NA       NA         NA     NA     NA    NA       NA     NA
+NA.131           NA       NA         NA     NA     NA    NA       NA     NA
+NA.132           NA       NA         NA     NA     NA    NA       NA     NA
+NA.133           NA       NA         NA     NA     NA    NA       NA     NA
+NA.134           NA       NA         NA     NA     NA    NA       NA     NA
+NA.135           NA       NA         NA     NA     NA    NA       NA     NA
+NA.136           NA       NA         NA     NA     NA    NA       NA     NA
+NA.137           NA       NA         NA     NA     NA    NA       NA     NA
+NA.138           NA       NA         NA     NA     NA    NA       NA     NA
+NA.139           NA       NA         NA     NA     NA    NA       NA     NA
+NA.140           NA       NA         NA     NA     NA    NA       NA     NA
+NA.141           NA       NA         NA     NA     NA    NA       NA     NA
+NA.142           NA       NA         NA     NA     NA    NA       NA     NA
+NA.143           NA       NA         NA     NA     NA    NA       NA     NA
+NA.144           NA       NA         NA     NA     NA    NA       NA     NA
+NA.145           NA       NA         NA     NA     NA    NA       NA     NA
+NA.146           NA       NA         NA     NA     NA    NA       NA     NA
+NA.147           NA       NA         NA     NA     NA    NA       NA     NA
+NA.148           NA       NA         NA     NA     NA    NA       NA     NA
+NA.149           NA       NA         NA     NA     NA    NA       NA     NA
+NA.150           NA       NA         NA     NA     NA    NA       NA     NA
+NA.151           NA       NA         NA     NA     NA    NA       NA     NA
+NA.152           NA       NA         NA     NA     NA    NA       NA     NA
+NA.153           NA       NA         NA     NA     NA    NA       NA     NA
+NA.154           NA       NA         NA     NA     NA    NA       NA     NA
+NA.155           NA       NA         NA     NA     NA    NA       NA     NA
+NA.156           NA       NA         NA     NA     NA    NA       NA     NA
+NA.157           NA       NA         NA     NA     NA    NA       NA     NA
+NA.158           NA       NA         NA     NA     NA    NA       NA     NA
+NA.159           NA       NA         NA     NA     NA    NA       NA     NA
+NA.160           NA       NA         NA     NA     NA    NA       NA     NA
+NA.161           NA       NA         NA     NA     NA    NA       NA     NA
+NA.162           NA       NA         NA     NA     NA    NA       NA     NA
+NA.163           NA       NA         NA     NA     NA    NA       NA     NA
+NA.164           NA       NA         NA     NA     NA    NA       NA     NA
+NA.165           NA       NA         NA     NA     NA    NA       NA     NA
+NA.166           NA       NA         NA     NA     NA    NA       NA     NA
+NA.167           NA       NA         NA     NA     NA    NA       NA     NA
+NA.168           NA       NA         NA     NA     NA    NA       NA     NA
+NA.169           NA       NA         NA     NA     NA    NA       NA     NA
+NA.170           NA       NA         NA     NA     NA    NA       NA     NA
+NA.171           NA       NA         NA     NA     NA    NA       NA     NA
+NA.172           NA       NA         NA     NA     NA    NA       NA     NA
+NA.173           NA       NA         NA     NA     NA    NA       NA     NA
+NA.174           NA       NA         NA     NA     NA    NA       NA     NA
+NA.175           NA       NA         NA     NA     NA    NA       NA     NA
+NA.176           NA       NA         NA     NA     NA    NA       NA     NA
+NA.177           NA       NA         NA     NA     NA    NA       NA     NA
+NA.178           NA       NA         NA     NA     NA    NA       NA     NA
+NA.179           NA       NA         NA     NA     NA    NA       NA     NA
+NA.180           NA       NA         NA     NA     NA    NA       NA     NA
+NA.181           NA       NA         NA     NA     NA    NA       NA     NA
+NA.182           NA       NA         NA     NA     NA    NA       NA     NA
+NA.183           NA       NA         NA     NA     NA    NA       NA     NA
+NA.184           NA       NA         NA     NA     NA    NA       NA     NA
+NA.185           NA       NA         NA     NA     NA    NA       NA     NA
+NA.186           NA       NA         NA     NA     NA    NA       NA     NA
+NA.187           NA       NA         NA     NA     NA    NA       NA     NA
+NA.188           NA       NA         NA     NA     NA    NA       NA     NA
+NA.189           NA       NA         NA     NA     NA    NA       NA     NA
+NA.190           NA       NA         NA     NA     NA    NA       NA     NA
+NA.191           NA       NA         NA     NA     NA    NA       NA     NA
+NA.192           NA       NA         NA     NA     NA    NA       NA     NA
+NA.193           NA       NA         NA     NA     NA    NA       NA     NA
+NA.194           NA       NA         NA     NA     NA    NA       NA     NA
+NA.195           NA       NA         NA     NA     NA    NA       NA     NA
+NA.196           NA       NA         NA     NA     NA    NA       NA     NA
+NA.197           NA       NA         NA     NA     NA    NA       NA     NA
+NA.198           NA       NA         NA     NA     NA    NA       NA     NA
+NA.199           NA       NA         NA     NA     NA    NA       NA     NA
+NA.200           NA       NA         NA     NA     NA    NA       NA     NA
+NA.201           NA       NA         NA     NA     NA    NA       NA     NA
+NA.202           NA       NA         NA     NA     NA    NA       NA     NA
+NA.203           NA       NA         NA     NA     NA    NA       NA     NA
+NA.204           NA       NA         NA     NA     NA    NA       NA     NA
+NA.205           NA       NA         NA     NA     NA    NA       NA     NA
+NA.206           NA       NA         NA     NA     NA    NA       NA     NA
+NA.207           NA       NA         NA     NA     NA    NA       NA     NA
+NA.208           NA       NA         NA     NA     NA    NA       NA     NA
+NA.209           NA       NA         NA     NA     NA    NA       NA     NA
+NA.210           NA       NA         NA     NA     NA    NA       NA     NA
+NA.211           NA       NA         NA     NA     NA    NA       NA     NA
+NA.212           NA       NA         NA     NA     NA    NA       NA     NA
+NA.213           NA       NA         NA     NA     NA    NA       NA     NA
+NA.214           NA       NA         NA     NA     NA    NA       NA     NA
+NA.215           NA       NA         NA     NA     NA    NA       NA     NA
+NA.216           NA       NA         NA     NA     NA    NA       NA     NA
+NA.217           NA       NA         NA     NA     NA    NA       NA     NA
+NA.218           NA       NA         NA     NA     NA    NA       NA     NA
+NA.219           NA       NA         NA     NA     NA    NA       NA     NA
+NA.220           NA       NA         NA     NA     NA    NA       NA     NA
+NA.221           NA       NA         NA     NA     NA    NA       NA     NA
+NA.222           NA       NA         NA     NA     NA    NA       NA     NA
+NA.223           NA       NA         NA     NA     NA    NA       NA     NA
+NA.224           NA       NA         NA     NA     NA    NA       NA     NA
+NA.225           NA       NA         NA     NA     NA    NA       NA     NA
+NA.226           NA       NA         NA     NA     NA    NA       NA     NA
+NA.227           NA       NA         NA     NA     NA    NA       NA     NA
+NA.228           NA       NA         NA     NA     NA    NA       NA     NA
+NA.229           NA       NA         NA     NA     NA    NA       NA     NA
+NA.230           NA       NA         NA     NA     NA    NA       NA     NA
+NA.231           NA       NA         NA     NA     NA    NA       NA     NA
+NA.232           NA       NA         NA     NA     NA    NA       NA     NA
+NA.233           NA       NA         NA     NA     NA    NA       NA     NA
+NA.234           NA       NA         NA     NA     NA    NA       NA     NA
+NA.235           NA       NA         NA     NA     NA    NA       NA     NA
+NA.236           NA       NA         NA     NA     NA    NA       NA     NA
+NA.237           NA       NA         NA     NA     NA    NA       NA     NA
+NA.238           NA       NA         NA     NA     NA    NA       NA     NA
+NA.239           NA       NA         NA     NA     NA    NA       NA     NA
+NA.240           NA       NA         NA     NA     NA    NA       NA     NA
+NA.241           NA       NA         NA     NA     NA    NA       NA     NA
+NA.242           NA       NA         NA     NA     NA    NA       NA     NA
+NA.243           NA       NA         NA     NA     NA    NA       NA     NA
+NA.244           NA       NA         NA     NA     NA    NA       NA     NA
+NA.245           NA       NA         NA     NA     NA    NA       NA     NA
+NA.246           NA       NA         NA     NA     NA    NA       NA     NA
+NA.247           NA       NA         NA     NA     NA    NA       NA     NA
+NA.248           NA       NA         NA     NA     NA    NA       NA     NA
+NA.249           NA       NA         NA     NA     NA    NA       NA     NA
+NA.250           NA       NA         NA     NA     NA    NA       NA     NA
+NA.251           NA       NA         NA     NA     NA    NA       NA     NA
+NA.252           NA       NA         NA     NA     NA    NA       NA     NA
+NA.253           NA       NA         NA     NA     NA    NA       NA     NA
+NA.254           NA       NA         NA     NA     NA    NA       NA     NA
+NA.255           NA       NA         NA     NA     NA    NA       NA     NA
+NA.256           NA       NA         NA     NA     NA    NA       NA     NA
+NA.257           NA       NA         NA     NA     NA    NA       NA     NA
+NA.258           NA       NA         NA     NA     NA    NA       NA     NA
+NA.259           NA       NA         NA     NA     NA    NA       NA     NA
+NA.260           NA       NA         NA     NA     NA    NA       NA     NA
+NA.261           NA       NA         NA     NA     NA    NA       NA     NA
+NA.262           NA       NA         NA     NA     NA    NA       NA     NA
+NA.263           NA       NA         NA     NA     NA    NA       NA     NA
+NA.264           NA       NA         NA     NA     NA    NA       NA     NA
+NA.265           NA       NA         NA     NA     NA    NA       NA     NA
+NA.266           NA       NA         NA     NA     NA    NA       NA     NA
+NA.267           NA       NA         NA     NA     NA    NA       NA     NA
+NA.268           NA       NA         NA     NA     NA    NA       NA     NA
+NA.269           NA       NA         NA     NA     NA    NA       NA     NA
+NA.270           NA       NA         NA     NA     NA    NA       NA     NA
+NA.271           NA       NA         NA     NA     NA    NA       NA     NA
+NA.272           NA       NA         NA     NA     NA    NA       NA     NA
+NA.273           NA       NA         NA     NA     NA    NA       NA     NA
+NA.274           NA       NA         NA     NA     NA    NA       NA     NA
+NA.275           NA       NA         NA     NA     NA    NA       NA     NA
+NA.276           NA       NA         NA     NA     NA    NA       NA     NA
+NA.277           NA       NA         NA     NA     NA    NA       NA     NA
+NA.278           NA       NA         NA     NA     NA    NA       NA     NA
+NA.279           NA       NA         NA     NA     NA    NA       NA     NA
+NA.280           NA       NA         NA     NA     NA    NA       NA     NA
+NA.281           NA       NA         NA     NA     NA    NA       NA     NA
+NA.282           NA       NA         NA     NA     NA    NA       NA     NA
+NA.283           NA       NA         NA     NA     NA    NA       NA     NA
+NA.284           NA       NA         NA     NA     NA    NA       NA     NA
+NA.285           NA       NA         NA     NA     NA    NA       NA     NA
+NA.286           NA       NA         NA     NA     NA    NA       NA     NA
+NA.287           NA       NA         NA     NA     NA    NA       NA     NA
+NA.288           NA       NA         NA     NA     NA    NA       NA     NA
+NA.289           NA       NA         NA     NA     NA    NA       NA     NA
+NA.290           NA       NA         NA     NA     NA    NA       NA     NA
+NA.291           NA       NA         NA     NA     NA    NA       NA     NA
+NA.292           NA       NA         NA     NA     NA    NA       NA     NA
+NA.293           NA       NA         NA     NA     NA    NA       NA     NA
+NA.294           NA       NA         NA     NA     NA    NA       NA     NA
+NA.295           NA       NA         NA     NA     NA    NA       NA     NA
+NA.296           NA       NA         NA     NA     NA    NA       NA     NA
+NA.297           NA       NA         NA     NA     NA    NA       NA     NA
+NA.298           NA       NA         NA     NA     NA    NA       NA     NA
+NA.299           NA       NA         NA     NA     NA    NA       NA     NA
+NA.300           NA       NA         NA     NA     NA    NA       NA     NA
+NA.301           NA       NA         NA     NA     NA    NA       NA     NA
+NA.302           NA       NA         NA     NA     NA    NA       NA     NA
+NA.303           NA       NA         NA     NA     NA    NA       NA     NA
+NA.304           NA       NA         NA     NA     NA    NA       NA     NA
+NA.305           NA       NA         NA     NA     NA    NA       NA     NA
+NA.306           NA       NA         NA     NA     NA    NA       NA     NA
+NA.307           NA       NA         NA     NA     NA    NA       NA     NA
+NA.308           NA       NA         NA     NA     NA    NA       NA     NA
+NA.309           NA       NA         NA     NA     NA    NA       NA     NA
+NA.310           NA       NA         NA     NA     NA    NA       NA     NA
+NA.311           NA       NA         NA     NA     NA    NA       NA     NA
+NA.312           NA       NA         NA     NA     NA    NA       NA     NA
+NA.313           NA       NA         NA     NA     NA    NA       NA     NA
+NA.314           NA       NA         NA     NA     NA    NA       NA     NA
+NA.315           NA       NA         NA     NA     NA    NA       NA     NA
+NA.316           NA       NA         NA     NA     NA    NA       NA     NA
+NA.317           NA       NA         NA     NA     NA    NA       NA     NA
+NA.318           NA       NA         NA     NA     NA    NA       NA     NA
+NA.319           NA       NA         NA     NA     NA    NA       NA     NA
+NA.320           NA       NA         NA     NA     NA    NA       NA     NA
+NA.321           NA       NA         NA     NA     NA    NA       NA     NA
+NA.322           NA       NA         NA     NA     NA    NA       NA     NA
+NA.323           NA       NA         NA     NA     NA    NA       NA     NA
+NA.324           NA       NA         NA     NA     NA    NA       NA     NA
+NA.325           NA       NA         NA     NA     NA    NA       NA     NA
+NA.326           NA       NA         NA     NA     NA    NA       NA     NA
+NA.327           NA       NA         NA     NA     NA    NA       NA     NA
+NA.328           NA       NA         NA     NA     NA    NA       NA     NA
+NA.329           NA       NA         NA     NA     NA    NA       NA     NA
+NA.330           NA       NA         NA     NA     NA    NA       NA     NA
+       seqno_shed drec_shed upslope initial_shed row col missing buffer
+150           105       104      21            1  12   7   FALSE  FALSE
+151           106       105      15            1  12   8   FALSE  FALSE
+152           107       106      10            1  12   9   FALSE  FALSE
+153           108       107       6            1  12  10   FALSE  FALSE
+154           109       108       3            1  12  11   FALSE  FALSE
+155           110       109       1            1  12  12   FALSE  FALSE
+156            35        NA       0           NA  12  13      NA   TRUE
+157            36        NA       0           NA  13   1      NA   TRUE
+158            37        NA       0           NA  13   2      NA   TRUE
+159            38        NA       0           NA  13   3      NA   TRUE
+160            39        NA       0           NA  13   4      NA   TRUE
+161            40        NA       0           NA  13   5      NA   TRUE
+162            41        NA       0           NA  13   6      NA   TRUE
+163            42        NA       0           NA  13   7      NA   TRUE
+164            43        NA       0           NA  13   8      NA   TRUE
+165            44        NA       0           NA  13   9      NA   TRUE
+166            45        NA       0           NA  13  10      NA   TRUE
+167            46        NA       0           NA  13  11      NA   TRUE
+168            47        NA       0           NA  13  12      NA   TRUE
+169            48        NA       0           NA  13  13      NA   TRUE
+NA             NA        NA      NA           NA  NA  NA      NA     NA
+NA.1           NA        NA      NA           NA  NA  NA      NA     NA
+NA.2           NA        NA      NA           NA  NA  NA      NA     NA
+NA.3           NA        NA      NA           NA  NA  NA      NA     NA
+NA.4           NA        NA      NA           NA  NA  NA      NA     NA
+NA.5           NA        NA      NA           NA  NA  NA      NA     NA
+NA.6           NA        NA      NA           NA  NA  NA      NA     NA
+NA.7           NA        NA      NA           NA  NA  NA      NA     NA
+NA.8           NA        NA      NA           NA  NA  NA      NA     NA
+NA.9           NA        NA      NA           NA  NA  NA      NA     NA
+NA.10          NA        NA      NA           NA  NA  NA      NA     NA
+NA.11          NA        NA      NA           NA  NA  NA      NA     NA
+NA.12          NA        NA      NA           NA  NA  NA      NA     NA
+NA.13          NA        NA      NA           NA  NA  NA      NA     NA
+NA.14          NA        NA      NA           NA  NA  NA      NA     NA
+NA.15          NA        NA      NA           NA  NA  NA      NA     NA
+NA.16          NA        NA      NA           NA  NA  NA      NA     NA
+NA.17          NA        NA      NA           NA  NA  NA      NA     NA
+NA.18          NA        NA      NA           NA  NA  NA      NA     NA
+NA.19          NA        NA      NA           NA  NA  NA      NA     NA
+NA.20          NA        NA      NA           NA  NA  NA      NA     NA
+NA.21          NA        NA      NA           NA  NA  NA      NA     NA
+NA.22          NA        NA      NA           NA  NA  NA      NA     NA
+NA.23          NA        NA      NA           NA  NA  NA      NA     NA
+NA.24          NA        NA      NA           NA  NA  NA      NA     NA
+NA.25          NA        NA      NA           NA  NA  NA      NA     NA
+NA.26          NA        NA      NA           NA  NA  NA      NA     NA
+NA.27          NA        NA      NA           NA  NA  NA      NA     NA
+NA.28          NA        NA      NA           NA  NA  NA      NA     NA
+NA.29          NA        NA      NA           NA  NA  NA      NA     NA
+NA.30          NA        NA      NA           NA  NA  NA      NA     NA
+NA.31          NA        NA      NA           NA  NA  NA      NA     NA
+NA.32          NA        NA      NA           NA  NA  NA      NA     NA
+NA.33          NA        NA      NA           NA  NA  NA      NA     NA
+NA.34          NA        NA      NA           NA  NA  NA      NA     NA
+NA.35          NA        NA      NA           NA  NA  NA      NA     NA
+NA.36          NA        NA      NA           NA  NA  NA      NA     NA
+NA.37          NA        NA      NA           NA  NA  NA      NA     NA
+NA.38          NA        NA      NA           NA  NA  NA      NA     NA
+NA.39          NA        NA      NA           NA  NA  NA      NA     NA
+NA.40          NA        NA      NA           NA  NA  NA      NA     NA
+NA.41          NA        NA      NA           NA  NA  NA      NA     NA
+NA.42          NA        NA      NA           NA  NA  NA      NA     NA
+NA.43          NA        NA      NA           NA  NA  NA      NA     NA
+NA.44          NA        NA      NA           NA  NA  NA      NA     NA
+NA.45          NA        NA      NA           NA  NA  NA      NA     NA
+NA.46          NA        NA      NA           NA  NA  NA      NA     NA
+NA.47          NA        NA      NA           NA  NA  NA      NA     NA
+NA.48          NA        NA      NA           NA  NA  NA      NA     NA
+NA.49          NA        NA      NA           NA  NA  NA      NA     NA
+NA.50          NA        NA      NA           NA  NA  NA      NA     NA
+NA.51          NA        NA      NA           NA  NA  NA      NA     NA
+NA.52          NA        NA      NA           NA  NA  NA      NA     NA
+NA.53          NA        NA      NA           NA  NA  NA      NA     NA
+NA.54          NA        NA      NA           NA  NA  NA      NA     NA
+NA.55          NA        NA      NA           NA  NA  NA      NA     NA
+NA.56          NA        NA      NA           NA  NA  NA      NA     NA
+NA.57          NA        NA      NA           NA  NA  NA      NA     NA
+NA.58          NA        NA      NA           NA  NA  NA      NA     NA
+NA.59          NA        NA      NA           NA  NA  NA      NA     NA
+NA.60          NA        NA      NA           NA  NA  NA      NA     NA
+NA.61          NA        NA      NA           NA  NA  NA      NA     NA
+NA.62          NA        NA      NA           NA  NA  NA      NA     NA
+NA.63          NA        NA      NA           NA  NA  NA      NA     NA
+NA.64          NA        NA      NA           NA  NA  NA      NA     NA
+NA.65          NA        NA      NA           NA  NA  NA      NA     NA
+NA.66          NA        NA      NA           NA  NA  NA      NA     NA
+NA.67          NA        NA      NA           NA  NA  NA      NA     NA
+NA.68          NA        NA      NA           NA  NA  NA      NA     NA
+NA.69          NA        NA      NA           NA  NA  NA      NA     NA
+NA.70          NA        NA      NA           NA  NA  NA      NA     NA
+NA.71          NA        NA      NA           NA  NA  NA      NA     NA
+NA.72          NA        NA      NA           NA  NA  NA      NA     NA
+NA.73          NA        NA      NA           NA  NA  NA      NA     NA
+NA.74          NA        NA      NA           NA  NA  NA      NA     NA
+NA.75          NA        NA      NA           NA  NA  NA      NA     NA
+NA.76          NA        NA      NA           NA  NA  NA      NA     NA
+NA.77          NA        NA      NA           NA  NA  NA      NA     NA
+NA.78          NA        NA      NA           NA  NA  NA      NA     NA
+NA.79          NA        NA      NA           NA  NA  NA      NA     NA
+NA.80          NA        NA      NA           NA  NA  NA      NA     NA
+NA.81          NA        NA      NA           NA  NA  NA      NA     NA
+NA.82          NA        NA      NA           NA  NA  NA      NA     NA
+NA.83          NA        NA      NA           NA  NA  NA      NA     NA
+NA.84          NA        NA      NA           NA  NA  NA      NA     NA
+NA.85          NA        NA      NA           NA  NA  NA      NA     NA
+NA.86          NA        NA      NA           NA  NA  NA      NA     NA
+NA.87          NA        NA      NA           NA  NA  NA      NA     NA
+NA.88          NA        NA      NA           NA  NA  NA      NA     NA
+NA.89          NA        NA      NA           NA  NA  NA      NA     NA
+NA.90          NA        NA      NA           NA  NA  NA      NA     NA
+NA.91          NA        NA      NA           NA  NA  NA      NA     NA
+NA.92          NA        NA      NA           NA  NA  NA      NA     NA
+NA.93          NA        NA      NA           NA  NA  NA      NA     NA
+NA.94          NA        NA      NA           NA  NA  NA      NA     NA
+NA.95          NA        NA      NA           NA  NA  NA      NA     NA
+NA.96          NA        NA      NA           NA  NA  NA      NA     NA
+NA.97          NA        NA      NA           NA  NA  NA      NA     NA
+NA.98          NA        NA      NA           NA  NA  NA      NA     NA
+NA.99          NA        NA      NA           NA  NA  NA      NA     NA
+NA.100         NA        NA      NA           NA  NA  NA      NA     NA
+NA.101         NA        NA      NA           NA  NA  NA      NA     NA
+NA.102         NA        NA      NA           NA  NA  NA      NA     NA
+NA.103         NA        NA      NA           NA  NA  NA      NA     NA
+NA.104         NA        NA      NA           NA  NA  NA      NA     NA
+NA.105         NA        NA      NA           NA  NA  NA      NA     NA
+NA.106         NA        NA      NA           NA  NA  NA      NA     NA
+NA.107         NA        NA      NA           NA  NA  NA      NA     NA
+NA.108         NA        NA      NA           NA  NA  NA      NA     NA
+NA.109         NA        NA      NA           NA  NA  NA      NA     NA
+NA.110         NA        NA      NA           NA  NA  NA      NA     NA
+NA.111         NA        NA      NA           NA  NA  NA      NA     NA
+NA.112         NA        NA      NA           NA  NA  NA      NA     NA
+NA.113         NA        NA      NA           NA  NA  NA      NA     NA
+NA.114         NA        NA      NA           NA  NA  NA      NA     NA
+NA.115         NA        NA      NA           NA  NA  NA      NA     NA
+NA.116         NA        NA      NA           NA  NA  NA      NA     NA
+NA.117         NA        NA      NA           NA  NA  NA      NA     NA
+NA.118         NA        NA      NA           NA  NA  NA      NA     NA
+NA.119         NA        NA      NA           NA  NA  NA      NA     NA
+NA.120         NA        NA      NA           NA  NA  NA      NA     NA
+NA.121         NA        NA      NA           NA  NA  NA      NA     NA
+NA.122         NA        NA      NA           NA  NA  NA      NA     NA
+NA.123         NA        NA      NA           NA  NA  NA      NA     NA
+NA.124         NA        NA      NA           NA  NA  NA      NA     NA
+NA.125         NA        NA      NA           NA  NA  NA      NA     NA
+NA.126         NA        NA      NA           NA  NA  NA      NA     NA
+NA.127         NA        NA      NA           NA  NA  NA      NA     NA
+NA.128         NA        NA      NA           NA  NA  NA      NA     NA
+NA.129         NA        NA      NA           NA  NA  NA      NA     NA
+NA.130         NA        NA      NA           NA  NA  NA      NA     NA
+NA.131         NA        NA      NA           NA  NA  NA      NA     NA
+NA.132         NA        NA      NA           NA  NA  NA      NA     NA
+NA.133         NA        NA      NA           NA  NA  NA      NA     NA
+NA.134         NA        NA      NA           NA  NA  NA      NA     NA
+NA.135         NA        NA      NA           NA  NA  NA      NA     NA
+NA.136         NA        NA      NA           NA  NA  NA      NA     NA
+NA.137         NA        NA      NA           NA  NA  NA      NA     NA
+NA.138         NA        NA      NA           NA  NA  NA      NA     NA
+NA.139         NA        NA      NA           NA  NA  NA      NA     NA
+NA.140         NA        NA      NA           NA  NA  NA      NA     NA
+NA.141         NA        NA      NA           NA  NA  NA      NA     NA
+NA.142         NA        NA      NA           NA  NA  NA      NA     NA
+NA.143         NA        NA      NA           NA  NA  NA      NA     NA
+NA.144         NA        NA      NA           NA  NA  NA      NA     NA
+NA.145         NA        NA      NA           NA  NA  NA      NA     NA
+NA.146         NA        NA      NA           NA  NA  NA      NA     NA
+NA.147         NA        NA      NA           NA  NA  NA      NA     NA
+NA.148         NA        NA      NA           NA  NA  NA      NA     NA
+NA.149         NA        NA      NA           NA  NA  NA      NA     NA
+NA.150         NA        NA      NA           NA  NA  NA      NA     NA
+NA.151         NA        NA      NA           NA  NA  NA      NA     NA
+NA.152         NA        NA      NA           NA  NA  NA      NA     NA
+NA.153         NA        NA      NA           NA  NA  NA      NA     NA
+NA.154         NA        NA      NA           NA  NA  NA      NA     NA
+NA.155         NA        NA      NA           NA  NA  NA      NA     NA
+NA.156         NA        NA      NA           NA  NA  NA      NA     NA
+NA.157         NA        NA      NA           NA  NA  NA      NA     NA
+NA.158         NA        NA      NA           NA  NA  NA      NA     NA
+NA.159         NA        NA      NA           NA  NA  NA      NA     NA
+NA.160         NA        NA      NA           NA  NA  NA      NA     NA
+NA.161         NA        NA      NA           NA  NA  NA      NA     NA
+NA.162         NA        NA      NA           NA  NA  NA      NA     NA
+NA.163         NA        NA      NA           NA  NA  NA      NA     NA
+NA.164         NA        NA      NA           NA  NA  NA      NA     NA
+NA.165         NA        NA      NA           NA  NA  NA      NA     NA
+NA.166         NA        NA      NA           NA  NA  NA      NA     NA
+NA.167         NA        NA      NA           NA  NA  NA      NA     NA
+NA.168         NA        NA      NA           NA  NA  NA      NA     NA
+NA.169         NA        NA      NA           NA  NA  NA      NA     NA
+NA.170         NA        NA      NA           NA  NA  NA      NA     NA
+NA.171         NA        NA      NA           NA  NA  NA      NA     NA
+NA.172         NA        NA      NA           NA  NA  NA      NA     NA
+NA.173         NA        NA      NA           NA  NA  NA      NA     NA
+NA.174         NA        NA      NA           NA  NA  NA      NA     NA
+NA.175         NA        NA      NA           NA  NA  NA      NA     NA
+NA.176         NA        NA      NA           NA  NA  NA      NA     NA
+NA.177         NA        NA      NA           NA  NA  NA      NA     NA
+NA.178         NA        NA      NA           NA  NA  NA      NA     NA
+NA.179         NA        NA      NA           NA  NA  NA      NA     NA
+NA.180         NA        NA      NA           NA  NA  NA      NA     NA
+NA.181         NA        NA      NA           NA  NA  NA      NA     NA
+NA.182         NA        NA      NA           NA  NA  NA      NA     NA
+NA.183         NA        NA      NA           NA  NA  NA      NA     NA
+NA.184         NA        NA      NA           NA  NA  NA      NA     NA
+NA.185         NA        NA      NA           NA  NA  NA      NA     NA
+NA.186         NA        NA      NA           NA  NA  NA      NA     NA
+NA.187         NA        NA      NA           NA  NA  NA      NA     NA
+NA.188         NA        NA      NA           NA  NA  NA      NA     NA
+NA.189         NA        NA      NA           NA  NA  NA      NA     NA
+NA.190         NA        NA      NA           NA  NA  NA      NA     NA
+NA.191         NA        NA      NA           NA  NA  NA      NA     NA
+NA.192         NA        NA      NA           NA  NA  NA      NA     NA
+NA.193         NA        NA      NA           NA  NA  NA      NA     NA
+NA.194         NA        NA      NA           NA  NA  NA      NA     NA
+NA.195         NA        NA      NA           NA  NA  NA      NA     NA
+NA.196         NA        NA      NA           NA  NA  NA      NA     NA
+NA.197         NA        NA      NA           NA  NA  NA      NA     NA
+NA.198         NA        NA      NA           NA  NA  NA      NA     NA
+NA.199         NA        NA      NA           NA  NA  NA      NA     NA
+NA.200         NA        NA      NA           NA  NA  NA      NA     NA
+NA.201         NA        NA      NA           NA  NA  NA      NA     NA
+NA.202         NA        NA      NA           NA  NA  NA      NA     NA
+NA.203         NA        NA      NA           NA  NA  NA      NA     NA
+NA.204         NA        NA      NA           NA  NA  NA      NA     NA
+NA.205         NA        NA      NA           NA  NA  NA      NA     NA
+NA.206         NA        NA      NA           NA  NA  NA      NA     NA
+NA.207         NA        NA      NA           NA  NA  NA      NA     NA
+NA.208         NA        NA      NA           NA  NA  NA      NA     NA
+NA.209         NA        NA      NA           NA  NA  NA      NA     NA
+NA.210         NA        NA      NA           NA  NA  NA      NA     NA
+NA.211         NA        NA      NA           NA  NA  NA      NA     NA
+NA.212         NA        NA      NA           NA  NA  NA      NA     NA
+NA.213         NA        NA      NA           NA  NA  NA      NA     NA
+NA.214         NA        NA      NA           NA  NA  NA      NA     NA
+NA.215         NA        NA      NA           NA  NA  NA      NA     NA
+NA.216         NA        NA      NA           NA  NA  NA      NA     NA
+NA.217         NA        NA      NA           NA  NA  NA      NA     NA
+NA.218         NA        NA      NA           NA  NA  NA      NA     NA
+NA.219         NA        NA      NA           NA  NA  NA      NA     NA
+NA.220         NA        NA      NA           NA  NA  NA      NA     NA
+NA.221         NA        NA      NA           NA  NA  NA      NA     NA
+NA.222         NA        NA      NA           NA  NA  NA      NA     NA
+NA.223         NA        NA      NA           NA  NA  NA      NA     NA
+NA.224         NA        NA      NA           NA  NA  NA      NA     NA
+NA.225         NA        NA      NA           NA  NA  NA      NA     NA
+NA.226         NA        NA      NA           NA  NA  NA      NA     NA
+NA.227         NA        NA      NA           NA  NA  NA      NA     NA
+NA.228         NA        NA      NA           NA  NA  NA      NA     NA
+NA.229         NA        NA      NA           NA  NA  NA      NA     NA
+NA.230         NA        NA      NA           NA  NA  NA      NA     NA
+NA.231         NA        NA      NA           NA  NA  NA      NA     NA
+NA.232         NA        NA      NA           NA  NA  NA      NA     NA
+NA.233         NA        NA      NA           NA  NA  NA      NA     NA
+NA.234         NA        NA      NA           NA  NA  NA      NA     NA
+NA.235         NA        NA      NA           NA  NA  NA      NA     NA
+NA.236         NA        NA      NA           NA  NA  NA      NA     NA
+NA.237         NA        NA      NA           NA  NA  NA      NA     NA
+NA.238         NA        NA      NA           NA  NA  NA      NA     NA
+NA.239         NA        NA      NA           NA  NA  NA      NA     NA
+NA.240         NA        NA      NA           NA  NA  NA      NA     NA
+NA.241         NA        NA      NA           NA  NA  NA      NA     NA
+NA.242         NA        NA      NA           NA  NA  NA      NA     NA
+NA.243         NA        NA      NA           NA  NA  NA      NA     NA
+NA.244         NA        NA      NA           NA  NA  NA      NA     NA
+NA.245         NA        NA      NA           NA  NA  NA      NA     NA
+NA.246         NA        NA      NA           NA  NA  NA      NA     NA
+NA.247         NA        NA      NA           NA  NA  NA      NA     NA
+NA.248         NA        NA      NA           NA  NA  NA      NA     NA
+NA.249         NA        NA      NA           NA  NA  NA      NA     NA
+NA.250         NA        NA      NA           NA  NA  NA      NA     NA
+NA.251         NA        NA      NA           NA  NA  NA      NA     NA
+NA.252         NA        NA      NA           NA  NA  NA      NA     NA
+NA.253         NA        NA      NA           NA  NA  NA      NA     NA
+NA.254         NA        NA      NA           NA  NA  NA      NA     NA
+NA.255         NA        NA      NA           NA  NA  NA      NA     NA
+NA.256         NA        NA      NA           NA  NA  NA      NA     NA
+NA.257         NA        NA      NA           NA  NA  NA      NA     NA
+NA.258         NA        NA      NA           NA  NA  NA      NA     NA
+NA.259         NA        NA      NA           NA  NA  NA      NA     NA
+NA.260         NA        NA      NA           NA  NA  NA      NA     NA
+NA.261         NA        NA      NA           NA  NA  NA      NA     NA
+NA.262         NA        NA      NA           NA  NA  NA      NA     NA
+NA.263         NA        NA      NA           NA  NA  NA      NA     NA
+NA.264         NA        NA      NA           NA  NA  NA      NA     NA
+NA.265         NA        NA      NA           NA  NA  NA      NA     NA
+NA.266         NA        NA      NA           NA  NA  NA      NA     NA
+NA.267         NA        NA      NA           NA  NA  NA      NA     NA
+NA.268         NA        NA      NA           NA  NA  NA      NA     NA
+NA.269         NA        NA      NA           NA  NA  NA      NA     NA
+NA.270         NA        NA      NA           NA  NA  NA      NA     NA
+NA.271         NA        NA      NA           NA  NA  NA      NA     NA
+NA.272         NA        NA      NA           NA  NA  NA      NA     NA
+NA.273         NA        NA      NA           NA  NA  NA      NA     NA
+NA.274         NA        NA      NA           NA  NA  NA      NA     NA
+NA.275         NA        NA      NA           NA  NA  NA      NA     NA
+NA.276         NA        NA      NA           NA  NA  NA      NA     NA
+NA.277         NA        NA      NA           NA  NA  NA      NA     NA
+NA.278         NA        NA      NA           NA  NA  NA      NA     NA
+NA.279         NA        NA      NA           NA  NA  NA      NA     NA
+NA.280         NA        NA      NA           NA  NA  NA      NA     NA
+NA.281         NA        NA      NA           NA  NA  NA      NA     NA
+NA.282         NA        NA      NA           NA  NA  NA      NA     NA
+NA.283         NA        NA      NA           NA  NA  NA      NA     NA
+NA.284         NA        NA      NA           NA  NA  NA      NA     NA
+NA.285         NA        NA      NA           NA  NA  NA      NA     NA
+NA.286         NA        NA      NA           NA  NA  NA      NA     NA
+NA.287         NA        NA      NA           NA  NA  NA      NA     NA
+NA.288         NA        NA      NA           NA  NA  NA      NA     NA
+NA.289         NA        NA      NA           NA  NA  NA      NA     NA
+NA.290         NA        NA      NA           NA  NA  NA      NA     NA
+NA.291         NA        NA      NA           NA  NA  NA      NA     NA
+NA.292         NA        NA      NA           NA  NA  NA      NA     NA
+NA.293         NA        NA      NA           NA  NA  NA      NA     NA
+NA.294         NA        NA      NA           NA  NA  NA      NA     NA
+NA.295         NA        NA      NA           NA  NA  NA      NA     NA
+NA.296         NA        NA      NA           NA  NA  NA      NA     NA
+NA.297         NA        NA      NA           NA  NA  NA      NA     NA
+NA.298         NA        NA      NA           NA  NA  NA      NA     NA
+NA.299         NA        NA      NA           NA  NA  NA      NA     NA
+NA.300         NA        NA      NA           NA  NA  NA      NA     NA
+NA.301         NA        NA      NA           NA  NA  NA      NA     NA
+NA.302         NA        NA      NA           NA  NA  NA      NA     NA
+NA.303         NA        NA      NA           NA  NA  NA      NA     NA
+NA.304         NA        NA      NA           NA  NA  NA      NA     NA
+NA.305         NA        NA      NA           NA  NA  NA      NA     NA
+NA.306         NA        NA      NA           NA  NA  NA      NA     NA
+NA.307         NA        NA      NA           NA  NA  NA      NA     NA
+NA.308         NA        NA      NA           NA  NA  NA      NA     NA
+NA.309         NA        NA      NA           NA  NA  NA      NA     NA
+NA.310         NA        NA      NA           NA  NA  NA      NA     NA
+NA.311         NA        NA      NA           NA  NA  NA      NA     NA
+NA.312         NA        NA      NA           NA  NA  NA      NA     NA
+NA.313         NA        NA      NA           NA  NA  NA      NA     NA
+NA.314         NA        NA      NA           NA  NA  NA      NA     NA
+NA.315         NA        NA      NA           NA  NA  NA      NA     NA
+NA.316         NA        NA      NA           NA  NA  NA      NA     NA
+NA.317         NA        NA      NA           NA  NA  NA      NA     NA
+NA.318         NA        NA      NA           NA  NA  NA      NA     NA
+NA.319         NA        NA      NA           NA  NA  NA      NA     NA
+NA.320         NA        NA      NA           NA  NA  NA      NA     NA
+NA.321         NA        NA      NA           NA  NA  NA      NA     NA
+NA.322         NA        NA      NA           NA  NA  NA      NA     NA
+NA.323         NA        NA      NA           NA  NA  NA      NA     NA
+NA.324         NA        NA      NA           NA  NA  NA      NA     NA
+NA.325         NA        NA      NA           NA  NA  NA      NA     NA
+NA.326         NA        NA      NA           NA  NA  NA      NA     NA
+NA.327         NA        NA      NA           NA  NA  NA      NA     NA
+NA.328         NA        NA      NA           NA  NA  NA      NA     NA
+NA.329         NA        NA      NA           NA  NA  NA      NA     NA
+NA.330         NA        NA      NA           NA  NA  NA      NA     NA
+       elev_orig edge_map ldir flatcell vol2fl mm2fl parea elev_diff local_shed
+150      99.6737     TRUE    4    FALSE      0     0     0    2.4111          1
+151      99.7247     TRUE    4    FALSE      0     0     0    1.7075          1
+152      99.7843     TRUE    4    FALSE      0     0     0    1.0973          1
+153      99.8512     TRUE    4    FALSE      0     0     0    0.5990          1
+154      99.9237     TRUE    4    FALSE      0     0     0    0.2289          1
+155     100.0000     TRUE    4    FALSE      0     0     0    0.0000          1
+156           NA     TRUE   NA       NA      0     0     0    0.0000         NA
+157           NA     TRUE   NA       NA      0     0     0    0.0000         NA
+158           NA     TRUE   NA       NA      0     0     0    0.0000         NA
+159           NA     TRUE   NA       NA      0     0     0    0.0000         NA
+160           NA     TRUE   NA       NA      0     0     0    0.0000         NA
+161           NA     TRUE   NA       NA      0     0     0    0.0000         NA
+162           NA     TRUE   NA       NA      0     0     0    0.0000         NA
+163           NA     TRUE   NA       NA      0     0     0    0.0000         NA
+164           NA     TRUE   NA       NA      0     0     0    0.0000         NA
+165           NA     TRUE   NA       NA      0     0     0    0.0000         NA
+166           NA     TRUE   NA       NA      0     0     0    0.0000         NA
+167           NA     TRUE   NA       NA      0     0     0    0.0000         NA
+168           NA     TRUE   NA       NA      0     0     0    0.0000         NA
+169           NA     TRUE   NA       NA      0     0     0    0.0000         NA
+NA            NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.1          NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.2          NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.3          NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.4          NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.5          NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.6          NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.7          NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.8          NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.9          NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.10         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.11         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.12         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.13         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.14         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.15         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.16         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.17         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.18         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.19         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.20         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.21         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.22         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.23         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.24         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.25         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.26         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.27         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.28         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.29         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.30         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.31         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.32         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.33         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.34         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.35         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.36         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.37         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.38         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.39         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.40         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.41         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.42         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.43         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.44         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.45         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.46         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.47         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.48         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.49         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.50         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.51         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.52         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.53         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.54         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.55         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.56         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.57         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.58         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.59         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.60         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.61         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.62         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.63         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.64         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.65         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.66         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.67         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.68         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.69         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.70         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.71         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.72         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.73         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.74         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.75         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.76         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.77         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.78         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.79         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.80         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.81         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.82         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.83         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.84         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.85         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.86         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.87         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.88         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.89         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.90         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.91         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.92         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.93         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.94         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.95         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.96         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.97         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.98         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.99         NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.100        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.101        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.102        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.103        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.104        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.105        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.106        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.107        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.108        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.109        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.110        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.111        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.112        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.113        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.114        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.115        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.116        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.117        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.118        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.119        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.120        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.121        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.122        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.123        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.124        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.125        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.126        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.127        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.128        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.129        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.130        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.131        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.132        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.133        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.134        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.135        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.136        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.137        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.138        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.139        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.140        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.141        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.142        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.143        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.144        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.145        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.146        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.147        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.148        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.149        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.150        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.151        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.152        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.153        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.154        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.155        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.156        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.157        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.158        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.159        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.160        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.161        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.162        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.163        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.164        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.165        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.166        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.167        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.168        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.169        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.170        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.171        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.172        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.173        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.174        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.175        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.176        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.177        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.178        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.179        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.180        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.181        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.182        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.183        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.184        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.185        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.186        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.187        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.188        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.189        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.190        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.191        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.192        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.193        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.194        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.195        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.196        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.197        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.198        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.199        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.200        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.201        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.202        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.203        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.204        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.205        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.206        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.207        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.208        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.209        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.210        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.211        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.212        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.213        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.214        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.215        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.216        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.217        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.218        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.219        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.220        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.221        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.222        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.223        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.224        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.225        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.226        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.227        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.228        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.229        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.230        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.231        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.232        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.233        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.234        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.235        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.236        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.237        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.238        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.239        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.240        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.241        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.242        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.243        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.244        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.245        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.246        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.247        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.248        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.249        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.250        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.251        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.252        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.253        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.254        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.255        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.256        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.257        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.258        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.259        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.260        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.261        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.262        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.263        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.264        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.265        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.266        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.267        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.268        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.269        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.270        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.271        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.272        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.273        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.274        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.275        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.276        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.277        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.278        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.279        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.280        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.281        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.282        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.283        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.284        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.285        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.286        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.287        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.288        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.289        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.290        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.291        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.292        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.293        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.294        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.295        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.296        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.297        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.298        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.299        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.300        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.301        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.302        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.303        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.304        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.305        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.306        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.307        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.308        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.309        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.310        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.311        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.312        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.313        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.314        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.315        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.316        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.317        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.318        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.319        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.320        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.321        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.322        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.323        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.324        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.325        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.326        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.327        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.328        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.329        NA       NA   NA       NA     NA    NA    NA        NA         NA
+NA.330        NA       NA   NA       NA     NA    NA    NA        NA         NA
+       local_elev_diff pond_shed fill_shed
+150             2.4111         1         1
+151             1.7075         1         1
+152             1.0973         1         1
+153             0.5990         1         1
+154             0.2289         1         1
+155             0.0000         1         1
+156             0.0000        NA        NA
+157             0.0000        NA        NA
+158             0.0000        NA        NA
+159             0.0000        NA        NA
+160             0.0000        NA        NA
+161             0.0000        NA        NA
+162             0.0000        NA        NA
+163             0.0000        NA        NA
+164             0.0000        NA        NA
+165             0.0000        NA        NA
+166             0.0000        NA        NA
+167             0.0000        NA        NA
+168             0.0000        NA        NA
+169             0.0000        NA        NA
+NA                  NA        NA        NA
+NA.1                NA        NA        NA
+NA.2                NA        NA        NA
+NA.3                NA        NA        NA
+NA.4                NA        NA        NA
+NA.5                NA        NA        NA
+NA.6                NA        NA        NA
+NA.7                NA        NA        NA
+NA.8                NA        NA        NA
+NA.9                NA        NA        NA
+NA.10               NA        NA        NA
+NA.11               NA        NA        NA
+NA.12               NA        NA        NA
+NA.13               NA        NA        NA
+NA.14               NA        NA        NA
+NA.15               NA        NA        NA
+NA.16               NA        NA        NA
+NA.17               NA        NA        NA
+NA.18               NA        NA        NA
+NA.19               NA        NA        NA
+NA.20               NA        NA        NA
+NA.21               NA        NA        NA
+NA.22               NA        NA        NA
+NA.23               NA        NA        NA
+NA.24               NA        NA        NA
+NA.25               NA        NA        NA
+NA.26               NA        NA        NA
+NA.27               NA        NA        NA
+NA.28               NA        NA        NA
+NA.29               NA        NA        NA
+NA.30               NA        NA        NA
+NA.31               NA        NA        NA
+NA.32               NA        NA        NA
+NA.33               NA        NA        NA
+NA.34               NA        NA        NA
+NA.35               NA        NA        NA
+NA.36               NA        NA        NA
+NA.37               NA        NA        NA
+NA.38               NA        NA        NA
+NA.39               NA        NA        NA
+NA.40               NA        NA        NA
+NA.41               NA        NA        NA
+NA.42               NA        NA        NA
+NA.43               NA        NA        NA
+NA.44               NA        NA        NA
+NA.45               NA        NA        NA
+NA.46               NA        NA        NA
+NA.47               NA        NA        NA
+NA.48               NA        NA        NA
+NA.49               NA        NA        NA
+NA.50               NA        NA        NA
+NA.51               NA        NA        NA
+NA.52               NA        NA        NA
+NA.53               NA        NA        NA
+NA.54               NA        NA        NA
+NA.55               NA        NA        NA
+NA.56               NA        NA        NA
+NA.57               NA        NA        NA
+NA.58               NA        NA        NA
+NA.59               NA        NA        NA
+NA.60               NA        NA        NA
+NA.61               NA        NA        NA
+NA.62               NA        NA        NA
+NA.63               NA        NA        NA
+NA.64               NA        NA        NA
+NA.65               NA        NA        NA
+NA.66               NA        NA        NA
+NA.67               NA        NA        NA
+NA.68               NA        NA        NA
+NA.69               NA        NA        NA
+NA.70               NA        NA        NA
+NA.71               NA        NA        NA
+NA.72               NA        NA        NA
+NA.73               NA        NA        NA
+NA.74               NA        NA        NA
+NA.75               NA        NA        NA
+NA.76               NA        NA        NA
+NA.77               NA        NA        NA
+NA.78               NA        NA        NA
+NA.79               NA        NA        NA
+NA.80               NA        NA        NA
+NA.81               NA        NA        NA
+NA.82               NA        NA        NA
+NA.83               NA        NA        NA
+NA.84               NA        NA        NA
+NA.85               NA        NA        NA
+NA.86               NA        NA        NA
+NA.87               NA        NA        NA
+NA.88               NA        NA        NA
+NA.89               NA        NA        NA
+NA.90               NA        NA        NA
+NA.91               NA        NA        NA
+NA.92               NA        NA        NA
+NA.93               NA        NA        NA
+NA.94               NA        NA        NA
+NA.95               NA        NA        NA
+NA.96               NA        NA        NA
+NA.97               NA        NA        NA
+NA.98               NA        NA        NA
+NA.99               NA        NA        NA
+NA.100              NA        NA        NA
+NA.101              NA        NA        NA
+NA.102              NA        NA        NA
+NA.103              NA        NA        NA
+NA.104              NA        NA        NA
+NA.105              NA        NA        NA
+NA.106              NA        NA        NA
+NA.107              NA        NA        NA
+NA.108              NA        NA        NA
+NA.109              NA        NA        NA
+NA.110              NA        NA        NA
+NA.111              NA        NA        NA
+NA.112              NA        NA        NA
+NA.113              NA        NA        NA
+NA.114              NA        NA        NA
+NA.115              NA        NA        NA
+NA.116              NA        NA        NA
+NA.117              NA        NA        NA
+NA.118              NA        NA        NA
+NA.119              NA        NA        NA
+NA.120              NA        NA        NA
+NA.121              NA        NA        NA
+NA.122              NA        NA        NA
+NA.123              NA        NA        NA
+NA.124              NA        NA        NA
+NA.125              NA        NA        NA
+NA.126              NA        NA        NA
+NA.127              NA        NA        NA
+NA.128              NA        NA        NA
+NA.129              NA        NA        NA
+NA.130              NA        NA        NA
+NA.131              NA        NA        NA
+NA.132              NA        NA        NA
+NA.133              NA        NA        NA
+NA.134              NA        NA        NA
+NA.135              NA        NA        NA
+NA.136              NA        NA        NA
+NA.137              NA        NA        NA
+NA.138              NA        NA        NA
+NA.139              NA        NA        NA
+NA.140              NA        NA        NA
+NA.141              NA        NA        NA
+NA.142              NA        NA        NA
+NA.143              NA        NA        NA
+NA.144              NA        NA        NA
+NA.145              NA        NA        NA
+NA.146              NA        NA        NA
+NA.147              NA        NA        NA
+NA.148              NA        NA        NA
+NA.149              NA        NA        NA
+NA.150              NA        NA        NA
+NA.151              NA        NA        NA
+NA.152              NA        NA        NA
+NA.153              NA        NA        NA
+NA.154              NA        NA        NA
+NA.155              NA        NA        NA
+NA.156              NA        NA        NA
+NA.157              NA        NA        NA
+NA.158              NA        NA        NA
+NA.159              NA        NA        NA
+NA.160              NA        NA        NA
+NA.161              NA        NA        NA
+NA.162              NA        NA        NA
+NA.163              NA        NA        NA
+NA.164              NA        NA        NA
+NA.165              NA        NA        NA
+NA.166              NA        NA        NA
+NA.167              NA        NA        NA
+NA.168              NA        NA        NA
+NA.169              NA        NA        NA
+NA.170              NA        NA        NA
+NA.171              NA        NA        NA
+NA.172              NA        NA        NA
+NA.173              NA        NA        NA
+NA.174              NA        NA        NA
+NA.175              NA        NA        NA
+NA.176              NA        NA        NA
+NA.177              NA        NA        NA
+NA.178              NA        NA        NA
+NA.179              NA        NA        NA
+NA.180              NA        NA        NA
+NA.181              NA        NA        NA
+NA.182              NA        NA        NA
+NA.183              NA        NA        NA
+NA.184              NA        NA        NA
+NA.185              NA        NA        NA
+NA.186              NA        NA        NA
+NA.187              NA        NA        NA
+NA.188              NA        NA        NA
+NA.189              NA        NA        NA
+NA.190              NA        NA        NA
+NA.191              NA        NA        NA
+NA.192              NA        NA        NA
+NA.193              NA        NA        NA
+NA.194              NA        NA        NA
+NA.195              NA        NA        NA
+NA.196              NA        NA        NA
+NA.197              NA        NA        NA
+NA.198              NA        NA        NA
+NA.199              NA        NA        NA
+NA.200              NA        NA        NA
+NA.201              NA        NA        NA
+NA.202              NA        NA        NA
+NA.203              NA        NA        NA
+NA.204              NA        NA        NA
+NA.205              NA        NA        NA
+NA.206              NA        NA        NA
+NA.207              NA        NA        NA
+NA.208              NA        NA        NA
+NA.209              NA        NA        NA
+NA.210              NA        NA        NA
+NA.211              NA        NA        NA
+NA.212              NA        NA        NA
+NA.213              NA        NA        NA
+NA.214              NA        NA        NA
+NA.215              NA        NA        NA
+NA.216              NA        NA        NA
+NA.217              NA        NA        NA
+NA.218              NA        NA        NA
+NA.219              NA        NA        NA
+NA.220              NA        NA        NA
+NA.221              NA        NA        NA
+NA.222              NA        NA        NA
+NA.223              NA        NA        NA
+NA.224              NA        NA        NA
+NA.225              NA        NA        NA
+NA.226              NA        NA        NA
+NA.227              NA        NA        NA
+NA.228              NA        NA        NA
+NA.229              NA        NA        NA
+NA.230              NA        NA        NA
+NA.231              NA        NA        NA
+NA.232              NA        NA        NA
+NA.233              NA        NA        NA
+NA.234              NA        NA        NA
+NA.235              NA        NA        NA
+NA.236              NA        NA        NA
+NA.237              NA        NA        NA
+NA.238              NA        NA        NA
+NA.239              NA        NA        NA
+NA.240              NA        NA        NA
+NA.241              NA        NA        NA
+NA.242              NA        NA        NA
+NA.243              NA        NA        NA
+NA.244              NA        NA        NA
+NA.245              NA        NA        NA
+NA.246              NA        NA        NA
+NA.247              NA        NA        NA
+NA.248              NA        NA        NA
+NA.249              NA        NA        NA
+NA.250              NA        NA        NA
+NA.251              NA        NA        NA
+NA.252              NA        NA        NA
+NA.253              NA        NA        NA
+NA.254              NA        NA        NA
+NA.255              NA        NA        NA
+NA.256              NA        NA        NA
+NA.257              NA        NA        NA
+NA.258              NA        NA        NA
+NA.259              NA        NA        NA
+NA.260              NA        NA        NA
+NA.261              NA        NA        NA
+NA.262              NA        NA        NA
+NA.263              NA        NA        NA
+NA.264              NA        NA        NA
+NA.265              NA        NA        NA
+NA.266              NA        NA        NA
+NA.267              NA        NA        NA
+NA.268              NA        NA        NA
+NA.269              NA        NA        NA
+NA.270              NA        NA        NA
+NA.271              NA        NA        NA
+NA.272              NA        NA        NA
+NA.273              NA        NA        NA
+NA.274              NA        NA        NA
+NA.275              NA        NA        NA
+NA.276              NA        NA        NA
+NA.277              NA        NA        NA
+NA.278              NA        NA        NA
+NA.279              NA        NA        NA
+NA.280              NA        NA        NA
+NA.281              NA        NA        NA
+NA.282              NA        NA        NA
+NA.283              NA        NA        NA
+NA.284              NA        NA        NA
+NA.285              NA        NA        NA
+NA.286              NA        NA        NA
+NA.287              NA        NA        NA
+NA.288              NA        NA        NA
+NA.289              NA        NA        NA
+NA.290              NA        NA        NA
+NA.291              NA        NA        NA
+NA.292              NA        NA        NA
+NA.293              NA        NA        NA
+NA.294              NA        NA        NA
+NA.295              NA        NA        NA
+NA.296              NA        NA        NA
+NA.297              NA        NA        NA
+NA.298              NA        NA        NA
+NA.299              NA        NA        NA
+NA.300              NA        NA        NA
+NA.301              NA        NA        NA
+NA.302              NA        NA        NA
+NA.303              NA        NA        NA
+NA.304              NA        NA        NA
+NA.305              NA        NA        NA
+NA.306              NA        NA        NA
+NA.307              NA        NA        NA
+NA.308              NA        NA        NA
+NA.309              NA        NA        NA
+NA.310              NA        NA        NA
+NA.311              NA        NA        NA
+NA.312              NA        NA        NA
+NA.313              NA        NA        NA
+NA.314              NA        NA        NA
+NA.315              NA        NA        NA
+NA.316              NA        NA        NA
+NA.317              NA        NA        NA
+NA.318              NA        NA        NA
+NA.319              NA        NA        NA
+NA.320              NA        NA        NA
+NA.321              NA        NA        NA
+NA.322              NA        NA        NA
+NA.323              NA        NA        NA
+NA.324              NA        NA        NA
+NA.325              NA        NA        NA
+NA.326              NA        NA        NA
+NA.327              NA        NA        NA
+NA.328              NA        NA        NA
+NA.329              NA        NA        NA
+NA.330              NA        NA        NA
