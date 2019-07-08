@@ -63,8 +63,17 @@ first_pitr1 <- function(db, max_area = 10, max_depth = 0.5, verbose = FALSE) {
     }
   }
 
+  if(verbose) message("\n")
+
+  # Update elev_diff
+  if(verbose) message("    Calculating elevation differences")
+  db <- calc_upslopes(db, type = "elev_diff")
+
   # Save as local_shed numbers
-  db <- dplyr::mutate(db, local_shed = shedno)
+  db <- dplyr::mutate(db,
+                      local_shed = shedno,
+                      local_ldir = ldir,
+                      local_elev_diff = elev_diff)
 
   return(db)
 }
@@ -196,6 +205,8 @@ second_pitr1 <- function(db, verbose = FALSE) {
   # Save as pond_shed numbers
   db <- dplyr::mutate(db, pond_shed = shedno)
 
+  if(verbose) message("\n")
+
   return(list("db" = db, "stats" = pond))
 }
 
@@ -222,8 +233,6 @@ third_pitr1 <- function(db, verbose = FALSE) {
 
     w_focal <- dplyr::filter(w_stats, shedno == w)
     w_drain <- dplyr::filter(w_stats, shedno == w_focal$drains_to)
-
-    # if(verbose) message("  Assessing ", w)
 
     if(w_focal$end_pit == w_drain$end_pit) {
       new_shed <- max(db$shedno, na.rm = TRUE) + 1
@@ -278,8 +287,7 @@ third_pitr1 <- function(db, verbose = FALSE) {
         dplyr::filter(mm2fl < w_focal$varatio) %>%
         dplyr::mutate(mm2fl = vol2fl/shed_area)
 
-      db[db_new$seqno, "mm2fl"] <-
-        db_new[, "mm2fl"]
+      db[db_new$seqno, "mm2fl"] <- db_new[, "mm2fl"]
 
     } else {
       finished <- c(finished, w_focal$shedno)
@@ -308,6 +316,12 @@ third_pitr1 <- function(db, verbose = FALSE) {
     dplyr::select(-drains_to_orig)
 
   db <- dplyr::mutate(db, fill_shed = shedno)
+
+  if(verbose) message("\n")
+
+  # Update elev_diff
+  if(verbose) message("    Calculating new elevation differences")
+  db <- calc_upslopes(db, type = "elev_diff")
 
   return(list("db" = db, "stats" = fill))
 }
