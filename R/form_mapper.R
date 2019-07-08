@@ -105,13 +105,13 @@ form_mapper <- function(folder, grid, str_val = 10000, ridge_val = 10000,
 
     db_form <- read_shed(out_locs$backup, "form")
     db_weti <- calc_weti(db, grid, verbose = verbose)
-    db_weti <- dplyr::full_join(db_form, db_weti,
+    db_form <- dplyr::full_join(db_form, db_weti,
                                 by = c("seqno", "col", "row")) %>%
       dplyr::mutate(lnqarea = dplyr::if_else(aspect > -1, log(qarea), 0),
                     new_asp = dplyr::if_else(aspect > -1, aspect + 45, 0),
                     new_asp = dplyr::if_else(new_asp > 360,
                                              new_asp -360, new_asp))
-    save_backup(locs = out_locs, data = db_weti, name = "weti")
+    save_backup(locs = out_locs, data = db_form, name = "weti")
     rm(db_form, db_weti)
     write_time(sub_start, log_file)
 
@@ -130,7 +130,7 @@ form_mapper <- function(folder, grid, str_val = 10000, ridge_val = 10000,
     write_start(task, sub_start, log_file)
     db_relz <- calc_relz(db, idb, str_val = str_val, ridge_val = ridge_val,
                          verbose = verbose)
-    save_backup(locs = out_locs, data = db_relz, name = "relz")
+    save_backup(locs = out_locs, data = db_relz, name = "relief")
     rm(db_relz)
     write_time(sub_start, log_file)
 
@@ -148,9 +148,9 @@ form_mapper <- function(folder, grid, str_val = 10000, ridge_val = 10000,
     sub_start <- Sys.time()
     write_start(task, sub_start, log_file)
 
-    db_relz <- read_shed(out_locs$backup, "relz")
-    db_length <- calc_length(db, db_relz)
-    save_backup(locs = out_locs, data = db_length, name = "len")
+    db_relz <- read_shed(out_locs$backup, "relief")
+    db_length <- calc_length(db, db_relz, verbose = verbose)
+    save_backup(locs = out_locs, data = db_length, name = "length")
     rm(db_length, db_relz)
     write_time(sub_start, log_file)
 
@@ -164,7 +164,7 @@ form_mapper <- function(folder, grid, str_val = 10000, ridge_val = 10000,
   task <- "saving output"
   announce(task, quiet)
   save_output(out_locs, out_format,
-              which = c("form", "weti", "relz", "len"),
+              which = c("weti", "relief", "length"),
               where = "form", add_db = db)
 
   # Save final time
