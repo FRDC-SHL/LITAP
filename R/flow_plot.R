@@ -133,7 +133,7 @@ flow_plot <- function(db, type = "relief", dir = FALSE, seqno = FALSE, highlight
       ggplot2::geom_curve(data = stats,
                           ggplot2::aes(x = in_col, xend = out_col,
                                        y = in_row, yend = out_row),
-                 arrow = ggplot2::arrow(length = unit(0.01, "npc")))
+                 arrow = ggplot2::arrow(length = ggplot2::unit(0.01, "npc")))
       #ggplot2::scale_shape_manual(values = c(20,21))
   }
 
@@ -142,17 +142,20 @@ flow_plot <- function(db, type = "relief", dir = FALSE, seqno = FALSE, highlight
     g <- g +
       #ggplot2::geom_point(data = db_dir, size = 1) +
       # ggplot2::geom_segment(data = db_dir, ggplot2::aes(xend = xend, yend = yend, colour = factor(shedno)),
-      #              arrow = ggplot2::arrow(length = unit(1.5, "mm")))
+      #              arrow = ggplot2::arrow(length = ggplot2::unit(1.5, "mm")))
       ggplot2::geom_segment(data = db_dir, ggplot2::aes(xend = xend, yend = yend, colour = factor(shedno)))
   } else if(dir & !shed) {
     g <- g +
       #ggplot2::geom_point(data = db_dir, size = 1) +
       ggplot2::geom_segment(data = db_dir, ggplot2::aes(xend = xend, yend = yend),
-                   arrow = ggplot2::arrow(length = unit(1.5, "mm")))
+                   arrow = ggplot2::arrow(length = ggplot2::unit(1.5, "mm")))
   }
 
   # Add lowest point
-  if(pits) g <- g + ggplot2::geom_point(data = db[db$ldir == 5,], colour = "black")
+  if(pits) {
+    if(shed_type == "local" && "local_ldir" %in% names(db)) dir <- "local_ldir" else dir <- "ldir"
+    g <- g + ggplot2::geom_point(data = db[db[[dir]] == 5,], colour = "black")
+  }
 
   g
 }
