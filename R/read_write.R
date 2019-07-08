@@ -9,12 +9,13 @@ save_backup <- function(locs, data, name) {
 save_output <- function(locs, out_format,
                         which = c("local", "pond", "fill", "pit", "ilocal"),
                         where = "flow", add_db = NULL) {
+
   for(name in which) {
-    if(file.exists(paste0(locs[["backup"]], "_", name , ".rds"))) {
+    if(file.exists(file.path(locs[["backup"]], paste0(name , ".rds")))) {
       data <- read_shed(locs[["backup"]], name)
 
-      if(name %in% c("fill", "ilocal", "form", "weti", "relz", "len")) {
-        if("db" %in% names(data)) db <- data$db
+      if(name %in% c("fill", "ilocal", "form", "weti", "relief", "length")) {
+        if("db" %in% names(data)) db <- data$db else db <- data
         if(!is.null(add_db)) {
           suppressMessages(db <- dplyr::left_join(db, add_db))
         }
@@ -35,13 +36,14 @@ save_shed <- function(file_out, obj, name, clean = FALSE){
     obj <- remove_buffer(obj)
     obj <- obj[, lapply(obj, class) != "list"] # remove lists
   }
-  if(stringr::str_detect(name, ".rds$")) readr::write_rds(obj, paste0(file_out, "_", name))
-  if(stringr::str_detect(name, ".csv$")) readr::write_csv(obj, paste0(file_out, "_", name))
-  if(stringr::str_detect(name, ".dbf$")) foreign::write.dbf(obj, paste0(file_out, "_", name))
+
+  if(stringr::str_detect(name, ".rds$")) readr::write_rds(obj, file.path(file_out, name))
+  if(stringr::str_detect(name, ".csv$")) readr::write_csv(obj, file.path(file_out, name))
+  if(stringr::str_detect(name, ".dbf$")) foreign::write.dbf(obj, file.path(file_out, name))
 }
 
 read_shed <- function(file_out, name){
-  readr::read_rds(paste0(file_out, "_", name , ".rds"))
+  readr::read_rds(file.path(file_out, paste0(name , ".rds")))
 }
 
 
@@ -139,9 +141,9 @@ remove_buffer <- function(db, stats = NULL) {
 
 }
 
-locs_create <- function(folder_out, f, which = c("backup", "flow")) {
+locs_create <- function(out_folder, which = c("backup", "flow")) {
   out_locs <- list()
-  for(i in which) out_locs[i] <- file.path(folder_out, i)
+  for(i in which) out_locs[i] <- file.path(out_folder, i)
   lapply(out_locs, function(x) {if(!dir.exists(x)) dir.create(x)})
-  lapply(out_locs, function(x) file.path(x, f))
+  out_locs
 }

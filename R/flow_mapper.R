@@ -17,8 +17,8 @@
 #'   pit removal
 #' @param max_depth Numeric. Largest depth of pits to be removed during initial
 #'   pit removal
-#' @param out_folder Charater. Folder to store output files. Defaults to folder
-#'   in the same location and with the same name as the dem file
+#' @param out_folder Character. Folder in which to store output files. Defaults
+#'   to folder in the same location and with the same name as the dem file
 #' @param clean Logical. Remove all backup files and output files from previous
 #'   runs in this folder?
 #' @param clim Numeric vector. Column limits if specifying a subset of the dem
@@ -86,16 +86,9 @@ flow_mapper <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
 
   f <- tools::file_path_sans_ext(basename(file))
 
-  if(is.null(out_folder)) out_folder <- dirname(file)
-  if(!dir.exists(out_folder)) {
-    stop("The location '", out_folder, "' doesn't exist. ",
-         "Please specify an existing folder", call. = FALSE)
-  }
-  out_folder <- file.path(out_folder, f)
-
+  if(is.null(out_folder)) out_folder <- file.path(dirname(file), f)
   if(!dir.exists(out_folder)) dir.create(out_folder)
-
-  out_locs <- locs_create(out_folder, f)
+  out_locs <- locs_create(out_folder)
 
   # Clean records
   if(clean) lapply(stringr::str_remove(out_locs, paste0(f, "$")),

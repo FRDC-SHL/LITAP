@@ -53,15 +53,16 @@ form_mapper <- function(folder, grid, str_val = 10000, ridge_val = 10000,
   idb <- get_backups(folder, type = "ilocal")
 
   # Get out locs
-  out_locs <- locs_create(folder, f = basename(folder),
-                          which = c("backup", "form"))
+  out_locs <- locs_create(folder, which = c("backup", "form"))
 
   # Messaging
   if(quiet) verbose <- FALSE
 
   # Setup Log
   if(log) {
-    log_file <- paste0(folder, "/", basename(folder), "_form.log")
+    log_file <- list.files(folder, pattern = "_flow.log") %>%
+      stringr::str_replace("flow", "form") %>%
+      file.path(folder, .)
     if(file.exists(log_file)) file.remove(log_file)
   } else log_file <- FALSE
 
