@@ -350,7 +350,7 @@ flow_mapper <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
     write_start(task, sub_start, log_file)
 
     db_ilocal <- first_pitr1(db_iinitial, max_area = max_area, max_depth = max_depth, verbose = verbose)
-    db_ilocal$pond_shed <- db_ilocal$local_shed
+    #db_ilocal$pond_shed <- db_ilocal$local_shed
 
     if(length(unique(db_ilocal$shedno[!is.na(db_ilocal$shedno)])) > 1) {
       ipit <- pit_stat1(db_ilocal) %>%
