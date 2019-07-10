@@ -72,13 +72,9 @@ calc_weti <- function(db, grid = 5, verbose = FALSE) {
     pb <- progress::progress_bar$new(total = s)
   }
 
-  i <- 0
-
   while(any(db_c$in_t >= 0 & db_c$out_t !=0)) {
-    i <- i + 1
     db_c <- trace_wetness(db_n_sub, db_c)
     if(verbose) pb$update((s - nrow(db_c[db_c$in_t > -1,]))/s)
-    #if(verbose) message("Round ", i, " - ", nrow(db_c[db_c$in_t > -1,]), " remaining")
   }
   if(verbose) pb$terminate()
 
@@ -96,6 +92,8 @@ calc_weti <- function(db, grid = 5, verbose = FALSE) {
     dplyr::select(-qarea_flat)
 
   db_c$qarea[db_c$seqno %in% db_c_temp$seqno] <- db_c_temp$qarea
+
+  db_c$qc[is.na(db_c$qc)] <- db_c$qarea[is.na(db_c$qc)]/0.0001
 
   # Shouldn't this be all +1?
   db_weti <- db_c %>%
