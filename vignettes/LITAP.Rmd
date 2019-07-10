@@ -12,7 +12,8 @@ vignette: >
 ```{r, include = FALSE}
 # rmarkdown::pdf_document
 # rmarkdown::html_vignette
-knitr::opts_chunk$set(fig.width = 15, fig.height = 10, tidy = TRUE, eval = FALSE)
+knitr::opts_chunk$set(fig.width = 15, fig.height = 10, tidy = TRUE, eval = TRUE)
+file.copy(system.file("extdata", "testELEV.dbf", package = "LITAP"), ".")
 ```
 
 <style>
@@ -37,7 +38,7 @@ library(LITAP)
 The only required parameters are the location of the dem file (`file`) and the number of rows and the number of columns (`nrow` and `ncol`) in the dem file.
 
 ```{r}
-flow_mapper(file = "testELEV.dem", nrow = 150, ncol = 150)
+flow_mapper(file = "testELEV.dbf", nrow = 150, ncol = 150)
 ```
 
 ## Pit removal parameters
@@ -48,30 +49,27 @@ The maximum size of initial watersheds which will be removed in the first step c
 - `max_depth` represents the maximum depth of a pit (difference between the elevation of the pour point and the elevation of the pit centre) of a watershed to be removed in the initial step
 
 ```{r}
-flow_mapper(file = "testELEV.dem", nrow = 150, ncol = 150, 
-             max_area = 5, max_depth = 0.2)
+flow_mapper(file = "testELEV.dbf", nrow = 150, ncol = 150, 
+            max_area = 5, max_depth = 0.2)
 ```
 
 ## Output folders
 
-A LITAP run saves all output into three folders: `backup`, `dbf`, and `final`.  
+A LITAP run saves all output from `flow_mapper()` into two folders: `backup` and `flow`.  
 
-- `backup` folder contains .rds files (R data files) used to resume a run from an intermediate point. These shouldn't be used by the user.
-- `dbf` folder contains .dbf files which mimic the output of the original LandMapR program
-- `final` folder contains .csv and .rds files of the output, similar to that produced by the LandMapR program but designed for ease of use in R.
+- `backup` folder contains .rds files (R data files) used to resume a run from an intermediate point. These are also used by `form_mapper()`. These shouldn't be used by the user.
+- `flow` folder contains .csv, .dbf, or .rds files of the output (depending on the output format specified), similar to that produced by the LandMapR program but designed for ease of use in R.
 
-LITAP will automatically prepend the run name according to the input file (e.g. in these examples it would be "test")
-
-You can specify where these output folders/files should be saved with `folder_out`. Otherwise the folders will be created in the folder of the original Elev.dem file, which may not be desirable. Note that folder locations are relative to working directory of the R session.
+You can specify where these output folders/files should be saved with `out_folder`. Otherwise the folders will be created in the folder of the original Elev.dbf file, which may not be desirable. Note that folder locations are relative to working directory of the R session.
 
 ```{r}
-flow_mapper(file = "testELEV.dem", nrow = 150, ncol = 150, folder_out = "./Output/")
+flow_mapper(file = "testELEV.dbf", nrow = 150, ncol = 150, out_folder = "./Output/")
 ```
 
 To clean up any old files before conducting a new run, use `clean = TRUE`. __Careful, this will remove all backup files from previous runs making it impossible to resume a run!__
 
 ```{r}
-flow_mapper(file = "testELEV.dem", nrow = 150, ncol = 150, folder_out = "./Output/", clean = TRUE)
+flow_mapper(file = "testELEV.dbf", nrow = 150, ncol = 150, out_folder = "./Output/", clean = TRUE)
 ```
 
 ## Different input file types
@@ -92,39 +90,38 @@ flow_mapper(file = "testELEV")     # ArcGis Gridfile folder (contains .hdr files
 To conduct a run on only a subset of the dem you can specify row and column limits (`rlim` and `clim` respectively):
 
 ```{r}
-flow_mapper(file = "testELEV.dem", nrow = 150, ncol = 150, 
-             rlim = c(50,100), clim = c(50,100))
+flow_mapper(file = "testELEV.dbf", nrow = 150, ncol = 150, 
+            rlim = c(50,100), clim = c(50,100))
 ```
 
 ## Output messages
 
-To prevent detailed output, use `verbose = FALSE`:
+To include detailed output, use `verbose = TRUE`:
 
 ```{r}
-flow_mapper(file = "testELEV.dem", nrow = 150, ncol = 150, verbose = FALSE)
+flow_mapper(file = "testELEV.dbf", nrow = 150, ncol = 150, verbose = TRUE)
 ```
 
 To prevent all output, use `quiet = TRUE`:
 
 ```{r}
-flow_mapper(file = "testELEV.dem", nrow = 150, ncol = 150, quiet = TRUE)
+flow_mapper(file = "testELEV.dbf", nrow = 150, ncol = 150, quiet = TRUE)
 ```
 
 ## Resuming a run
 Each run of LITAP goes through 10 steps. A run can be halted or resumed at step by specifying the corresponding variable.
 
-
 For example, to resume with calculating pond statistics (step 5) and continue to the end of the run:
 
 ```{r}
-flow_mapper(file = "testELEV.dem", nrow = 150, ncol = 150, 
+flow_mapper(file = "testELEV.dbf", nrow = 150, ncol = 150, 
             resume = "pond")
 ```
 
 Or to resume from pond statistics and to end just after calculating fill statistics (step 6):
 
 ```{r}
-flow_mapper(file = "testELEV.dem", nrow = 150, ncol = 150, 
+flow_mapper(file = "testELEV.dbf", nrow = 150, ncol = 150, 
             resume = "pond", end = "fill")
 ```
 
@@ -154,5 +151,11 @@ From the flow directions, combine cells into initial watersheds
 
 8. __Initial Inverted Pit Removal__ (`ilocal`)
 Remove pits which are smaller than the maximum area and depth (and which are not edge pits). These pits are removed into neighbouring pits. Calculate watershed statistics on these resulting local pits. Because the DEM is inverted, this will highlight peaks and flow down from these peaks.
+
+
+```{r, include = FALSE}
+unlink("./testELEV/", recursive = TRUE)
+unlink("./Output/", recursive = TRUE)
+```
 
 

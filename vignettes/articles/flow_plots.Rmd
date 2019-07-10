@@ -31,28 +31,23 @@ if(!pdf) {
 
 Flow plots are simply a way of visualizing what LITAP is doing under the hood.
 
-In the following examples, we will be using the output from complete run on the supplied "testELEV.dbf". You can find these files in the LITAP folder by using the `system.file()` function:
+In the following examples, we will be using the output from complete run on the supplied "testELEV.dbf". You can find the original DEM file in the LITAP `extdata` folder by using the `system.file()` function. For more information on the `flow_mapper()` function see the [Getting Started Vignette](../LITAP.html).
 
 ```{r}
 library(LITAP)
 
-files <- system.file("extdata", "final", package = "LITAP")
-list.files(files, full.names = TRUE)
+# Save output to working directory
+flow_mapper(system.file("extdata", "testELEV.dbf", package = "LITAP"),
+            out_folder = "./testELEV/", nrow = 150, ncol = 150, clean = TRUE) 
 ```
 
-These files were created using the `flow_mapper()` function (see the [Getting Started Vignette](../LITAP.html))
-
-
-We will load the rds file (R data files) for the relevant dems. Note that in each of these dem files, the only thing that differs is how the watersheds are almalgamated, and the different flow directions to make this happen.
+We will load the rds file (R data files) for the final dems and stats file.
 
 ```{r}
-initial_dem <- readRDS(list.files(files, pattern = "dem_initial.rds", full.names = TRUE))
-local_dem <- readRDS(list.files(files, pattern = "dem_local.rds", full.names = TRUE))
-pond_dem <- readRDS(list.files(files, pattern = "dem_pond.rds", full.names = TRUE))
-fill_dem <- readRDS(list.files(files, pattern = "dem_fill.rds", full.names = TRUE))
-inverted_dem <- readRDS(list.files(files, pattern = "dem_ilocal.rds", full.names = TRUE))
+dem <- readRDS("./testELEV/flow/dem_fill.rds")
+inverted_dem <- readRDS("./testELEV/flow/dem_ilocal.rds")
 
-local_stats <- readRDS(list.files(files, pattern = "testELEV_local.rds", full.names = TRUE))
+local_stats <- readRDS("./testELEV/flow/stats_local.rds")
 ```
 
 ## Basic maps
@@ -60,7 +55,7 @@ local_stats <- readRDS(list.files(files, pattern = "testELEV_local.rds", full.na
 By default, the `flow_plot()` function displays relief maps, using the `terrain()` and `hillShade()` functions from the `raster` package. Note the outer border of dark grey, this represents unknown cells, as the relief calculations do not work on cells without neighbours.
 
 ```{r}
-flow_plot(initial_dem)
+flow_plot(dem)
 ```
 
 ```{r, echo = FALSE, results = "asis"}
@@ -70,7 +65,7 @@ if(pdf) cat("\\newpage")
 Alternatively, you can plot elevation data directly.
 
 ```{r}
-flow_plot(initial_dem, type = "elevation")
+flow_plot(dem, type = "elevation")
 ```
 
 ```{r, echo = FALSE, results = "asis"}
@@ -83,7 +78,7 @@ if(pdf) cat("\\newpage")
 You can zoom in on a particular area of interest by specifying row and column limits:
 
 ```{r}
-flow_plot(initial_dem, type = "elevation", rlim = c(20, 30), clim = c(35, 45))
+flow_plot(dem, type = "elevation", rlim = c(20, 30), clim = c(35, 45))
 ```
 
 ```{r, echo = FALSE, results = "asis"}
@@ -96,7 +91,7 @@ if(pdf) cat("\\newpage")
 You can number the cells in a plot with `seqno = TRUE`:
 
 ```{r}
-flow_plot(initial_dem, type = "elevation", rlim = c(20, 30), clim = c(35, 45), 
+flow_plot(dem, type = "elevation", rlim = c(20, 30), clim = c(35, 45), 
           seqno = TRUE)
 ```
 
@@ -107,7 +102,7 @@ if(pdf) cat("\\newpage")
 If you're only interested in certain cells, specify which ones with `cells = c()` and `highlight = TRUE`
 
 ```{r}
-flow_plot(initial_dem, type = "elevation", rlim = c(20, 30), clim = c(35, 45), 
+flow_plot(dem, type = "elevation", rlim = c(20, 30), clim = c(35, 45), 
           seqno = TRUE, cells = c(3187:3193, 3336:3343), highlight = TRUE)
 ```
 
@@ -120,7 +115,7 @@ if(pdf) cat("\\newpage")
 You can plot individual flow directions with `dir = TRUE`.
 
 ```{r}
-flow_plot(initial_dem, type = "elevation", rlim = c(20, 30), clim = c(35, 45), 
+flow_plot(dem, type = "elevation", rlim = c(20, 30), clim = c(35, 45), 
           dir = TRUE)
 ```
 
@@ -131,7 +126,7 @@ if(pdf) cat("\\newpage")
 In combination with cell numbers
 
 ```{r}
-flow_plot(initial_dem, type = "elevation", rlim = c(20, 30), clim = c(35, 45), 
+flow_plot(dem, type = "elevation", rlim = c(20, 30), clim = c(35, 45), 
           dir = TRUE, seqno = TRUE)
 ```
 
@@ -142,7 +137,7 @@ if(pdf) cat("\\newpage")
 Only for certain cells (this will show the entire flow path that a given cell is on)
 
 ```{r}
-flow_plot(initial_dem, type = "elevation", rlim = c(20, 30), clim = c(35, 45), 
+flow_plot(dem, type = "elevation", rlim = c(20, 30), clim = c(35, 45), 
           dir = TRUE, cells = c(3187:3193, 3336:3343))
 ```
 
@@ -153,7 +148,7 @@ if(pdf) cat("\\newpage")
 Only for certain cells and show cell numbers
 
 ```{r}
-flow_plot(initial_dem, type = "elevation", rlim = c(20, 30), clim = c(35, 45), 
+flow_plot(dem, type = "elevation", rlim = c(20, 30), clim = c(35, 45), 
           dir = TRUE, seqno = TRUE, cells = c(3187:3193, 3336:3343))
 ```
 
@@ -164,7 +159,7 @@ if(pdf) cat("\\newpage")
 Highlight the cells of interest
 
 ```{r}
-flow_plot(initial_dem, type = "elevation", rlim = c(20, 30), clim = c(35, 45), 
+flow_plot(dem, type = "elevation", rlim = c(20, 30), clim = c(35, 45), 
           dir = TRUE, seqno = TRUE, cells = c(3187:3193, 3336:3343), highlight = TRUE)
 ```
 
@@ -177,7 +172,7 @@ if(pdf) cat("\\newpage")
 You can filter the flow directions to show only those with an upslope area greater than some threshold:
 
 ```{r}
-flow_plot(initial_dem, type = "elevation", dir = TRUE, upslope_threshold = 500)
+flow_plot(dem, type = "elevation", dir = TRUE, upslope_threshold = 500)
 ```
 
 ```{r, echo = FALSE, results = "asis"}
@@ -187,12 +182,12 @@ if(pdf) cat("\\newpage")
 ### Comparing different upslope thresholds:
 
 ```{r, echo = FALSE, fig.asp = 1.5}
-gridExtra::grid.arrange(flow_plot(initial_dem, type = "elevation", dir = TRUE, upslope_threshold = 0) + ggplot2::labs(title = "0") + ggplot2::theme(legend.position = "none"),
-                        flow_plot(initial_dem, type = "elevation", dir = TRUE, upslope_threshold = 10) + ggplot2::labs(title = "10") + ggplot2::theme(legend.position = "none"),
-                        flow_plot(initial_dem, type = "elevation", dir = TRUE, upslope_threshold = 20) + ggplot2::labs(title = "20") + ggplot2::theme(legend.position = "none"),
-                        flow_plot(initial_dem, type = "elevation", dir = TRUE, upslope_threshold = 40) + ggplot2::labs(title = "75") + ggplot2::theme(legend.position = "none"),
-                        flow_plot(initial_dem, type = "elevation", dir = TRUE, upslope_threshold = 75) + ggplot2::labs(title = "200") + ggplot2::theme(legend.position = "none"),
-                        flow_plot(initial_dem, type = "elevation", dir = TRUE, upslope_threshold = 500) + ggplot2::labs(title = "500") + ggplot2::theme(legend.position = "none"),
+gridExtra::grid.arrange(flow_plot(dem, type = "elevation", dir = TRUE, upslope_threshold = 0) + ggplot2::labs(title = "0") + ggplot2::theme(legend.position = "none"),
+                        flow_plot(dem, type = "elevation", dir = TRUE, upslope_threshold = 10) + ggplot2::labs(title = "10") + ggplot2::theme(legend.position = "none"),
+                        flow_plot(dem, type = "elevation", dir = TRUE, upslope_threshold = 20) + ggplot2::labs(title = "20") + ggplot2::theme(legend.position = "none"),
+                        flow_plot(dem, type = "elevation", dir = TRUE, upslope_threshold = 40) + ggplot2::labs(title = "75") + ggplot2::theme(legend.position = "none"),
+                        flow_plot(dem, type = "elevation", dir = TRUE, upslope_threshold = 75) + ggplot2::labs(title = "200") + ggplot2::theme(legend.position = "none"),
+                        flow_plot(dem, type = "elevation", dir = TRUE, upslope_threshold = 500) + ggplot2::labs(title = "500") + ggplot2::theme(legend.position = "none"),
                         ncol = 2)
 
 ```
@@ -218,7 +213,8 @@ if(pdf) cat("\\newpage")
 You can also highlight watersheds
 
 ```{r}
-flow_plot(db = initial_dem, type = "elevation", shed = TRUE, shed_type = "initial")
+flow_plot(db = dem, type = "elevation", shed = TRUE, shed_type = "initial") +
+  labs(title = "Initial Watersheds")
 ```
 
 ```{r, echo = FALSE, results = "asis"}
@@ -228,7 +224,7 @@ if(pdf) cat("\\newpage")
 ### Watershed pits
 
 ```{r}
-flow_plot(db = initial_dem, type = "elevation", shed = TRUE, shed_type = "initial", 
+flow_plot(db = dem, type = "elevation", shed = TRUE, shed_type = "initial", 
           pits = TRUE)
 ```
 
@@ -245,13 +241,13 @@ if(pdf) cat("\\newpage")
 
 ```{r, echo = FALSE}
 gridExtra::grid.arrange(
-  flow_plot(db = initial_dem, type = "elevation", shed = TRUE, shed_type = "initial") + 
+  flow_plot(db = dem, type = "elevation", shed = TRUE, shed_type = "initial") + 
     ggplot2::labs(title = "Initial Watersheds") + ggplot2::theme(plot.margin = ggplot2::unit(c(5, 1, 5, 1), "pt")),
-  flow_plot(db = local_dem, type = "elevation", shed = TRUE, shed_type = "local") + 
+  flow_plot(db = dem, type = "elevation", shed = TRUE, shed_type = "local") + 
     ggplot2::labs(title = "Local Watersheds") + ggplot2::theme(plot.margin = ggplot2::unit(c(5, 1, 5, 1), "pt")),
-  flow_plot(db = pond_dem, type = "elevation", shed = TRUE, shed_type = "pond") + 
+  flow_plot(db = dem, type = "elevation", shed = TRUE, shed_type = "pond") + 
     ggplot2::labs(title = "Pond Watersheds") + ggplot2::theme(plot.margin = ggplot2::unit(c(5, 1, 5, 1), "pt")),
-  flow_plot(db = fill_dem, type = "elevation", shed = TRUE, shed_type = "fill") + 
+  flow_plot(db = dem, type = "elevation", shed = TRUE, shed_type = "fill") + 
     ggplot2::labs(title = "Fill Watersheds") + ggplot2::theme(plot.margin = ggplot2::unit(c(5, 1, 5, 1), "pt")),
   ncol = 2)
 ```
@@ -263,7 +259,7 @@ if(pdf) cat("\\newpage")
 ### Watersheds by flow paths
 
 ```{r}
-flow_plot(db = initial_dem, type = "elevation", shed = TRUE, 
+flow_plot(db = dem, type = "elevation", shed = TRUE, 
           shed_type = "initial", dir = TRUE)
 ```
 
@@ -274,7 +270,7 @@ if(pdf) cat("\\newpage")
 Subsets still apply
 
 ```{r}
-flow_plot(db = initial_dem, type = "elevation", shed = TRUE, 
+flow_plot(db = dem, type = "elevation", shed = TRUE, 
           rlim = c(30,60), clim = c(45,75),
           shed_type = "initial", dir = TRUE)
 ```
@@ -284,30 +280,46 @@ flow_plot(db = initial_dem, type = "elevation", shed = TRUE,
 ```{r, echo = FALSE, fig.asp = ifelse(pdf, 1.5, 1), results = "asis"}
 if(!pdf) {
   gridExtra::grid.arrange(
-    flow_plot(db = initial_dem, type = "elevation", shed = TRUE, shed_type = "initial", dir = TRUE, rlim = c(10, 45), clim = c(85, 115)) + 
-      ggplot2::labs(title = "Initial Watersheds") + ggplot2::theme(plot.margin = ggplot2::unit(c(5, 1, 5, 1), "pt")),
-    flow_plot(db = local_dem, type = "elevation", shed = TRUE, shed_type = "local", dir = TRUE, rlim = c(10, 45), clim = c(85, 115)) + 
-      ggplot2::labs(title = "Local Watersheds") + ggplot2::theme(plot.margin = ggplot2::unit(c(5, 1, 5, 1), "pt")),
-    flow_plot(db = pond_dem, type = "elevation", shed = TRUE, shed_type = "pond", dir = TRUE, rlim = c(10, 45), clim = c(85, 115)) + 
-      ggplot2::labs(title = "Pond Watersheds") + ggplot2::theme(plot.margin = ggplot2::unit(c(5, 1, 5, 1), "pt")),
-    flow_plot(db = fill_dem, type = "elevation", shed = TRUE, shed_type = "fill", dir = TRUE, rlim = c(10, 45), clim = c(85, 115)) + 
-      ggplot2::labs(title = "Fill Watersheds") + ggplot2::theme(plot.margin = ggplot2::unit(c(5, 1, 5, 1), "pt")),
+    flow_plot(db = dem, type = "elevation", shed = TRUE, shed_type = "initial", 
+              dir = TRUE, rlim = c(10, 45), clim = c(85, 115)) + 
+      ggplot2::labs(title = "Initial Watersheds") + 
+      ggplot2::theme(plot.margin = ggplot2::unit(c(5, 1, 5, 1), "pt")),
+    flow_plot(db = dem, type = "elevation", shed = TRUE, shed_type = "local",
+              dir = TRUE, rlim = c(10, 45), clim = c(85, 115)) + 
+      ggplot2::labs(title = "Local Watersheds") + 
+      ggplot2::theme(plot.margin = ggplot2::unit(c(5, 1, 5, 1), "pt")),
+    flow_plot(db = dem, type = "elevation", shed = TRUE, shed_type = "pond", 
+              dir = TRUE, rlim = c(10, 45), clim = c(85, 115)) + 
+      ggplot2::labs(title = "Pond Watersheds") + 
+      ggplot2::theme(plot.margin = ggplot2::unit(c(5, 1, 5, 1), "pt")),
+    flow_plot(db = dem, type = "elevation", shed = TRUE, shed_type = "fill", 
+              dir = TRUE, rlim = c(10, 45), clim = c(85, 115)) + 
+      ggplot2::labs(title = "Fill Watersheds") + 
+      ggplot2::theme(plot.margin = ggplot2::unit(c(5, 1, 5, 1), "pt")),
     ncol = 2)
 } else {
   gridExtra::grid.arrange(
-    flow_plot(db = initial_dem, type = "elevation", shed = TRUE, shed_type = "initial", dir = TRUE, rlim = c(10, 45), clim = c(85, 115)) + 
-      ggplot2::labs(title = "Initial Watersheds") + ggplot2::theme(plot.margin = ggplot2::unit(c(5, 1, 5, 1), "pt")),
-    flow_plot(db = local_dem, type = "elevation", shed = TRUE, shed_type = "local", dir = TRUE, rlim = c(10, 45), clim = c(85, 115)) + 
-      ggplot2::labs(title = "Local Watersheds") + ggplot2::theme(plot.margin = ggplot2::unit(c(5, 1, 5, 1), "pt")),
+    flow_plot(db = dem, type = "elevation", shed = TRUE, shed_type = "initial", 
+              dir = TRUE, rlim = c(10, 45), clim = c(85, 115)) + 
+      ggplot2::labs(title = "Initial Watersheds") + 
+      ggplot2::theme(plot.margin = ggplot2::unit(c(5, 1, 5, 1), "pt")),
+    flow_plot(db = dem, type = "elevation", shed = TRUE, shed_type = "local", 
+              dir = TRUE, rlim = c(10, 45), clim = c(85, 115)) + 
+      ggplot2::labs(title = "Local Watersheds") + 
+      ggplot2::theme(plot.margin = ggplot2::unit(c(5, 1, 5, 1), "pt")),
     ncol = 1)
   
   cat("\\newpage")
   
   gridExtra::grid.arrange(
-    flow_plot(db = pond_dem, type = "elevation", shed = TRUE, shed_type = "pond", dir = TRUE, rlim = c(10, 45), clim = c(85, 115)) + 
-      ggplot2::labs(title = "Pond Watersheds") + ggplot2::theme(plot.margin = ggplot2::unit(c(5, 1, 5, 1), "pt")),
-    flow_plot(db = fill_dem, type = "elevation", shed = TRUE, shed_type = "fill", dir = TRUE, rlim = c(10, 45), clim = c(85, 115)) + 
-      ggplot2::labs(title = "Fill Watersheds") + ggplot2::theme(plot.margin = ggplot2::unit(c(5, 1, 5, 1), "pt")),
+    flow_plot(db = dem, type = "elevation", shed = TRUE, shed_type = "pond", 
+              dir = TRUE, rlim = c(10, 45), clim = c(85, 115)) + 
+      ggplot2::labs(title = "Pond Watersheds") + 
+      ggplot2::theme(plot.margin = ggplot2::unit(c(5, 1, 5, 1), "pt")),
+    flow_plot(db = dem, type = "elevation", shed = TRUE, shed_type = "fill", 
+              dir = TRUE, rlim = c(10, 45), clim = c(85, 115)) + 
+      ggplot2::labs(title = "Fill Watersheds") + 
+      ggplot2::theme(plot.margin = ggplot2::unit(c(5, 1, 5, 1), "pt")),
     ncol = 1)
 }
 ```
@@ -319,7 +331,7 @@ if(pdf) cat("\\newpage")
 ### Look at pour points
 
 ```{r}
-flow_plot(db = local_dem, type = "elevation", shed = TRUE, shed_type = "local", 
+flow_plot(db = dem, type = "elevation", shed = TRUE, shed_type = "local", 
           stats = local_stats)
 ```
 
@@ -330,10 +342,15 @@ if(pdf) cat("\\newpage")
 Take a closer look  
 
 ```{r}
-flow_plot(db = local_dem, type = "elevation", shed = TRUE, shed_type = "local",
+flow_plot(db = dem, type = "elevation", shed = TRUE, shed_type = "local",
           rlim = c(0, 40), clim = c(110, 150), stats = local_stats)
 ```
 
 ```{r, echo = FALSE, results = "asis"}
 if(pdf) cat("\\newpage")
 ```
+
+```{r, include = FALSE}
+unlink("./testELEV")
+```
+

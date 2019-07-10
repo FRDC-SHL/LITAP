@@ -12,3 +12,5 @@
 ^appveyor.yml$
 ^\.Rprofile$
 FES4 Input files
+^doc$
+^Meta$
