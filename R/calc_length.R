@@ -5,7 +5,7 @@ calc_length <- function(db, relz, grid = 5, verbose = FALSE){
   relz <- dplyr::left_join(relz, dplyr::select(db, seqno, row, col),
                            by = c("seqno", "row", "col"))
 
-  relz %>%
+  relz <- relz %>%
     dplyr::mutate(
       l2pit = sqrt((pit_col - col)^2 + (pit_row - row)^2) * grid,
       l2pit = sqrt(l2pit^2 + (z2pit * grid)^2),
@@ -28,4 +28,8 @@ calc_length <- function(db, relz, grid = 5, verbose = FALSE){
     dplyr::mutate_at(dplyr::vars("l2pit", "l2peak", "lpit2peak", "l2str", "l2div", "lstr2div"),
                      ~ round(., 1))
 
+  relz$ppit2peakl[relz$lpit2peak == 0] <- 0
+  relz$pstr2divl[relz$lstr2div == 0] <- 0
+
+  relz
 }

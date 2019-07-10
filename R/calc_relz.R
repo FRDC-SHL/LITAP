@@ -156,7 +156,7 @@ calc_pit <- function(db, pond = NULL, verbose) {
 
 # calcrelief3
 calc_relief <- function(relz) {
-  relz %>%
+  r <- relz %>%
     dplyr::mutate(min_elev = min(elev, na.rm = TRUE),
                   max_elev = max(elev, na.rm = TRUE),
                   elev_range = max_elev - min_elev) %>%
@@ -174,5 +174,13 @@ calc_relief <- function(relz) {
                   pctz2pit = trunc((z2pit / zpit2peak) * 100),
                   pctn2st = trunc((n2st / ncr2st) * 100),
                   pmin2max = trunc(((elev - min_elev) / elev_range) * 100))
+
+  r$pctz2top[r$ztop2pit == 0] <- 0
+  r$pctz2st[r$zcr2st == 0] <- 0
+  r$pctn2st[r$ncr2st == 0] <- 0
+  r$pmin2max[r$elev_range == 0] <- 0
+
+  r
+
 }
 
