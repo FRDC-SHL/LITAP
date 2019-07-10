@@ -46,11 +46,14 @@ form_mapper <- function(folder, grid, str_val = 10000, ridge_val = 10000,
   check_resume(resume, end, resume_options)
   check_grid(grid)
 
-  # Get backup fill
-  db <- get_backups(folder, type = "fill")
+  # Get backup fill dem
+  db <- get_backups(folder, step = "fill")
 
-  # Get backup inverted
-  idb <- get_backups(folder, type = "ilocal")
+  # Get backup inverted dem
+  idb <- get_backups(folder, step = "ilocal")
+
+  # Get backup pond stats
+  pond <- get_backups(folder, step = "pond", type = "stats")
 
   # Get out locs
   out_locs <- locs_create(folder, which = c("backup", "form"))
@@ -171,13 +174,14 @@ form_mapper <- function(folder, grid, str_val = 10000, ridge_val = 10000,
   run_time(start, log_file, quiet)
 }
 
-get_backups <- function(folder, type) {
+get_backups <- function(folder, step, type = "db") {
+
   if(!dir.exists(folder)) stop("This folder doesn't exist: ", folder, call. = FALSE)
-  f <- list.files(file.path(folder, "backup"), pattern = type,
+  f <- list.files(file.path(folder, "backup"), pattern = step,
                   recursive = TRUE, full.names = TRUE)
-  if(length(f) > 1) stop("There is more than one eligable ", type, " file:\n",
+  if(length(f) > 1) stop("There is more than one eligable ", step, " file:\n",
                          paste0(f, collapse = "\n"), call. = FALSE)
-  if(length(f) == 0) stop("There are no eligable ", type, " files",
+  if(length(f) == 0) stop("There are no eligable ", step, " files",
                           call. = FALSE)
-  readr::read_rds(f)$db
+  readr::read_rds(f)[[type]]
 }
