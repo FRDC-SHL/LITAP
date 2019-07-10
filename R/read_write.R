@@ -110,9 +110,13 @@ remove_buffer <- function(db, stats = NULL) {
 
   #if("upslope" %in% names(db)) db <- dplyr::rename(db, upslope_buffer = upslope)
 
-  db <- db %>%
-    dplyr::mutate(row = row - 1, col = col -1,
-                  seqno = 1:length(row))
+  db <- dplyr::mutate(db, seqno = 1:length(row))
+
+  # Correct rows and columns
+  for(i in stringr::str_subset(names(db), "row|col")) {
+    db <- dplyr::mutate(db, !!i := !!rlang::sym(i) - 1)
+  }
+
 
   # Get index of seqno replacements
   index <- dplyr::select(db, seqno, seqno_buffer)
