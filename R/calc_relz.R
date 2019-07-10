@@ -51,10 +51,12 @@ calc_stream <- function(db, str_val = 10000, verbose = TRUE) {
   str_elev <- 0
 
   relz <- data.frame(seqno = db$seqno,
-                     str_row = 0, str_col = 0, str_elev = 0,
-                     z2st = 0, n2st = 0)
+                     str_row = as.numeric(NA), str_col = as.numeric(NA),
+                     str_elev = as.numeric(NA),
+                     z2st = as.numeric(NA), n2st = as.numeric(NA))
 
   db_temp <- dplyr::select(db, seqno, row, col, elev, upslope, shedno) %>%
+    dplyr::filter(!is.na(elev)) %>%
     dplyr::arrange(shedno, dplyr::desc(elev), upslope)
 
   seqno_order <- db_temp$seqno
@@ -128,9 +130,10 @@ calc_pit <- function(db, pond = NULL, verbose) {
     dplyr::full_join(dplyr::select(db, seqno, shedno, elev), ., by = "shedno") %>%
     dplyr::mutate(z2pit = elev - pit_elev,
                   z2pit = replace(z2pit, z2pit < 0, 0),
-                  n2pit = dplyr::if_else(is.na(shedno), 0, as.numeric(NA)))
+                  n2pit = as.numeric(NA))
 
   seqno_order <- dplyr::arrange(db, upslope, dplyr::desc(elev)) %>%
+    dplyr::filter(!is.na(shedno), !is.na(elev)) %>%
     dplyr::pull(seqno)
 
   # While some not assigned, loop over them
