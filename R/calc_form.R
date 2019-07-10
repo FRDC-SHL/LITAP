@@ -46,16 +46,21 @@ calc_form <- function(db, grid = 10, verbose = FALSE) {
 
 
 aspect <- function(slope_x, slope_y, slope_pct) {
-  local_angle <- rad_deg(acos(abs(slope_x)/slope_pct))
-  dplyr::case_when(slope_x > 0 & slope_y > 0 ~ 270 + local_angle,
-                   slope_x > 0 & slope_y < 0 ~ 270 - local_angle,
-                   slope_x < 0 & slope_y > 0 ~ 90 - local_angle,
-                   slope_x < 0 & slope_y < 0 ~ 90 + local_angle,
-                   slope_x < 0 & slope_y == 0 ~ 90,
-                   slope_x > 0 & slope_y == 0 ~ 270,
-                   slope_x == 0 & slope_y < 0 ~ 180,
-                   slope_x == 0 & slope_y > 0 ~ 360,
-                   TRUE ~ as.numeric(NA))
+  if(slope_pct > 0) {
+    local_angle <- rad_deg(acos(abs(slope_x)/slope_pct))
+    asp <- dplyr::case_when(slope_x > 0 & slope_y > 0 ~ 270 + local_angle,
+                            slope_x > 0 & slope_y < 0 ~ 270 - local_angle,
+                            slope_x < 0 & slope_y > 0 ~ 90 - local_angle,
+                            slope_x < 0 & slope_y < 0 ~ 90 + local_angle,
+                            slope_x < 0 & slope_y == 0 ~ 90,
+                            slope_x > 0 & slope_y == 0 ~ 270,
+                            slope_x == 0 & slope_y < 0 ~ 180,
+                            slope_x == 0 & slope_y > 0 ~ 360,
+                            TRUE ~ as.numeric(NA))
+  } else {
+    asp <- 360
+  }
+  asp
 }
 
 prof_plan <- function(aspect, n, grid){
@@ -80,7 +85,7 @@ prof_plan <- function(aspect, n, grid){
     }
 
     p <- rad_deg(atan((((2 * n[5]) - z1 - z2) / (grid * grid))))
-  } else p <- NA
+  } else p <- as.numeric(NA)
   p
 }
 
