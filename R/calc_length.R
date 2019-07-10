@@ -18,11 +18,14 @@ calc_length <- function(db, relz, grid = 5, verbose = FALSE){
 
       l2div = sqrt((cr_col - col)^2 + (cr_row - row)^2) * grid,
       l2div = sqrt(l2div^2 + (z2cr * grid)^2),
+      # In C++ version, z2peak, but in foxitpro, z2cr. USE z2cr which I think is more correct
 
       lpit2peak = l2pit + l2peak,
       lstr2div = l2str + l2div,
 
-      ppit2peakl = round((l2pit / lpit2peak) * 100),
-      pstr2divl = round((l2str / lstr2div) * 100))
+      ppit2peakl = trunc((l2pit / lpit2peak) * 100),
+      pstr2divl = trunc((l2str / lstr2div) * 100)) %>%
+    dplyr::mutate_at(dplyr::vars("l2pit", "l2peak", "lpit2peak", "l2str", "l2div", "lstr2div"),
+                     ~ round(., 1))
 
 }
