@@ -66,12 +66,21 @@ calc_weti <- function(db, grid = 5, verbose = FALSE) {
                      sumtanbl = sum(tan2_f[status == "lower"], na.rm = TRUE),
                      qc = NA)
 
+
+  if(verbose) {
+    s <- nrow(db_c[db_c$in_t > -1,])
+    pb <- progress::progress_bar$new(total = s)
+  }
+
   i <- 0
+
   while(any(db_c$in_t >= 0 & db_c$out_t !=0)) {
     i <- i + 1
     db_c <- trace_wetness(db_n_sub, db_c)
-    if(verbose) message("Round ", i, " - ", nrow(db_c[db_c$in_t > -1,]), " remaining")
+    if(verbose) pb$update((s - nrow(db_c[db_c$in_t > -1,]))/s)
+    #if(verbose) message("Round ", i, " - ", nrow(db_c[db_c$in_t > -1,]), " remaining")
   }
+  if(verbose) pb$terminate()
 
   # For cells which have no lower cells and were not already evaluated
   # (i.e. sumtanbl == 0) push to drec

@@ -1,22 +1,27 @@
 # Relief calculations type 3
 
-calc_relz <- function(db, idb, str_val = 10000, ridge_val = 10000,
+calc_relz <- function(db, idb, str_val = 10000, ridge_val = 10000, pond = NULL,
                       verbose = FALSE) {
 
-  if(verbose) message("Calculating streams")
+  if(verbose) message("  Calculating streams")
   streams <- db %>%
     dplyr::mutate(shedno = fill_shed) %>%
     calc_stream(str_val = str_val, verbose = verbose)
 
-  str2pits <- calc_pit(db)
+  if(verbose) message("  Calculating stream to pits")
+  str2pits <- db %>%
+    dplyr::mutate(shedno = local_shed) %>%
+    calc_pit(pond = pond, verbose = verbose)
 
-  if(verbose) message("Calculating ridges")
+  if(verbose) message("  Calculating ridges")
   ridges <- calc_stream(idb, str_val = ridge_val, verbose = verbose) %>%
     dplyr::rename(cr_row = str_row, cr_col = str_col, cr_elev = str_elev,
                   z2cr = z2st, n2cr = n2st) %>%
     dplyr::mutate(cr_elev = max(db$elev, na.rm = TRUE) - cr_elev) #Convert back to orig elev
 
-  ridge2pits <- calc_pit(idb) %>%
+  if(verbose) message("  Calculating ridges to pits")
+
+  ridge2pits <- calc_pit(idb, verbose = verbose) %>%
     dplyr::rename(peak_seqno = pit_seqno, peak_row = pit_row, peak_col = pit_col,
                   peak_elev = pit_elev, z2peak = z2pit, n2peak = n2pit) %>%
     dplyr::mutate(peak_elev = max(db$elev, na.rm = TRUE) - peak_elev)
@@ -27,7 +32,7 @@ calc_relz <- function(db, idb, str_val = 10000, ridge_val = 10000,
     dplyr::left_join(dplyr::select(db, seqno, elev, row, col, buffer, fill_shed),
                      by = "seqno")
 
-  if(verbose) message("Calculating relief")
+  if(verbose) message("  Calculating relief")
   calc_relief(all)
 }
 
@@ -56,9 +61,9 @@ calc_stream <- function(db, str_val = 10000, verbose = TRUE) {
 
   db_temp <- dplyr::arrange(db, seqno)
 
+  if(verbose) pb <- progress::progress_bar$new(total = length(seqno_order))
   for(i in seqno_order){
-    if(verbose) message(i)
-
+    if(verbose) pb$tick()
     track <- trace_flow2(i, db_temp)
 
     # Get first cell already visited
@@ -100,18 +105,26 @@ calc_stream <- function(db, str_val = 10000, verbose = TRUE) {
       relz$n2st[track] <- seq(num_dn + relz$n2st[end] - 1, by = -1, along.with = track)
     }
   }
+  if(verbose) pb$terminate()
 
   relz$z2st[relz$z2st < 0] <- 0
 
   relz
 }
 
-# use pond db
-calc_pit <- function(db) {
 
-  temp <- db %>%
-    dplyr::filter(ldir == 5) %>%
-    dplyr::select(shedno, pit_seqno = seqno, pit_row = row, pit_col = col, pit_elev = elev) %>%
+calc_pit <- function(db, pond = NULL, verbose) {
+
+  if(is.null(pond) || nrow(pond) == 0) {
+    temp <- db %>%
+      dplyr::filter(ldir == 5) %>%
+      dplyr::select(shedno, pit_seqno = seqno, pit_row = row, pit_col = col, pit_elev = elev)
+  } else {
+    temp <- pond %>%
+      dplyr::select(shedno, pit_seqno, pit_row, pit_col, pit_elev)
+  }
+
+  temp <- temp %>%
     dplyr::full_join(dplyr::select(db, seqno, shedno, elev), ., by = "shedno") %>%
     dplyr::mutate(z2pit = elev - pit_elev,
                   z2pit = replace(z2pit, z2pit < 0, 0),
@@ -121,12 +134,20 @@ calc_pit <- function(db) {
     dplyr::pull(seqno)
 
   # While some not assigned, loop over them
-  while(any(is.na(temp$n2pit))) {
+  if(verbose) {
+    s <- sum(is.na(temp$n2pit[seqno_order]))
+    pb <- progress::progress_bar$new(total = s)
+  }
+
+  while(any(is.na(temp$n2pit[seqno_order]))) {
     # Get the next one which isn't filled
-    i <- seqno_order[which(is.na(temp$n2pit[seqno_order]))[1]]
+    i <- seqno_order[is.na(temp$n2pit[seqno_order])][1]
     track <- trace_flow2(i, db)
     temp$n2pit[track] <- seq(length(track) - 1, along.with = track, by = -1)
+    if(verbose) pb$update((s-sum(is.na(temp$n2pit[seqno_order])))/s)
   }
+  if(verbose) pb$terminate()
+
   dplyr::select(temp, -shedno, -elev)
 }
 

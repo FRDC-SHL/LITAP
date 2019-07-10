@@ -123,13 +123,13 @@ form_mapper <- function(folder, grid, str_val = 10000, ridge_val = 10000,
   }
 
   # Relief ------------------------------------------------------------------
-  task <- "relief derivitives"
+  task <- "calculating relief derivitives"
   if(resume == "relief"){
     announce(task, quiet)
     sub_start <- Sys.time()
     write_start(task, sub_start, log_file)
     db_relz <- calc_relz(db, idb, str_val = str_val, ridge_val = ridge_val,
-                         verbose = verbose)
+                         pond = pond, verbose = verbose)
     save_backup(locs = out_locs, data = db_relz, name = "relief")
     rm(db_relz)
     write_time(sub_start, log_file)
