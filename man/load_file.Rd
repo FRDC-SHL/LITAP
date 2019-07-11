@@ -81,6 +81,3 @@ important. Column names don't matter, but they should be present.
   \code{\link[readxl]{read_excel}} function.
   }
 }
-\examples{
-
-}

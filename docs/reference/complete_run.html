@@ -129,6 +129,9 @@
     </li>
   </ul>
 </li>
+<li>
+  <a href="../news/index.html">News</a>
+</li>
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
@@ -153,8 +156,8 @@
     </div>
 
     
-    <p>Run an elevation dem file through all functions to caculate watershed flow
-and fill patterns</p>
+    <p>Run an elevation file through all functions to calculate watershed flow and
+fill patterns.</p>
     
 
     <pre class="usage"><span class='fu'>complete_run</span>(<span class='no'>file</span>, <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>missing_value</span> <span class='kw'>=</span> -<span class='fl'>9999</span>,
@@ -167,8 +170,8 @@ and fill patterns</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>file</th>
-      <td><p>Character. Elevation dem file (see <code><a href='load_file.html'>load_file</a></code> for
-supported file types</p></td>
+      <td><p>Character. Elevation file (see <code><a href='load_file.html'>load_file</a></code> for
+supported file types.</p></td>
     </tr>
     <tr>
       <th>nrow</th>
@@ -264,10 +267,13 @@ below)</p></td>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
 <span class='co'># Basic Run</span>
-<span class='fu'>complete_run</span>(<span class='kw'>file</span> <span class='kw'>=</span> <span class='st'>"testElev.dbf"</span>, <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>100</span>)
+
+<span class='co'># (Find test files in extdata folder)</span>
+
+<span class='fu'>complete_run</span>(<span class='kw'>file</span> <span class='kw'>=</span> <span class='st'>"testELEV.dbf"</span>, <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>150</span>, <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>150</span>)
 
 <span class='co'># Specify parameters for initial pit removal</span>
-<span class='fu'>complete_run</span>(<span class='kw'>file</span> <span class='kw'>=</span> <span class='st'>"testElev.dbf"</span>, <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>100</span>,
+<span class='fu'>complete_run</span>(<span class='kw'>file</span> <span class='kw'>=</span> <span class='st'>"testELEV.dbf"</span>, <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>150</span>, <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>150</span>,
              <span class='kw'>max_area</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>max_depth</span> <span class='kw'>=</span> <span class='fl'>2</span>)
 <span class='co'># }</span><div class='input'>
 </div></pre>

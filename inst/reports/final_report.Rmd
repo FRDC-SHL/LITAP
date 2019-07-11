@@ -29,19 +29,32 @@ params:
 ```{r load_files, include = FALSE}
 knitr::opts_chunk$set(fig.width = 10, fig.height = 10, tidy = TRUE, echo = FALSE)
 
+library(LITAP)
+library(gridExtra)
+library(ggplot2)
+
 if(is.null(params$rlim)) rlim <- "none" else rlim <- params$rlim
 if(is.null(params$clim)) clim <- "none" else clim <- params$clim
 
+# Get files
 files <- params$out_files
 
-library(LITAP)
-library(gridExtra)
+read_output <- function(files) {
+   x <- NULL
+   if(any(stringr::str_detect(files, ".rds"))) {
+      x <- readRDS(stringr::str_subset(files, ".rds"))
+   } else if (any(stringr::str_detect(files, ".csv"))) {
+      x <- readr::read_csv(stringr::str_subset(files, ".csv"))
+   } else if(any(stringr::str_detect(files, ".dbf"))) {
+      x <- foreign::read.dbf(stringr::str_subset(files, ".dbf"))
+   }
+   x
+}
 
-#cat(files)
-if(length(stringr::str_subset(files, paste0(run, "_dem_fill.rds"))) > 0) dem <- readRDS(stringr::str_subset(files, paste0(run, "_dem_fill.rds")))
-if(length(stringr::str_subset(files, paste0(run, "_pit.rds"))) > 0) pit <- readRDS(stringr::str_subset(files, paste0(run, "_pit.rds"))) else pit <- NULL #cat(stringr::str_subset(files, paste0(run, "_pit.rds"))) 
-if(length(stringr::str_subset(files, paste0(run, "_pond.rds"))) > 0) pond <- readRDS(stringr::str_subset(files, paste0(run, "_pond.rds"))) else pond <- NULL
-if(length(stringr::str_subset(files, paste0(run, "_fill.rds"))) > 0) fill <- readRDS(stringr::str_subset(files, paste0(run, "_fill.rds"))) else fill <- NULL
+dem <- read_output(stringr::str_subset(files, "dem_fill"))
+pit <- read_output(stringr::str_subset(files, "stats_pit"))
+pond <- read_output(stringr::str_subset(files, "stats_pond"))
+fill <- read_output(stringr::str_subset(files, "stats_fill"))
 ```
 
 ## Details
@@ -65,11 +78,10 @@ __LITAP version:__
 
 
 
-## Local files output (.csv)
+## Local files output
 
 ```{r list_files, results = "asis"}
-lf <- stringr::str_subset(files, "csv$")
-cat(paste0("- [", basename(lf), "](", lf, ")\n"))
+cat(paste0("- [", basename(files), "](", files, ")\n"))
 ```
 
 
@@ -105,7 +117,6 @@ grid.arrange(flow_plot(db = dem, type = "elevation", pits = TRUE, shed = TRUE, s
 __NOTE:__  
 
 - NextPit values do not match the original values from LandMapR
-- Varatio/Pit Vol/Pit Area may be slightly different as well
 
 ### Watershed stats - Pit Table
 ```{r pit_table}

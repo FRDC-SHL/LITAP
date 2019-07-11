@@ -1,5 +1,4 @@
 
-#' @import magrittr
 pit_stat1 <- function(db, w = NULL, verbose = FALSE) {
 
   if(length(unique(db$shedno[!is.na(db$shedno)])) > 1){ # If more than one watershed
@@ -7,7 +6,7 @@ pit_stat1 <- function(db, w = NULL, verbose = FALSE) {
     # Subset watersheds
     if(is.null(w)) w <- unique(db$shedno)
 
-    if(verbose) message("    Assessing pour points: ", appendLF = is.null(w))
+    if(verbose) message("    Assessing pour points ", appendLF = is.null(w))
 
     # For each watershed calculate the pour_point (details of the point at which tip to another watershed)
 
@@ -81,11 +80,11 @@ pit_stat1 <- function(db, w = NULL, verbose = FALSE) {
       dplyr::filter(shedno %in% w) %>%
       dplyr::left_join(pp, by = "shedno") %>%
       dplyr::group_by(shedno) %>%
-      dplyr::mutate(shed_area = seq_along(shedno)) %>%
+      dplyr::mutate(shed_area = length(shedno)) %>%
       dplyr::filter(elev <= pour_elev) %>%
       dplyr::summarize(shed_area = shed_area[1],
                        edge_pit = any(edge_map),
-                       pit_area = seq_along(shed_area),
+                       pit_area = length(shedno),
                        pit_vol = sum(pour_elev - elev),
                        pit_elev = elev[ldir == 5],
                        pit_seqno = seqno[ldir == 5],
@@ -132,7 +131,6 @@ pit_stat1 <- function(db, w = NULL, verbose = FALSE) {
   return(stats)
 }
 
-#' @import magrittr
 out_stat <- function(pit_stat) {
   pit_stat %>%
     dplyr::select(-dplyr::ends_with("_out")) %>%
@@ -144,29 +142,32 @@ out_stat <- function(pit_stat) {
 
 calc_vol2fl <- function(db, i_stats, verbose) {
 
-  # Where no change in ShedNo from local (or initial?) to ShedNow (pond shed) then all 0's ???
-  db <- dplyr::mutate(db, shedno = initial_shed)
-  vol <- db[, lapply(db, class) != "list"] %>% # remove lists
-    dplyr::filter(!is.na(shedno), local_shed != pond_shed)
+  # According to DEMProces.cpp (C++ flowmapr), Edge pits are skipped
+  i_stats <- dplyr::filter(i_stats, edge_pit == FALSE)
 
-  if(nrow(vol) > 0) {
+  db <- dplyr::mutate(db, shedno = initial_shed)
+
+  vol <- db[, lapply(db, class) != "list"]  %>% # remove lists
+    dplyr::filter(!is.na(shedno))
+
+  if(nrow(vol) > 0 & nrow(i_stats) > 0) {
     vol <- vol %>%
-      dplyr::left_join(dplyr::select(i_stats, shedno, pour_elev, shed_area), #add stats
+      dplyr::right_join(dplyr::select(i_stats, shedno, pour_elev, shed_area), #add stats
                        by = "shedno") %>%
       tidyr::nest(-shedno) %>%
       dplyr::mutate(vol = purrr::map(data, vol2fl, verbose = verbose)) %>%
       tidyr::unnest(vol)
+
     db <- dplyr::left_join(db, vol, by = c("shedno", "elev")) %>%
       mutate_cond(is.na(parea), mm2fl = 0, vol2fl = 0, parea = 0)
   } else {
     db <- dplyr::mutate(db, vol2fl = 0, mm2fl = 0, parea = 0)
   }
 
-  return(db)
+  db
 }
 
 # for each watershed look at slices of elevations, calculate the volumes and add together
-#' @import magrittr
 vol2fl <- function(db, verbose) {
 
   if(any(db$shed_area <= 0)) {
@@ -184,16 +185,18 @@ vol2fl <- function(db, verbose) {
                   last_elev = replace(last_elev, last_elev == 0, elev[last_elev == 0]),
                   elev_diff = (elev - last_elev) * 1000,
                   vol2fl = NA)
-                  #curr_vol = (elev_diff * (total_cells - 1)),
-                  #vol2fl = 0.1 + cumsum(curr_vol))
+  #curr_vol = (elev_diff * (total_cells - 1)),
+  #vol2fl = 0.1 + cumsum(curr_vol))
 
-  for(i in 1:nrow(vol_stats)) {
-    prev <- vol_stats$vol2fl[i-1]
-    if(length(prev) == 0) prev <- 0.1
-    vol_stats$vol2fl[i] <-  prev + (vol_stats$elev_diff[i] * (vol_stats$parea[i] - 1))
+  if(nrow(vol_stats) > 0) {
+    for(i in 1:nrow(vol_stats)) {
+      prev <- vol_stats$vol2fl[i-1]
+      if(length(prev) == 0) prev <- 0.1
+      vol_stats$vol2fl[i] <-  prev + (vol_stats$elev_diff[i] * (vol_stats$parea[i]-1))
+    }
   }
 
-  vol_stats <- vol_stats %>%
+  vol_stats %>%
     dplyr::mutate(mm2fl = dplyr::if_else(shed_area > 0,
                                          vol2fl/shed_area,
                                          vol2fl/1)) %>%
@@ -201,6 +204,4 @@ vol2fl <- function(db, verbose) {
 
   # db <- dplyr::left_join(db, vol_stats, by = "elev") %>%
   #   mutate_cond(is.na(parea), mm2fl = 0, vol2fl = 0, parea = 0)
-
-  return(vol_stats)
 }

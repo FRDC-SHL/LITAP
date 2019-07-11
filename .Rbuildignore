@@ -8,3 +8,9 @@
 ^_pkgdown.yml$
 ^README.Rmd$
 ^_pkgdown\.yml$
+^.travis.yml$
+^appveyor.yml$
+^\.Rprofile$
+FES4 Input files
+^doc$
+^Meta$

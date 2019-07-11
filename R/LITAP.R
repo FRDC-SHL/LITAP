@@ -1,5 +1,6 @@
 #' Dealing with CRAN Notes due to Non-standard evaluation
-.onLoad <- function(libname = find.package("feedr"), pkgname = "feedr"){
+#' @keywords internal
+.onLoad <- function(libname = find.package("LITAP"), pkgname = "LITAP"){
   # CRAN Note avoidance
   if(getRversion() >= "2.15.1")
     utils::globalVariables(

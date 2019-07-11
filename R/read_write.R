@@ -1,53 +1,49 @@
-save_all <- function(locs, data, name) {
-
-  if(all(names(data) == c("db", "stats"))) {
-    save_shed(locs$backup_out, data, paste0("backup_", name, ".rds"))
+save_backup <- function(locs, data, name) {
+  if(is.data.frame(data) || (is.list(data) && all(names(data) == c("db", "stats")))) {
+    save_shed(locs$backup, data, paste0(name, ".rds"))
   } else if(names(data) == "db") {
-    save_shed(locs$backup_out, data$db, paste0("backup_", name, ".rds"))
+    save_shed(locs$backup, data$db, paste0(name, ".rds"))
   }
+}
 
-  if(name %in% c("initial", "local", "pond", "fill", "pit", "ilocal")) {
-    if("db" %in% names(data)) {
-      d <- remove_buffer(data$db)
-      d <- d[, lapply(d, class) != "list"] # remove lists
+save_output <- function(locs, out_format,
+                        which = c("local", "pond", "fill", "pit", "ilocal"),
+                        where = "flow", add_db = NULL) {
 
-      save_shed(locs$final_out, d, paste0("dem_", name, ".rds"))
-      save_shed(locs$final_out, d, paste0("dem_", name, ".csv"))
+  for(name in which) {
+    if(file.exists(file.path(locs[["backup"]], paste0(name , ".rds")))) {
+      data <- read_shed(locs[["backup"]], name)
 
-      if(name %in% c("fill", "ilocal")) {
-        dbf <- convert_orig(d, type = "dem")
-        name_dbf <- name
-        if(name == "fill") name_dbf <- "dem"
-        if(name == "ilocal") name_dbf <- "idem"
-        save_shed(locs$dbf_out, as.data.frame(dbf), paste0(name_dbf, ".dbf"))
-      }
-    }
-    if("stats" %in% names(data)) {
-      if(nrow(data$stats) > 0) {
-        s <- remove_buffer(data$db, data$stats)
-        save_shed(locs$final_out, s, paste0(name, ".rds"))
-        save_shed(locs$final_out, s, paste0(name, ".csv"))
-
-        if(name %in% c("local", "pond", "fill", "pit", "ilocal")) {
-          name_dbf <- name
-          if(name == "ilocal") name_dbf <- "ipit"
-          dbf <- convert_orig(s, type = "stats")
-          if(any(is.na(dbf))) dbf <- dplyr::mutate_if(dbf, dplyr::funs(all(is.na(.))), dplyr::funs(return(0)))
-          save_shed(locs$dbf_out, as.data.frame(dbf), paste0(name_dbf, ".dbf"))
+      if(name %in% c("fill", "ilocal", "form", "weti", "relief", "length")) {
+        if("db" %in% names(data)) db <- data$db else db <- data
+        if(!is.null(add_db)) {
+          suppressMessages(db <- dplyr::left_join(db, add_db))
         }
+        save_shed(locs[[where]], db,
+                  paste0("dem_", name, ".", out_format), clean = TRUE)
+      }
+
+      if("stats" %in% names(data) && nrow(data$stats) > 0) {
+        s <- remove_buffer(data$db, data$stats)
+        save_shed(locs[[where]], s, paste0("stats_", name, ".", out_format))
       }
     }
   }
 }
 
-save_shed <- function(file_out, obj, name){
-  if(stringr::str_detect(name, ".rds$")) readr::write_rds(obj, paste0(file_out, "_", name))
-  if(stringr::str_detect(name, ".csv$")) readr::write_csv(obj, paste0(file_out, "_", name))
-  if(stringr::str_detect(name, ".dbf$")) foreign::write.dbf(obj, paste0(file_out, "_", name))
+save_shed <- function(file_out, obj, name, clean = FALSE){
+  if(clean) {
+    obj <- remove_buffer(obj)
+    obj <- obj[, lapply(obj, class) != "list"] # remove lists
+  }
+
+  if(stringr::str_detect(name, ".rds$")) readr::write_rds(obj, file.path(file_out, name))
+  if(stringr::str_detect(name, ".csv$")) readr::write_csv(obj, file.path(file_out, name))
+  if(stringr::str_detect(name, ".dbf$")) foreign::write.dbf(obj, file.path(file_out, name))
 }
 
 read_shed <- function(file_out, name){
-  readr::read_rds(paste0(file_out, "_", name , ".rds"))
+  readr::read_rds(file.path(file_out, paste0(name , ".rds")))
 }
 
 
@@ -108,14 +104,19 @@ remove_buffer <- function(db, stats = NULL) {
   db <- db %>%
     dplyr::filter(!buffer) %>%
     dplyr::arrange(row, col) %>%
-    dplyr::rename(seqno_buffer = seqno,
-                  drec_buffer = drec)
+    dplyr::rename(seqno_buffer = seqno)
+
+  if("drec" %in% names(db)) db <- dplyr::rename(db, drec_buffer = drec)
 
   #if("upslope" %in% names(db)) db <- dplyr::rename(db, upslope_buffer = upslope)
 
-  db <- db %>%
-    dplyr::mutate(row = row - 1, col = col -1,
-                  seqno = 1:length(row))
+  db <- dplyr::mutate(db, seqno = 1:length(row))
+
+  # Correct rows and columns
+  for(i in stringr::str_subset(names(db), "row|col")) {
+    db <- dplyr::mutate(db, !!i := !!rlang::sym(i) - 1)
+  }
+
 
   # Get index of seqno replacements
   index <- dplyr::select(db, seqno, seqno_buffer)
@@ -133,10 +134,20 @@ remove_buffer <- function(db, stats = NULL) {
     return(stats)
   } else {
     # Replace drec and upslope with correct cell numbers
-    db <- db %>%
-      dplyr::mutate(drec = rename_seqno(drec_buffer, index))
-    #upslope = purrr::map(upslope_buffer, ~ rename_seqno(.x, index)))
+
+    if("drec_buffer" %in% names(db)) {
+      db <- db %>%
+        dplyr::mutate(drec = rename_seqno(drec_buffer, index))
+    }
+      #upslope = purrr::map(upslope_buffer, ~ rename_seqno(.x, index)))
     return(db)
   }
 
+}
+
+locs_create <- function(out_folder, which = c("backup", "flow")) {
+  out_locs <- list()
+  for(i in which) out_locs[i] <- file.path(out_folder, i)
+  lapply(out_locs, function(x) {if(!dir.exists(x)) dir.create(x)})
+  out_locs
 }

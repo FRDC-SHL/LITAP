@@ -1,12 +1,19 @@
 LITAP
 ================
 
-**Landscape Integrated Terrain Analysis Package (LITAP)** for the analysis of waterflow based on elevation data and pit removals. Based on R. A. (Bob) MacMillan's FlowMapR program.
+**Landscape Integrated Terrain Analysis Package (LITAP)** for the
+analysis of waterflow based on elevation data and pit removals. Based on
+R. A. (Bob) MacMillan’s LandMapR suite of programs.
 
-See the companion website for more details: <http://steffilazerte.github.io/LITAP>
+Currently LITAP includes functions
 
-Installation
-------------
+  - `flow_mapper()` - based on FlowMapR
+  - `form_mapper()` - based on FormMapR
+
+See the companion website for more details:
+<http://steffilazerte.github.io/LITAP>
+
+## Installation
 
 Use the `devtools` package to directly install R packages from github:
 
@@ -15,38 +22,182 @@ install.packages("devtools")  # If not already installed
 devtools::install_github("steffilazerte/LITAP")
 ```
 
-Basic Usage
------------
+## Example files
 
-Must specify the dem file and the number of rows and columns:
-
-``` r
-complete_run(file = "testElev.dem", nrow = 100, ncol = 100)
-```
-
-Can also specify pit removal parameters:
+LITAP comes with several example files (`testELEV.dbf` and
+`testELEV_mini.dbf`). These are found in the “extdata” folder inside the
+LITAP package folder. If you are unsure where this folder is, use the
+function `system.file()`:
 
 ``` r
-complete_run(file = "testElev.dem", nrow = 100, ncol = 100, max_area = 5, max_depth = 0.2)
+system.file("extdata", package = "LITAP")
 ```
 
-As well as the location of output files:
+Now you can copy and paste these files to your working folder to try out
+the following examples.
+
+    ## [1] TRUE
+
+## Basic Usage: `flow_mapper()`
+
+Load the package:
 
 ``` r
-complete_run(file = "testElev.dem", nrow = 100, ncol = 100, folder_out = "./Output/")
+library(LITAP)
 ```
 
-LITAP accepts multiple file types and can automatically assess the number of rows and columns, depending on the type (see `?load_file` for details and requirements):
+First, specify the dem file and the number of rows and columns:
 
 ``` r
-complete_run(file = "testElev.csv")
-complete_run(file = "testElev.grd")
-complete_run(file = "testElev.flt")
+flow_mapper(file = "testELEV.dbf", nrow = 150, ncol = 150)
 ```
 
-Output
-------
+    ## CALCULATING DIRECTIONS
 
-Output files include .rds (R data files) and .csv files in the "Final" folder, .dbf files in the "dbf" folder and backup files (for resuming runs) in the "Backup" folder. Additionally, an html report summaring the run is included in the output folder.
+    ## CALCULATING WATERSHEDS
 
-See the [LITAP website](http://steffilazerte.github.io/LITAP/) hosted on github for more details and examples
+    ## REMOVING INITIAL PITS
+
+    ## CALCULATING POND (GLOBAL) WATERSHEDS
+
+    ## CALCULATING FILL PATTERNS
+
+    ## INVERTING DEM
+
+    ## CALCULATING INVERTED DIRECTIONS
+
+    ## CALCULATING INVERTED WATERSHEDS
+
+    ## REMOVING INVERTED INITIAL PITS
+
+    ## SAVING OUTPUT
+
+    ## CREATING REPORT
+
+    ## Run took: 0.44 min
+
+Can also specify pit removal
+parameters:
+
+``` r
+flow_mapper(file = "testELEV.dbf", nrow = 150, ncol = 150, max_area = 5, max_depth = 0.2)
+```
+
+    ## CALCULATING DIRECTIONS
+
+    ## CALCULATING WATERSHEDS
+
+    ## REMOVING INITIAL PITS
+
+    ## CALCULATING POND (GLOBAL) WATERSHEDS
+
+    ## CALCULATING FILL PATTERNS
+
+    ## INVERTING DEM
+
+    ## CALCULATING INVERTED DIRECTIONS
+
+    ## CALCULATING INVERTED WATERSHEDS
+
+    ## REMOVING INVERTED INITIAL PITS
+
+    ## SAVING OUTPUT
+
+    ## CREATING REPORT
+
+    ## Run took: 0.41 min
+
+As well as the location of output
+files:
+
+``` r
+flow_mapper(file = "testELEV.dbf", nrow = 150, ncol = 150, out_folder = "./Output/")
+```
+
+    ## CALCULATING DIRECTIONS
+
+    ## CALCULATING WATERSHEDS
+
+    ## REMOVING INITIAL PITS
+
+    ## CALCULATING POND (GLOBAL) WATERSHEDS
+
+    ## CALCULATING FILL PATTERNS
+
+    ## INVERTING DEM
+
+    ## CALCULATING INVERTED DIRECTIONS
+
+    ## CALCULATING INVERTED WATERSHEDS
+
+    ## REMOVING INVERTED INITIAL PITS
+
+    ## SAVING OUTPUT
+
+    ## CREATING REPORT
+
+    ## Run took: 0.4 min
+
+## Basic Usage: `form_mapper()`
+
+`form_mapper()` uses output from `flow_mapper()` and requires a grid
+size.
+
+``` r
+form_mapper(folder = "./Output/", grid = 5)
+```
+
+    ## CALCULATING FORM
+
+    ## CALCULATING WETNESS INDICES
+
+    ## CALCULATING RELIEF DERIVITIVES
+
+    ## CALCULATING SLOPE LENGTH
+
+    ## SAVING OUTPUT
+
+    ## Run took: 0.81 min
+
+Optionally, users can also define channels and ridges according to the
+number of up-/down-slope cells that flow through the cell in
+question.
+
+``` r
+form_mapper(folder = "./Output/", str_val = 10000, ridge_val = 10000, grid = 5)
+```
+
+    ## CALCULATING FORM
+
+    ## CALCULATING WETNESS INDICES
+
+    ## CALCULATING RELIEF DERIVITIVES
+
+    ## CALCULATING SLOPE LENGTH
+
+    ## SAVING OUTPUT
+
+    ## Run took: 0.81 min
+
+## Multiple file types
+
+LITAP accepts multiple file types and can automatically assess the
+number of rows and columns, depending on the type (see `?load_file` for
+details and requirements):
+
+``` r
+flow_mapper(file = "testELEV.csv")
+flow_mapper(file = "testELEV.grd")
+flow_mapper(file = "testELEV.flt")
+```
+
+## Output
+
+Output files can be .csv, .dbf, or .rds (R data files) in the output
+folders “flow” and “form” (respectively). Backup files (for
+`form_mapper()` and for resuming runs) are stored in the “Backup”
+folder. Additionally, an html report summaring the `flow_mapper()` run
+is included in the output folder (`testELEV_final_report.html`).
+
+See the [LITAP website](http://steffilazerte.github.io/LITAP/) hosted on
+github for more details and examples

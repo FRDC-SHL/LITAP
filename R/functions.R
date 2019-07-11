@@ -59,10 +59,10 @@ trace_pits <- function(shedno, w_stats) {
 
 
 
-
+# Relabel seqno
 rename_seqno <- function(x, index) {
   if(length(x) > 0){
-    x <- dplyr::as_tibble(x) %>%
+    x <- tibble::enframe(x, name = NULL) %>%
       dplyr::rename(seqno_buffer = value) %>%
       dplyr::left_join(index, by = "seqno_buffer") %>%
       dplyr::pull(seqno)
@@ -102,6 +102,9 @@ edge_pit <- function(a, db) {
   any(is.na(db$elev[a]))
 }
 
+# Calculate which cells are neighbouring and pull the neighbouring values into
+# extra columns for vectorized operations
+# Data MUST be arranged by seqno
 nb_values <- function(db, max_cols, col = "elev", db_sub = NULL, format = "long") {
 
   if(is.null(db_sub)) db_sub <- db
@@ -116,7 +119,6 @@ nb_values <- function(db, max_cols, col = "elev", db_sub = NULL, format = "long"
     if(i == 7) seqno <- db_sub$seqno - (max_cols + 1)
     if(i == 8) seqno <- db_sub$seqno - max_cols
     if(i == 9) seqno <- db_sub$seqno - (max_cols - 1)
-
 
     seqno[seqno < 1 | seqno > max(db$seqno)] <- NA
 
@@ -155,9 +157,10 @@ flow_values <- function(db, max_cols, col = "elev", db_sub = NULL) {
 
 finddir2 <- function(db) {
   db %>%
-    dplyr::mutate(elev_diff = elev - elev_n) %>%
+    dplyr::mutate(elev_diff = as.double(elev - elev_n)) %>%
     dplyr::mutate(elev_diff = dplyr::if_else(n %in% c(1, 3, 7, 9),
-                                             elev_diff/sqrt(2), elev_diff)) %>%
+                                             elev_diff/sqrt(2),
+                                             elev_diff)) %>%
     dplyr::group_by(seqno) %>%
     dplyr::mutate(max_slope = max(elev_diff, na.rm = TRUE),
                   ldir = n[elev_diff == max_slope & max_slope > 0 & !is.na(elev_diff)][1]) %>%
@@ -325,7 +328,6 @@ flatin <- function(n, db, verbose = FALSE) {
   } else return(NA)
 }
 
-#' @import magrittr
 neighbour_pit <- function(n, db, verbose = FALSE) {
 
   # Add in local flow directions
@@ -337,16 +339,6 @@ neighbour_pit <- function(n, db, verbose = FALSE) {
   #   dplyr::filter(index != 5, ldir == 5)
 
   if(nrow(n) != 0) return(n[1,])
-}
-
-calc_upslope <- function(cell, db) {
-  new_upslope <- db %>%
-    dplyr::filter(drec == cell) %>%
-    .$upslope %>%
-    list(., cell) %>%
-    unlist() %>%
-    unique()
-  return(new_upslope)
 }
 
 # G. Grothendieck
@@ -442,18 +434,6 @@ divide <- function(db, size = 12){
   db$group4 <- NA
   db$group4[(db$row > (size/2)) & (db$col > (size/2))] <- db$group1[db$row < (max(db$row) - ((size/2) - 1)) & db$col < (max(db$col) - ((size/2) - 1))]
 
-
-  # ggplot(db, aes(x = row, y = col)) +
-  #   geom_rect(xmin = 0, xmax = max(db$row), ymax = 0, ymin = max(db$col)) +
-  #   geom_raster(aes(fill = group1)) +
-  #   geom_point(x = 10, y = 72)
-  #
-  #  ggplot(db, aes(x = row, y = col)) +
-  #    geom_rect(xmin = 0, xmax = max(db$row), ymax = 0, ymin = max(db$col)) +
-  #    geom_raster(aes(fill = group2)) +
-  #    geom_point(x = 10, y = 72)
-
-
   db_group1 <- db %>%
     dplyr::select(group1, seqno, elev) %>%
     dplyr::group_by(group1) %>%
@@ -494,7 +474,6 @@ most_n <- function(n1, n2, n3, n4) {
 }
 
 
-#' @import magrittr
 get_run <- function(file) {
   basename(file) %>%
     stringr::str_split(stringr::regex("Elev", ignore_case = TRUE)) %>%

@@ -4,7 +4,7 @@
 #' examples.
 #'
 #' @param db Data frame. Cell by cell data on the elevation of the watershed.
-#'   Output by LITAP's \code{complete_run()} function.
+#'   Output by LITAP's \code{flow_mapper()} function.
 #' @param type Character. Either relief or elevation. Defaults to relief.
 #' @param dir Logical. Include flow directions?
 #' @param seqno Logical. Include cell numbering?
@@ -22,15 +22,17 @@
 #' @param stats Data frame. Data frame of watershed stats to highlight pour
 #'   points.
 #' @param missing Character. What is the value of missing data? Defaults to NA
-
 #'
-#' @import ggplot2
 #' @export
 flow_plot <- function(db, type = "relief", dir = FALSE, seqno = FALSE, highlight = FALSE,
                       shed = FALSE, shed_type = "shedno", pits = FALSE,
                       upslope_threshold = NULL,
                       cells = NULL, clim = NULL, rlim = NULL,
                       stats = NULL, missing = NA) {
+
+  if(!type %in% c("relief", "elevation", "elev")) {
+    stop("type must be either 'relief' or 'elevation' ('elev' also accepted)")
+  } else if(type == "elev") type <- "elevation"
 
   db_orig <- db
 
@@ -82,12 +84,12 @@ flow_plot <- function(db, type = "relief", dir = FALSE, seqno = FALSE, highlight
   }
 
   # Main plot
-  g <- ggplot(data = db, aes(x = col, y = row)) +
-    theme_classic() +
-    theme(plot.margin = unit(c(1, 1, 1, 1), "pt")) +
-    scale_y_reverse() +
-    scale_x_continuous(position = "top") +
-    coord_fixed()
+  g <- ggplot2::ggplot(data = db, ggplot2::aes(x = col, y = row)) +
+    ggplot2::theme_classic() +
+    ggplot2::theme(plot.margin = ggplot2::unit(c(1, 1, 1, 1), "pt")) +
+    ggplot2::scale_y_reverse() +
+    ggplot2::scale_x_continuous(position = "top") +
+    ggplot2::coord_fixed()
 
   if(!dir & shed) {
     labs <- db %>%
@@ -95,58 +97,65 @@ flow_plot <- function(db, type = "relief", dir = FALSE, seqno = FALSE, highlight
       dplyr::summarize(row = median(row), col = median(col))
 
     g <- g +
-      geom_raster(aes(fill = factor(shedno))) +
-      scale_fill_discrete(name = "Watershed", guide = FALSE) +
-      geom_text(data = labs, aes(label = shedno))
+      ggplot2::geom_raster(ggplot2::aes(fill = factor(shedno))) +
+      ggplot2::scale_fill_discrete(name = "Watershed", guide = FALSE) +
+      ggplot2::geom_text(data = labs, ggplot2::aes(label = shedno))
 
   } else if(type == "relief") {
-    g <- g + geom_raster(aes(alpha = relief)) +
-      scale_alpha_continuous(range = c(1, 0), guide = FALSE)
+    g <- g + ggplot2::geom_raster(ggplot2::aes(alpha = relief)) +
+      ggplot2::scale_alpha_continuous(range = c(1, 0), guide = FALSE)
   } else if(type == "elevation") {
-    g <- g + geom_raster(aes(alpha = elev)) +
-      scale_alpha_continuous(range = c(0, 1))
+    g <- g + ggplot2::geom_raster(ggplot2::aes(alpha = elev)) +
+      ggplot2::scale_alpha_continuous(range = c(0, 1))
   }
 
   # Add cell labels
   if(seqno == TRUE) {
     if(highlight) {
       seqnos <- dplyr::filter(db, seqno %in% cells)
-      g <- g + geom_text(data = seqnos, aes(label = seqno), size = 2.5, vjust = -1)
+      g <- g + ggplot2::geom_text(data = seqnos, ggplot2::aes(label = seqno),
+                                  size = 2.5, vjust = -1)
     } else {
-      g <- g + geom_text(aes(label = seqno), size = 2.5, vjust = -1)
+      g <- g + ggplot2::geom_text(ggplot2::aes(label = seqno),
+                                  size = 2.5, vjust = -1)
     }
   }
 
   # Add upslope area
   # if(!is.null(upslope)){
   #   g <- g +
-  #     geom_raster(aes(alpha = area), fill = "black") +
-  #     scale_alpha_manual(name = "Upslope area", values = c(0, 0.5))
+  #     ggplot2::geom_raster(ggplot2::aes(alpha = area), fill = "black") +
+  #     ggplot2::scale_alpha_manual(name = "Upslope area", values = c(0, 0.5))
   # } else
     if(!is.null(stats)){
     g <- g +
-      #geom_point(data = stats, aes(shape = dir)) +
-      geom_curve(data = stats, aes(x = in_col, xend = out_col, y = in_row, yend = out_row),
-                 arrow = arrow(length = unit(0.01, "npc")))
-      #scale_shape_manual(values = c(20,21))
+      #ggplot2::geom_point(data = stats, ggplot2::aes(shape = dir)) +
+      ggplot2::geom_curve(data = stats,
+                          ggplot2::aes(x = in_col, xend = out_col,
+                                       y = in_row, yend = out_row),
+                 arrow = ggplot2::arrow(length = ggplot2::unit(0.01, "npc")))
+      #ggplot2::scale_shape_manual(values = c(20,21))
   }
 
   # Add directions
   if(dir & shed) {
     g <- g +
-      #geom_point(data = db_dir, size = 1) +
-      # geom_segment(data = db_dir, aes(xend = xend, yend = yend, colour = factor(shedno)),
-      #              arrow = arrow(length = unit(1.5, "mm")))
-      geom_segment(data = db_dir, aes(xend = xend, yend = yend, colour = factor(shedno)))
+      #ggplot2::geom_point(data = db_dir, size = 1) +
+      # ggplot2::geom_segment(data = db_dir, ggplot2::aes(xend = xend, yend = yend, colour = factor(shedno)),
+      #              arrow = ggplot2::arrow(length = ggplot2::unit(1.5, "mm")))
+      ggplot2::geom_segment(data = db_dir, ggplot2::aes(xend = xend, yend = yend, colour = factor(shedno)))
   } else if(dir & !shed) {
     g <- g +
-      #geom_point(data = db_dir, size = 1) +
-      geom_segment(data = db_dir, aes(xend = xend, yend = yend),
-                   arrow = arrow(length = unit(1.5, "mm")))
+      #ggplot2::geom_point(data = db_dir, size = 1) +
+      ggplot2::geom_segment(data = db_dir, ggplot2::aes(xend = xend, yend = yend),
+                   arrow = ggplot2::arrow(length = ggplot2::unit(1.5, "mm")))
   }
 
   # Add lowest point
-  if(pits) g <- g + geom_point(data = db[db$ldir == 5,], colour = "black")
+  if(pits) {
+    if(shed_type == "local" && "local_ldir" %in% names(db)) dir <- "local_ldir" else dir <- "ldir"
+    g <- g + ggplot2::geom_point(data = db[db[[dir]] == 5,], colour = "black")
+  }
 
-  return(g)
+  g
 }

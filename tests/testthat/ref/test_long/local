@@ -1,0 +1,456 @@
+    shedno seqno ridge    elev drec seqno_shed drec_shed upslope initial_shed
+1       NA   150    NA      NA   NA        150        NA       0           NA
+2       NA   151    NA      NA   NA        151        NA       0           NA
+3       NA   152    NA      NA   NA        152        NA       0           NA
+4       NA   153    NA      NA   NA        153        NA       0           NA
+5        4   154 FALSE 675.500  306          1        50     301            4
+6        4   155 FALSE 675.676  154          2         1     300            4
+7        4   156 FALSE 675.822  155          3         2     299            4
+8        4   157 FALSE 675.924  156          4         3     298            4
+9        4   158 FALSE 675.986  157          5         4     297            4
+10       4   159 FALSE 676.018  158          6         5     292            4
+11       4   160 FALSE 676.034  159          7         6     284            4
+12       4   161 FALSE 676.058  160          8         7     276            4
+13       4   162 FALSE 676.109  161          9         8     258            4
+14       4   163 FALSE 676.204  162         10         9     257            4
+15       4   164 FALSE 676.335  163         11        10     256            4
+16       4   165 FALSE 676.479  164         12        11     255            4
+17       4   166 FALSE 676.620  165         13        12     254            4
+18       4   167 FALSE 676.754  166         14        13     253            4
+19       4   168 FALSE 676.874  167         15        14     252            4
+20       4   169 FALSE 676.979  168         16        15     251            4
+21       4   170 FALSE 677.082  169         17        16     250            4
+22       4   171 FALSE 677.181  170         18        17     249            4
+23       4   172 FALSE 677.264  171         19        18     248            4
+24       4   173 FALSE 677.332  172         20        19     247            4
+25       4   174 FALSE 677.385  173         21        20     246            4
+26       4   175 FALSE 677.422  174         22        21     245            4
+27       4   176 FALSE 677.445  175         23        22     244            4
+28       4   177 FALSE 677.461  176         24        23     237            4
+29       4   178 FALSE 677.470  177         25        24     236            4
+30       4   179 FALSE 677.478  178         26        25     228            4
+31       4   180 FALSE 677.491  179         27        26     220            4
+32       4   181 FALSE 677.512  180         28        27     212            4
+33       4   182 FALSE 677.541  181         29        28     199            4
+34       4   183 FALSE 677.574  182         30        29     192            4
+35       4   184 FALSE 677.613  183         31        30     185            4
+36       4   185 FALSE 677.660  184         32        31     178            4
+37       4   186 FALSE 677.719  185         33        32     165            4
+38       4   187 FALSE 677.806  186         34        33     152            4
+39       4   188 FALSE 677.929  187         35        34     139            4
+40       4   189 FALSE 678.083  188         36        35     125            4
+41       4   190 FALSE 678.256  189         37        36     110            4
+42       4   191 FALSE 678.440  190         38        37      92            4
+43       4   192 FALSE 678.614  191         39        38      76            4
+44       4   193 FALSE 678.760  192         40        39      62            4
+45       4   194 FALSE 678.875  193         41        40      50            4
+46       4   195 FALSE 678.962  194         42        41      39            4
+47       4   196 FALSE 679.017  195         43        42      29            4
+48       4   197 FALSE 679.054  196         44        43      21            4
+49       4   198 FALSE 679.082  197         45        44      20            4
+50       4   199 FALSE 679.105  198         46        45      18            4
+51       4   200 FALSE 679.124  199         47        46      13            4
+52       4   201 FALSE 679.139  200         48        47      10            4
+53       4   202  TRUE 679.146  201         49        48       6            4
+54       3   203  TRUE 679.143  204          1         2       7            3
+55       3   204 FALSE 679.136  205          2         3      16            3
+56       3   205 FALSE 679.124  206          3         4      29            3
+57       3   206 FALSE 679.111  207          4         5      44            3
+58       3   207 FALSE 679.099  208          5         6      61            3
+59       3   208 FALSE 679.088  209          6         7      75            3
+60       3   209 FALSE 679.074  210          7         8      87            3
+61       3   210 FALSE 679.059  211          8         9      97            3
+62       3   211 FALSE 679.047  212          9        10     106            3
+63       3   212 FALSE 679.044  212         10        10     487            3
+64       3   213 FALSE 679.055  212         11        10     373            3
+65       3   214 FALSE 679.085  213         12        11     362            3
+66       3   215 FALSE 679.132  214         13        12     342            3
+67       3   216 FALSE 679.193  215         14        13     138            3
+68       3   217 FALSE 679.253  216         15        14     135            3
+69       3   218 FALSE 679.302  217         16        15     133            3
+70       3   219 FALSE 679.335  218         17        16     132            3
+71       3   220 FALSE 679.356  219         18        17     127            3
+72       3   221 FALSE 679.373  220         19        18     115            3
+73       3   222 FALSE 679.402  221         20        19     104            3
+74       3   223 FALSE 679.450  222         21        20      62            3
+75       3   224 FALSE 679.521  223         22        21      53            3
+76       3   225 FALSE 679.608  224         23        22      46            3
+77       3   226 FALSE 679.699  225         24        23      39            3
+78       3   227 FALSE 679.784  226         25        24      32            3
+79       3   228 FALSE 679.862  227         26        25      25            3
+80       3   229 FALSE 679.930  228         27        26      18            3
+81       3   230 FALSE 679.992  229         28        27      11            3
+82       3   231 FALSE 680.047  230         29        28      10            3
+83       3   232 FALSE 680.087  231         30        29       5            3
+84       3   233  TRUE 680.109  232         31        30       3            3
+85       5   234  TRUE 680.106  235          1         2       4            5
+86       5   235 FALSE 680.072  236          2         3      10            5
+87       5   236 FALSE 680.004  237          3         4      11            5
+88       5   237 FALSE 679.908  238          4         5      13            5
+89       5   238 FALSE 679.788  239          5         6      16            5
+90       5   239 FALSE 679.648  240          6         7      20            5
+91       5   240 FALSE 679.503  241          7         8      25            5
+92       5   241 FALSE 679.365  242          8         9      31            5
+93       5   242 FALSE 679.235  243          9        10      38            5
+94       5   243 FALSE 679.119  244         10        11      44            5
+95       5   244 FALSE 679.017  245         11        12      48            5
+96       5   245 FALSE 678.922  246         12        13      49            5
+97       5   246 FALSE 678.826  247         13        14      50            5
+98       5   247 FALSE 678.728  248         14        15      51            5
+99       5   248 FALSE 678.621  249         15        16      52            5
+100      5   249 FALSE 678.506  250         16        17      53            5
+101      5   250 FALSE 678.385  251         17        18      54            5
+102      5   251 FALSE 678.266  252         18        19      55            5
+103      5   252 FALSE 678.157  253         19        20      56            5
+104      5   253 FALSE 678.058  254         20        21      57            5
+105      5   254 FALSE 677.966  255         21        22      58            5
+106      5   255 FALSE 677.880  256         22        23      59            5
+107      5   256 FALSE 677.787  257         23        24      60            5
+108      5   257 FALSE 677.678  258         24        25      61            5
+109      5   258 FALSE 677.557  259         25        26      62            5
+110      5   259 FALSE 677.422  260         26        27      78            5
+111      5   260 FALSE 677.273  261         27        28      88            5
+112      5   261 FALSE 677.127  262         28        29      97            5
+113      5   262 FALSE 676.993  263         29        30     520            5
+114      5   263 FALSE 676.875  264         30        31     542            5
+115      5   264 FALSE 676.782  265         31        32     617            5
+116      5   265 FALSE 676.717  266         32        33     628            5
+117      5   266 FALSE 676.672  267         33        34     639            5
+118      5   267 FALSE 676.638  268         34        35     649            5
+119      5   268 FALSE 676.615  269         35        36     658            5
+120      5   269 FALSE 676.588  270         36        37     666            5
+121      5   270 FALSE 676.550  271         37        38     673            5
+122      5   271 FALSE 676.494  272         38        39     674            5
+123      5   272 FALSE 676.407  273         39        40     676            5
+124      5   273 FALSE 676.277  274         40        41     682            5
+125      5   274 FALSE 676.112  275         41        42     685            5
+126      5   275 FALSE 675.932  276         42        43     689            5
+127      5   276 FALSE 675.756  277         43        44     694            5
+128      5   277 FALSE 675.614  278         44        45     695            5
+129      5   278 FALSE 675.529  279         45        46     713            5
+130      5   279 FALSE 675.499  279         46        46    3195            5
+131      5   280 FALSE 675.514  279         47        46     196            5
+132      5   281 FALSE 675.554  280         48        47     184            5
+133      5   282 FALSE 675.604  281         49        48     143            5
+134      5   283 FALSE 675.652  282         50        49     138            5
+135      5   284 FALSE 675.702  283         51        50     131            5
+136      5   285 FALSE 675.759  284         52        51     127            5
+137      5   286 FALSE 675.829  285         53        52     123            5
+138      5   287 FALSE 675.914  286         54        53     111            5
+139      5   288 FALSE 676.010  287         55        54     101            5
+140      5   289 FALSE 676.104  288         56        55      92            5
+141      5   290 FALSE 676.195  289         57        56      84            5
+142      5   291 FALSE 676.286  290         58        57      73            5
+143      5   292 FALSE 676.378  291         59        58      66            5
+144      5   293 FALSE 676.477  292         60        59      53            5
+145      5   294 FALSE 676.596  293         61        60      12            5
+146      5   295 FALSE 676.726  294         62        61       5            5
+147      5   296 FALSE 676.856  295         63        62       4            5
+148      5   297 FALSE 676.983  296         64        63       3            5
+149      5   298 FALSE 677.097  297         65        64       2            5
+150      5   299 FALSE 677.181  298         66        65       1            5
+151      5   300  TRUE 677.226  451         67       133       1            5
+    row col missing buffer elev_orig edge_map ldir flatcell vol2fl mm2fl parea
+1     1 150      NA   TRUE        NA     TRUE   NA       NA      0     0     0
+2     1 151      NA   TRUE        NA     TRUE   NA       NA      0     0     0
+3     1 152      NA   TRUE        NA     TRUE   NA       NA      0     0     0
+4     2   1      NA   TRUE        NA     TRUE   NA       NA      0     0     0
+5     2   2   FALSE  FALSE   675.500     TRUE    2    FALSE      0     0     0
+6     2   3   FALSE  FALSE   675.676     TRUE    4    FALSE      0     0     0
+7     2   4   FALSE  FALSE   675.822     TRUE    4    FALSE      0     0     0
+8     2   5   FALSE  FALSE   675.924     TRUE    4    FALSE      0     0     0
+9     2   6   FALSE  FALSE   675.986     TRUE    4    FALSE      0     0     0
+10    2   7   FALSE  FALSE   676.018     TRUE    4    FALSE      0     0     0
+11    2   8   FALSE  FALSE   676.034     TRUE    4    FALSE      0     0     0
+12    2   9   FALSE  FALSE   676.058     TRUE    4    FALSE      0     0     0
+13    2  10   FALSE  FALSE   676.109     TRUE    4    FALSE      0     0     0
+14    2  11   FALSE  FALSE   676.204     TRUE    4    FALSE      0     0     0
+15    2  12   FALSE  FALSE   676.335     TRUE    4    FALSE      0     0     0
+16    2  13   FALSE  FALSE   676.479     TRUE    4    FALSE      0     0     0
+17    2  14   FALSE  FALSE   676.620     TRUE    4    FALSE      0     0     0
+18    2  15   FALSE  FALSE   676.754     TRUE    4    FALSE      0     0     0
+19    2  16   FALSE  FALSE   676.874     TRUE    4    FALSE      0     0     0
+20    2  17   FALSE  FALSE   676.979     TRUE    4    FALSE      0     0     0
+21    2  18   FALSE  FALSE   677.082     TRUE    4    FALSE      0     0     0
+22    2  19   FALSE  FALSE   677.181     TRUE    4    FALSE      0     0     0
+23    2  20   FALSE  FALSE   677.264     TRUE    4    FALSE      0     0     0
+24    2  21   FALSE  FALSE   677.332     TRUE    4    FALSE      0     0     0
+25    2  22   FALSE  FALSE   677.385     TRUE    4    FALSE      0     0     0
+26    2  23   FALSE  FALSE   677.422     TRUE    4    FALSE      0     0     0
+27    2  24   FALSE  FALSE   677.445     TRUE    4    FALSE      0     0     0
+28    2  25   FALSE  FALSE   677.461     TRUE    4    FALSE      0     0     0
+29    2  26   FALSE  FALSE   677.470     TRUE    4    FALSE      0     0     0
+30    2  27   FALSE  FALSE   677.478     TRUE    4    FALSE      0     0     0
+31    2  28   FALSE  FALSE   677.491     TRUE    4    FALSE      0     0     0
+32    2  29   FALSE  FALSE   677.512     TRUE    4    FALSE      0     0     0
+33    2  30   FALSE  FALSE   677.541     TRUE    4    FALSE      0     0     0
+34    2  31   FALSE  FALSE   677.574     TRUE    4    FALSE      0     0     0
+35    2  32   FALSE  FALSE   677.613     TRUE    4    FALSE      0     0     0
+36    2  33   FALSE  FALSE   677.660     TRUE    4    FALSE      0     0     0
+37    2  34   FALSE  FALSE   677.719     TRUE    4    FALSE      0     0     0
+38    2  35   FALSE  FALSE   677.806     TRUE    4    FALSE      0     0     0
+39    2  36   FALSE  FALSE   677.929     TRUE    4    FALSE      0     0     0
+40    2  37   FALSE  FALSE   678.083     TRUE    4    FALSE      0     0     0
+41    2  38   FALSE  FALSE   678.256     TRUE    4    FALSE      0     0     0
+42    2  39   FALSE  FALSE   678.440     TRUE    4    FALSE      0     0     0
+43    2  40   FALSE  FALSE   678.614     TRUE    4    FALSE      0     0     0
+44    2  41   FALSE  FALSE   678.760     TRUE    4    FALSE      0     0     0
+45    2  42   FALSE  FALSE   678.875     TRUE    4    FALSE      0     0     0
+46    2  43   FALSE  FALSE   678.962     TRUE    4    FALSE      0     0     0
+47    2  44   FALSE  FALSE   679.017     TRUE    4    FALSE      0     0     0
+48    2  45   FALSE  FALSE   679.054     TRUE    4    FALSE      0     0     0
+49    2  46   FALSE  FALSE   679.082     TRUE    4    FALSE      0     0     0
+50    2  47   FALSE  FALSE   679.105     TRUE    4    FALSE      0     0     0
+51    2  48   FALSE  FALSE   679.124     TRUE    4    FALSE      0     0     0
+52    2  49   FALSE  FALSE   679.139     TRUE    4    FALSE      0     0     0
+53    2  50   FALSE  FALSE   679.146     TRUE    4    FALSE      0     0     0
+54    2  51   FALSE  FALSE   679.143     TRUE    6    FALSE      0     0     0
+55    2  52   FALSE  FALSE   679.136     TRUE    6    FALSE      0     0     0
+56    2  53   FALSE  FALSE   679.124     TRUE    6    FALSE      0     0     0
+57    2  54   FALSE  FALSE   679.111     TRUE    6    FALSE      0     0     0
+58    2  55   FALSE  FALSE   679.099     TRUE    6    FALSE      0     0     0
+59    2  56   FALSE  FALSE   679.088     TRUE    6    FALSE      0     0     0
+60    2  57   FALSE  FALSE   679.074     TRUE    6    FALSE      0     0     0
+61    2  58   FALSE  FALSE   679.059     TRUE    6    FALSE      0     0     0
+62    2  59   FALSE  FALSE   679.047     TRUE    6    FALSE      0     0     0
+63    2  60   FALSE  FALSE   679.044     TRUE    5     TRUE      0     0     0
+64    2  61   FALSE  FALSE   679.055     TRUE    4    FALSE      0     0     0
+65    2  62   FALSE  FALSE   679.085     TRUE    4    FALSE      0     0     0
+66    2  63   FALSE  FALSE   679.132     TRUE    4    FALSE      0     0     0
+67    2  64   FALSE  FALSE   679.193     TRUE    4    FALSE      0     0     0
+68    2  65   FALSE  FALSE   679.253     TRUE    4    FALSE      0     0     0
+69    2  66   FALSE  FALSE   679.302     TRUE    4    FALSE      0     0     0
+70    2  67   FALSE  FALSE   679.335     TRUE    4    FALSE      0     0     0
+71    2  68   FALSE  FALSE   679.356     TRUE    4    FALSE      0     0     0
+72    2  69   FALSE  FALSE   679.373     TRUE    4    FALSE      0     0     0
+73    2  70   FALSE  FALSE   679.402     TRUE    4    FALSE      0     0     0
+74    2  71   FALSE  FALSE   679.450     TRUE    4    FALSE      0     0     0
+75    2  72   FALSE  FALSE   679.521     TRUE    4    FALSE      0     0     0
+76    2  73   FALSE  FALSE   679.608     TRUE    4    FALSE      0     0     0
+77    2  74   FALSE  FALSE   679.699     TRUE    4    FALSE      0     0     0
+78    2  75   FALSE  FALSE   679.784     TRUE    4    FALSE      0     0     0
+79    2  76   FALSE  FALSE   679.862     TRUE    4    FALSE      0     0     0
+80    2  77   FALSE  FALSE   679.930     TRUE    4    FALSE      0     0     0
+81    2  78   FALSE  FALSE   679.992     TRUE    4    FALSE      0     0     0
+82    2  79   FALSE  FALSE   680.047     TRUE    4    FALSE      0     0     0
+83    2  80   FALSE  FALSE   680.087     TRUE    4    FALSE      0     0     0
+84    2  81   FALSE  FALSE   680.109     TRUE    4    FALSE      0     0     0
+85    2  82   FALSE  FALSE   680.106     TRUE    6    FALSE      0     0     0
+86    2  83   FALSE  FALSE   680.072     TRUE    6    FALSE      0     0     0
+87    2  84   FALSE  FALSE   680.004     TRUE    6    FALSE      0     0     0
+88    2  85   FALSE  FALSE   679.908     TRUE    6    FALSE      0     0     0
+89    2  86   FALSE  FALSE   679.788     TRUE    6    FALSE      0     0     0
+90    2  87   FALSE  FALSE   679.648     TRUE    6    FALSE      0     0     0
+91    2  88   FALSE  FALSE   679.503     TRUE    6    FALSE      0     0     0
+92    2  89   FALSE  FALSE   679.365     TRUE    6    FALSE      0     0     0
+93    2  90   FALSE  FALSE   679.235     TRUE    6    FALSE      0     0     0
+94    2  91   FALSE  FALSE   679.119     TRUE    6    FALSE      0     0     0
+95    2  92   FALSE  FALSE   679.017     TRUE    6    FALSE      0     0     0
+96    2  93   FALSE  FALSE   678.922     TRUE    6    FALSE      0     0     0
+97    2  94   FALSE  FALSE   678.826     TRUE    6    FALSE      0     0     0
+98    2  95   FALSE  FALSE   678.728     TRUE    6    FALSE      0     0     0
+99    2  96   FALSE  FALSE   678.621     TRUE    6    FALSE      0     0     0
+100   2  97   FALSE  FALSE   678.506     TRUE    6    FALSE      0     0     0
+101   2  98   FALSE  FALSE   678.385     TRUE    6    FALSE      0     0     0
+102   2  99   FALSE  FALSE   678.266     TRUE    6    FALSE      0     0     0
+103   2 100   FALSE  FALSE   678.157     TRUE    6    FALSE      0     0     0
+104   2 101   FALSE  FALSE   678.058     TRUE    6    FALSE      0     0     0
+105   2 102   FALSE  FALSE   677.966     TRUE    6    FALSE      0     0     0
+106   2 103   FALSE  FALSE   677.880     TRUE    6    FALSE      0     0     0
+107   2 104   FALSE  FALSE   677.787     TRUE    6    FALSE      0     0     0
+108   2 105   FALSE  FALSE   677.678     TRUE    6    FALSE      0     0     0
+109   2 106   FALSE  FALSE   677.557     TRUE    6    FALSE      0     0     0
+110   2 107   FALSE  FALSE   677.422     TRUE    6    FALSE      0     0     0
+111   2 108   FALSE  FALSE   677.273     TRUE    6    FALSE      0     0     0
+112   2 109   FALSE  FALSE   677.127     TRUE    6    FALSE      0     0     0
+113   2 110   FALSE  FALSE   676.993     TRUE    6    FALSE      0     0     0
+114   2 111   FALSE  FALSE   676.875     TRUE    6    FALSE      0     0     0
+115   2 112   FALSE  FALSE   676.782     TRUE    6    FALSE      0     0     0
+116   2 113   FALSE  FALSE   676.717     TRUE    6    FALSE      0     0     0
+117   2 114   FALSE  FALSE   676.672     TRUE    6    FALSE      0     0     0
+118   2 115   FALSE  FALSE   676.638     TRUE    6    FALSE      0     0     0
+119   2 116   FALSE  FALSE   676.615     TRUE    6    FALSE      0     0     0
+120   2 117   FALSE  FALSE   676.588     TRUE    6    FALSE      0     0     0
+121   2 118   FALSE  FALSE   676.550     TRUE    6    FALSE      0     0     0
+122   2 119   FALSE  FALSE   676.494     TRUE    6    FALSE      0     0     0
+123   2 120   FALSE  FALSE   676.407     TRUE    6    FALSE      0     0     0
+124   2 121   FALSE  FALSE   676.277     TRUE    6    FALSE      0     0     0
+125   2 122   FALSE  FALSE   676.112     TRUE    6    FALSE      0     0     0
+126   2 123   FALSE  FALSE   675.932     TRUE    6    FALSE      0     0     0
+127   2 124   FALSE  FALSE   675.756     TRUE    6    FALSE      0     0     0
+128   2 125   FALSE  FALSE   675.614     TRUE    6    FALSE      0     0     0
+129   2 126   FALSE  FALSE   675.529     TRUE    6    FALSE      0     0     0
+130   2 127   FALSE  FALSE   675.499     TRUE    5     TRUE      0     0     0
+131   2 128   FALSE  FALSE   675.514     TRUE    4    FALSE      0     0     0
+132   2 129   FALSE  FALSE   675.554     TRUE    4    FALSE      0     0     0
+133   2 130   FALSE  FALSE   675.604     TRUE    4    FALSE      0     0     0
+134   2 131   FALSE  FALSE   675.652     TRUE    4    FALSE      0     0     0
+135   2 132   FALSE  FALSE   675.702     TRUE    4    FALSE      0     0     0
+136   2 133   FALSE  FALSE   675.759     TRUE    4    FALSE      0     0     0
+137   2 134   FALSE  FALSE   675.829     TRUE    4    FALSE      0     0     0
+138   2 135   FALSE  FALSE   675.914     TRUE    4    FALSE      0     0     0
+139   2 136   FALSE  FALSE   676.010     TRUE    4    FALSE      0     0     0
+140   2 137   FALSE  FALSE   676.104     TRUE    4    FALSE      0     0     0
+141   2 138   FALSE  FALSE   676.195     TRUE    4    FALSE      0     0     0
+142   2 139   FALSE  FALSE   676.286     TRUE    4    FALSE      0     0     0
+143   2 140   FALSE  FALSE   676.378     TRUE    4    FALSE      0     0     0
+144   2 141   FALSE  FALSE   676.477     TRUE    4    FALSE      0     0     0
+145   2 142   FALSE  FALSE   676.596     TRUE    4    FALSE      0     0     0
+146   2 143   FALSE  FALSE   676.726     TRUE    4    FALSE      0     0     0
+147   2 144   FALSE  FALSE   676.856     TRUE    4    FALSE      0     0     0
+148   2 145   FALSE  FALSE   676.983     TRUE    4    FALSE      0     0     0
+149   2 146   FALSE  FALSE   677.097     TRUE    4    FALSE      0     0     0
+150   2 147   FALSE  FALSE   677.181     TRUE    4    FALSE      0     0     0
+151   2 148   FALSE  FALSE   677.226     TRUE    1    FALSE      0     0     0
+    elev_diff local_shed local_ldir local_elev_diff
+1       0.000         NA         NA           0.000
+2       0.000         NA         NA           0.000
+3       0.000         NA         NA           0.000
+4       0.000         NA         NA           0.000
+5      39.094          4          2          39.094
+6      38.918          4          4          38.918
+7      38.772          4          4          38.772
+8      38.670          4          4          38.670
+9      38.608          4          4          38.608
+10     38.345          4          4          38.345
+11     37.838          4          4          37.838
+12     37.187          4          4          37.187
+13     35.280          4          4          35.280
+14     35.185          4          4          35.185
+15     35.054          4          4          35.054
+16     34.910          4          4          34.910
+17     34.769          4          4          34.769
+18     34.635          4          4          34.635
+19     34.515          4          4          34.515
+20     34.410          4          4          34.410
+21     34.307          4          4          34.307
+22     34.208          4          4          34.208
+23     34.125          4          4          34.125
+24     34.057          4          4          34.057
+25     34.004          4          4          34.004
+26     33.967          4          4          33.967
+27     33.944          4          4          33.944
+28     33.420          4          4          33.420
+29     33.411          4          4          33.411
+30     32.708          4          4          32.708
+31     31.921          4          4          31.921
+32     31.050          4          4          31.050
+33     29.507          4          4          29.507
+34     28.622          4          4          28.622
+35     27.652          4          4          27.652
+36     26.590          4          4          26.590
+37     24.224          4          4          24.224
+38     21.961          4          4          21.961
+39     19.618          4          4          19.618
+40     17.085          4          4          17.085
+41     14.531          4          4          14.531
+42     11.962          4          4          11.962
+43      9.662          4          4           9.662
+44      7.634          4          4           7.634
+45      5.895          4          4           5.895
+46      4.363          4          4           4.363
+47      3.019          4          4           3.019
+48      1.942          4          4           1.942
+49      1.914          4          4           1.914
+50      1.813          4          4           1.813
+51      1.267          4          4           1.267
+52      1.037          4          4           1.037
+53      0.663          4          4           0.663
+54      0.818          3          6           0.818
+55      1.864          3          6           1.864
+56      3.208          3          6           3.208
+57      4.649          3          6           4.649
+58      6.170          3          6           6.170
+59      7.608          3          6           7.608
+60      8.967          3          6           8.967
+61     10.203          3          6          10.203
+62     11.328          3          6          11.328
+63     48.443          3          5          48.443
+64     36.140          3          4          36.140
+65     34.821          3          4          34.821
+66     32.762          3          4          32.762
+67     17.258          3          4          17.258
+68     16.870          3          4          16.870
+69     16.657          3          4          16.657
+70     16.624          3          4          16.624
+71     16.203          3          4          16.203
+72     15.102          3          4          15.102
+73     14.016          3          4          14.016
+74      8.670          3          4           8.670
+75      7.433          3          4           7.433
+76      6.324          3          4           6.324
+77      5.232          3          4           5.232
+78      4.172          3          4           4.172
+79      3.146          3          4           3.146
+80      2.164          3          4           2.164
+81      1.238          3          4           1.238
+82      1.183          3          4           1.183
+83      0.502          3          4           0.502
+84      0.325          3          4           0.325
+85      0.488          5          6           0.488
+86      1.219          5          6           1.219
+87      1.287          5          6           1.287
+88      1.708          5          6           1.708
+89      2.465          5          6           2.465
+90      3.530          5          6           3.530
+91      4.853          5          6           4.853
+92      6.377          5          6           6.377
+93      8.049          5          6           8.049
+94      9.635          5          6           9.635
+95     10.553          5          6          10.553
+96     10.648          5          6          10.648
+97     10.744          5          6          10.744
+98     10.842          5          6          10.842
+99     10.949          5          6          10.949
+100    11.064          5          6          11.064
+101    11.185          5          6          11.185
+102    11.304          5          6          11.304
+103    11.413          5          6          11.413
+104    11.512          5          6          11.512
+105    11.604          5          6          11.604
+106    11.690          5          6          11.690
+107    11.783          5          6          11.783
+108    11.892          5          6          11.892
+109    12.013          5          6          12.013
+110    13.816          5          6          13.816
+111    14.800          5          6          14.800
+112    15.815          5          6          15.815
+113    75.017          5          6          75.017
+114    77.153          5          6          77.153
+115    86.762          5          6          86.762
+116    88.472          5          6          88.472
+117    90.202          5          6          90.202
+118    91.863          5          6          91.863
+119    93.394          5          6          93.394
+120    94.772          5          6          94.772
+121    95.981          5          6          95.981
+122    96.037          5          6          96.037
+123    96.364          5          6          96.364
+124    97.694          5          6          97.694
+125    98.508          5          6          98.508
+126    99.733          5          6          99.733
+127   101.347          5          6         101.347
+128   101.489          5          6         101.489
+129   106.537          5          6         106.537
+130   453.427          5          5         453.427
+131    27.950          5          4          27.950
+132    26.234          5          4          26.234
+133    18.793          5          4          18.793
+134    18.284          5          4          18.284
+135    17.513          5          4          17.513
+136    17.042          5          4          17.042
+137    16.509          5          4          16.509
+138    14.403          5          4          14.403
+139    12.592          5          4          12.592
+140    11.016          5          4          11.016
+141     9.691          5          4           9.691
+142     8.017          5          4           8.017
+143     6.959          5          4           6.959
+144     5.319          5          4           5.319
+145     1.215          5          4           1.215
+146     0.455          5          4           0.455
+147     0.325          5          4           0.325
+148     0.198          5          4           0.198
+149     0.084          5          4           0.084
+150     0.000          5          4           0.000
+151     0.000          5          1           0.000

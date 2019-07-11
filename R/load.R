@@ -37,7 +37,8 @@ load_excel <- function(file, ...) {
     stop("Require package 'readxl' to load .xlsx or .xls files.\n
          Install with \"install.packages('readxl')\", then try again")
   } else {
-    h <- readxl::read_excel(file, n_max = 5, col_names = FALSE)
+    h <- readxl::read_excel(file, n_max = 5,
+                            col_names = FALSE, .name_repair = "minimal")
     header <- any(stringr::str_detect(h[1,], "[a-zA-Z]+"))
     db <- readxl::read_excel(file, col_names = header)
     names(db) <- c("x", "y", "elev")
@@ -129,8 +130,6 @@ load_txt <- function(file) {
 #'   \item Excel files (.xls, .xlsx) are loaded via the
 #'   \code{\link[readxl]{read_excel}} function.
 #'   }
-#'
-#' @examples
 #'
 #' @export
 load_file <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
@@ -232,15 +231,15 @@ add_buffer <- function(db) {
   ncols = max(db$col)
   nrows = max(db$row)
 
-  buffers <- tibble::data_frame(row = c(rep(1, ncols+2),        #top
-                                        1:(nrows+2),            #left
-                                        1:(nrows+2),            #right
-                                        rep(nrows+2, ncols+2)), #bottom
-                                col = c(1:(ncols+2),            #top
-                                        rep(1, nrows+2),        #left
-                                        rep(ncols+2, nrows+2),  #right
-                                        1:(ncols+2)),           #bottom
-                                buffer = TRUE) %>%
+  buffers <- tibble::tibble(row = c(rep(1, ncols+2),        #top
+                                    1:(nrows+2),            #left
+                                    1:(nrows+2),            #right
+                                    rep(nrows+2, ncols+2)), #bottom
+                            col = c(1:(ncols+2),            #top
+                                    rep(1, nrows+2),        #left
+                                    rep(ncols+2, nrows+2),  #right
+                                    1:(ncols+2)),           #bottom
+                            buffer = TRUE) %>%
 
     dplyr::distinct()
 

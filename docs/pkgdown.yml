@@ -1,25 +1,47 @@
-urls:
-  reference: http://hadley.github.io/pkgdown/reference
-  article: http://hadley.github.io/pkgdown/articles
+pandoc: 2.3.1
+pkgdown: 1.3.0
+pkgdown_sha: ~
 articles:
-  flow_plots: articles/flow_plots.html
   LITAP: LITAP.html
+  flow_plots: articles/flow_plots.html
+  021ELEV_compare_report_flow: reports/021ELEV_compare_report_flow.html
+  021ELEV_compare_report_form: reports/021ELEV_compare_report_form.html
+  02hELEV_compare_report_flow: reports/02hELEV_compare_report_flow.html
+  02hELEV_compare_report_form: reports/02hELEV_compare_report_form.html
+  02zELEV_compare_report_flow: reports/02zELEV_compare_report_flow.html
+  02zELEV_compare_report_form: reports/02zELEV_compare_report_form.html
+  B1hElev_compare_report_flow: reports/B1hElev_compare_report_flow.html
+  B1hElev_compare_report_form: reports/B1hElev_compare_report_form.html
+  B1mElev_compare_report_flow: reports/B1mElev_compare_report_flow.html
+  B1mElev_compare_report_form: reports/B1mElev_compare_report_form.html
+  B1zElev_compare_report_flow: reports/B1zElev_compare_report_flow.html
+  B1zElev_compare_report_form: reports/B1zElev_compare_report_form.html
+  Ec0ELEV_compare_report_flow: reports/Ec0ELEV_compare_report_flow.html
+  Ec0ELEV_compare_report_form: reports/Ec0ELEV_compare_report_form.html
+  EecELEV_compare_report_flow: reports/EecELEV_compare_report_flow.html
+  EecELEV_compare_report_form: reports/EecELEV_compare_report_form.html
+  EemELEV_compare_report_flow: reports/EemELEV_compare_report_flow.html
+  EemELEV_compare_report_form: reports/EemELEV_compare_report_form.html
+  H10Elev_compare_report_flow: reports/H10Elev_compare_report_flow.html
+  H10Elev_compare_report_form: reports/H10Elev_compare_report_form.html
+  H30Elev_compare_report_flow: reports/H30Elev_compare_report_flow.html
+  H30Elev_compare_report_form: reports/H30Elev_compare_report_form.html
+  H3hElev_compare_report_flow: reports/H3hElev_compare_report_flow.html
+  H3hElev_compare_report_form: reports/H3hElev_compare_report_form.html
+  I10Elev_compare_report_flow: reports/I10Elev_compare_report_flow.html
+  I10Elev_compare_report_form: reports/I10Elev_compare_report_form.html
+  I30Elev_compare_report_flow: reports/I30Elev_compare_report_flow.html
+  I30Elev_compare_report_form: reports/I30Elev_compare_report_form.html
+  I3hElev_compare_report_flow: reports/I3hElev_compare_report_flow.html
+  I3hElev_compare_report_form: reports/I3hElev_compare_report_form.html
+  R10Elev_compare_report_flow: reports/R10Elev_compare_report_flow.html
+  R10Elev_compare_report_form: reports/R10Elev_compare_report_form.html
+  R30Elev_compare_report_flow: reports/R30Elev_compare_report_flow.html
+  R30Elev_compare_report_form: reports/R30Elev_compare_report_form.html
+  R3hElev_compare_report_flow: reports/R3hElev_compare_report_flow.html
+  R3hElev_compare_report_form: reports/R3hElev_compare_report_form.html
   general: reports/general.html
-  test_021_fast: reports/test_021_fast.html
-  test_02h_fast: reports/test_02h_fast.html
-  test_02z_fast: reports/test_02z_fast.html
-  test_B1h_fast: reports/test_B1h_fast.html
-  test_B1m_fast: reports/test_B1m_fast.html
-  test_B1z_fast: reports/test_B1z_fast.html
-  test_Ec0_fast: reports/test_Ec0_fast.html
-  test_Eec_fast: reports/test_Eec_fast.html
-  test_Eem_fast: reports/test_Eem_fast.html
-  test_H10_fast: reports/test_H10_fast.html
-  test_H3h_fast: reports/test_H3h_fast.html
-  test_I10_fast: reports/test_I10_fast.html
-  test_I3h_fast: reports/test_I3h_fast.html
-  test_R10_fast: reports/test_R10_fast.html
-  test_R3h_fast: reports/test_R3h_fast.html
-  test_T10_fast: reports/test_T10_fast.html
-  test_T20_fast: reports/test_T20_fast.html
+urls:
+  reference: http://steffilazerte.github.io/LITAP/reference
+  article: http://steffilazerte.github.io/LITAP/articles
 
