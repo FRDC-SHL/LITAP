@@ -1,13 +1,28 @@
-url: http://hadley.github.io/pkgdown
+url: http://steffilazerte.github.io/LITAP
+
+navbar:
+  type: default
+  left:
+  - icon: fa-home
+    href: index.html
+  - text: Reference
+    href: reference/index.html
+  - text: Articles
+    href: articles/index.html
+  - text: News
+    href: news/index.html
+  right:
+  - icon: fa-github fa-lg
+    href: https://github.com/steffilazerte/LITAP
 
 articles:
   - title: Tutorials
     desc: Running and plotting in LITAP
     contents:
-    - flow_plots
-    - LITAP
+    - '`articles/flow_plots`'
+    - '`LITAP`'
   - title: Reports
-    desc: Reports comparing the output of original FlowMapR runs with LITAP runs
+    desc: Reports comparing the output of original FlowMapR/FormMapR runs with LITAP runs
     contents:
-    - general
-    - starts_with("test_")
+    - '`reports/general`'
+    - contains("report")

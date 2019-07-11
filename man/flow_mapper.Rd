@@ -30,8 +30,8 @@ pit removal}
 \item{max_depth}{Numeric. Largest depth of pits to be removed during initial
 pit removal}
 
-\item{out_folder}{Charater. Folder to store output files. Defaults to folder
-in the same location and with the same name as the dem file}
+\item{out_folder}{Character. Folder in which to store output files. Defaults
+to folder in the same location and with the same name as the dem file}
 
 \item{clean}{Logical. Remove all backup files and output files from previous
 runs in this folder?}

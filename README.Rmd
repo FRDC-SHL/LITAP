@@ -35,7 +35,6 @@ system.file("extdata", package = "LITAP")
 
 Now you can copy and paste these files to your working folder to try out the following examples.
 
-
 ```{r, echo = FALSE}
 file.copy(system.file("extdata", "testELEV.dbf", package = "LITAP"), ".")
 ```
@@ -71,13 +70,13 @@ flow_mapper(file = "testELEV.dbf", nrow = 150, ncol = 150, out_folder = "./Outpu
 `form_mapper()` uses output from `flow_mapper()` and requires a grid size.
 
 ```{r}
-form_mapper(folder = "./Output/testELEV/", grid = 5)
+form_mapper(folder = "./Output/", grid = 5)
 ```
 
 Optionally, users can also define channels and ridges according to the number of up-/down-slope cells that flow through the cell in question.
 
 ```{r}
-form_mapper(folder = "./Output/testELEV/", str_val = 10000, ridge_val = 10000)
+form_mapper(folder = "./Output/", str_val = 10000, ridge_val = 10000, grid = 5)
 ```
 
 ## Multiple file types
@@ -97,6 +96,7 @@ Output files can be .csv, .dbf, or .rds (R data files) in the output folders "fl
 See the [LITAP website](http://steffilazerte.github.io/LITAP/) hosted on github for more details and examples
 
 ```{r, include = FALSE}
-unlink("./testELEV")
-unlink("./Output/testELEV")
+unlink("./testELEV", recursive = TRUE)
+unlink("./Output", recursive = TRUE)
+file.remove("./testELEV.dbf")
 ```
