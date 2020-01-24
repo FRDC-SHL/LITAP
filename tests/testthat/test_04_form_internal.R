@@ -5,9 +5,9 @@ test_that("Sub-functions", {
   grid <- 5
 
   # DB files
-  expect_silent(db <- get_backups(dir, type = "fill")) %>%
+  expect_silent(db <- get_backups(dir, step = "fill")) %>%
     expect_is("data.frame")
-  expect_silent(idb <- get_backups(dir, type = "ilocal")) %>%
+  expect_silent(idb <- get_backups(dir, step = "ilocal")) %>%
     expect_is("data.frame")
 
   # Form
