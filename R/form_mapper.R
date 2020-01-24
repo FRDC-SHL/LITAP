@@ -166,6 +166,9 @@ form_mapper <- function(folder, grid, str_val = 10000, ridge_val = 10000,
   # Save output -------------------------------------------------------------
   task <- "saving output"
   announce(task, quiet)
+
+  db <- dplyr::select(db, -data)
+
   save_output(out_locs, out_format,
               which = c("weti", "relief", "length"),
               where = "form", add_db = db)

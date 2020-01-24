@@ -73,7 +73,7 @@ calc_upslopes <- function(db, type = c("upslope", "elev_diff")) {
   # Calculate upslope flow for each cell by watershed
   db %>%
     dplyr::arrange(dplyr::desc(elev), seqno) %>%
-    tidyr::nest(-shedno, .key = "db_w") %>%
+    tidyr::nest(db_w = c(-shedno)) %>%
     dplyr::mutate(db_w = purrr::map2(db_w, shedno,
                                      ~get_upslope3(.x, .y[1], type = type))) %>%
     tidyr::unnest(db_w) %>%

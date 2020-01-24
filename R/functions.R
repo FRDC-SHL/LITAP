@@ -437,22 +437,22 @@ divide <- function(db, size = 12){
   db_group1 <- db %>%
     dplyr::select(group1, seqno, elev) %>%
     dplyr::group_by(group1) %>%
-    tidyr::nest(.key = "db_sub1")
+    tidyr::nest(db_sub1 = tidyr::everything())
 
   db_group2 <- db %>%
     dplyr::select(group2, seqno, elev) %>%
     dplyr::group_by(group2) %>%
-    tidyr::nest(.key = "db_sub2")
+    tidyr::nest(db_sub2 = tidyr::everything())
 
   db_group3 <- db %>%
     dplyr::select(group3, seqno, elev) %>%
     dplyr::group_by(group3) %>%
-    tidyr::nest(.key = "db_sub3")
+    tidyr::nest(db_sub3 = tidyr::everything())
 
   db_group4 <- db %>%
     dplyr::select(group4, seqno, elev) %>%
     dplyr::group_by(group4) %>%
-    tidyr::nest(.key = "db_sub4")
+    tidyr::nest(db_sub4 = tidyr::everything())
 
   db_test <- db %>%
     dplyr::left_join(db_group1, by = "group1") %>%
