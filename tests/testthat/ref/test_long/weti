@@ -454,459 +454,459 @@
 149 5.648657e+02  6.337      5 FALSE 677.097         65        64       2
 150 4.577688e+02  6.126      5 FALSE 677.181         66        65       1
 151 4.075068e+02  6.010      5  TRUE 677.226         67       133       1
-    initial_shed missing buffer elev_orig edge_map ldir flatcell vol2fl mm2fl
-1             NA      NA   TRUE        NA     TRUE   NA       NA      0     0
-2             NA      NA   TRUE        NA     TRUE   NA       NA      0     0
-3             NA      NA   TRUE        NA     TRUE   NA       NA      0     0
-4             NA      NA   TRUE        NA     TRUE   NA       NA      0     0
-5              4   FALSE  FALSE   675.500     TRUE    2    FALSE      0     0
-6              4   FALSE  FALSE   675.676     TRUE    4    FALSE      0     0
-7              4   FALSE  FALSE   675.822     TRUE    4    FALSE      0     0
-8              4   FALSE  FALSE   675.924     TRUE    4    FALSE      0     0
-9              4   FALSE  FALSE   675.986     TRUE    4    FALSE      0     0
-10             4   FALSE  FALSE   676.018     TRUE    4    FALSE      0     0
-11             4   FALSE  FALSE   676.034     TRUE    4    FALSE      0     0
-12             4   FALSE  FALSE   676.058     TRUE    4    FALSE      0     0
-13             4   FALSE  FALSE   676.109     TRUE    4    FALSE      0     0
-14             4   FALSE  FALSE   676.204     TRUE    4    FALSE      0     0
-15             4   FALSE  FALSE   676.335     TRUE    4    FALSE      0     0
-16             4   FALSE  FALSE   676.479     TRUE    4    FALSE      0     0
-17             4   FALSE  FALSE   676.620     TRUE    4    FALSE      0     0
-18             4   FALSE  FALSE   676.754     TRUE    4    FALSE      0     0
-19             4   FALSE  FALSE   676.874     TRUE    4    FALSE      0     0
-20             4   FALSE  FALSE   676.979     TRUE    4    FALSE      0     0
-21             4   FALSE  FALSE   677.082     TRUE    4    FALSE      0     0
-22             4   FALSE  FALSE   677.181     TRUE    4    FALSE      0     0
-23             4   FALSE  FALSE   677.264     TRUE    4    FALSE      0     0
-24             4   FALSE  FALSE   677.332     TRUE    4    FALSE      0     0
-25             4   FALSE  FALSE   677.385     TRUE    4    FALSE      0     0
-26             4   FALSE  FALSE   677.422     TRUE    4    FALSE      0     0
-27             4   FALSE  FALSE   677.445     TRUE    4    FALSE      0     0
-28             4   FALSE  FALSE   677.461     TRUE    4    FALSE      0     0
-29             4   FALSE  FALSE   677.470     TRUE    4    FALSE      0     0
-30             4   FALSE  FALSE   677.478     TRUE    4    FALSE      0     0
-31             4   FALSE  FALSE   677.491     TRUE    4    FALSE      0     0
-32             4   FALSE  FALSE   677.512     TRUE    4    FALSE      0     0
-33             4   FALSE  FALSE   677.541     TRUE    4    FALSE      0     0
-34             4   FALSE  FALSE   677.574     TRUE    4    FALSE      0     0
-35             4   FALSE  FALSE   677.613     TRUE    4    FALSE      0     0
-36             4   FALSE  FALSE   677.660     TRUE    4    FALSE      0     0
-37             4   FALSE  FALSE   677.719     TRUE    4    FALSE      0     0
-38             4   FALSE  FALSE   677.806     TRUE    4    FALSE      0     0
-39             4   FALSE  FALSE   677.929     TRUE    4    FALSE      0     0
-40             4   FALSE  FALSE   678.083     TRUE    4    FALSE      0     0
-41             4   FALSE  FALSE   678.256     TRUE    4    FALSE      0     0
-42             4   FALSE  FALSE   678.440     TRUE    4    FALSE      0     0
-43             4   FALSE  FALSE   678.614     TRUE    4    FALSE      0     0
-44             4   FALSE  FALSE   678.760     TRUE    4    FALSE      0     0
-45             4   FALSE  FALSE   678.875     TRUE    4    FALSE      0     0
-46             4   FALSE  FALSE   678.962     TRUE    4    FALSE      0     0
-47             4   FALSE  FALSE   679.017     TRUE    4    FALSE      0     0
-48             4   FALSE  FALSE   679.054     TRUE    4    FALSE      0     0
-49             4   FALSE  FALSE   679.082     TRUE    4    FALSE      0     0
-50             4   FALSE  FALSE   679.105     TRUE    4    FALSE      0     0
-51             4   FALSE  FALSE   679.124     TRUE    4    FALSE      0     0
-52             4   FALSE  FALSE   679.139     TRUE    4    FALSE      0     0
-53             4   FALSE  FALSE   679.146     TRUE    4    FALSE      0     0
-54             3   FALSE  FALSE   679.143     TRUE    6    FALSE      0     0
-55             3   FALSE  FALSE   679.136     TRUE    6    FALSE      0     0
-56             3   FALSE  FALSE   679.124     TRUE    6    FALSE      0     0
-57             3   FALSE  FALSE   679.111     TRUE    6    FALSE      0     0
-58             3   FALSE  FALSE   679.099     TRUE    6    FALSE      0     0
-59             3   FALSE  FALSE   679.088     TRUE    6    FALSE      0     0
-60             3   FALSE  FALSE   679.074     TRUE    6    FALSE      0     0
-61             3   FALSE  FALSE   679.059     TRUE    6    FALSE      0     0
-62             3   FALSE  FALSE   679.047     TRUE    6    FALSE      0     0
-63             3   FALSE  FALSE   679.044     TRUE    5     TRUE      0     0
-64             3   FALSE  FALSE   679.055     TRUE    4    FALSE      0     0
-65             3   FALSE  FALSE   679.085     TRUE    4    FALSE      0     0
-66             3   FALSE  FALSE   679.132     TRUE    4    FALSE      0     0
-67             3   FALSE  FALSE   679.193     TRUE    4    FALSE      0     0
-68             3   FALSE  FALSE   679.253     TRUE    4    FALSE      0     0
-69             3   FALSE  FALSE   679.302     TRUE    4    FALSE      0     0
-70             3   FALSE  FALSE   679.335     TRUE    4    FALSE      0     0
-71             3   FALSE  FALSE   679.356     TRUE    4    FALSE      0     0
-72             3   FALSE  FALSE   679.373     TRUE    4    FALSE      0     0
-73             3   FALSE  FALSE   679.402     TRUE    4    FALSE      0     0
-74             3   FALSE  FALSE   679.450     TRUE    4    FALSE      0     0
-75             3   FALSE  FALSE   679.521     TRUE    4    FALSE      0     0
-76             3   FALSE  FALSE   679.608     TRUE    4    FALSE      0     0
-77             3   FALSE  FALSE   679.699     TRUE    4    FALSE      0     0
-78             3   FALSE  FALSE   679.784     TRUE    4    FALSE      0     0
-79             3   FALSE  FALSE   679.862     TRUE    4    FALSE      0     0
-80             3   FALSE  FALSE   679.930     TRUE    4    FALSE      0     0
-81             3   FALSE  FALSE   679.992     TRUE    4    FALSE      0     0
-82             3   FALSE  FALSE   680.047     TRUE    4    FALSE      0     0
-83             3   FALSE  FALSE   680.087     TRUE    4    FALSE      0     0
-84             3   FALSE  FALSE   680.109     TRUE    4    FALSE      0     0
-85             5   FALSE  FALSE   680.106     TRUE    6    FALSE      0     0
-86             5   FALSE  FALSE   680.072     TRUE    6    FALSE      0     0
-87             5   FALSE  FALSE   680.004     TRUE    6    FALSE      0     0
-88             5   FALSE  FALSE   679.908     TRUE    6    FALSE      0     0
-89             5   FALSE  FALSE   679.788     TRUE    6    FALSE      0     0
-90             5   FALSE  FALSE   679.648     TRUE    6    FALSE      0     0
-91             5   FALSE  FALSE   679.503     TRUE    6    FALSE      0     0
-92             5   FALSE  FALSE   679.365     TRUE    6    FALSE      0     0
-93             5   FALSE  FALSE   679.235     TRUE    6    FALSE      0     0
-94             5   FALSE  FALSE   679.119     TRUE    6    FALSE      0     0
-95             5   FALSE  FALSE   679.017     TRUE    6    FALSE      0     0
-96             5   FALSE  FALSE   678.922     TRUE    6    FALSE      0     0
-97             5   FALSE  FALSE   678.826     TRUE    6    FALSE      0     0
-98             5   FALSE  FALSE   678.728     TRUE    6    FALSE      0     0
-99             5   FALSE  FALSE   678.621     TRUE    6    FALSE      0     0
-100            5   FALSE  FALSE   678.506     TRUE    6    FALSE      0     0
-101            5   FALSE  FALSE   678.385     TRUE    6    FALSE      0     0
-102            5   FALSE  FALSE   678.266     TRUE    6    FALSE      0     0
-103            5   FALSE  FALSE   678.157     TRUE    6    FALSE      0     0
-104            5   FALSE  FALSE   678.058     TRUE    6    FALSE      0     0
-105            5   FALSE  FALSE   677.966     TRUE    6    FALSE      0     0
-106            5   FALSE  FALSE   677.880     TRUE    6    FALSE      0     0
-107            5   FALSE  FALSE   677.787     TRUE    6    FALSE      0     0
-108            5   FALSE  FALSE   677.678     TRUE    6    FALSE      0     0
-109            5   FALSE  FALSE   677.557     TRUE    6    FALSE      0     0
-110            5   FALSE  FALSE   677.422     TRUE    6    FALSE      0     0
-111            5   FALSE  FALSE   677.273     TRUE    6    FALSE      0     0
-112            5   FALSE  FALSE   677.127     TRUE    6    FALSE      0     0
-113            5   FALSE  FALSE   676.993     TRUE    6    FALSE      0     0
-114            5   FALSE  FALSE   676.875     TRUE    6    FALSE      0     0
-115            5   FALSE  FALSE   676.782     TRUE    6    FALSE      0     0
-116            5   FALSE  FALSE   676.717     TRUE    6    FALSE      0     0
-117            5   FALSE  FALSE   676.672     TRUE    6    FALSE      0     0
-118            5   FALSE  FALSE   676.638     TRUE    6    FALSE      0     0
-119            5   FALSE  FALSE   676.615     TRUE    6    FALSE      0     0
-120            5   FALSE  FALSE   676.588     TRUE    6    FALSE      0     0
-121            5   FALSE  FALSE   676.550     TRUE    6    FALSE      0     0
-122            5   FALSE  FALSE   676.494     TRUE    6    FALSE      0     0
-123            5   FALSE  FALSE   676.407     TRUE    6    FALSE      0     0
-124            5   FALSE  FALSE   676.277     TRUE    6    FALSE      0     0
-125            5   FALSE  FALSE   676.112     TRUE    6    FALSE      0     0
-126            5   FALSE  FALSE   675.932     TRUE    6    FALSE      0     0
-127            5   FALSE  FALSE   675.756     TRUE    6    FALSE      0     0
-128            5   FALSE  FALSE   675.614     TRUE    6    FALSE      0     0
-129            5   FALSE  FALSE   675.529     TRUE    6    FALSE      0     0
-130            5   FALSE  FALSE   675.499     TRUE    5     TRUE      0     0
-131            5   FALSE  FALSE   675.514     TRUE    4    FALSE      0     0
-132            5   FALSE  FALSE   675.554     TRUE    4    FALSE      0     0
-133            5   FALSE  FALSE   675.604     TRUE    4    FALSE      0     0
-134            5   FALSE  FALSE   675.652     TRUE    4    FALSE      0     0
-135            5   FALSE  FALSE   675.702     TRUE    4    FALSE      0     0
-136            5   FALSE  FALSE   675.759     TRUE    4    FALSE      0     0
-137            5   FALSE  FALSE   675.829     TRUE    4    FALSE      0     0
-138            5   FALSE  FALSE   675.914     TRUE    4    FALSE      0     0
-139            5   FALSE  FALSE   676.010     TRUE    4    FALSE      0     0
-140            5   FALSE  FALSE   676.104     TRUE    4    FALSE      0     0
-141            5   FALSE  FALSE   676.195     TRUE    4    FALSE      0     0
-142            5   FALSE  FALSE   676.286     TRUE    4    FALSE      0     0
-143            5   FALSE  FALSE   676.378     TRUE    4    FALSE      0     0
-144            5   FALSE  FALSE   676.477     TRUE    4    FALSE      0     0
-145            5   FALSE  FALSE   676.596     TRUE    4    FALSE      0     0
-146            5   FALSE  FALSE   676.726     TRUE    4    FALSE      0     0
-147            5   FALSE  FALSE   676.856     TRUE    4    FALSE      0     0
-148            5   FALSE  FALSE   676.983     TRUE    4    FALSE      0     0
-149            5   FALSE  FALSE   677.097     TRUE    4    FALSE      0     0
-150            5   FALSE  FALSE   677.181     TRUE    4    FALSE      0     0
-151            5   FALSE  FALSE   677.226     TRUE    1    FALSE      0     0
-    parea elev_diff local_shed local_ldir local_elev_diff pond_shed fill_shed
-1       0     0.000         NA         NA           0.000        NA        NA
-2       0     0.000         NA         NA           0.000        NA        NA
-3       0     0.000         NA         NA           0.000        NA        NA
-4       0     0.000         NA         NA           0.000        NA        NA
-5       0    39.094          4          2          39.094         4         4
-6       0    38.918          4          4          38.918         4         4
-7       0    38.772          4          4          38.772         4         4
-8       0    38.670          4          4          38.670         4         4
-9       0    38.608          4          4          38.608         4         4
-10      0    38.345          4          4          38.345         4         4
-11      0    37.838          4          4          37.838         4         4
-12      0    37.187          4          4          37.187         4         4
-13      0    35.280          4          4          35.280         4         4
-14      0    35.185          4          4          35.185         4         4
-15      0    35.054          4          4          35.054         4         4
-16      0    34.910          4          4          34.910         4         4
-17      0    34.769          4          4          34.769         4         4
-18      0    34.635          4          4          34.635         4         4
-19      0    34.515          4          4          34.515         4         4
-20      0    34.410          4          4          34.410         4         4
-21      0    34.307          4          4          34.307         4         4
-22      0    34.208          4          4          34.208         4         4
-23      0    34.125          4          4          34.125         4         4
-24      0    34.057          4          4          34.057         4         4
-25      0    34.004          4          4          34.004         4         4
-26      0    33.967          4          4          33.967         4         4
-27      0    33.944          4          4          33.944         4         4
-28      0    33.420          4          4          33.420         4         4
-29      0    33.411          4          4          33.411         4         4
-30      0    32.708          4          4          32.708         4         4
-31      0    31.921          4          4          31.921         4         4
-32      0    31.050          4          4          31.050         4         4
-33      0    29.507          4          4          29.507         4         4
-34      0    28.622          4          4          28.622         4         4
-35      0    27.652          4          4          27.652         4         4
-36      0    26.590          4          4          26.590         4         4
-37      0    24.224          4          4          24.224         4         4
-38      0    21.961          4          4          21.961         4         4
-39      0    19.618          4          4          19.618         4         4
-40      0    17.085          4          4          17.085         4         4
-41      0    14.531          4          4          14.531         4         4
-42      0    11.962          4          4          11.962         4         4
-43      0     9.662          4          4           9.662         4         4
-44      0     7.634          4          4           7.634         4         4
-45      0     5.895          4          4           5.895         4         4
-46      0     4.363          4          4           4.363         4         4
-47      0     3.019          4          4           3.019         4         4
-48      0     1.942          4          4           1.942         4         4
-49      0     1.914          4          4           1.914         4         4
-50      0     1.813          4          4           1.813         4         4
-51      0     1.267          4          4           1.267         4         4
-52      0     1.037          4          4           1.037         4         4
-53      0     0.663          4          4           0.663         4         4
-54      0     0.818          3          6           0.818         3         3
-55      0     1.864          3          6           1.864         3         3
-56      0     3.208          3          6           3.208         3         3
-57      0     4.649          3          6           4.649         3         3
-58      0     6.170          3          6           6.170         3         3
-59      0     7.608          3          6           7.608         3         3
-60      0     8.967          3          6           8.967         3         3
-61      0    10.203          3          6          10.203         3         3
-62      0    11.328          3          6          11.328         3         3
-63      0    48.443          3          5          48.443         3         3
-64      0    36.140          3          4          36.140         3         3
-65      0    34.821          3          4          34.821         3         3
-66      0    32.762          3          4          32.762         3         3
-67      0    17.258          3          4          17.258         3         3
-68      0    16.870          3          4          16.870         3         3
-69      0    16.657          3          4          16.657         3         3
-70      0    16.624          3          4          16.624         3         3
-71      0    16.203          3          4          16.203         3         3
-72      0    15.102          3          4          15.102         3         3
-73      0    14.016          3          4          14.016         3         3
-74      0     8.670          3          4           8.670         3         3
-75      0     7.433          3          4           7.433         3         3
-76      0     6.324          3          4           6.324         3         3
-77      0     5.232          3          4           5.232         3         3
-78      0     4.172          3          4           4.172         3         3
-79      0     3.146          3          4           3.146         3         3
-80      0     2.164          3          4           2.164         3         3
-81      0     1.238          3          4           1.238         3         3
-82      0     1.183          3          4           1.183         3         3
-83      0     0.502          3          4           0.502         3         3
-84      0     0.325          3          4           0.325         3         3
-85      0     0.488          5          6           0.488         5         5
-86      0     1.219          5          6           1.219         5         5
-87      0     1.287          5          6           1.287         5         5
-88      0     1.708          5          6           1.708         5         5
-89      0     2.465          5          6           2.465         5         5
-90      0     3.530          5          6           3.530         5         5
-91      0     4.853          5          6           4.853         5         5
-92      0     6.377          5          6           6.377         5         5
-93      0     8.049          5          6           8.049         5         5
-94      0     9.635          5          6           9.635         5         5
-95      0    10.553          5          6          10.553         5         5
-96      0    10.648          5          6          10.648         5         5
-97      0    10.744          5          6          10.744         5         5
-98      0    10.842          5          6          10.842         5         5
-99      0    10.949          5          6          10.949         5         5
-100     0    11.064          5          6          11.064         5         5
-101     0    11.185          5          6          11.185         5         5
-102     0    11.304          5          6          11.304         5         5
-103     0    11.413          5          6          11.413         5         5
-104     0    11.512          5          6          11.512         5         5
-105     0    11.604          5          6          11.604         5         5
-106     0    11.690          5          6          11.690         5         5
-107     0    11.783          5          6          11.783         5         5
-108     0    11.892          5          6          11.892         5         5
-109     0    12.013          5          6          12.013         5         5
-110     0    13.816          5          6          13.816         5         5
-111     0    14.800          5          6          14.800         5         5
-112     0    15.815          5          6          15.815         5         5
-113     0    75.017          5          6          75.017         5         5
-114     0    77.153          5          6          77.153         5         5
-115     0    86.762          5          6          86.762         5         5
-116     0    88.472          5          6          88.472         5         5
-117     0    90.202          5          6          90.202         5         5
-118     0    91.863          5          6          91.863         5         5
-119     0    93.394          5          6          93.394         5         5
-120     0    94.772          5          6          94.772         5         5
-121     0    95.981          5          6          95.981         5         5
-122     0    96.037          5          6          96.037         5         5
-123     0    96.364          5          6          96.364         5         5
-124     0    97.694          5          6          97.694         5         5
-125     0    98.508          5          6          98.508         5         5
-126     0    99.733          5          6          99.733         5         5
-127     0   101.347          5          6         101.347         5         5
-128     0   101.489          5          6         101.489         5         5
-129     0   106.537          5          6         106.537         5         5
-130     0   453.427          5          5         453.427         5         5
-131     0    27.950          5          4          27.950         5         5
-132     0    26.234          5          4          26.234         5         5
-133     0    18.793          5          4          18.793         5         5
-134     0    18.284          5          4          18.284         5         5
-135     0    17.513          5          4          17.513         5         5
-136     0    17.042          5          4          17.042         5         5
-137     0    16.509          5          4          16.509         5         5
-138     0    14.403          5          4          14.403         5         5
-139     0    12.592          5          4          12.592         5         5
-140     0    11.016          5          4          11.016         5         5
-141     0     9.691          5          4           9.691         5         5
-142     0     8.017          5          4           8.017         5         5
-143     0     6.959          5          4           6.959         5         5
-144     0     5.319          5          4           5.319         5         5
-145     0     1.215          5          4           1.215         5         5
-146     0     0.455          5          4           0.455         5         5
-147     0     0.325          5          4           0.325         5         5
-148     0     0.198          5          4           0.198         5         5
-149     0     0.084          5          4           0.084         5         5
-150     0     0.000          5          4           0.000         5         5
-151     0     0.000          5          1           0.000         5         5
-      lnqarea new_asp
-1          NA      NA
-2          NA      NA
-3          NA      NA
-4          NA      NA
-5    7.384155     311
-6    7.581928     311
-7    7.790257     317
-8    8.005118     326
-9    8.209301     343
-10   8.178253       8
-11   8.033538      19
-12   7.615563       2
-13   6.991870     339
-14   6.583109     325
-15   6.364337     318
-16   6.246740     312
-17   6.226319     307
-18   6.255087     303
-19   6.344853     299
-20   6.505761     297
-21   6.697554     297
-22   6.917866     296
-23   7.213619     294
-24   7.575001     295
-25   7.968575     300
-26   8.332486     309
-27   8.708307     331
-28   8.696424     358
-29   8.678235      15
-30   8.648115      21
-31   8.604587      21
-32   8.550745      20
-33   8.490934      19
-34   8.426438      20
-35   8.352213      21
-36   8.259014      20
-37   8.132402      15
-38   7.953172       6
-39   7.703311     358
-40   7.483937     351
-41   7.298974     346
-42   7.155716     342
-43   7.060254     341
-44   6.996137     341
-45   6.970794     344
-46   6.970719     350
-47   6.861552       1
-48   6.734985      11
-49   6.570904      18
-50   6.356773      24
-51   6.065748      29
-52   5.632105      34
-53   5.151608      40
-54   5.516373      44
-55   6.158098      47
-56   6.589087      49
-57   6.916326      50
-58   7.173610      50
-59   7.378064      51
-60   7.550143      52
-61   7.708402      52
-62   7.879672      49
-63   9.400003      44
-64   9.079173      37
-65   8.943872      30
-66   8.741788      23
-67   8.517202      20
-68   8.332801      21
-69   8.197296      26
-70   8.090363      32
-71   7.988031      36
-72   7.867695      35
-73   7.707792      27
-74   7.510921      17
-75   7.303773       8
-76   7.111994       3
-77   6.932292       3
-78   6.746155       4
-79   6.539256       6
-80   6.305269       8
-81   6.028583      12
-82   5.692116      17
-83   5.241302      25
-84   4.589762      34
-85   4.681450      45
-86   5.318017      55
-87   5.712494      64
-88   6.000372      70
-89   6.225179      76
-90   6.410909      81
-91   6.568444      85
-92   6.699966      89
-93   6.811050      95
-94   6.886822     101
-95   6.881782     110
-96   6.807487     121
-97   6.680235     132
-98   6.506365     141
-99   6.329507     146
-100  6.146984     149
-101  5.968178     150
-102  5.791594     152
-103  5.609558     153
-104  5.437039     153
-105  5.303002     152
-106  5.236427     147
-107  5.293894     138
-108  5.567363     127
-109  5.949666     116
-110  6.590617     108
-111  7.563352     100
-112  8.453221      92
-113  9.073087      84
-114  9.399853      77
-115  9.549865      70
-116  9.612672      64
-117  9.642117      60
-118  9.661764      57
-119  9.677499      55
-120  9.690774      56
-121  9.702005      59
-122  9.711344      66
-123  9.719052      76
-124  9.725838      86
-125  9.694484      94
-126  9.621584      99
-127  9.552416     103
-128  9.515228     103
-129  9.637504      96
-130 11.292515      67
-131 10.187118       9
-132  8.285990     349
-133  8.032806     349
-134  8.026175     353
-135  7.971345     355
-136  7.884763     355
-137  7.791201     354
-138  7.715155     352
-139  7.666238     353
-140  7.586326     356
-141  7.455024     358
-142  7.255036     359
-143  6.931011     357
-144  6.474418     349
-145  5.897945     338
-146  5.299511     328
-147  4.755355     320
-148  4.325307     313
-149  3.977827     305
-150  3.594763     292
-151  3.233963     262
+    initial_shed missing buffer elev_orig edge_map ldir flatcell data vol2fl
+1             NA      NA   TRUE        NA     TRUE   NA       NA NULL      0
+2             NA      NA   TRUE        NA     TRUE   NA       NA NULL      0
+3             NA      NA   TRUE        NA     TRUE   NA       NA NULL      0
+4             NA      NA   TRUE        NA     TRUE   NA       NA NULL      0
+5              4   FALSE  FALSE   675.500     TRUE    2    FALSE NULL      0
+6              4   FALSE  FALSE   675.676     TRUE    4    FALSE NULL      0
+7              4   FALSE  FALSE   675.822     TRUE    4    FALSE NULL      0
+8              4   FALSE  FALSE   675.924     TRUE    4    FALSE NULL      0
+9              4   FALSE  FALSE   675.986     TRUE    4    FALSE NULL      0
+10             4   FALSE  FALSE   676.018     TRUE    4    FALSE NULL      0
+11             4   FALSE  FALSE   676.034     TRUE    4    FALSE NULL      0
+12             4   FALSE  FALSE   676.058     TRUE    4    FALSE NULL      0
+13             4   FALSE  FALSE   676.109     TRUE    4    FALSE NULL      0
+14             4   FALSE  FALSE   676.204     TRUE    4    FALSE NULL      0
+15             4   FALSE  FALSE   676.335     TRUE    4    FALSE NULL      0
+16             4   FALSE  FALSE   676.479     TRUE    4    FALSE NULL      0
+17             4   FALSE  FALSE   676.620     TRUE    4    FALSE NULL      0
+18             4   FALSE  FALSE   676.754     TRUE    4    FALSE NULL      0
+19             4   FALSE  FALSE   676.874     TRUE    4    FALSE NULL      0
+20             4   FALSE  FALSE   676.979     TRUE    4    FALSE NULL      0
+21             4   FALSE  FALSE   677.082     TRUE    4    FALSE NULL      0
+22             4   FALSE  FALSE   677.181     TRUE    4    FALSE NULL      0
+23             4   FALSE  FALSE   677.264     TRUE    4    FALSE NULL      0
+24             4   FALSE  FALSE   677.332     TRUE    4    FALSE NULL      0
+25             4   FALSE  FALSE   677.385     TRUE    4    FALSE NULL      0
+26             4   FALSE  FALSE   677.422     TRUE    4    FALSE NULL      0
+27             4   FALSE  FALSE   677.445     TRUE    4    FALSE NULL      0
+28             4   FALSE  FALSE   677.461     TRUE    4    FALSE NULL      0
+29             4   FALSE  FALSE   677.470     TRUE    4    FALSE NULL      0
+30             4   FALSE  FALSE   677.478     TRUE    4    FALSE NULL      0
+31             4   FALSE  FALSE   677.491     TRUE    4    FALSE NULL      0
+32             4   FALSE  FALSE   677.512     TRUE    4    FALSE NULL      0
+33             4   FALSE  FALSE   677.541     TRUE    4    FALSE NULL      0
+34             4   FALSE  FALSE   677.574     TRUE    4    FALSE NULL      0
+35             4   FALSE  FALSE   677.613     TRUE    4    FALSE NULL      0
+36             4   FALSE  FALSE   677.660     TRUE    4    FALSE NULL      0
+37             4   FALSE  FALSE   677.719     TRUE    4    FALSE NULL      0
+38             4   FALSE  FALSE   677.806     TRUE    4    FALSE NULL      0
+39             4   FALSE  FALSE   677.929     TRUE    4    FALSE NULL      0
+40             4   FALSE  FALSE   678.083     TRUE    4    FALSE NULL      0
+41             4   FALSE  FALSE   678.256     TRUE    4    FALSE NULL      0
+42             4   FALSE  FALSE   678.440     TRUE    4    FALSE NULL      0
+43             4   FALSE  FALSE   678.614     TRUE    4    FALSE NULL      0
+44             4   FALSE  FALSE   678.760     TRUE    4    FALSE NULL      0
+45             4   FALSE  FALSE   678.875     TRUE    4    FALSE NULL      0
+46             4   FALSE  FALSE   678.962     TRUE    4    FALSE NULL      0
+47             4   FALSE  FALSE   679.017     TRUE    4    FALSE NULL      0
+48             4   FALSE  FALSE   679.054     TRUE    4    FALSE NULL      0
+49             4   FALSE  FALSE   679.082     TRUE    4    FALSE NULL      0
+50             4   FALSE  FALSE   679.105     TRUE    4    FALSE NULL      0
+51             4   FALSE  FALSE   679.124     TRUE    4    FALSE NULL      0
+52             4   FALSE  FALSE   679.139     TRUE    4    FALSE NULL      0
+53             4   FALSE  FALSE   679.146     TRUE    4    FALSE NULL      0
+54             3   FALSE  FALSE   679.143     TRUE    6    FALSE NULL      0
+55             3   FALSE  FALSE   679.136     TRUE    6    FALSE NULL      0
+56             3   FALSE  FALSE   679.124     TRUE    6    FALSE NULL      0
+57             3   FALSE  FALSE   679.111     TRUE    6    FALSE NULL      0
+58             3   FALSE  FALSE   679.099     TRUE    6    FALSE NULL      0
+59             3   FALSE  FALSE   679.088     TRUE    6    FALSE NULL      0
+60             3   FALSE  FALSE   679.074     TRUE    6    FALSE NULL      0
+61             3   FALSE  FALSE   679.059     TRUE    6    FALSE NULL      0
+62             3   FALSE  FALSE   679.047     TRUE    6    FALSE NULL      0
+63             3   FALSE  FALSE   679.044     TRUE    5     TRUE NULL      0
+64             3   FALSE  FALSE   679.055     TRUE    4    FALSE NULL      0
+65             3   FALSE  FALSE   679.085     TRUE    4    FALSE NULL      0
+66             3   FALSE  FALSE   679.132     TRUE    4    FALSE NULL      0
+67             3   FALSE  FALSE   679.193     TRUE    4    FALSE NULL      0
+68             3   FALSE  FALSE   679.253     TRUE    4    FALSE NULL      0
+69             3   FALSE  FALSE   679.302     TRUE    4    FALSE NULL      0
+70             3   FALSE  FALSE   679.335     TRUE    4    FALSE NULL      0
+71             3   FALSE  FALSE   679.356     TRUE    4    FALSE NULL      0
+72             3   FALSE  FALSE   679.373     TRUE    4    FALSE NULL      0
+73             3   FALSE  FALSE   679.402     TRUE    4    FALSE NULL      0
+74             3   FALSE  FALSE   679.450     TRUE    4    FALSE NULL      0
+75             3   FALSE  FALSE   679.521     TRUE    4    FALSE NULL      0
+76             3   FALSE  FALSE   679.608     TRUE    4    FALSE NULL      0
+77             3   FALSE  FALSE   679.699     TRUE    4    FALSE NULL      0
+78             3   FALSE  FALSE   679.784     TRUE    4    FALSE NULL      0
+79             3   FALSE  FALSE   679.862     TRUE    4    FALSE NULL      0
+80             3   FALSE  FALSE   679.930     TRUE    4    FALSE NULL      0
+81             3   FALSE  FALSE   679.992     TRUE    4    FALSE NULL      0
+82             3   FALSE  FALSE   680.047     TRUE    4    FALSE NULL      0
+83             3   FALSE  FALSE   680.087     TRUE    4    FALSE NULL      0
+84             3   FALSE  FALSE   680.109     TRUE    4    FALSE NULL      0
+85             5   FALSE  FALSE   680.106     TRUE    6    FALSE NULL      0
+86             5   FALSE  FALSE   680.072     TRUE    6    FALSE NULL      0
+87             5   FALSE  FALSE   680.004     TRUE    6    FALSE NULL      0
+88             5   FALSE  FALSE   679.908     TRUE    6    FALSE NULL      0
+89             5   FALSE  FALSE   679.788     TRUE    6    FALSE NULL      0
+90             5   FALSE  FALSE   679.648     TRUE    6    FALSE NULL      0
+91             5   FALSE  FALSE   679.503     TRUE    6    FALSE NULL      0
+92             5   FALSE  FALSE   679.365     TRUE    6    FALSE NULL      0
+93             5   FALSE  FALSE   679.235     TRUE    6    FALSE NULL      0
+94             5   FALSE  FALSE   679.119     TRUE    6    FALSE NULL      0
+95             5   FALSE  FALSE   679.017     TRUE    6    FALSE NULL      0
+96             5   FALSE  FALSE   678.922     TRUE    6    FALSE NULL      0
+97             5   FALSE  FALSE   678.826     TRUE    6    FALSE NULL      0
+98             5   FALSE  FALSE   678.728     TRUE    6    FALSE NULL      0
+99             5   FALSE  FALSE   678.621     TRUE    6    FALSE NULL      0
+100            5   FALSE  FALSE   678.506     TRUE    6    FALSE NULL      0
+101            5   FALSE  FALSE   678.385     TRUE    6    FALSE NULL      0
+102            5   FALSE  FALSE   678.266     TRUE    6    FALSE NULL      0
+103            5   FALSE  FALSE   678.157     TRUE    6    FALSE NULL      0
+104            5   FALSE  FALSE   678.058     TRUE    6    FALSE NULL      0
+105            5   FALSE  FALSE   677.966     TRUE    6    FALSE NULL      0
+106            5   FALSE  FALSE   677.880     TRUE    6    FALSE NULL      0
+107            5   FALSE  FALSE   677.787     TRUE    6    FALSE NULL      0
+108            5   FALSE  FALSE   677.678     TRUE    6    FALSE NULL      0
+109            5   FALSE  FALSE   677.557     TRUE    6    FALSE NULL      0
+110            5   FALSE  FALSE   677.422     TRUE    6    FALSE NULL      0
+111            5   FALSE  FALSE   677.273     TRUE    6    FALSE NULL      0
+112            5   FALSE  FALSE   677.127     TRUE    6    FALSE NULL      0
+113            5   FALSE  FALSE   676.993     TRUE    6    FALSE NULL      0
+114            5   FALSE  FALSE   676.875     TRUE    6    FALSE NULL      0
+115            5   FALSE  FALSE   676.782     TRUE    6    FALSE NULL      0
+116            5   FALSE  FALSE   676.717     TRUE    6    FALSE NULL      0
+117            5   FALSE  FALSE   676.672     TRUE    6    FALSE NULL      0
+118            5   FALSE  FALSE   676.638     TRUE    6    FALSE NULL      0
+119            5   FALSE  FALSE   676.615     TRUE    6    FALSE NULL      0
+120            5   FALSE  FALSE   676.588     TRUE    6    FALSE NULL      0
+121            5   FALSE  FALSE   676.550     TRUE    6    FALSE NULL      0
+122            5   FALSE  FALSE   676.494     TRUE    6    FALSE NULL      0
+123            5   FALSE  FALSE   676.407     TRUE    6    FALSE NULL      0
+124            5   FALSE  FALSE   676.277     TRUE    6    FALSE NULL      0
+125            5   FALSE  FALSE   676.112     TRUE    6    FALSE NULL      0
+126            5   FALSE  FALSE   675.932     TRUE    6    FALSE NULL      0
+127            5   FALSE  FALSE   675.756     TRUE    6    FALSE NULL      0
+128            5   FALSE  FALSE   675.614     TRUE    6    FALSE NULL      0
+129            5   FALSE  FALSE   675.529     TRUE    6    FALSE NULL      0
+130            5   FALSE  FALSE   675.499     TRUE    5     TRUE NULL      0
+131            5   FALSE  FALSE   675.514     TRUE    4    FALSE NULL      0
+132            5   FALSE  FALSE   675.554     TRUE    4    FALSE NULL      0
+133            5   FALSE  FALSE   675.604     TRUE    4    FALSE NULL      0
+134            5   FALSE  FALSE   675.652     TRUE    4    FALSE NULL      0
+135            5   FALSE  FALSE   675.702     TRUE    4    FALSE NULL      0
+136            5   FALSE  FALSE   675.759     TRUE    4    FALSE NULL      0
+137            5   FALSE  FALSE   675.829     TRUE    4    FALSE NULL      0
+138            5   FALSE  FALSE   675.914     TRUE    4    FALSE NULL      0
+139            5   FALSE  FALSE   676.010     TRUE    4    FALSE NULL      0
+140            5   FALSE  FALSE   676.104     TRUE    4    FALSE NULL      0
+141            5   FALSE  FALSE   676.195     TRUE    4    FALSE NULL      0
+142            5   FALSE  FALSE   676.286     TRUE    4    FALSE NULL      0
+143            5   FALSE  FALSE   676.378     TRUE    4    FALSE NULL      0
+144            5   FALSE  FALSE   676.477     TRUE    4    FALSE NULL      0
+145            5   FALSE  FALSE   676.596     TRUE    4    FALSE NULL      0
+146            5   FALSE  FALSE   676.726     TRUE    4    FALSE NULL      0
+147            5   FALSE  FALSE   676.856     TRUE    4    FALSE NULL      0
+148            5   FALSE  FALSE   676.983     TRUE    4    FALSE NULL      0
+149            5   FALSE  FALSE   677.097     TRUE    4    FALSE NULL      0
+150            5   FALSE  FALSE   677.181     TRUE    4    FALSE NULL      0
+151            5   FALSE  FALSE   677.226     TRUE    1    FALSE NULL      0
+    mm2fl parea elev_diff local_shed local_ldir local_elev_diff pond_shed
+1       0     0     0.000         NA         NA           0.000        NA
+2       0     0     0.000         NA         NA           0.000        NA
+3       0     0     0.000         NA         NA           0.000        NA
+4       0     0     0.000         NA         NA           0.000        NA
+5       0     0    39.094          4          2          39.094         4
+6       0     0    38.918          4          4          38.918         4
+7       0     0    38.772          4          4          38.772         4
+8       0     0    38.670          4          4          38.670         4
+9       0     0    38.608          4          4          38.608         4
+10      0     0    38.345          4          4          38.345         4
+11      0     0    37.838          4          4          37.838         4
+12      0     0    37.187          4          4          37.187         4
+13      0     0    35.280          4          4          35.280         4
+14      0     0    35.185          4          4          35.185         4
+15      0     0    35.054          4          4          35.054         4
+16      0     0    34.910          4          4          34.910         4
+17      0     0    34.769          4          4          34.769         4
+18      0     0    34.635          4          4          34.635         4
+19      0     0    34.515          4          4          34.515         4
+20      0     0    34.410          4          4          34.410         4
+21      0     0    34.307          4          4          34.307         4
+22      0     0    34.208          4          4          34.208         4
+23      0     0    34.125          4          4          34.125         4
+24      0     0    34.057          4          4          34.057         4
+25      0     0    34.004          4          4          34.004         4
+26      0     0    33.967          4          4          33.967         4
+27      0     0    33.944          4          4          33.944         4
+28      0     0    33.420          4          4          33.420         4
+29      0     0    33.411          4          4          33.411         4
+30      0     0    32.708          4          4          32.708         4
+31      0     0    31.921          4          4          31.921         4
+32      0     0    31.050          4          4          31.050         4
+33      0     0    29.507          4          4          29.507         4
+34      0     0    28.622          4          4          28.622         4
+35      0     0    27.652          4          4          27.652         4
+36      0     0    26.590          4          4          26.590         4
+37      0     0    24.224          4          4          24.224         4
+38      0     0    21.961          4          4          21.961         4
+39      0     0    19.618          4          4          19.618         4
+40      0     0    17.085          4          4          17.085         4
+41      0     0    14.531          4          4          14.531         4
+42      0     0    11.962          4          4          11.962         4
+43      0     0     9.662          4          4           9.662         4
+44      0     0     7.634          4          4           7.634         4
+45      0     0     5.895          4          4           5.895         4
+46      0     0     4.363          4          4           4.363         4
+47      0     0     3.019          4          4           3.019         4
+48      0     0     1.942          4          4           1.942         4
+49      0     0     1.914          4          4           1.914         4
+50      0     0     1.813          4          4           1.813         4
+51      0     0     1.267          4          4           1.267         4
+52      0     0     1.037          4          4           1.037         4
+53      0     0     0.663          4          4           0.663         4
+54      0     0     0.818          3          6           0.818         3
+55      0     0     1.864          3          6           1.864         3
+56      0     0     3.208          3          6           3.208         3
+57      0     0     4.649          3          6           4.649         3
+58      0     0     6.170          3          6           6.170         3
+59      0     0     7.608          3          6           7.608         3
+60      0     0     8.967          3          6           8.967         3
+61      0     0    10.203          3          6          10.203         3
+62      0     0    11.328          3          6          11.328         3
+63      0     0    48.443          3          5          48.443         3
+64      0     0    36.140          3          4          36.140         3
+65      0     0    34.821          3          4          34.821         3
+66      0     0    32.762          3          4          32.762         3
+67      0     0    17.258          3          4          17.258         3
+68      0     0    16.870          3          4          16.870         3
+69      0     0    16.657          3          4          16.657         3
+70      0     0    16.624          3          4          16.624         3
+71      0     0    16.203          3          4          16.203         3
+72      0     0    15.102          3          4          15.102         3
+73      0     0    14.016          3          4          14.016         3
+74      0     0     8.670          3          4           8.670         3
+75      0     0     7.433          3          4           7.433         3
+76      0     0     6.324          3          4           6.324         3
+77      0     0     5.232          3          4           5.232         3
+78      0     0     4.172          3          4           4.172         3
+79      0     0     3.146          3          4           3.146         3
+80      0     0     2.164          3          4           2.164         3
+81      0     0     1.238          3          4           1.238         3
+82      0     0     1.183          3          4           1.183         3
+83      0     0     0.502          3          4           0.502         3
+84      0     0     0.325          3          4           0.325         3
+85      0     0     0.488          5          6           0.488         5
+86      0     0     1.219          5          6           1.219         5
+87      0     0     1.287          5          6           1.287         5
+88      0     0     1.708          5          6           1.708         5
+89      0     0     2.465          5          6           2.465         5
+90      0     0     3.530          5          6           3.530         5
+91      0     0     4.853          5          6           4.853         5
+92      0     0     6.377          5          6           6.377         5
+93      0     0     8.049          5          6           8.049         5
+94      0     0     9.635          5          6           9.635         5
+95      0     0    10.553          5          6          10.553         5
+96      0     0    10.648          5          6          10.648         5
+97      0     0    10.744          5          6          10.744         5
+98      0     0    10.842          5          6          10.842         5
+99      0     0    10.949          5          6          10.949         5
+100     0     0    11.064          5          6          11.064         5
+101     0     0    11.185          5          6          11.185         5
+102     0     0    11.304          5          6          11.304         5
+103     0     0    11.413          5          6          11.413         5
+104     0     0    11.512          5          6          11.512         5
+105     0     0    11.604          5          6          11.604         5
+106     0     0    11.690          5          6          11.690         5
+107     0     0    11.783          5          6          11.783         5
+108     0     0    11.892          5          6          11.892         5
+109     0     0    12.013          5          6          12.013         5
+110     0     0    13.816          5          6          13.816         5
+111     0     0    14.800          5          6          14.800         5
+112     0     0    15.815          5          6          15.815         5
+113     0     0    75.017          5          6          75.017         5
+114     0     0    77.153          5          6          77.153         5
+115     0     0    86.762          5          6          86.762         5
+116     0     0    88.472          5          6          88.472         5
+117     0     0    90.202          5          6          90.202         5
+118     0     0    91.863          5          6          91.863         5
+119     0     0    93.394          5          6          93.394         5
+120     0     0    94.772          5          6          94.772         5
+121     0     0    95.981          5          6          95.981         5
+122     0     0    96.037          5          6          96.037         5
+123     0     0    96.364          5          6          96.364         5
+124     0     0    97.694          5          6          97.694         5
+125     0     0    98.508          5          6          98.508         5
+126     0     0    99.733          5          6          99.733         5
+127     0     0   101.347          5          6         101.347         5
+128     0     0   101.489          5          6         101.489         5
+129     0     0   106.537          5          6         106.537         5
+130     0     0   453.427          5          5         453.427         5
+131     0     0    27.950          5          4          27.950         5
+132     0     0    26.234          5          4          26.234         5
+133     0     0    18.793          5          4          18.793         5
+134     0     0    18.284          5          4          18.284         5
+135     0     0    17.513          5          4          17.513         5
+136     0     0    17.042          5          4          17.042         5
+137     0     0    16.509          5          4          16.509         5
+138     0     0    14.403          5          4          14.403         5
+139     0     0    12.592          5          4          12.592         5
+140     0     0    11.016          5          4          11.016         5
+141     0     0     9.691          5          4           9.691         5
+142     0     0     8.017          5          4           8.017         5
+143     0     0     6.959          5          4           6.959         5
+144     0     0     5.319          5          4           5.319         5
+145     0     0     1.215          5          4           1.215         5
+146     0     0     0.455          5          4           0.455         5
+147     0     0     0.325          5          4           0.325         5
+148     0     0     0.198          5          4           0.198         5
+149     0     0     0.084          5          4           0.084         5
+150     0     0     0.000          5          4           0.000         5
+151     0     0     0.000          5          1           0.000         5
+    fill_shed   lnqarea new_asp
+1          NA        NA      NA
+2          NA        NA      NA
+3          NA        NA      NA
+4          NA        NA      NA
+5           4  7.384155     311
+6           4  7.581928     311
+7           4  7.790257     317
+8           4  8.005118     326
+9           4  8.209301     343
+10          4  8.178253       8
+11          4  8.033538      19
+12          4  7.615563       2
+13          4  6.991870     339
+14          4  6.583109     325
+15          4  6.364337     318
+16          4  6.246740     312
+17          4  6.226319     307
+18          4  6.255087     303
+19          4  6.344853     299
+20          4  6.505761     297
+21          4  6.697554     297
+22          4  6.917866     296
+23          4  7.213619     294
+24          4  7.575001     295
+25          4  7.968575     300
+26          4  8.332486     309
+27          4  8.708307     331
+28          4  8.696424     358
+29          4  8.678235      15
+30          4  8.648115      21
+31          4  8.604587      21
+32          4  8.550745      20
+33          4  8.490934      19
+34          4  8.426438      20
+35          4  8.352213      21
+36          4  8.259014      20
+37          4  8.132402      15
+38          4  7.953172       6
+39          4  7.703311     358
+40          4  7.483937     351
+41          4  7.298974     346
+42          4  7.155716     342
+43          4  7.060254     341
+44          4  6.996137     341
+45          4  6.970794     344
+46          4  6.970719     350
+47          4  6.861552       1
+48          4  6.734985      11
+49          4  6.570904      18
+50          4  6.356773      24
+51          4  6.065748      29
+52          4  5.632105      34
+53          4  5.151608      40
+54          3  5.516373      44
+55          3  6.158098      47
+56          3  6.589087      49
+57          3  6.916326      50
+58          3  7.173610      50
+59          3  7.378064      51
+60          3  7.550143      52
+61          3  7.708402      52
+62          3  7.879672      49
+63          3  9.400003      44
+64          3  9.079173      37
+65          3  8.943872      30
+66          3  8.741788      23
+67          3  8.517202      20
+68          3  8.332801      21
+69          3  8.197296      26
+70          3  8.090363      32
+71          3  7.988031      36
+72          3  7.867695      35
+73          3  7.707792      27
+74          3  7.510921      17
+75          3  7.303773       8
+76          3  7.111994       3
+77          3  6.932292       3
+78          3  6.746155       4
+79          3  6.539256       6
+80          3  6.305269       8
+81          3  6.028583      12
+82          3  5.692116      17
+83          3  5.241302      25
+84          3  4.589762      34
+85          5  4.681450      45
+86          5  5.318017      55
+87          5  5.712494      64
+88          5  6.000372      70
+89          5  6.225179      76
+90          5  6.410909      81
+91          5  6.568444      85
+92          5  6.699966      89
+93          5  6.811050      95
+94          5  6.886822     101
+95          5  6.881782     110
+96          5  6.807487     121
+97          5  6.680235     132
+98          5  6.506365     141
+99          5  6.329507     146
+100         5  6.146984     149
+101         5  5.968178     150
+102         5  5.791594     152
+103         5  5.609558     153
+104         5  5.437039     153
+105         5  5.303002     152
+106         5  5.236427     147
+107         5  5.293894     138
+108         5  5.567363     127
+109         5  5.949666     116
+110         5  6.590617     108
+111         5  7.563352     100
+112         5  8.453221      92
+113         5  9.073087      84
+114         5  9.399853      77
+115         5  9.549865      70
+116         5  9.612672      64
+117         5  9.642117      60
+118         5  9.661764      57
+119         5  9.677499      55
+120         5  9.690774      56
+121         5  9.702005      59
+122         5  9.711344      66
+123         5  9.719052      76
+124         5  9.725838      86
+125         5  9.694484      94
+126         5  9.621584      99
+127         5  9.552416     103
+128         5  9.515228     103
+129         5  9.637504      96
+130         5 11.292515      67
+131         5 10.187118       9
+132         5  8.285990     349
+133         5  8.032806     349
+134         5  8.026175     353
+135         5  7.971345     355
+136         5  7.884763     355
+137         5  7.791201     354
+138         5  7.715155     352
+139         5  7.666238     353
+140         5  7.586326     356
+141         5  7.455024     358
+142         5  7.255036     359
+143         5  6.931011     357
+144         5  6.474418     349
+145         5  5.897945     338
+146         5  5.299511     328
+147         5  4.755355     320
+148         5  4.325307     313
+149         5  3.977827     305
+150         5  3.594763     292
+151         5  3.233963     262

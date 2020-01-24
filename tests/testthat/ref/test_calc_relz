@@ -5,20 +5,20 @@
 153      153      12       3  99.5782 0.2730    7       146      12       3
 154      154      12       3  99.5782 0.3455    8       146      12       3
 155      155      12       3  99.5782 0.4218    9       146      12       3
-156      156      12      13       NA     NA    0        NA      NA      NA
-157      157      13       1       NA     NA    0        NA      NA      NA
-158      158      13       2       NA     NA    0        NA      NA      NA
-159      159      13       3       NA     NA    0        NA      NA      NA
-160      160      13       4       NA     NA    0        NA      NA      NA
-161      161      13       5       NA     NA    0        NA      NA      NA
-162      162      13       6       NA     NA    0        NA      NA      NA
-163      163      13       7       NA     NA    0        NA      NA      NA
-164      164      13       8       NA     NA    0        NA      NA      NA
-165      165      13       9       NA     NA    0        NA      NA      NA
-166      166      13      10       NA     NA    0        NA      NA      NA
-167      167      13      11       NA     NA    0        NA      NA      NA
-168      168      13      12       NA     NA    0        NA      NA      NA
-169      169      13      13       NA     NA    0        NA      NA      NA
+156      156      NA      NA       NA     NA   NA        NA      NA      NA
+157      157      NA      NA       NA     NA   NA        NA      NA      NA
+158      158      NA      NA       NA     NA   NA        NA      NA      NA
+159      159      NA      NA       NA     NA   NA        NA      NA      NA
+160      160      NA      NA       NA     NA   NA        NA      NA      NA
+161      161      NA      NA       NA     NA   NA        NA      NA      NA
+162      162      NA      NA       NA     NA   NA        NA      NA      NA
+163      163      NA      NA       NA     NA   NA        NA      NA      NA
+164      164      NA      NA       NA     NA   NA        NA      NA      NA
+165      165      NA      NA       NA     NA   NA        NA      NA      NA
+166      166      NA      NA       NA     NA   NA        NA      NA      NA
+167      167      NA      NA       NA     NA   NA        NA      NA      NA
+168      168      NA      NA       NA     NA   NA        NA      NA      NA
+169      169      NA      NA       NA     NA   NA        NA      NA      NA
 NA        NA      NA      NA       NA     NA   NA        NA      NA      NA
 NA.1      NA      NA      NA       NA     NA   NA        NA      NA      NA
 NA.2      NA      NA      NA       NA     NA   NA        NA      NA      NA
@@ -357,20 +357,20 @@ NA.330    NA      NA      NA       NA     NA   NA        NA      NA      NA
 153     99.5782 0.2730     7      3     12 100.4218 0.5706    9         38
 154     99.5782 0.3455     8      3     12 100.4218 0.4981    9         38
 155     99.5782 0.4218     9      3     12 100.4218 0.4218    9         38
-156          NA     NA     0     12     13       NA     NA    0         NA
-157          NA     NA     0     13      1       NA     NA    0         NA
-158          NA     NA     0     13      2       NA     NA    0         NA
-159          NA     NA     0     13      3       NA     NA    0         NA
-160          NA     NA     0     13      4       NA     NA    0         NA
-161          NA     NA     0     13      5       NA     NA    0         NA
-162          NA     NA     0     13      6       NA     NA    0         NA
-163          NA     NA     0     13      7       NA     NA    0         NA
-164          NA     NA     0     13      8       NA     NA    0         NA
-165          NA     NA     0     13      9       NA     NA    0         NA
-166          NA     NA     0     13     10       NA     NA    0         NA
-167          NA     NA     0     13     11       NA     NA    0         NA
-168          NA     NA     0     13     12       NA     NA    0         NA
-169          NA     NA     0     13     13       NA     NA    0         NA
+156          NA     NA    NA     NA     NA       NA     NA   NA         NA
+157          NA     NA    NA     NA     NA       NA     NA   NA         NA
+158          NA     NA    NA     NA     NA       NA     NA   NA         NA
+159          NA     NA    NA     NA     NA       NA     NA   NA         NA
+160          NA     NA    NA     NA     NA       NA     NA   NA         NA
+161          NA     NA    NA     NA     NA       NA     NA   NA         NA
+162          NA     NA    NA     NA     NA       NA     NA   NA         NA
+163          NA     NA    NA     NA     NA       NA     NA   NA         NA
+164          NA     NA    NA     NA     NA       NA     NA   NA         NA
+165          NA     NA    NA     NA     NA       NA     NA   NA         NA
+166          NA     NA    NA     NA     NA       NA     NA   NA         NA
+167          NA     NA    NA     NA     NA       NA     NA   NA         NA
+168          NA     NA    NA     NA     NA       NA     NA   NA         NA
+169          NA     NA    NA     NA     NA       NA     NA   NA         NA
 NA           NA     NA    NA     NA     NA       NA     NA   NA         NA
 NA.1         NA     NA    NA     NA     NA       NA     NA   NA         NA
 NA.2         NA     NA    NA     NA     NA       NA     NA   NA         NA
@@ -709,20 +709,20 @@ NA.330       NA     NA    NA     NA     NA       NA     NA   NA         NA
 153           3       12  100.4218 0.5706      9  99.8512  12  10  FALSE
 154           3       12  100.4218 0.4981      9  99.9237  12  11  FALSE
 155           3       12  100.4218 0.4218      9 100.0000  12  12  FALSE
-156          NA       NA        NA     NA      0       NA  12  13   TRUE
-157          NA       NA        NA     NA      0       NA  13   1   TRUE
-158          NA       NA        NA     NA      0       NA  13   2   TRUE
-159          NA       NA        NA     NA      0       NA  13   3   TRUE
-160          NA       NA        NA     NA      0       NA  13   4   TRUE
-161          NA       NA        NA     NA      0       NA  13   5   TRUE
-162          NA       NA        NA     NA      0       NA  13   6   TRUE
-163          NA       NA        NA     NA      0       NA  13   7   TRUE
-164          NA       NA        NA     NA      0       NA  13   8   TRUE
-165          NA       NA        NA     NA      0       NA  13   9   TRUE
-166          NA       NA        NA     NA      0       NA  13  10   TRUE
-167          NA       NA        NA     NA      0       NA  13  11   TRUE
-168          NA       NA        NA     NA      0       NA  13  12   TRUE
-169          NA       NA        NA     NA      0       NA  13  13   TRUE
+156          NA       NA        NA     NA     NA       NA  12  13   TRUE
+157          NA       NA        NA     NA     NA       NA  13   1   TRUE
+158          NA       NA        NA     NA     NA       NA  13   2   TRUE
+159          NA       NA        NA     NA     NA       NA  13   3   TRUE
+160          NA       NA        NA     NA     NA       NA  13   4   TRUE
+161          NA       NA        NA     NA     NA       NA  13   5   TRUE
+162          NA       NA        NA     NA     NA       NA  13   6   TRUE
+163          NA       NA        NA     NA     NA       NA  13   7   TRUE
+164          NA       NA        NA     NA     NA       NA  13   8   TRUE
+165          NA       NA        NA     NA     NA       NA  13   9   TRUE
+166          NA       NA        NA     NA     NA       NA  13  10   TRUE
+167          NA       NA        NA     NA     NA       NA  13  11   TRUE
+168          NA       NA        NA     NA     NA       NA  13  12   TRUE
+169          NA       NA        NA     NA     NA       NA  13  13   TRUE
 NA           NA       NA        NA     NA     NA       NA  NA  NA     NA
 NA.1         NA       NA        NA     NA     NA       NA  NA  NA     NA
 NA.2         NA       NA        NA     NA     NA       NA  NA  NA     NA
@@ -1413,20 +1413,20 @@ NA.330        NA       NA       NA         NA            NA        NA     NA
 153     0.8436 0.5706   0.8436     16       32      32       32      43
 154     0.8436 0.4981   0.8436     17       40      40       40      47
 155     0.8436 0.4218   0.8436     18       50      50       50      50
-156         NA     NA       NA      0       NA      NA       NA     NaN
-157         NA     NA       NA      0       NA      NA       NA     NaN
-158         NA     NA       NA      0       NA      NA       NA     NaN
-159         NA     NA       NA      0       NA      NA       NA     NaN
-160         NA     NA       NA      0       NA      NA       NA     NaN
-161         NA     NA       NA      0       NA      NA       NA     NaN
-162         NA     NA       NA      0       NA      NA       NA     NaN
-163         NA     NA       NA      0       NA      NA       NA     NaN
-164         NA     NA       NA      0       NA      NA       NA     NaN
-165         NA     NA       NA      0       NA      NA       NA     NaN
-166         NA     NA       NA      0       NA      NA       NA     NaN
-167         NA     NA       NA      0       NA      NA       NA     NaN
-168         NA     NA       NA      0       NA      NA       NA     NaN
-169         NA     NA       NA      0       NA      NA       NA     NaN
+156         NA     NA       NA     NA       NA      NA       NA      NA
+157         NA     NA       NA     NA       NA      NA       NA      NA
+158         NA     NA       NA     NA       NA      NA       NA      NA
+159         NA     NA       NA     NA       NA      NA       NA      NA
+160         NA     NA       NA     NA       NA      NA       NA      NA
+161         NA     NA       NA     NA       NA      NA       NA      NA
+162         NA     NA       NA     NA       NA      NA       NA      NA
+163         NA     NA       NA     NA       NA      NA       NA      NA
+164         NA     NA       NA     NA       NA      NA       NA      NA
+165         NA     NA       NA     NA       NA      NA       NA      NA
+166         NA     NA       NA     NA       NA      NA       NA      NA
+167         NA     NA       NA     NA       NA      NA       NA      NA
+168         NA     NA       NA     NA       NA      NA       NA      NA
+169         NA     NA       NA     NA       NA      NA       NA      NA
 NA          NA     NA       NA     NA       NA      NA       NA      NA
 NA.1        NA     NA       NA     NA       NA      NA       NA      NA
 NA.2        NA     NA       NA     NA       NA      NA       NA      NA
