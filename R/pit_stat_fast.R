@@ -154,7 +154,7 @@ calc_vol2fl <- function(db, i_stats, verbose) {
     vol <- vol %>%
       dplyr::right_join(dplyr::select(i_stats, shedno, pour_elev, shed_area), #add stats
                        by = "shedno") %>%
-      tidyr::nest(-shedno) %>%
+      tidyr::nest(data = c(-shedno)) %>%
       dplyr::mutate(vol = purrr::map(data, vol2fl, verbose = verbose)) %>%
       tidyr::unnest(vol)
 

@@ -1,3 +1,7 @@
+# LITAP 0.3.1 (2020-01-24)
+
+- Update to `tidyr` v1.0.0
+
 # LITAP 0.3.0 (2019-07-11)
 
 - Added `form_mapper()` which mimics FormMapR
