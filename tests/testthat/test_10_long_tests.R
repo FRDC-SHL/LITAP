@@ -24,7 +24,7 @@ test_that("form_mapper()", {
   skip_on_cran()
   expect_message(form_mapper(folder = "./test_long", grid = 5))
 
-  for(i in list.files("./test_long", pattern = "(form|len|relz|weti).rds",
+  for(i in list.files("./test_long", pattern = "(form|length|relz|weti)[.]*.rds",
                       recursive = TRUE)){
       out <- basename(stringr::str_extract(i, "^[^.]*"))
       o <- readr::read_rds(file.path("./test_long", i))
