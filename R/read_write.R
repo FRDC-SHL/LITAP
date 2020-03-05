@@ -154,3 +154,25 @@ locs_create <- function(out_folder, which = c("backup", "flow")) {
   lapply(out_locs, function(x) {if(!dir.exists(x)) dir.create(x)})
   out_locs
 }
+
+
+#' Load previously created files
+#'
+#' @param folder Location of Project
+#' @param step Fill, pond, etc.
+#' @param where backup, Flow, Form, etc.
+#' @param type Some files have both "db" and "stats" extract which one?
+#'
+#'
+#' @noRd
+get_previous <- function(folder, step, where = "backup", type = "db") {
+
+  if(!dir.exists(folder)) stop("This folder doesn't exist: ", folder, call. = FALSE)
+  f <- list.files(file.path(folder, "backup"), pattern = step,
+                  recursive = TRUE, full.names = TRUE)
+  if(length(f) > 1) stop("There is more than one eligable ", step, " file:\n",
+                         paste0(f, collapse = "\n"), call. = FALSE)
+  if(length(f) == 0) stop("There are no eligable ", step, " files",
+                          call. = FALSE)
+  readr::read_rds(f)[[type]]
+}
