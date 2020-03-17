@@ -1,71 +1,3 @@
-load_dem <- function(file) {
-  if(!requireNamespace("foreign", quietly = TRUE)) {
-    stop("Require package 'foreign' to load .dbf files.\n
-         Install with \"install.packages('foreign')\", then try again")
-  } else {
-    # Load file
-    db <- foreign::read.dbf(file)
-
-    # Format names
-    names(db) <- tolower(names(db))
-    names(db) <- stringr::str_replace(names(db), "(^elevation$)|(^z$)", "elev")
-    names(db) <- stringr::str_replace(names(db), "(^latitude$)|(^lat$)", "y")
-    names(db) <- stringr::str_replace(names(db), "(^longitude$)|(^lon$)|(^long$)", "x")
-    db <- dplyr::select(db, dplyr::matches("(^x$)|(^y$)|(^elev$)"))
-
-    if(ncol(db) < 1) stop("No valid column names (see ?load_file for more ",
-                          "details on valid names)", call. = FALSE)
-
-    if(!("elev" %in% names(db))) stop("No valid elevation column (must be ",
-                                      "named either \"z\", \"elev\" or ",
-                                      "\"elevation\", case does not matter)",
-                                      call. = FALSE)
-
-    # Sort if x/y present
-    if(ncol(db) > 1 && all(c("x", "y", "elev") %in% names(db))) {
-      return(dplyr::arrange(db, dplyr::desc(y), x))
-    } else if ("elev" %in% names(db)) {
-      return(db)
-    } else {
-      stop("dem files must have at least one column corresponding to 'elevation' (elev, elevation, or z")
-    }
-  }
-}
-
-load_excel <- function(file, ...) {
-  if(!requireNamespace("readxl", quietly = TRUE)) {
-    stop("Require package 'readxl' to load .xlsx or .xls files.\n
-         Install with \"install.packages('readxl')\", then try again")
-  } else {
-    h <- readxl::read_excel(file, n_max = 5,
-                            col_names = FALSE, .name_repair = "minimal")
-    header <- any(stringr::str_detect(h[1,], "[a-zA-Z]+"))
-    db <- readxl::read_excel(file, col_names = header)
-    names(db) <- c("x", "y", "elev")
-    db <- dplyr::arrange(db, dplyr::desc(y), x)
-    return(db)
-  }
-}
-
-load_raster <- function(file) {
-  db <- raster::raster(file) %>%
-    raster::as.data.frame(xy = TRUE) %>%
-    dplyr::arrange(dplyr::desc(y), x)
-  names(db) <- c("x", "y", "elev")
-  db
-}
-
-load_txt <- function(file) {
-  t <- readLines(file, 10)
-  header <- any(stringr::str_detect(t[1], "[a-zA-Z]+"))
-  if(any(stringr::str_detect(t, ","))) sep <- "," else sep <- ""
-
-  utils::read.table(file, header = header, sep = sep,
-                    col.names = c("x", "y", "elev")) %>%
-    dplyr::arrange(dplyr::desc(y), x)
-}
-
-
 #' Load and prep elevation data
 #'
 #' This function is used by \code{\link{complete_run}} to load input files and
@@ -141,19 +73,21 @@ load_file <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
     if(ext == "" & verbose) message("  Assuming folder representing Arc/Info Binary Grid")
     db <- load_raster(file)
   } else if(ext == "dbf") {
-    db <- load_dem(file)
+    db <- load_dem(file, type = "elev")
   } else if(ext %in% c("xlsx", "xls")) {
-    db <- load_excel(file)
+    db <- load_excel(file, type = "elev")
   } else if(ext %in% c("txt", "csv", "dat")) {
-    db <- load_txt(file)
+    db <- load_txt(file, type = "elev")
   } else {
     stop("Unknown file format", call. = FALSE)
   }
 
-  if(ncol(db) == 3) {
+  # Sort if x/y present
+  if(ncol(db) > 1 && all(c("x", "y", "elev") %in% names(db))) {
+    db <- dplyr::arrange(db, dplyr::desc(y), x)
     nrow <- length(unique(db$y))
     ncol <- length(unique(db$x))
-    db <- dplyr::select(db, -x, -y)
+    db <- dplyr::select(db, -"x", -"y")
     if(verbose) message("  Detected ", nrow, " rows and ", ncol, " columns")
   } else if(!is.null(nrow) && !is.null(ncol)) {
     if(verbose) message("  Using supplied ", nrow, " rows and ", ncol, " columns")
@@ -164,6 +98,82 @@ load_file <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
 
   db_format(db, nrow, ncol, missing_value, verbose) %>%
     db_prep(clim, rlim, edge, verbose)
+}
+
+
+load_dem <- function(file, type = "elev") {
+  if(!requireNamespace("foreign", quietly = TRUE)) {
+    stop("Require package 'foreign' to load .dbf files.\n
+         Install with \"install.packages('foreign')\", then try again")
+  }
+
+  # Load file
+  db <- foreign::read.dbf(file)
+  check_names(db, type = type)
+}
+
+check_names <- function(db, type) {
+
+  # Format names
+  names(db) <- tolower(names(db))
+  names(db) <- stringr::str_trim(names(db))
+
+  if(!is.null(fix_names[[type]])) {
+    # Fix fixable names
+    names(db) <- stringr::str_replace_all(names(db), pattern = fix_names[[type]])
+  }
+  # Check if required columns present
+  if(type == "elev" && !("elev" %in% names(db))) {
+    stop("No valid elevation column (must be named 'elev', '",
+         paste0(names(fix_names$elev[fix_names$elev == "elev"]), collapse = "', '"),
+         "', case does not matter)",
+         call. = FALSE)
+  } else if(type != "elev" && !all(match_names[[type]] %in% names(db))) {
+    m <- match_names[[type]][!match_names[[type]] %in% names(db)]
+    stop("Required columns missing from data: '",
+         paste0(m, collapse = "', '"), "'")
+  }
+  dplyr::select(db, tidyselect::any_of(match_names[[type]]))
+}
+
+load_excel <- function(file, type = "elev") {
+  if(!requireNamespace("readxl", quietly = TRUE)) {
+    stop("Require package 'readxl' to load .xlsx or .xls files.\n
+         Install with \"install.packages('readxl')\", then try again")
+  }
+  h <- readxl::read_excel(file, n_max = 5,
+                          col_names = FALSE, .name_repair = "minimal")
+  header <- any(stringr::str_detect(h[1,], "[a-zA-Z]+"))
+
+  db <- readxl::read_excel(file, col_names = header)
+  if(!header) {
+    names(db) <- match_names[[type]]
+  } else {
+    db <- check_names(db, type = type)
+  }
+  db
+}
+
+load_txt <- function(file, type = "elev") {
+  t <- readLines(file, 10)
+  header <- any(stringr::str_detect(t[1], "[a-zA-Z]+"))
+  if(any(stringr::str_detect(t, ","))) sep <- "," else sep <- ""
+
+  db <- utils::read.table(file, header = header, sep = sep)
+  if(!header) {
+    names(db) <- match_names[[type]]
+  } else {
+    db <- check_names(db, type = type)
+  }
+  dplyr::mutate_all(db, as.numeric)
+}
+
+
+load_raster <- function(file) {
+  db <- raster::raster(file) %>%
+    raster::as.data.frame(xy = TRUE)
+  names(db) <- match_names[["elev"]]
+  db
 }
 
 db_format <- function(db, nrow, ncol, missing_value = -9999, verbose) {
@@ -249,3 +259,48 @@ add_buffer <- function(db) {
     dplyr::arrange(row, col) %>%
     dplyr::mutate(seqno = 1:length(row))
 }
+
+load_rule <- function(file, type) {
+
+  if(!type %in% c("arule", "crule")) {
+    stop("'type' must be either 'arule' or 'crule'", call. = FALSE)
+  }
+
+  ext <- tolower(tools::file_ext(file))
+
+  if(ext == "dbf") {
+    rule <- load_dem(file, type = type)
+  } else if(ext %in% c("xlsx", "xls")) {
+    rule <- load_excel(file)
+  } else if(ext %in% c("txt", "csv", "dat")) {
+    rule <- load_txt(file)
+  } else {
+    stop(paste0("Expecting rule files as data base (dbf), Excel (xlsx, xls)\n",
+                "       or text (txt, csv, dat)"), call. = FALSE)
+  }
+  rule
+}
+
+format_rule <- function(rule, type) {
+  if(!type %in% c("arule", "crule")) {
+    stop("'type' must be either 'arule' or 'crule'", call. = FALSE)
+  }
+  message("Formatting ", type, " file")
+  rule <- dplyr::mutate_if(rule, ~!is.numeric(.), tolower)
+
+  msg <- vector()
+  if(type == "arule") {
+    if(any(rule$attr_in == "slope")) {
+      msg <- c(msg, "  - Renaming 'slope' to 'slope_pct'")
+    }
+
+    rule <- dplyr::mutate(
+      rule,
+      attr_in = stringr::str_replace_all(
+        attr_in,
+        c("slope" = "slope_pct")))
+  }
+  message(paste0(msg, collapse = "\n"))
+  rule
+}
+

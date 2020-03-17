@@ -14,7 +14,8 @@ save_output <- function(locs, out_format,
     if(file.exists(file.path(locs[["backup"]], paste0(name , ".rds")))) {
       data <- read_shed(locs[["backup"]], name)
 
-      if(name %in% c("fill", "ilocal", "form", "weti", "relief", "length")) {
+      if(name %in% c("fill", "ilocal", "form", "weti", "relief", "length",
+                     "fuzc", "fuza")) {
         if("db" %in% names(data)) db <- data$db else db <- data
         if("data" %in% names(db)) db <- dplyr::select(db, -data)
 
@@ -168,11 +169,13 @@ locs_create <- function(out_folder, which = c("backup", "flow")) {
 get_previous <- function(folder, step, where = "backup", type = "db") {
 
   if(!dir.exists(folder)) stop("This folder doesn't exist: ", folder, call. = FALSE)
-  f <- list.files(file.path(folder, "backup"), pattern = step,
+  f <- list.files(file.path(folder, where), pattern = step,
                   recursive = TRUE, full.names = TRUE)
   if(length(f) > 1) stop("There is more than one eligable ", step, " file:\n",
                          paste0(f, collapse = "\n"), call. = FALSE)
   if(length(f) == 0) stop("There are no eligable ", step, " files",
                           call. = FALSE)
-  readr::read_rds(f)[[type]]
+  r <- readr::read_rds(f)
+  if(class(f) == "list") r <- r[[type]]
+  r
 }

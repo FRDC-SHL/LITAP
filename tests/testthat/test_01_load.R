@@ -99,13 +99,16 @@ test_that("Text files load", {
 
   file <- "./FES4 Input files/FES04_XYZGrid.dat"
   expect_silent(d <- load_txt(file))
-  expect_equivalent(d_raw, d, tolerance = 0.00001)
+  expect_equivalent(d_raw,
+                    dplyr::arrange(d, dplyr::desc(y), x),
+                    tolerance = 0.0001)
   expect_silent(d <- load_file(file, verbose = FALSE))
   expect_values(d)
 
   file <- "./FES4 Input files/FES04_XYZ.dat"
   expect_silent(d <- load_txt(file))
-  expect_equivalent(d_raw, d, tolerance = 0.00001)
+  expect_equivalent(d_raw, dplyr::arrange(d, dplyr::desc(y), x),
+                    tolerance = 0.00001)
   expect_silent(d <- load_file(file, verbose = FALSE))
   expect_values(d)
 })
@@ -115,8 +118,9 @@ test_that("Excel files load", {
   skip_on_appveyor()
   skip_on_travis()
   file <- "./FES4 Input files/FES04_XYZ.xlsx"
-  expect_silent(d <- load_excel(file))
-  expect_equivalent(d_raw, d, tolerance = 0.00001)
+  expect_error(d <- load_excel(file), NA)
+  expect_equivalent(d_raw, dplyr::arrange(d, dplyr::desc(y), x),
+                    tolerance = 0.00001)
   expect_silent(d <- load_file(file, verbose = FALSE))
   expect_values(d)
 })

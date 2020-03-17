@@ -25,3 +25,4 @@ foreign::write.dbf(as.data.frame(d), "./inst/extdata/testELEV.dbf")
 # Run to get output of subset dem for vignettes
 flow_mapper(file = "./inst/extdata/testELEV.dbf", nrow = 150, ncol = 150,
             max_area = 1, max_depth = 0.1)
+
