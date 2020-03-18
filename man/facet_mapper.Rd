@@ -9,7 +9,7 @@ facet_mapper(folder, arule, crule, out_format = "rds", resume = NULL,
   quiet = FALSE)
 }
 \arguments{
-\item{folder}{Character. Location of [flow_mapper()] output}
+\item{folder}{Character. Location of \code{\link[=flow_mapper]{flow_mapper()}} output}
 
 \item{resume}{Character. From which stage should the run be resumed? (see
 Details below)}
@@ -26,13 +26,14 @@ Details below)}
 \item{quiet}{Logical. Suppress all messages.}
 }
 \description{
-This function takes backup data frame output from [flow_mapper()] and
-[form_mapper()] calculates fuzzy attributes (among other metrics).  Based on
+This function takes backup data frame output from \code{\link[=flow_mapper]{flow_mapper()}} and
+\code{\link[=form_mapper]{form_mapper()}} calculates fuzzy attributes (among other metrics).  Based on
 FacetMapR by R. A. (Bob) MacMillan, LandMapper Environmental Solutions.
 }
 \details{
 For resuming or ending a run, \code{resume} or \code{end} must be
-  one of the following:
-
-  - facet
+one of the following:
+\itemize{
+\item facet
+}
 }

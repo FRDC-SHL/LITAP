@@ -34,7 +34,7 @@ columns to extract}
 }
 \value{
 Returns a data frame containing elevation data in a format suitable
-  for analysis
+for analysis
 }
 \description{
 This function is used by \code{\link{complete_run}} to load input files and
@@ -44,7 +44,7 @@ trouble-shooting.
 }
 \details{
 All x/y data must be in a format such that greater values indicate
-  East or North respectively.
+East or North respectively.
 
 This function uses file extensions to guess the file type to be loaded.
 
@@ -57,27 +57,27 @@ X/Y coordinates are optional and must be named as "x", "lon", "long",
 \code{ncol} arguments must be supplied. Column names matter, column order
 does not. Extra columns, if present, are ignored.
 \itemize{
-  \item dBase files (.dbf)
+\item dBase files (.dbf)
 }
 
 \strong{Grid file types:}
 These file types are loaded via the \code{\link[raster]{raster}} function.
 \itemize{
-  \item Surfer grid files (.grd)
-  \item Esri grid files (binary .adf or ascii .asc)
-  \item Geo Tiff (.tif)
-  \item Floating point raster files (.flt) (**Note** the companion header,
-  .hdr, file must also be present)
-  }
+\item Surfer grid files (.grd)
+\item Esri grid files (binary .adf or ascii .asc)
+\item Geo Tiff (.tif)
+\item Floating point raster files (.flt) (\strong{Note} the companion header,
+.hdr, file must also be present)
+}
 
 \strong{Text/Spreadsheet file types:}
 Data in these files are all assumed to be arranged in three columns
-reflecting x, y, and z dimensions (z = elevation). Column **order** is
+reflecting x, y, and z dimensions (z = elevation). Column \strong{order} is
 important. Column names don't matter, but they should be present.
 \itemize{
-  \item Text files (.txt, .dat, .csv) are loaded via R base
-  \code{link[utils]{read.table}} function.
-  \item Excel files (.xls, .xlsx) are loaded via the
-  \code{\link[readxl]{read_excel}} function.
-  }
+\item Text files (.txt, .dat, .csv) are loaded via R base
+\code{link[utils]{read.table}} function.
+\item Excel files (.xls, .xlsx) are loaded via the
+\code{\link[readxl]{read_excel}} function.
+}
 }

@@ -9,7 +9,7 @@ form_mapper(folder, grid, str_val = 10000, ridge_val = 10000,
   report = TRUE, verbose = FALSE, quiet = FALSE)
 }
 \arguments{
-\item{folder}{Character. Location of [flow_mapper()] output}
+\item{folder}{Character. Location of \code{\link[=flow_mapper]{flow_mapper()}} output}
 
 \item{grid}{Numeric. Grid size for the original dem}
 
@@ -32,18 +32,19 @@ Details below)}
 \item{quiet}{Logical. Suppress all messages.}
 }
 \description{
-This function takes backup data frame output from [flow_mapper()] and
+This function takes backup data frame output from \code{\link[=flow_mapper]{flow_mapper()}} and
 calculates form, wetness indices, reflief and stream/crest lengths (among
 other metrics).  Based on FormMapR by R. A. (Bob) MacMillan, LandMapper
 Environmental Solutions.
 }
 \details{
 For resuming or ending a run, \code{resume} or \code{end} must be
-  one of the following:
-
-  1. `weti` (Calculating Wetness Indices)
-  2. `relief` (Calculating Relief Derivitives)
-  3. `length` (Calculating Slope Length)
+one of the following:
+\enumerate{
+\item \code{weti} (Calculating Wetness Indices)
+\item \code{relief} (Calculating Relief Derivitives)
+\item \code{length} (Calculating Slope Length)
+}
 }
 \examples{
 

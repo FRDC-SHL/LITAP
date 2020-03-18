@@ -61,22 +61,22 @@ Environmental Solutions.
 }
 \details{
 For information regarding loading other file types see
-  \code{\link{load_file}}.
+\code{\link{load_file}}.
 
-  For resuming or ending a run, \code{resume} or \code{end} must be one of
-  the following:
+For resuming or ending a run, \code{resume} or \code{end} must be one of
+the following:
 
-  \enumerate{
-    \item \code{directions} (Calculating Directions)
-    \item \code{watersheds} (Calculating Watersheds)
-    \item \code{local} (Initial Pit Removal)
-    \item \code{pond} (Calculating Pond Shed Statistics - Second Pit Removal)
-    \item \code{fill} (Calculating Fill Shed Statistics - Third Pit Removal)
-    \item \code{inverted} (Calculating Directions on Inverted DEM)
-    \item \code{iwatersheds} (Calculating Inverted Watersheds)
-    \item \code{ilocal} (Initial Inverted Pit Removal)
-    \item \code{report} (Create the final report)
-  }
+\enumerate{
+\item \code{directions} (Calculating Directions)
+\item \code{watersheds} (Calculating Watersheds)
+\item \code{local} (Initial Pit Removal)
+\item \code{pond} (Calculating Pond Shed Statistics - Second Pit Removal)
+\item \code{fill} (Calculating Fill Shed Statistics - Third Pit Removal)
+\item \code{inverted} (Calculating Directions on Inverted DEM)
+\item \code{iwatersheds} (Calculating Inverted Watersheds)
+\item \code{ilocal} (Initial Inverted Pit Removal)
+\item \code{report} (Create the final report)
+}
 }
 \examples{
 # Basic Run

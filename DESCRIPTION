@@ -1,7 +1,7 @@
 Package: LITAP
 Type: Package
 Title: Landscape Integrated Terrain Analysis Package
-Version: 0.3.1
+Version: 0.4.0
 Authors@R: c(
      person("Steffi", "LaZerte", email = "sel@steffilazerte.ca", role = c("aut","cre")))
 Description: Flow analysis of elevation data including pit removal. 
@@ -33,3 +33,4 @@ Suggests:
     testthat
 VignetteBuilder: knitr
 RoxygenNote: 6.1.1
+Roxygen: list(markdown = TRUE)
