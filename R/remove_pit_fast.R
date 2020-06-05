@@ -356,7 +356,7 @@ remove_pit1 <- function(w_rm, w_stats, db, update_elev = FALSE, verbose = FALSE)
   #   NA's from the previous step
 
   # 1. Get original flow down to old pit
-  new_flow <- trace_flow2(cell = w_rm$in_seqno, db = db)
+  new_flow <- trace_flow2(cell = w_rm$in_seqno, drec = db$drec)
 
   # Reverse directions
   new_ldir <- db[new_flow, ] %>%
@@ -378,7 +378,7 @@ remove_pit1 <- function(w_rm, w_stats, db, update_elev = FALSE, verbose = FALSE)
   db$drec[new_ldir$seqno] <- new_ldir$seqno_next
 
   # Get new flow path from old pit centre to new pit centre
-  new_flow <- trace_flow2(cell = w_rm$pit_seqno, db = db)
+  new_flow <- trace_flow2(cell = w_rm$pit_seqno, drec = db$drec)
 
   # Update upslope starting with old pit and looping through to new,
   #    adding upslope from previous to new cell along the way
