@@ -6,6 +6,22 @@ save_backup <- function(locs, data, name) {
   }
 }
 
+save_output2 <- function(data, stats = NULL, name, locs, out_format, where,
+                         add_db = NULL) {
+
+  if(!is.null(add_db)) {
+    data <- dplyr::left_join(data, add_db, by = "seqno")
+  }
+
+  data <- remove_buffer(data)
+  save_shed(locs[[where]], data, paste0("dem_", name, ".", out_format))
+  if(!is.null(stats)) {
+    stats <- remove_buffer(data, stats)
+    save_shed(locs[[where]], stats, paste0("stats_", name, ".", out_format))
+  }
+}
+
+
 save_output <- function(locs, out_format,
                         which = c("local", "pond", "fill", "pit", "ilocal"),
                         where = "flow", add_db = NULL) {
@@ -167,16 +183,24 @@ locs_create <- function(out_folder, which = c("backup", "flow")) {
 #'
 #'
 #' @noRd
-get_previous <- function(folder, step, where = "backup", type = "db") {
+get_previous <- function(folder, step, where = "backup", type = "dem") {
 
   if(!dir.exists(folder)) stop("This folder doesn't exist: ", folder, call. = FALSE)
+
   f <- list.files(file.path(folder, where), pattern = step,
-                  recursive = TRUE, full.names = TRUE)
-  if(length(f) > 1) stop("There is more than one eligable ", step, " file:\n",
-                         paste0(f, collapse = "\n"), call. = FALSE)
-  if(length(f) == 0) stop("There are no eligable ", step, " files",
+                  recursive = TRUE, full.names = TRUE) %>%
+    stringr::str_subset(type)
+
+  if(length(f) > 1) stop("There is more than one eligable ", step, " for type ",
+                         type, "\n(",
+                         paste0(f, collapse = "\n"), ")", call. = FALSE)
+  if(length(f) == 0) stop("There are no eligable ", step, " for type ", type, " files",
                           call. = FALSE)
   r <- readr::read_rds(f)
-  if(class(f) == "list") r <- r[[type]]
+
+  if(any(class(r) == "list")) {
+    type <- dplyr::if_else(type == "dem", "db", type)
+    r <- r[[type]]
+  }
   r
 }
