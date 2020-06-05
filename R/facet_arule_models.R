@@ -9,7 +9,7 @@ arule_models <- function(model, x, b, b_low, b_hi, b1, b2, d) {
                                           x <= b1 ~ basic_model(x, b1, d),
                                           x >= b2 ~ basic_model(x, b2, d))
   if(model == 4) fuzz <- dplyr::if_else(x > b, 1, basic_model(x, b, d))
-  if(model == 5) fuzz <- dplyr::case_when(x < b, 1, basic_model(x, b, d))
+  if(model == 5) fuzz <- dplyr::if_else(x < b, 1, basic_model(x, b, d))
 
   fuzz * 100
 }
