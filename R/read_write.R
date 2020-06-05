@@ -103,18 +103,17 @@ convert_orig <- function(data, type) {
 
 
 remove_buffer <- function(db, stats = NULL) {
-
   # replace seqno
   db <- db %>%
-    dplyr::filter(!buffer) %>%
-    dplyr::arrange(row, col) %>%
-    dplyr::rename(seqno_buffer = seqno)
+    dplyr::filter(!.data$buffer) %>%
+    dplyr::arrange(.data$row, .data$col) %>%
+    dplyr::rename("seqno_buffer" = "seqno")
 
-  if("drec" %in% names(db)) db <- dplyr::rename(db, drec_buffer = drec)
+  if("drec" %in% names(db)) db <- dplyr::rename(db, "drec_buffer" = "drec")
 
   #if("upslope" %in% names(db)) db <- dplyr::rename(db, upslope_buffer = upslope)
 
-  db <- dplyr::mutate(db, seqno = 1:length(row))
+  db <- dplyr::mutate(db, seqno = 1:length(.data$row))
 
   # Correct rows and columns
   for(i in stringr::str_subset(names(db), "row|col")) {
@@ -123,25 +122,27 @@ remove_buffer <- function(db, stats = NULL) {
 
 
   # Get index of seqno replacements
-  index <- dplyr::select(db, seqno, seqno_buffer)
+  index <- dplyr::select(db, "seqno", "seqno_buffer")
 
   # Stats
   if(!is.null(stats)){
     stats <- dplyr::mutate(stats,
-                           pit_row = pit_row - 1, pit_col = pit_col - 1,
-                           pit_seqno = rename_seqno(pit_seqno, index),
-                           out_row = out_row - 1, out_col = out_col - 1,
-                           out_seqno = rename_seqno(out_seqno, index),
-                           in_row = in_row - 1, in_col = in_col - 1,
-                           in_seqno = rename_seqno(in_seqno, index),
-                           pit_seqno_out = rename_seqno(pit_seqno_out, index))
+                           pit_row = .data$pit_row - 1,
+                           pit_col = .data$pit_col - 1,
+                           pit_seqno = rename_seqno(.data$pit_seqno, index),
+                           out_row = .data$out_row - 1,
+                           out_col = .data$out_col - 1,
+                           out_seqno = rename_seqno(.data$out_seqno, index),
+                           in_row = .data$in_row - 1,
+                           in_col = .data$in_col - 1,
+                           in_seqno = rename_seqno(.data$in_seqno, index),
+                           pit_seqno_out = rename_seqno(.data$pit_seqno_out, index))
     return(stats)
   } else {
     # Replace drec and upslope with correct cell numbers
 
     if("drec_buffer" %in% names(db)) {
-      db <- db %>%
-        dplyr::mutate(drec = rename_seqno(drec_buffer, index))
+      db <- dplyr::mutate(db, drec = rename_seqno(.data$drec_buffer, index))
     }
       #upslope = purrr::map(upslope_buffer, ~ rename_seqno(.x, index)))
     return(db)

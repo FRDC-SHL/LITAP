@@ -31,13 +31,13 @@
 #' This function uses file extensions to guess the file type to be loaded.
 #'
 #' \strong{dBase files:}
-#' These files are loaded via the \code{\link[foreign]{read.dbf}} function.
-#' Columns must be named and must have a valid name (case doesn't not matter).
-#' X/Y coordinates are optional and must be named as "x", "lon", "long",
-#' "longitude", or "y", "lat", "latitude". Elevation columns can be "elev",
-#' "elevation", or "z". If no "x" and "y" columns are suppled, \code{nrow} and
-#' \code{ncol} arguments must be supplied. Column names matter, column order
-#' does not. Extra columns, if present, are ignored.
+#' These files are loaded via the \code{\link[foreign]{read.dbf}} function from
+#' the foreign package. Columns must be named and must have a valid name (case
+#' doesn't not matter). X/Y coordinates are optional and must be named as "x",
+#' "lon", "long", "longitude", or "y", "lat", "latitude". Elevation columns can
+#' be "elev", "elevation", or "z". If no "x" and "y" columns are suppled,
+#' \code{nrow} and \code{ncol} arguments must be supplied. Column names matter,
+#' column order does not. Extra columns, if present, are ignored.
 #' \itemize{
 #'   \item dBase files (.dbf)
 #' }
@@ -118,22 +118,26 @@ check_names <- function(db, type) {
   names(db) <- tolower(names(db))
   names(db) <- stringr::str_trim(names(db))
 
+  all_names <- dplyr::filter(match_names, .data$type == !!type) %>%
+    dplyr::pull("name")
+  req_names <- dplyr::filter(match_names,
+                             .data$type == !!type,
+                             .data$required == TRUE) %>%
+    dplyr::pull("name")
+
+  # Fix fixable names
   if(!is.null(fix_names[[type]])) {
-    # Fix fixable names
     names(db) <- stringr::str_replace_all(names(db), pattern = fix_names[[type]])
   }
+
   # Check if required columns present
-  if(type == "elev" && !("elev" %in% names(db))) {
-    stop("No valid elevation column (must be named 'elev', '",
-         paste0(names(fix_names$elev[fix_names$elev == "elev"]), collapse = "', '"),
-         "', case does not matter)",
-         call. = FALSE)
-  } else if(type != "elev" && !all(match_names[[type]] %in% names(db))) {
-    m <- match_names[[type]][!match_names[[type]] %in% names(db)]
+  if(!all(req_names %in% names(db))) {
     stop("Required columns missing from data: '",
          paste0(m, collapse = "', '"), "'")
   }
-  dplyr::select(db, tidyselect::any_of(match_names[[type]]))
+
+  # Grab names which are present
+  dplyr::select(db, tidyselect::any_of(all_names))
 }
 
 load_excel <- function(file, type = "elev") {
@@ -241,6 +245,10 @@ add_buffer <- function(db) {
   ncols = max(db$col)
   nrows = max(db$row)
 
+  db <- dplyr::arrange(db, seqno)
+
+  if("drec" %in% names(db)) drec <- dplyr::select(db, "drec")
+
   buffers <- tibble::tibble(row = c(rep(1, ncols+2),        #top
                                     1:(nrows+2),            #left
                                     1:(nrows+2),            #right
@@ -253,32 +261,47 @@ add_buffer <- function(db) {
 
     dplyr::distinct()
 
-  db %>%
+  db <- db %>%
     dplyr::mutate(row = row + 1, col = col + 1, buffer = FALSE) %>%
     dplyr::bind_rows(buffers) %>%
     dplyr::arrange(row, col) %>%
-    dplyr::mutate(seqno = 1:length(row))
+    dplyr::mutate(seqno_buffer = 1:length(row))
+
+  if("drec" %in% names(db)) {
+    drec <- dplyr::left_join(drec, dplyr::select(db, "seqno", "seqno_buffer"),
+                             by = c("drec" = "seqno")) %>%
+      dplyr::rename("drec_buffer" = "seqno_buffer") %>%
+      dplyr::distinct()
+    db <- dplyr::left_join(db, drec, by = "drec") %>%
+      dplyr::select(-"drec", "drec" = "drec_buffer")
+  }
+
+  db %>%
+    dplyr::select(-"seqno", "seqno" = "seqno_buffer") %>%
+    dplyr::select("seqno", dplyr::everything()) %>%
+    dplyr::arrange(.data$seqno)
 }
 
-load_rule <- function(file, type) {
+load_extra <- function(file, type) {
 
-  if(!type %in% c("arule", "crule")) {
-    stop("'type' must be either 'arule' or 'crule'", call. = FALSE)
+  if(!type %in% c("arule", "crule", "zone")) {
+    stop("'type' must be either 'arule', 'crule', or 'zone'", call. = FALSE)
   }
 
   ext <- tolower(tools::file_ext(file))
 
   if(ext == "dbf") {
-    rule <- load_dem(file, type = type)
+    extra <- load_dem(file, type = type)
   } else if(ext %in% c("xlsx", "xls")) {
-    rule <- load_excel(file)
+    extra <- load_excel(file)
   } else if(ext %in% c("txt", "csv", "dat")) {
-    rule <- load_txt(file)
+    extra <- load_txt(file)
   } else {
-    stop(paste0("Expecting rule files as data base (dbf), Excel (xlsx, xls)\n",
+    t <- dplyr::if_else(type == "zone", "zone", "rule")
+    stop(paste0("Expecting ", t, " file as data base (dbf), Excel (xlsx, xls)\n",
                 "       or text (txt, csv, dat)"), call. = FALSE)
   }
-  rule
+  extra
 }
 
 format_rule <- function(rule, type) {
@@ -301,6 +324,7 @@ format_rule <- function(rule, type) {
         c("slope" = "slope_pct")))
   }
   message(paste0(msg, collapse = "\n"))
+
+  if(!"zone" %in% names(rule)) rule <- dplyr::mutate(rule, zone = 0)
   rule
 }
-
