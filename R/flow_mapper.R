@@ -4,7 +4,7 @@
 #' fill patterns. Based on FlowMapR by R. A. (Bob) MacMillan, LandMapper
 #' Environmental Solutions.
 #'
-#' @param file Character. Elevation file (see \code{\link{load_file}} for
+#' @param file Character. Elevation file (see \code{\link{load_file}}) for
 #'   supported file types.
 #' @param nrow Numeric. Number of rows in dem file (required for dbf files with
 #'   a single column, but can be automatically assessed from files with x and y
@@ -114,7 +114,10 @@ flow_mapper <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
 
   # File details to log
   write_log("Run options:", log = log_file)
-  write_log("  Dimensions: nrows = ", nrow_orig, "; ncols = ", ncol_orig,
+  write_log("  Dimensions: nrows = ", nrow_orig,
+            "; ncols = ", ncol_orig,
+            "; max_area = ", max_area,
+            "; max_depth = ", max_depth,
             log = log_file)
 
   # Subset to log
