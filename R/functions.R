@@ -14,12 +14,16 @@ trace_flow <- function(cell, db) {
   }
 }
 
-trace_flow2 <- function(cell, db) {
+trace_flow2 <- function(cell, drec) {
   track <- cell
   end <- FALSE
   if(!is.na(cell)){
     while(!end){
-      cell <- db$drec[cell] # Get next cells (db must be sorted by seqno!)
+      # cell1 <- dplyr::pull(db, drec)[cell] # slooooow
+      # cell2 <- dplyr::slice(db, cell) %>% dplyr::pull(drec) # slooooow
+      # cell3 <- db[['drec']][cell] # slooooow
+      cell <- drec[cell] # Get next cells (drec must be sorted by seqno!)
+      #cell <- db$drec[cell] # Get next cells (db must be sorted by seqno!)
       if(!is.na(cell)) { # Otherwise is an edge cell
         if(cell %in% track) end <- TRUE # In a circular track or Pit
         if(cell != track[length(track)]) track <- c(track, cell) # If not simply starting and ending with the same pit cell, keep final cell
@@ -29,6 +33,50 @@ trace_flow2 <- function(cell, db) {
     return(track)
   }
 }
+
+trace_flow_fast <- function(cell, drec) {
+  track <- vector()
+  i <- 1
+  track[i] <- cell
+
+  repeat {
+    i <- i + 1
+    if(track[i-1] == drec[track[i-1]]) break
+    track[i] <- drec[track[i-1]]
+  }
+
+  track
+}
+
+trace_flow_fast2 <- function(cell, drec) {
+  track <- vector()
+  i <- 1
+  track[i] <- cell
+
+  for(i in 2:length(drec)) {
+    track[i] <- drec[track[i-1]]
+  }
+
+  #if(length(track) != length(unique(track))) {
+  #  browser()
+  #}
+  track[-length(track)]
+}
+
+trace_flow_all <- function(cells, drec) {
+  m <- matrix(ncol = length(cells))
+  m[1, ] <- cells
+
+  i <- 1
+  repeat {
+    i <- i + 1
+    if(all(m[i-1, ] == drec[m[i-1, ]])) break
+    m <- rbind(m, drec[m[i-1, ]])
+  }
+  m
+}
+
+
 
 trace_flow3 <- function(cell, db) {
   track <- cell
