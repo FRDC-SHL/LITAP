@@ -104,28 +104,30 @@ calc_segs_trace <- function(t, s, v) {
     last <- which(db$seedtype[t[-c(1:2)]] != 0)[1] + 2
   } else last <- length(t)
 
-  channels <- db[t[1:last], ]
+  if(!is.na(last)) { # Circling drec issues
+    channels <- db[t[1:last], ]
 
-  if(channels$seedtype[1] == 5){
-    segs[, c("end_seqno", "end_row", "end_col", "end_elev", "end_type")] <-
-      channels[1, c("seqno", "row", "col", "elev", "seedtype")]
-    segs$len_cells <- 1
-    segs <- dplyr::mutate(segs, initial_id = paste0(.data$initial_id, ".1"),
-                          impound = TRUE) %>%
-      dplyr::bind_rows(segs, .)
+    if(channels$seedtype[1] == 5){
+      segs[, c("end_seqno", "end_row", "end_col", "end_elev", "end_type")] <-
+        channels[1, c("seqno", "row", "col", "elev", "seedtype")]
+      segs$len_cells <- 1
+      segs <- dplyr::mutate(segs, initial_id = paste0(.data$initial_id, ".1"),
+                            impound = TRUE) %>%
+        dplyr::bind_rows(segs, .)
 
-  } else {
-    segs$len_cells <- nrow(channels)
-    segs[, c("end_seqno", "end_row", "end_col", "end_elev", "end_type")] <-
-      channels[nrow(channels), c("seqno", "row", "col", "elev", "seedtype")]
+    } else {
+      segs$len_cells <- nrow(channels)
+      segs[, c("end_seqno", "end_row", "end_col", "end_elev", "end_type")] <-
+        channels[nrow(channels), c("seqno", "row", "col", "elev", "seedtype")]
+    }
+
+    # Add ids to db
+    end <- channels$seqno
+    db$segment_no[end][db$segment_no[end] == 0] <- segs$initial_id[1]
+
+    v$segs <- dplyr::bind_rows(v$segs, segs)
+    v$db <- db
   }
-
-  # Add ids to db
-  end <- channels$seqno
-  db$segment_no[end][db$segment_no[end] == 0] <- segs$initial_id[1]
-
-  v$segs <- dplyr::bind_rows(v$segs, segs)
-  v$db <- db
 
   v
 }

@@ -51,23 +51,26 @@ split_segments_indiv <- function(t, s, v) {
 
   # Find first non-0 seedtype in track
   end <- which(v$seedtype[t[-1]] != 0)[1] + 1
-  t <- t[1:(end-1)]
+  #if(length(end) == 0 || is.na(end)) browser() # Find circling drec issues
+  if(!is.na(end)) {
+    t <- t[1:(end-1)]
 
-  # Get length
-  seg_length <- length(t) * s$grid
+    # Get length
+    seg_length <- length(t) * s$grid
 
-  if(seg_length > s$chan_length) {
-    n_segs <- as.integer(seg_length/s$chan_length) + 1
-    new_seg_length <- as.integer(length(t)/n_segs)
+    if(seg_length > s$chan_length) {
+      n_segs <- as.integer(seg_length/s$chan_length) + 1
+      new_seg_length <- as.integer(length(t)/n_segs)
 
-    splits <- seq(1, length(t), new_seg_length)[2:n_segs]
+      splits <- seq(1, length(t), new_seg_length)[2:n_segs]
 
-    # Change seedtype to 4 at each junction
-    # As long as not a pit that drains to self and next is 0, change next cell to 8
-    for(i in splits) {
-      v$seedtype[t][i] <- 4
-      if(s$drec[t][i] != s$seqno[t][i] &&
-         v$seedtype[t][i+1] == 0) v$seedtype[t][i+1] <- 8
+      # Change seedtype to 4 at each junction
+      # As long as not a pit that drains to self and next is 0, change next cell to 8
+      for(i in splits) {
+        v$seedtype[t][i] <- 4
+        if(s$drec[t][i] != s$seqno[t][i] &&
+           v$seedtype[t][i+1] == 0) v$seedtype[t][i+1] <- 8
+      }
     }
   }
   v

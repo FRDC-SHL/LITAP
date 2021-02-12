@@ -191,5 +191,5 @@ folders “flow”, “form”, “facet” and “wepp”. Backup files (for
 html report summarizing the `flow_mapper()` run is included in the
 output folder (`testELEV_final_report.html`).
 
-See the [LITAP website](http://steffilazerte.github.io/LITAP/) hosted on
+See the [LITAP website](http://steffilazerte.github.io/LITAP_docs/) hosted on
 github for more details and examples

@@ -87,6 +87,7 @@ get_upslope3 <- function(db, w, type = c("upslope", "elev_diff")){
   if("upslope" %in% type) db$upslope <- 0
   if("elev_diff" %in% type) db$elev_diff <- 0
 
+
   if(!is.na(w)) {
     for(cell in o){
       if(any(db[cell, type] == 0)){
@@ -125,8 +126,11 @@ get_all_flow <- function(db) {
   db$drec_shed[db$drec_shed == db$seqno_shed] <- NA
   m <- matrix(db$seqno_shed, ncol = 1)
   end <- FALSE
+  t2 <- 0
   while(!end){
-    m <- cbind(m, db$drec_shed[m[,ncol(m)]])
+    m1 <- db$drec_shed[m[,ncol(m)]]
+    m1[rowSums(m1 == m, na.rm = TRUE) > 0] <- NA
+    m <- cbind(m, m1)
     if(all(is.na(m[,ncol(m)]))) end <- TRUE
   }
   return(m)

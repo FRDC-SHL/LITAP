@@ -48,8 +48,8 @@ articles:
   reports/13_MZTRF_zero_compare_report_form: 13_MZTRF_zero_compare_report_form.html
   reports/Munger Test - LITAP_compare_report_flow: Munger Test - LITAP_compare_report_flow.html
   reports/general: general.html
-last_built: 2021-02-12T00:00Z
+last_built: 2021-02-12T04:10Z
 urls:
-  reference: http://steffilazerte.github.io/LITAP/reference
-  article: http://steffilazerte.github.io/LITAP/articles
+  reference: http://steffilazerte.github.io/LITAP_docs/reference
+  article: http://steffilazerte.github.io/LITAP_docs/articles
 
