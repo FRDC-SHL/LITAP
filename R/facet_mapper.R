@@ -5,15 +5,27 @@
 #' FacetMapR by R. A. (Bob) MacMillan, LandMapper Environmental Solutions.
 #'
 #' @param folder Character. Location of [flow_mapper()] output
-#' @param arule Character. Location of arule file
-#' @param crule Character. Location of crule file
-#' @param procedure Character. Which LSM procedure to use. One of `lsm` or
-#'   `bc_pem`.
-#' @param zone
+#' @param arule Character. Location of ARULE file. If NULL, A Rules are derived
+#'   from the dem file (see Details).
+#' @param crule Character. Location of CRULE file
+#' @param n_remove Numeric. Number of cells (rows/columns) to remove around the
+#'   edge of the dem before deriving the A Rules.
+#' @param procedure Character. Which LSM procedure to use. One of `lsm`
+#'   (Original LandMapR program) or `bc_pem` (newer BC-PEM Direct-to-Site-SEries
+#'   DSS program).
+#' @param zone file. If `procedure = "bc_pem"`, zones must either be defined for
+#'   each seqno in the weti dem file, OR must be provided as an index file here.
+#'   With a `zone` defined for each `seqno`. `zone` file can be either dem (.dem),
+#'   Excel (.xlsx, .xls), or text (.txt, .csv, .dat)
 #'
 #' @inheritParams args
 #'
 #' @details
+#'   Based on the technique described in Li et al. 2011, if no `arule` file is
+#'   provided, the ARULE cutoffs are calulated from the `form_mapper()` dem
+#'   files. These A Rules are saved as `afile_derived.csv` in the `folder`
+#'   provided.
+#'
 #'   Procedure `lsm` refers to... Procedure `bc_pem` refers to...
 #'
 #'   For resuming or ending a run, \code{resume} or \code{end} must be
@@ -22,20 +34,48 @@
 #'   - attributes
 #'   - classes
 #'
+#'  @references
+#'  Sheng Li, David A. Lobb, Brian G. McConkey, R. A. MacMillan, Alan Moulin,
+#'  and Walter R. Fraser. 2011. Extracting topographic characteristics of landforms
+#'  typical of Canadian agricultural landscapes for agri-environmental modeling.
+#'  I. Methodology. Canadian Journal of Soil Science 91(2), 251-266.
+#'  <https://doi.org/10.1139/CJSS10080>
+#'
+#' @examples
+#'
+#' # First need to run flow_mapper()
+#' flow_mapper(file = system.file("extdata", "testELEV.dbf", package = "LITAP"),
+#'            out_folder = "./testELEV/", nrow = 150, ncol = 150)
+#'
+#' # And form_mapper()
+#' form_mapper(folder = "./testELEV/", grid = 5)
+#'
+#' # Now can run facet_mapper() - Derive A Rules
+#' crule <- system.file("extdata", "crule.dbf", package = "LITAP")
+#' facet_mapper(folder = "./testELEV/", arule = NULL, crule = crule)
+#'
+#' # Now can run facet_mapper() - supply A Rules
+#' arule <- system.file("extdata", "arule.dbf", package = "LITAP")
+#' crule <- system.file("extdata", "crule.dbf", package = "LITAP")
+#' facet_mapper(folder = "./testELEV/", arule = arule, crule = crule)
+#'
+#' # Clean up (remove all output)
+#' unlink("./testELEV/", recursive = TRUE)
+#'
+#'
 #' @export
 
-facet_mapper <- function(folder, arule, crule,
+facet_mapper <- function(folder, arule = NULL, crule, n_remove = 9,
                          procedure = "lsm",
                          zone = NULL,
                          out_format = "rds",
+                         clean = FALSE,
                          resume = NULL, end = NULL,
-                         log = TRUE, report = TRUE,
+                         log = TRUE,
                          verbose = FALSE, quiet = FALSE) {
 
   # Messaging
   if(quiet) verbose <- FALSE
-
-  message("\nCAUTION: Function Under Development\n")
 
   # Get resume options
   if(is.null(resume)) resume <- ""
@@ -57,25 +97,31 @@ facet_mapper <- function(folder, arule, crule,
   # Get form dem (form_mapper)
   weti <- get_previous(folder, step = "weti", where = "form") %>%
     dplyr::select(-tidyselect::any_of(c("seqno_buffer", "drec_buffer"))) %>%
+    dplyr::rename(qweti = "qweti1", qarea = "qarea1", lnqarea = "lnqarea1") %>%
     add_buffer()
+
   relief <- get_previous(folder, step = "relief", where = "form") %>%
     dplyr::select(-tidyselect::any_of(c("seqno_buffer", "drec_buffer"))) %>%
     add_buffer()
 
   # Get out locs
-  out_locs <- locs_create(folder, which = "facet")
+  out_locs <- locs_create(folder, which = "facet", clean = clean)
 
   # Get Rules ---------------------------------------------------------------
 
-  if(missing(arule) || missing(crule)) {
-    stop("Must supply locations of 'arule' and 'crule' files", call. = FALSE)
+  if(missing(crule)) {
+    stop("Must supply locations of 'crule' file", call. = FALSE)
   }
 
-  afile <- arule
-  cfile <- crule
+  if(is.null(arule)) {
+    arule <- arule_derive(weti, relief, n_remove = n_remove)
+  } else {
+    afile <- arule
+    arule <- load_extra(arule, type = "arule")
+  }
+  arule <- format_rule(arule, type = "arule")
 
-  arule <- load_extra(arule, type = "arule") %>%
-    format_rule(type = "arule")
+  cfile <- crule
   crule <- load_extra(crule, type = "crule") %>%
     format_rule(type = "crule")
 
@@ -113,20 +159,24 @@ facet_mapper <- function(folder, arule, crule,
     crule <- dplyr::mutate(crule, zone = 0)
   }
 
-
   # Setup Log
   if(log) {
     log_file <- file.path(folder, paste0(basename(folder), "_facet.log"))
-    if(file.exists(log_file)) file.remove(log_file)
+    unlink(list.files(folder, "facet.log", full.names = TRUE))
   } else log_file <- FALSE
 
   start <- Sys.time()
 
   # File details to log
+  if(!exists("afile")) {
+    afile <- file.path(folder, "afile_derived.csv")
+    utils::write.csv(arule, afile, row.names = FALSE)
+  }
   write_log("Run options:\n", log = log_file)
   write_log("  Input folder = ", normalizePath(folder), "\n",
             "  arule file =  ", normalizePath(afile), "\n",
             "  crule file = ", normalizePath(cfile), "\n",
+            "  n_remove = ", n_remove, "\n",
             "  Procedure = ", procedure, "\n",
             log = log_file)
 
@@ -134,7 +184,6 @@ facet_mapper <- function(folder, arule, crule,
   write_log("\nRun started: ", start, "\n", log = log_file)
 
   # Facets ------------------------------------------------------------------
-
   task <- "calculating fuzzy attributes"
   if(resume == "" || resume == "attributes"){
     announce(task, quiet)
@@ -151,6 +200,7 @@ facet_mapper <- function(folder, arule, crule,
                  add_db = dplyr::select(db, "seqno", "buffer", "row", "col"))
     #save_backup(locs = out_locs, data = fuzzattr, name = "fuza")
     write_time(sub_start, log_file)
+    resume <- ""
   } else skip_task(task, log_file, quiet)
   if(end == "attributes") {
     run_time(start, log_file, quiet)
@@ -175,6 +225,7 @@ facet_mapper <- function(folder, arule, crule,
                  add_db = dplyr::select(db, "seqno", "buffer", "row", "col"))
     #save_backup(locs = out_locs, data = fuzzattr, name = "fuzc")
     write_time(sub_start, log_file)
+    resume <- ""
   }
 
   # Save output -------------------------------------------------------------

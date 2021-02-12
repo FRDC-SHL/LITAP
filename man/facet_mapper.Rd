@@ -4,12 +4,38 @@
 \alias{facet_mapper}
 \title{Calculate landform facets using LSM logic}
 \usage{
-facet_mapper(folder, arule, crule, out_format = "rds", resume = NULL,
-  end = NULL, log = TRUE, report = TRUE, verbose = FALSE,
-  quiet = FALSE)
+facet_mapper(
+  folder,
+  arule = NULL,
+  crule,
+  n_remove = 9,
+  procedure = "lsm",
+  zone = NULL,
+  out_format = "rds",
+  clean = FALSE,
+  resume = NULL,
+  end = NULL,
+  log = TRUE,
+  verbose = FALSE,
+  quiet = FALSE
+)
 }
 \arguments{
 \item{folder}{Character. Location of \code{\link[=flow_mapper]{flow_mapper()}} output}
+
+\item{arule}{Character. Location of ARULE file. If NULL, A Rules are derived
+from the dem file (see Details).}
+
+\item{crule}{Character. Location of CRULE file}
+
+\item{procedure}{Character. Which LSM procedure to use. One of \code{lsm}
+(Original LandMapR program) or \code{bc_pem} (newer BC-PEM Direct-to-Site-SEries
+DSS program).}
+
+\item{zone}{file. If \code{procedure = "bc_pem"}, zones must either be defined for
+each seqno in the weti dem file, OR must be provided as an index file here.
+With a \code{zone} defined for each \code{seqno}. \code{zone} file can be either dem (.dem),
+Excel (.xlsx, .xls), or text (.txt, .csv, .dat)}
 
 \item{resume}{Character. From which stage should the run be resumed? (see
 Details below)}
@@ -18,8 +44,6 @@ Details below)}
 (see Details below)}
 
 \item{log}{Logical. Create log file recording progress?}
-
-\item{report}{Logical. Create html report of results?}
 
 \item{verbose}{Logical. Output extra progress messages.}
 
@@ -31,9 +55,46 @@ This function takes backup data frame output from \code{\link[=flow_mapper]{flow
 FacetMapR by R. A. (Bob) MacMillan, LandMapper Environmental Solutions.
 }
 \details{
+Based on the technique described in Li et al. 2011, if no \code{arule} file is
+provided, the ARULE cutoffs are calulated from the \code{form_mapper()} dem
+files. These A Rules are saved as \code{afile_derived.csv} in the \code{folder}
+provided.
+
+Procedure \code{lsm} refers to... Procedure \code{bc_pem} refers to...
+
 For resuming or ending a run, \code{resume} or \code{end} must be
 one of the following:
 \itemize{
-\item facet
+\item attributes
+\item classes
 }
+
+@references
+Sheng Li, David A. Lobb, Brian G. McConkey, R. A. MacMillan, Alan Moulin,
+and Walter R. Fraser. 2011. Extracting topographic characteristics of landforms
+typical of Canadian agricultural landscapes for agri-environmental modeling.
+I. Methodology. Canadian Journal of Soil Science 91(2), 251-266.
+\url{https://doi.org/10.1139/CJSS10080}
+}
+\examples{
+
+# First need to run flow_mapper()
+flow_mapper(file = system.file("extdata", "testELEV.dbf", package = "LITAP"),
+           out_folder = "./testELEV/", nrow = 150, ncol = 150)
+
+# And form_mapper()
+form_mapper(folder = "./testELEV/", grid = 5)
+
+# Now can run facet_mapper() - Derive A Rules
+crule <- system.file("extdata", "crule.dbf", package = "LITAP")
+facet_mapper(folder = "./testELEV/", arule = NULL, crule = crule)
+
+# Now can run facet_mapper() - supply A Rules
+arule <- system.file("extdata", "arule.dbf", package = "LITAP")
+crule <- system.file("extdata", "crule.dbf", package = "LITAP")
+facet_mapper(folder = "./testELEV/", arule = arule, crule = crule)
+
+# Clean up (remove all output)
+unlink("./testELEV/", recursive = TRUE)
+
 }

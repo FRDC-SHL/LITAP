@@ -350,7 +350,7 @@
 498     17   498 FALSE 2.241  651        293       420       3           17   4
 499     17   499 FALSE 2.161  652        294       421       3           17   4
 500     17   500 FALSE 2.099  653        295       422       3           17   4
-    col missing buffer elev_orig edge_map ldir flatcell elev_diff local_shed
+    col missing buffer elev_orig edge_map ddir flatcell elev_diff local_shed
 150 150      NA   TRUE        NA     TRUE   NA       NA     0.000         NA
 151 151      NA   TRUE        NA     TRUE   NA       NA     0.000         NA
 152 152      NA   TRUE        NA     TRUE   NA       NA     0.000         NA
@@ -702,7 +702,7 @@
 498  42   FALSE  FALSE   678.982    FALSE    3    FALSE     0.368         17
 499  43   FALSE  FALSE   679.062    FALSE    3    FALSE     0.302         17
 500  44   FALSE  FALSE   679.124    FALSE    3    FALSE     0.249         17
-    local_ldir local_elev_diff
+    local_ddir local_elev_diff
 150         NA           0.000
 151         NA           0.000
 152         NA           0.000

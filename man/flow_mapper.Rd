@@ -4,14 +4,28 @@
 \alias{flow_mapper}
 \title{Map flow through the landscape}
 \usage{
-flow_mapper(file, nrow = NULL, ncol = NULL, missing_value = -9999,
-  max_area = 10, max_depth = 0.5, out_folder = NULL,
-  out_format = "rds", clean = FALSE, clim = NULL, rlim = NULL,
-  resume = NULL, end = NULL, log = TRUE, report = TRUE,
-  verbose = FALSE, quiet = FALSE)
+flow_mapper(
+  file,
+  nrow = NULL,
+  ncol = NULL,
+  missing_value = -9999,
+  max_area = 10,
+  max_depth = 0.5,
+  out_folder = NULL,
+  out_format = "rds",
+  clean = FALSE,
+  clim = NULL,
+  rlim = NULL,
+  resume = NULL,
+  end = NULL,
+  log = TRUE,
+  report = TRUE,
+  verbose = FALSE,
+  quiet = FALSE
+)
 }
 \arguments{
-\item{file}{Character. Elevation file (see \code{\link{load_file}} for
+\item{file}{Character. Elevation file (see \code{\link{load_file}}) for
 supported file types.}
 
 \item{nrow}{Numeric. Number of rows in dem file (required for dbf files with

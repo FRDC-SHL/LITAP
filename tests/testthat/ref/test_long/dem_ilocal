@@ -4346,7 +4346,7 @@
 4345     21         4554 FALSE 4.153        4555        685       686       6
 4346     21         4555 FALSE 3.997        4556        686       687       7
 4347     21         4556 FALSE 3.824        4557        687       688       8
-     initial_shed row col missing buffer elev_orig edge_map ldir flatcell
+     initial_shed row col missing buffer elev_orig edge_map ddir flatcell
 1              17   1   1   FALSE  FALSE   675.500     TRUE    6    FALSE
 2              17   1   2   FALSE  FALSE   675.676     TRUE    6    FALSE
 3              17   1   3   FALSE  FALSE   675.822     TRUE    6    FALSE
@@ -8694,7 +8694,7 @@
 4345           21  29 145   FALSE  FALSE   677.070    FALSE    6    FALSE
 4346           21  29 146   FALSE  FALSE   677.226    FALSE    6    FALSE
 4347           21  29 147   FALSE  FALSE   677.399    FALSE    6    FALSE
-     elev_diff local_shed local_ldir local_elev_diff seqno drec
+     elev_diff local_shed local_ddir local_elev_diff seqno drec
 1        0.000         17          6           0.000     1    2
 2        0.176         17          6           0.176     2    3
 3        0.322         17          6           0.322     3    4

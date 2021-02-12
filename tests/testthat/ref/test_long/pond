@@ -150,7 +150,7 @@
 149      5   298 FALSE 677.097  297         65        64       2            5
 150      5   299 FALSE 677.181  298         66        65       1            5
 151      5   300  TRUE 677.226  451         67       133       1            5
-    row col missing buffer elev_orig edge_map ldir flatcell data vol2fl mm2fl
+    row col missing buffer elev_orig edge_map ddir flatcell data vol2fl mm2fl
 1     1 150      NA   TRUE        NA     TRUE   NA       NA NULL      0     0
 2     1 151      NA   TRUE        NA     TRUE   NA       NA NULL      0     0
 3     1 152      NA   TRUE        NA     TRUE   NA       NA NULL      0     0
@@ -302,7 +302,7 @@
 149   2 146   FALSE  FALSE   677.097     TRUE    4    FALSE NULL      0     0
 150   2 147   FALSE  FALSE   677.181     TRUE    4    FALSE NULL      0     0
 151   2 148   FALSE  FALSE   677.226     TRUE    1    FALSE NULL      0     0
-    parea elev_diff local_shed local_ldir local_elev_diff pond_shed
+    parea elev_diff local_shed local_ddir local_elev_diff pond_shed
 1       0     0.000         NA         NA           0.000        NA
 2       0     0.000         NA         NA           0.000        NA
 3       0     0.000         NA         NA           0.000        NA

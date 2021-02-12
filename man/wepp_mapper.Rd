@@ -4,11 +4,31 @@
 \alias{wepp_mapper}
 \title{Calculate spatial entities required for WEPP}
 \usage{
-wepp_mapper(folder, out_format = "rds", resume = NULL, end = NULL,
-  log = TRUE, report = TRUE, verbose = FALSE, quiet = FALSE)
+wepp_mapper(
+  folder,
+  grid,
+  chan_length = 200,
+  upslope_threshold = 300,
+  out_format = "rds",
+  clean = FALSE,
+  resume = NULL,
+  end = NULL,
+  log = TRUE,
+  verbose = FALSE,
+  quiet = FALSE
+)
 }
 \arguments{
 \item{folder}{Character. Location of \code{\link[=flow_mapper]{flow_mapper()}} output}
+
+\item{grid}{Numeric. Grid size for the original dem}
+
+\item{chan_length}{Numeric. Channel length maximum length. Used to split
+channels into segments}
+
+\item{upslope_threshold}{Numeric. Threshold of upslope cells to define
+channel cells. #' Cells with an upslope value larger than this are
+considered channel cells}
 
 \item{resume}{Character. From which stage should the run be resumed? (see
 Details below)}
@@ -18,13 +38,9 @@ Details below)}
 
 \item{log}{Logical. Create log file recording progress?}
 
-\item{report}{Logical. Create html report of results?}
-
 \item{verbose}{Logical. Output extra progress messages.}
 
 \item{quiet}{Logical. Suppress all messages.}
-
-\item{grid}{Numeric. Grid size for the original dem}
 }
 \description{
 This function takes backup data frame output from \code{\link[=flow_mapper]{flow_mapper()}} and
@@ -32,4 +48,13 @@ This function takes backup data frame output from \code{\link[=flow_mapper]{flow
 spatial entities required for input in to WEPP (Water Erosion and Prediction
 Project) (among other metrics).  Based on FacetMapR by R. A. (Bob) MacMillan,
 LandMapper Environmental Solutions.
+}
+\examples{
+# First need to run flow_mapper()
+flow_mapper(file = system.file("extdata", "testELEV.dbf", package = "LITAP"),
+           out_folder = "./testELEV/", nrow = 150, ncol = 150)
+
+# Now can run wepp_mapper()
+wepp_mapper(folder = "./testELEV/")
+
 }

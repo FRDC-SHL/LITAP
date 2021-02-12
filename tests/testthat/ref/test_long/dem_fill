@@ -3570,7 +3570,7 @@
 3569      5         3768 FALSE 676.198        3616       1707      1630    1790
 3570      5         3769 FALSE 676.216        3616       1708      1630       3
 3571      5         3770 FALSE 676.254        3617       1709      1631       4
-     initial_shed row col missing buffer elev_orig edge_map ldir flatcell
+     initial_shed row col missing buffer elev_orig edge_map ddir flatcell
 1               4   1   1   FALSE  FALSE   675.500     TRUE    2    FALSE
 2               4   1   2   FALSE  FALSE   675.676     TRUE    4    FALSE
 3               4   1   3   FALSE  FALSE   675.822     TRUE    4    FALSE
@@ -7142,7 +7142,7 @@
 3569           14  24 119   FALSE  FALSE   676.198    FALSE    8    FALSE
 3570           14  24 120   FALSE  FALSE   676.216    FALSE    7    FALSE
 3571           14  24 121   FALSE  FALSE   676.254    FALSE    7    FALSE
-     vol2fl        mm2fl parea elev_diff local_shed local_ldir local_elev_diff
+     vol2fl        mm2fl parea elev_diff local_shed local_ddir local_elev_diff
 1       0.0 0.0000000000     0    39.094          4          2          39.094
 2       0.0 0.0000000000     0    38.918          4          4          38.918
 3       0.0 0.0000000000     0    38.772          4          4          38.772

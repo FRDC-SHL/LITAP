@@ -36,7 +36,7 @@ flow_plot <- function(db, type = "relief", dir = FALSE, seqno = FALSE, highlight
 
   db_orig <- db
 
-  if(!is.na(missing)) db <- mutate_cond(db, elev == missing, elev = NA)
+  if(!is.na(missing)) db <- dplyr::mutate(db, elev = dplyr::if_else(.data$elev == missing, as.numeric(NA), elev))
 
   if(!is.null(clim)) db <- dplyr::filter(db, col >= clim[1], col <= clim[2])
   if(!is.null(rlim)) db <- dplyr::filter(db, row >= rlim[1], row <= rlim[2])
@@ -64,15 +64,15 @@ flow_plot <- function(db, type = "relief", dir = FALSE, seqno = FALSE, highlight
 
 
 
-  #if("ldir" %in% names(db)) db <- dplyr::mutate(db, elev = replace(elev, ldir == 5, NA))
+  #if("ddir" %in% names(db)) db <- dplyr::mutate(db, elev = replace(elev, ddir == 5, NA))
   if(dir) {
     if(is.null(upslope_threshold)) upslope_threshold <- 0
     if(!("upslope" %in% names(db))) db$upslope <- Inf
     db_dir <- db %>%
       dplyr::filter(upslope >= upslope_threshold) %>%
-      dplyr::mutate(xloc = ifelse(ldir %in% c(1,4,7), -1, ifelse(ldir %in% c(3,6,9), 1, 0)),
+      dplyr::mutate(xloc = ifelse(ddir %in% c(1,4,7), -1, ifelse(ddir %in% c(3,6,9), 1, 0)),
                     xend = col + xloc,
-                    yloc = ifelse(ldir %in% c(7, 8, 9), -1, ifelse(ldir %in% c(1,2,3), 1, 0)),
+                    yloc = ifelse(ddir %in% c(7, 8, 9), -1, ifelse(ddir %in% c(1,2,3), 1, 0)),
                     yend = row + yloc)
 
     if(!is.null(cells)){
@@ -153,7 +153,7 @@ flow_plot <- function(db, type = "relief", dir = FALSE, seqno = FALSE, highlight
 
   # Add lowest point
   if(pits) {
-    if(shed_type == "local" && "local_ldir" %in% names(db)) dir <- "local_ldir" else dir <- "ldir"
+    if(shed_type == "local" && "local_ddir" %in% names(db)) dir <- "local_ddir" else dir <- "ddir"
     g <- g + ggplot2::geom_point(data = db[db[[dir]] == 5,], colour = "black")
   }
 

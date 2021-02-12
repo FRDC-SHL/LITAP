@@ -4,9 +4,19 @@
 \alias{form_mapper}
 \title{Map form and relief of the landscape}
 \usage{
-form_mapper(folder, grid, str_val = 10000, ridge_val = 10000,
-  out_format = "rds", resume = NULL, end = NULL, log = TRUE,
-  report = TRUE, verbose = FALSE, quiet = FALSE)
+form_mapper(
+  folder,
+  grid,
+  str_val = 10000,
+  ridge_val = 10000,
+  out_format = "rds",
+  resume = NULL,
+  end = NULL,
+  log = TRUE,
+  clean = TRUE,
+  verbose = FALSE,
+  quiet = FALSE
+)
 }
 \arguments{
 \item{folder}{Character. Location of \code{\link[=flow_mapper]{flow_mapper()}} output}
@@ -24,8 +34,6 @@ Details below)}
 (see Details below)}
 
 \item{log}{Logical. Create log file recording progress?}
-
-\item{report}{Logical. Create html report of results?}
 
 \item{verbose}{Logical. Output extra progress messages.}
 
@@ -45,6 +53,10 @@ one of the following:
 \item \code{relief} (Calculating Relief Derivitives)
 \item \code{length} (Calculating Slope Length)
 }
+
+Note that some variables have a version 1 and a version 2 (i.e. \code{qweti1} and
+\code{qweti2}). These reflect variables calculated (1) area based on number of
+cells vs. (2) area based on actual grid cell area values.
 }
 \examples{
 

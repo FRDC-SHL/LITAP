@@ -150,7 +150,7 @@
 149   298 FALSE      5 677.097  297         65        64       2            5
 150   299 FALSE      5 677.181  298         66        65       1            5
 151   300  TRUE      5 677.226  451         67       133       1            5
-    row col missing buffer elev_orig edge_map ldir flatcell data vol2fl mm2fl
+    row col missing buffer elev_orig edge_map ddir flatcell data vol2fl mm2fl
 1     1 150      NA   TRUE        NA     TRUE   NA       NA NULL      0     0
 2     1 151      NA   TRUE        NA     TRUE   NA       NA NULL      0     0
 3     1 152      NA   TRUE        NA     TRUE   NA       NA NULL      0     0

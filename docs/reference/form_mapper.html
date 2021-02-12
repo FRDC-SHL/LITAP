@@ -8,21 +8,29 @@
 
 <title>Map form and relief of the landscape — form_mapper • LITAP</title>
 
+
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -30,13 +38,13 @@
 
 
 
-<meta property="og:title" content="Map form and relief of the landscape — form_mapper" />
 
-<meta property="og:description" content="This function takes backup data frame output from [flow_mapper()] and
+<meta property="og:title" content="Map form and relief of the landscape — form_mapper" />
+<meta property="og:description" content="This function takes backup data frame output from flow_mapper() and
 calculates form, wetness indices, reflief and stream/crest lengths (among
 other metrics).  Based on FormMapR by R. A. (Bob) MacMillan, LandMapper
 Environmental Solutions." />
-<meta name="twitter:card" content="summary" />
+
 
 
 
@@ -50,9 +58,10 @@ Environmental Solutions." />
 <![endif]-->
 
 
+
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -66,7 +75,7 @@ Environmental Solutions." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">LITAP</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -74,7 +83,7 @@ Environmental Solutions." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fa fa-home"></span>
+    <span class="fas fa-home"></span>
      
   </a>
 </li>
@@ -88,11 +97,10 @@ Environmental Solutions." />
   <a href="../news/index.html">News</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/steffilazerte/LITAP">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fas fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -103,6 +111,7 @@ Environmental Solutions." />
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -114,24 +123,32 @@ Environmental Solutions." />
     </div>
 
     <div class="ref-description">
-    
-    <p>This function takes backup data frame output from [flow_mapper()] and
+    <p>This function takes backup data frame output from <code><a href='flow_mapper.html'>flow_mapper()</a></code> and
 calculates form, wetness indices, reflief and stream/crest lengths (among
 other metrics).  Based on FormMapR by R. A. (Bob) MacMillan, LandMapper
 Environmental Solutions.</p>
-    
     </div>
 
-    <pre class="usage"><span class='fu'>form_mapper</span>(<span class='no'>folder</span>, <span class='no'>grid</span>, <span class='kw'>str_val</span> <span class='kw'>=</span> <span class='fl'>10000</span>, <span class='kw'>ridge_val</span> <span class='kw'>=</span> <span class='fl'>10000</span>,
-  <span class='kw'>out_format</span> <span class='kw'>=</span> <span class='st'>"rds"</span>, <span class='kw'>resume</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>end</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>log</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>report</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
-    
+    <pre class="usage"><span class='fu'>form_mapper</span><span class='op'>(</span>
+  <span class='va'>folder</span>,
+  <span class='va'>grid</span>,
+  str_val <span class='op'>=</span> <span class='fl'>10000</span>,
+  ridge_val <span class='op'>=</span> <span class='fl'>10000</span>,
+  out_format <span class='op'>=</span> <span class='st'>"rds"</span>,
+  resume <span class='op'>=</span> <span class='cn'>NULL</span>,
+  end <span class='op'>=</span> <span class='cn'>NULL</span>,
+  log <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  clean <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  verbose <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  quiet <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>folder</th>
-      <td><p>Character. Location of [flow_mapper()] output</p></td>
+      <td><p>Character. Location of <code><a href='flow_mapper.html'>flow_mapper()</a></code> output</p></td>
     </tr>
     <tr>
       <th>grid</th>
@@ -160,10 +177,6 @@ Details below)</p></td>
       <td><p>Logical. Create log file recording progress?</p></td>
     </tr>
     <tr>
-      <th>report</th>
-      <td><p>Logical. Create html report of results?</p></td>
-    </tr>
-    <tr>
       <th>verbose</th>
       <td><p>Logical. Output extra progress messages.</p></td>
     </tr>
@@ -172,38 +185,41 @@ Details below)</p></td>
       <td><p>Logical. Suppress all messages.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>For resuming or ending a run, <code>resume</code> or <code>end</code> must be
-  one of the following:</p>
-<p>1. `weti` (Calculating Wetness Indices)
-  2. `relief` (Calculating Relief Derivitives)
-  3. `length` (Calculating Slope Length)</p>
-    
+one of the following:</p><ol>
+<li><p><code>weti</code> (Calculating Wetness Indices)</p></li>
+<li><p><code>relief</code> (Calculating Relief Derivitives)</p></li>
+<li><p><code>length</code> (Calculating Slope Length)</p></li>
+</ol>
+
+<p>Note that some variables have a version 1 and a version 2 (i.e. <code>qweti1</code> and
+<code>qweti2</code>). These reflect variables calculated (1) area based on number of
+cells vs. (2) area based on actual grid cell area values.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='co'># First need to run flow_mapper()</span>
-<span class='fu'><a href='flow_mapper.html'>flow_mapper</a></span>(<span class='kw'>file</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='st'>"testELEV.dbf"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"LITAP"</span>),
-           <span class='kw'>out_folder</span> <span class='kw'>=</span> <span class='st'>"./testELEV/"</span>, <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>150</span>, <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>150</span>)</div><div class='output co'>#&gt; <span class='message'>CALCULATING DIRECTIONS</span></div><div class='output co'>#&gt; <span class='message'>CALCULATING WATERSHEDS</span></div><div class='output co'>#&gt; <span class='message'>REMOVING INITIAL PITS</span></div><div class='output co'>#&gt; <span class='message'>CALCULATING POND (GLOBAL) WATERSHEDS</span></div><div class='output co'>#&gt; <span class='message'>CALCULATING FILL PATTERNS</span></div><div class='output co'>#&gt; <span class='message'>INVERTING DEM</span></div><div class='output co'>#&gt; <span class='message'>CALCULATING INVERTED DIRECTIONS</span></div><div class='output co'>#&gt; <span class='message'>CALCULATING INVERTED WATERSHEDS</span></div><div class='output co'>#&gt; <span class='message'>REMOVING INVERTED INITIAL PITS</span></div><div class='output co'>#&gt; <span class='message'>SAVING OUTPUT</span></div><div class='output co'>#&gt; <span class='message'>CREATING REPORT</span></div><div class='output co'>#&gt; <span class='message'>Run took: 0.36 min</span></div><div class='input'>
+<span class='fu'><a href='flow_mapper.html'>flow_mapper</a></span><span class='op'>(</span>file <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata"</span>, <span class='st'>"testELEV.dbf"</span>, package <span class='op'>=</span> <span class='st'>"LITAP"</span><span class='op'>)</span>,
+           out_folder <span class='op'>=</span> <span class='st'>"./testELEV/"</span>, nrow <span class='op'>=</span> <span class='fl'>150</span>, ncol <span class='op'>=</span> <span class='fl'>150</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>CALCULATING DIRECTIONS</span></div><div class='output co'>#&gt; <span class='message'>CALCULATING WATERSHEDS</span></div><div class='output co'>#&gt; <span class='message'>REMOVING INITIAL PITS</span></div><div class='output co'>#&gt; <span class='message'>CALCULATING POND (GLOBAL) WATERSHEDS</span></div><div class='output co'>#&gt; <span class='message'>CALCULATING FILL PATTERNS</span></div><div class='output co'>#&gt; <span class='message'>INVERTING DEM</span></div><div class='output co'>#&gt; <span class='message'>CALCULATING INVERTED DIRECTIONS</span></div><div class='output co'>#&gt; <span class='message'>CALCULATING INVERTED WATERSHEDS</span></div><div class='output co'>#&gt; <span class='message'>REMOVING INVERTED INITIAL PITS</span></div><div class='output co'>#&gt; <span class='message'>SAVING OUTPUT</span></div><div class='output co'>#&gt; <span class='message'>CREATING REPORT</span></div><div class='output co'>#&gt; <span class='message'>Run took: 0.43 min</span></div><div class='input'>
 <span class='co'># Now can run form_mapper()</span>
-<span class='fu'>form_mapper</span>(<span class='kw'>folder</span> <span class='kw'>=</span> <span class='st'>"./testELEV/"</span>, <span class='kw'>grid</span> <span class='kw'>=</span> <span class='fl'>5</span>)</div><div class='output co'>#&gt; <span class='message'>CALCULATING FORM</span></div><div class='output co'>#&gt; <span class='message'>CALCULATING WETNESS INDICES</span></div><div class='output co'>#&gt; <span class='message'>CALCULATING RELIEF DERIVITIVES</span></div><div class='output co'>#&gt; <span class='message'>CALCULATING SLOPE LENGTH</span></div><div class='output co'>#&gt; <span class='message'>SAVING OUTPUT</span></div><div class='output co'>#&gt; <span class='message'>Run took: 0.8 min</span></div><div class='input'>
+<span class='fu'>form_mapper</span><span class='op'>(</span>folder <span class='op'>=</span> <span class='st'>"./testELEV/"</span>, grid <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>SETUP</span></div><div class='output co'>#&gt; <span class='message'>CALCULATING FORM</span></div><div class='output co'>#&gt; <span class='message'>CALCULATING WETNESS INDICES</span></div><div class='output co'>#&gt; <span class='message'>CALCULATING RELIEF DERIVITIVES</span></div><div class='output co'>#&gt; <span class='message'>CALCULATING SLOPE LENGTH</span></div><div class='output co'>#&gt; <span class='message'>Run took: 0.22 min</span></div><div class='input'>
 <span class='co'># Clean up (remove all output)</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/unlink'>unlink</a></span>(<span class='st'>"./testELEV/"</span>, <span class='kw'>recursive</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div></pre>
-  </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#details">Details</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+<span class='fu'><a href='https://rdrr.io/r/base/unlink.html'>unlink</a></span><span class='op'>(</span><span class='st'>"./testELEV/"</span>, recursive <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 
+</div></pre>
+  </div>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -211,13 +227,16 @@ Details below)</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 
