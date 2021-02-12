@@ -10,6 +10,8 @@ expect_values <- function(d) {
 }
 
 
+
+# Load dem files ----------------------------------------------------------
 test_that("DEM files load", {
   # skip_on_cran()
   # skip_on_appveyor()
@@ -99,13 +101,16 @@ test_that("Text files load", {
 
   file <- "./FES4 Input files/FES04_XYZGrid.dat"
   expect_silent(d <- load_txt(file))
-  expect_equivalent(d_raw, d, tolerance = 0.00001)
+  expect_equivalent(d_raw,
+                    dplyr::arrange(d, dplyr::desc(y), x),
+                    tolerance = 0.0001)
   expect_silent(d <- load_file(file, verbose = FALSE))
   expect_values(d)
 
   file <- "./FES4 Input files/FES04_XYZ.dat"
   expect_silent(d <- load_txt(file))
-  expect_equivalent(d_raw, d, tolerance = 0.00001)
+  expect_equivalent(d_raw, dplyr::arrange(d, dplyr::desc(y), x),
+                    tolerance = 0.00001)
   expect_silent(d <- load_file(file, verbose = FALSE))
   expect_values(d)
 })
@@ -115,9 +120,10 @@ test_that("Excel files load", {
   skip_on_appveyor()
   skip_on_travis()
   file <- "./FES4 Input files/FES04_XYZ.xlsx"
-  expect_silent(d <- load_excel(file))
-  expect_equivalent(d_raw, d, tolerance = 0.00001)
-  expect_silent(d <- load_file(file, verbose = FALSE))
+  expect_error(d <- load_excel(file), NA)
+  expect_equivalent(d_raw, dplyr::arrange(d, dplyr::desc(y), x),
+                    tolerance = 0.00001)
+  expect_error(d <- load_file(file, verbose = FALSE), NA)
   expect_values(d)
 })
 
@@ -187,4 +193,25 @@ test_that("Informative warning/errors", {
 
   for(i in c(1, NA, c("A", "B"))) expect_error(load_file(f, nrow = 150, ncol = 150, rlim = i),
                                                "clim and rlim must be each be a vector of two")
+})
+
+
+
+# Load previous ------------------------------------------------------------
+
+expect_that("Load previous files", {
+  skip("no test")
+})
+
+# Load rule files ---------------------------------------------------------
+
+expect_that("Rule files load", {
+  skip("no test")
+  # No errors
+
+  # Expected output
+
+  # Catch incorrect rules
+
+
 })

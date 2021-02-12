@@ -21,11 +21,11 @@
   out_col out_elev drains_to pour_elev pond_shed edge_pit_out pit_elev_out
 1      49  679.146         4   679.146         3         TRUE      673.792
 2      10  674.766         2   674.805         4         TRUE      673.591
-3     121  676.261        11   676.261         5         TRUE      669.989
-4      86  671.663        23   671.663         6         TRUE      669.989
+3     121  676.261        24   676.261         5         TRUE      669.989
+4      86  671.663        24   671.663         6         TRUE      669.989
 5     147  677.167         5   677.168        15         TRUE      675.499
 6     122  672.874        22   672.874        19         TRUE      671.297
-7     107  671.298        23   671.298        22         TRUE      669.989
+7     107  671.298        24   671.298        22         TRUE      669.989
 8     108  671.297        22   671.298        25         TRUE      671.297
 9       1  674.473         6   674.473        24         TRUE      668.858
   pit_seqno_out pour_elev_out next_pit end_pit removed becomes final

@@ -1,4 +1,4 @@
-     elev seqno row col missing buffer elev_orig edge_map ldir flatcell drec
+     elev seqno row col missing buffer elev_orig edge_map ddir flatcell drec
 1      NA   150   1 150      NA   TRUE        NA     TRUE   NA       NA   NA
 2      NA   151   1 151      NA   TRUE        NA     TRUE   NA       NA   NA
 3      NA   152   1 152      NA   TRUE        NA     TRUE   NA       NA   NA

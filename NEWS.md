@@ -1,3 +1,15 @@
+# LITAP 0.4.0 (2021-02-12)
+
+- Added `facet_mapper()` based on FacetMapR
+- Added `wepp_mapper()` based on WeppMapR
+- Internal changes to increase `form_mapper()` speed
+- Added ARULE deriving based on Li et al. 2011. Canadian Journal of Soil Science 91(2), 251-266.
+- Added both forms of calculating qweti, qarea, and lnqarea to `form_mapper()`
+  (Originally values based on actual grid-cell area, now, qweti1, qarea1, lnqarea1 based on
+  number of cells, and qweti2, qarea2, lnqarea2 based on grid-cell area).
+- Reduced number of output files
+- Updated reports
+
 # LITAP 0.3.1 (2020-01-24)
 
 - Update to `tidyr` v1.0.0

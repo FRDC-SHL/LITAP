@@ -1,4 +1,4 @@
 library(testthat)
-library(LITAP)
+suppressPackageStartupMessages(library(LITAP))
 
 test_check("LITAP")

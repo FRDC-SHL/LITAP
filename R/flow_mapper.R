@@ -4,7 +4,7 @@
 #' fill patterns. Based on FlowMapR by R. A. (Bob) MacMillan, LandMapper
 #' Environmental Solutions.
 #'
-#' @param file Character. Elevation file (see \code{\link{load_file}} for
+#' @param file Character. Elevation file (see \code{\link{load_file}}) for
 #'   supported file types.
 #' @param nrow Numeric. Number of rows in dem file (required for dbf files with
 #'   a single column, but can be automatically assessed from files with x and y
@@ -88,17 +88,12 @@ flow_mapper <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
 
   if(is.null(out_folder)) out_folder <- file.path(dirname(file), f)
   if(!dir.exists(out_folder)) dir.create(out_folder)
-  out_locs <- locs_create(out_folder)
-
-  # Clean records
-  if(clean) lapply(stringr::str_remove(out_locs, paste0(f, "$")),
-                   function(x) file.remove(list.files(x, full.names = TRUE,
-                                                      recursive = TRUE)))
+  out_locs <- locs_create(out_folder, clean = clean)
 
   # Setup Log
   if(log) {
-    log_file <- paste0(out_folder, "/", f, "_flow.log")
-    if(file.exists(log_file)) file.remove(log_file)
+    log_file <- file.path(out_folder, paste0(basename(out_folder), "_flow.log"))
+    unlink(list.files(out_folder, "flow.log", full.names = TRUE))
   } else log_file <- FALSE
 
   start <- Sys.time()
@@ -114,7 +109,10 @@ flow_mapper <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
 
   # File details to log
   write_log("Run options:", log = log_file)
-  write_log("  Dimensions: nrows = ", nrow_orig, "; ncols = ", ncol_orig,
+  write_log("  Dimensions: nrows = ", nrow_orig,
+            "; ncols = ", ncol_orig,
+            "; max_area = ", max_area,
+            "; max_depth = ", max_depth,
             log = log_file)
 
   # Subset to log

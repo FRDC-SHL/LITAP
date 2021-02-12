@@ -4,14 +4,28 @@
 \alias{flow_mapper}
 \title{Map flow through the landscape}
 \usage{
-flow_mapper(file, nrow = NULL, ncol = NULL, missing_value = -9999,
-  max_area = 10, max_depth = 0.5, out_folder = NULL,
-  out_format = "rds", clean = FALSE, clim = NULL, rlim = NULL,
-  resume = NULL, end = NULL, log = TRUE, report = TRUE,
-  verbose = FALSE, quiet = FALSE)
+flow_mapper(
+  file,
+  nrow = NULL,
+  ncol = NULL,
+  missing_value = -9999,
+  max_area = 10,
+  max_depth = 0.5,
+  out_folder = NULL,
+  out_format = "rds",
+  clean = FALSE,
+  clim = NULL,
+  rlim = NULL,
+  resume = NULL,
+  end = NULL,
+  log = TRUE,
+  report = TRUE,
+  verbose = FALSE,
+  quiet = FALSE
+)
 }
 \arguments{
-\item{file}{Character. Elevation file (see \code{\link{load_file}} for
+\item{file}{Character. Elevation file (see \code{\link{load_file}}) for
 supported file types.}
 
 \item{nrow}{Numeric. Number of rows in dem file (required for dbf files with
@@ -61,22 +75,22 @@ Environmental Solutions.
 }
 \details{
 For information regarding loading other file types see
-  \code{\link{load_file}}.
+\code{\link{load_file}}.
 
-  For resuming or ending a run, \code{resume} or \code{end} must be one of
-  the following:
+For resuming or ending a run, \code{resume} or \code{end} must be one of
+the following:
 
-  \enumerate{
-    \item \code{directions} (Calculating Directions)
-    \item \code{watersheds} (Calculating Watersheds)
-    \item \code{local} (Initial Pit Removal)
-    \item \code{pond} (Calculating Pond Shed Statistics - Second Pit Removal)
-    \item \code{fill} (Calculating Fill Shed Statistics - Third Pit Removal)
-    \item \code{inverted} (Calculating Directions on Inverted DEM)
-    \item \code{iwatersheds} (Calculating Inverted Watersheds)
-    \item \code{ilocal} (Initial Inverted Pit Removal)
-    \item \code{report} (Create the final report)
-  }
+\enumerate{
+\item \code{directions} (Calculating Directions)
+\item \code{watersheds} (Calculating Watersheds)
+\item \code{local} (Initial Pit Removal)
+\item \code{pond} (Calculating Pond Shed Statistics - Second Pit Removal)
+\item \code{fill} (Calculating Fill Shed Statistics - Third Pit Removal)
+\item \code{inverted} (Calculating Directions on Inverted DEM)
+\item \code{iwatersheds} (Calculating Inverted Watersheds)
+\item \code{ilocal} (Initial Inverted Pit Removal)
+\item \code{report} (Create the final report)
+}
 }
 \examples{
 # Basic Run

@@ -4,12 +4,22 @@
 \alias{form_mapper}
 \title{Map form and relief of the landscape}
 \usage{
-form_mapper(folder, grid, str_val = 10000, ridge_val = 10000,
-  out_format = "rds", resume = NULL, end = NULL, log = TRUE,
-  report = TRUE, verbose = FALSE, quiet = FALSE)
+form_mapper(
+  folder,
+  grid,
+  str_val = 10000,
+  ridge_val = 10000,
+  out_format = "rds",
+  resume = NULL,
+  end = NULL,
+  log = TRUE,
+  clean = TRUE,
+  verbose = FALSE,
+  quiet = FALSE
+)
 }
 \arguments{
-\item{folder}{Character. Location of [flow_mapper()] output}
+\item{folder}{Character. Location of \code{\link[=flow_mapper]{flow_mapper()}} output}
 
 \item{grid}{Numeric. Grid size for the original dem}
 
@@ -25,25 +35,28 @@ Details below)}
 
 \item{log}{Logical. Create log file recording progress?}
 
-\item{report}{Logical. Create html report of results?}
-
 \item{verbose}{Logical. Output extra progress messages.}
 
 \item{quiet}{Logical. Suppress all messages.}
 }
 \description{
-This function takes backup data frame output from [flow_mapper()] and
+This function takes backup data frame output from \code{\link[=flow_mapper]{flow_mapper()}} and
 calculates form, wetness indices, reflief and stream/crest lengths (among
 other metrics).  Based on FormMapR by R. A. (Bob) MacMillan, LandMapper
 Environmental Solutions.
 }
 \details{
 For resuming or ending a run, \code{resume} or \code{end} must be
-  one of the following:
+one of the following:
+\enumerate{
+\item \code{weti} (Calculating Wetness Indices)
+\item \code{relief} (Calculating Relief Derivitives)
+\item \code{length} (Calculating Slope Length)
+}
 
-  1. `weti` (Calculating Wetness Indices)
-  2. `relief` (Calculating Relief Derivitives)
-  3. `length` (Calculating Slope Length)
+Note that some variables have a version 1 and a version 2 (i.e. \code{qweti1} and
+\code{qweti2}). These reflect variables calculated (1) area based on number of
+cells vs. (2) area based on actual grid cell area values.
 }
 \examples{
 

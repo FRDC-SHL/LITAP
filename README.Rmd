@@ -7,27 +7,34 @@ output: github_document
 knitr::opts_chunk$set(fig.width = 15, fig.height = 10, tidy = TRUE, eval = TRUE)
 ```
 
-__Landscape Integrated Terrain Analysis Package (LITAP)__ for the analysis of waterflow based on elevation data and pit removals. Based on R. A. (Bob) MacMillan's LandMapR suite of programs.
+__Landscape Integrated Terrain Analysis Package (LITAP)__ for the analysis of 
+waterflow based on elevation data and pit removals. Based on R. A. (Bob) 
+MacMillan's LandMapR suite of programs.
 
 Currently LITAP includes functions
 
 - `flow_mapper()` - based on FlowMapR
 - `form_mapper()` - based on FormMapR
+- `facet_mapper()` - based on FacetMapR
+- `wepp_mapper()` - based on WeppMapR
 
 See the companion website for more details: <http://steffilazerte.github.io/LITAP>
 
 ## Installation
 
-Use the `devtools` package to directly install R packages from github:
+Use the `remotes` package to directly install R packages from github:
 
 ```{r, eval = FALSE}
-install.packages("devtools") # If not already installed
-devtools::install_github("steffilazerte/LITAP") 
+install.packages("remotes") # If not already installed
+remotes::install_github("steffilazerte/LITAP") 
 ```
 
 ## Example files
 
-LITAP comes with several example files (`testELEV.dbf` and `testELEV_mini.dbf`). These are found in the "extdata" folder inside the LITAP package folder. If you are unsure where this folder is, use the function `system.file()`:
+LITAP comes with several example files (`testELEV.dbf`, `testELEV_mini.dbf`,
+`arule.dbf`, and `crule.dbf`). These are found in the "extdata" folder inside
+the LITAP package folder. If you are unsure where this folder is, use the
+function `system.file()`:
 
 ```{r, eval = FALSE}
 system.file("extdata", package = "LITAP")
@@ -35,8 +42,10 @@ system.file("extdata", package = "LITAP")
 
 Now you can copy and paste these files to your working folder to try out the following examples.
 
-```{r, echo = FALSE}
+```{r, include = FALSE}
 file.copy(system.file("extdata", "testELEV.dbf", package = "LITAP"), ".")
+file.copy(system.file("extdata", "arule.dbf", package = "LITAP"), ".")
+file.copy(system.file("extdata", "crule.dbf", package = "LITAP"), ".")
 ```
 
 ## Basic Usage: `flow_mapper()`
@@ -46,16 +55,15 @@ Load the package:
 library(LITAP)
 ```
 
-
 First, specify the dem file and the number of rows and columns:
 
-```{r}
+```{r, eval = FALSE}
 flow_mapper(file = "testELEV.dbf", nrow = 150, ncol = 150)
 ```
 
 Can also specify pit removal parameters:
 
-```{r}
+```{r, eval = FALSE}
 flow_mapper(file = "testELEV.dbf", nrow = 150, ncol = 150, 
              max_area = 5, max_depth = 0.2)
 ```
@@ -75,8 +83,41 @@ form_mapper(folder = "./Output/", grid = 5)
 
 Optionally, users can also define channels and ridges according to the number of up-/down-slope cells that flow through the cell in question.
 
-```{r}
+```{r, eval = FALSE}
 form_mapper(folder = "./Output/", str_val = 10000, ridge_val = 10000, grid = 5)
+```
+
+## Basic Usage: `facet_mapper()`
+
+`facet_mapper()` uses output from `flow_mapper()` and `form_mapper()` and requires a CRULE file
+and, optionally, an ARULE file.
+
+```{r}
+facet_mapper(folder = "./Output/", crule = "crule.dbf", arule = "arule.dbf")
+```
+
+If an ARULE file is not provided, LITAP will derive the rules based on the input 
+files (as in Li et al. 2011, Canadian Journal of Soil Science 91(2), 251-266). 
+The derived A rules will be output to "afile_derived.csv".
+
+```{r, eval = FALSE}
+facet_mapper(folder = "./Output/", crule = "crule.dbf")
+```
+
+## Basic Usage: `wepp_mapper()`
+
+`wepp_mapper()` uses output from `flow_mapper()` and requires a grid size.
+
+```{r, eval = FALSE}
+wepp_mapper(folder = "./Output/", grid = 5)
+```
+
+Optionally, users can also define the maximum length of channel cells 
+(after which they will be split into separate segments), as well as the 
+upslope threshold to define channel cells 
+
+```{r, eval = FALSE}
+wepp_mapper(folder = "./Output/", chan_length = 500, upslope_threshold = 500, grid = 5)
 ```
 
 ## Multiple file types
@@ -91,12 +132,12 @@ flow_mapper(file = "testELEV.flt")
 
 ## Output
 
-Output files can be .csv, .dbf, or .rds (R data files) in the output folders "flow" and "form" (respectively). Backup files (for `form_mapper()` and for resuming runs) are stored in the "Backup" folder. Additionally, an html report summaring the `flow_mapper()` run is included in the output folder (`testELEV_final_report.html`).
+Output files can be .csv, .dbf, or .rds (R data files) in the output folders "flow", "form", "facet" and "wepp". Backup files (for `form_mapper()`) are stored in the "Backup" folder. Additionally, an html report summarizing the `flow_mapper()` run is included in the output folder (`testELEV_final_report.html`).
 
 See the [LITAP website](http://steffilazerte.github.io/LITAP/) hosted on github for more details and examples
 
 ```{r, include = FALSE}
 unlink("./testELEV", recursive = TRUE)
 unlink("./Output", recursive = TRUE)
-file.remove("./testELEV.dbf")
+unlink(c("./testELEV.dbf", "arule.dbf", "crule.dbf"))
 ```

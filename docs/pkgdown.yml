@@ -1,46 +1,54 @@
-pandoc: 2.3.1
-pkgdown: 1.3.0
+pandoc: 2.11.2
+pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
   LITAP: LITAP.html
-  flow_plots: articles/flow_plots.html
-  021ELEV_compare_report_flow: reports/021ELEV_compare_report_flow.html
-  021ELEV_compare_report_form: reports/021ELEV_compare_report_form.html
-  02hELEV_compare_report_flow: reports/02hELEV_compare_report_flow.html
-  02hELEV_compare_report_form: reports/02hELEV_compare_report_form.html
-  02zELEV_compare_report_flow: reports/02zELEV_compare_report_flow.html
-  02zELEV_compare_report_form: reports/02zELEV_compare_report_form.html
-  B1hElev_compare_report_flow: reports/B1hElev_compare_report_flow.html
-  B1hElev_compare_report_form: reports/B1hElev_compare_report_form.html
-  B1mElev_compare_report_flow: reports/B1mElev_compare_report_flow.html
-  B1mElev_compare_report_form: reports/B1mElev_compare_report_form.html
-  B1zElev_compare_report_flow: reports/B1zElev_compare_report_flow.html
-  B1zElev_compare_report_form: reports/B1zElev_compare_report_form.html
-  Ec0ELEV_compare_report_flow: reports/Ec0ELEV_compare_report_flow.html
-  Ec0ELEV_compare_report_form: reports/Ec0ELEV_compare_report_form.html
-  EecELEV_compare_report_flow: reports/EecELEV_compare_report_flow.html
-  EecELEV_compare_report_form: reports/EecELEV_compare_report_form.html
-  EemELEV_compare_report_flow: reports/EemELEV_compare_report_flow.html
-  EemELEV_compare_report_form: reports/EemELEV_compare_report_form.html
-  H10Elev_compare_report_flow: reports/H10Elev_compare_report_flow.html
-  H10Elev_compare_report_form: reports/H10Elev_compare_report_form.html
-  H30Elev_compare_report_flow: reports/H30Elev_compare_report_flow.html
-  H30Elev_compare_report_form: reports/H30Elev_compare_report_form.html
-  H3hElev_compare_report_flow: reports/H3hElev_compare_report_flow.html
-  H3hElev_compare_report_form: reports/H3hElev_compare_report_form.html
-  I10Elev_compare_report_flow: reports/I10Elev_compare_report_flow.html
-  I10Elev_compare_report_form: reports/I10Elev_compare_report_form.html
-  I30Elev_compare_report_flow: reports/I30Elev_compare_report_flow.html
-  I30Elev_compare_report_form: reports/I30Elev_compare_report_form.html
-  I3hElev_compare_report_flow: reports/I3hElev_compare_report_flow.html
-  I3hElev_compare_report_form: reports/I3hElev_compare_report_form.html
-  R10Elev_compare_report_flow: reports/R10Elev_compare_report_flow.html
-  R10Elev_compare_report_form: reports/R10Elev_compare_report_form.html
-  R30Elev_compare_report_flow: reports/R30Elev_compare_report_flow.html
-  R30Elev_compare_report_form: reports/R30Elev_compare_report_form.html
-  R3hElev_compare_report_flow: reports/R3hElev_compare_report_flow.html
-  R3hElev_compare_report_form: reports/R3hElev_compare_report_form.html
-  general: reports/general.html
+  articles/flow_plots: flow_plots.html
+  reports/01_H1_compare_report_flow: 01_H1_compare_report_flow.html
+  reports/02_H3_compare_report_facet: 02_H3_compare_report_facet.html
+  reports/02_H3_compare_report_flow: 02_H3_compare_report_flow.html
+  reports/02_H3_compare_report_form: 02_H3_compare_report_form.html
+  reports/02_H3_compare_report_wepp: 02_H3_compare_report_wepp.html
+  reports/02_H3_miss_compare_report_facet: 02_H3_miss_compare_report_facet.html
+  reports/02_H3_miss_compare_report_flow: 02_H3_miss_compare_report_flow.html
+  reports/02_H3_miss_compare_report_form: 02_H3_miss_compare_report_form.html
+  reports/02_H3_miss_compare_report_wepp: 02_H3_miss_compare_report_wepp.html
+  reports/03_R1_compare_report_flow: 03_R1_compare_report_flow.html
+  reports/04_R3_compare_report_flow: 04_R3_compare_report_flow.html
+  reports/04_R3_miss_compare_report_flow: 04_R3_miss_compare_report_flow.html
+  reports/05_I1_compare_report_flow: 05_I1_compare_report_flow.html
+  reports/06_I3_compare_report_flow: 06_I3_compare_report_flow.html
+  reports/06_I3_miss_compare_report_flow: 06_I3_miss_compare_report_flow.html
+  reports/11_Ab02PV_compare_report_facet: 11_Ab02PV_compare_report_facet.html
+  reports/11_Ab02PV_compare_report_flow: 11_Ab02PV_compare_report_flow.html
+  reports/11_Ab02PV_compare_report_form: 11_Ab02PV_compare_report_form.html
+  reports/11_Ab02PV_compare_report_wepp: 11_Ab02PV_compare_report_wepp.html
+  reports/11_Ab02PV_high_compare_report_facet: 11_Ab02PV_high_compare_report_facet.html
+  reports/11_Ab02PV_high_compare_report_flow: 11_Ab02PV_high_compare_report_flow.html
+  reports/11_Ab02PV_high_compare_report_form: 11_Ab02PV_high_compare_report_form.html
+  reports/11_Ab02PV_high_compare_report_wepp: 11_Ab02PV_high_compare_report_wepp.html
+  reports/11_Ab02PV_zero_compare_report_facet: 11_Ab02PV_zero_compare_report_facet.html
+  reports/11_Ab02PV_zero_compare_report_flow: 11_Ab02PV_zero_compare_report_flow.html
+  reports/11_Ab02PV_zero_compare_report_form: 11_Ab02PV_zero_compare_report_form.html
+  reports/12_FES4_compare_report_facet: 12_FES4_compare_report_facet.html
+  reports/12_FES4_compare_report_flow: 12_FES4_compare_report_flow.html
+  reports/12_FES4_compare_report_form: 12_FES4_compare_report_form.html
+  reports/12_FES4_high_compare_report_facet: 12_FES4_high_compare_report_facet.html
+  reports/12_FES4_high_compare_report_flow: 12_FES4_high_compare_report_flow.html
+  reports/12_FES4_high_compare_report_form: 12_FES4_high_compare_report_form.html
+  reports/12_FES4_zero_compare_report_facet: 12_FES4_zero_compare_report_facet.html
+  reports/12_FES4_zero_compare_report_flow: 12_FES4_zero_compare_report_flow.html
+  reports/12_FES4_zero_compare_report_form: 12_FES4_zero_compare_report_form.html
+  reports/13_MZTRF_compare_report_facet: 13_MZTRF_compare_report_facet.html
+  reports/13_MZTRF_compare_report_flow: 13_MZTRF_compare_report_flow.html
+  reports/13_MZTRF_compare_report_form: 13_MZTRF_compare_report_form.html
+  reports/13_MZTRF_high_compare_report_flow: 13_MZTRF_high_compare_report_flow.html
+  reports/13_MZTRF_zero_compare_report_facet: 13_MZTRF_zero_compare_report_facet.html
+  reports/13_MZTRF_zero_compare_report_flow: 13_MZTRF_zero_compare_report_flow.html
+  reports/13_MZTRF_zero_compare_report_form: 13_MZTRF_zero_compare_report_form.html
+  reports/Munger Test - LITAP_compare_report_flow: Munger Test - LITAP_compare_report_flow.html
+  reports/general: general.html
+last_built: 2021-02-12T00:00Z
 urls:
   reference: http://steffilazerte.github.io/LITAP/reference
   article: http://steffilazerte.github.io/LITAP/articles

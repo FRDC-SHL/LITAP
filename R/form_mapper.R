@@ -19,6 +19,10 @@
 #'   2. `relief` (Calculating Relief Derivitives)
 #'   3. `length` (Calculating Slope Length)
 #'
+#'   Note that some variables have a version 1 and a version 2 (i.e. `qweti1` and
+#'   `qweti2`). These reflect variables calculated (1) area based on number of
+#'   cells vs. (2) area based on actual grid cell area values.
+#'
 #' @examples
 #'
 #' # First need to run flow_mapper()
@@ -36,8 +40,12 @@
 form_mapper <- function(folder, grid, str_val = 10000, ridge_val = 10000,
                         out_format = "rds",
                         resume = NULL, end = NULL,
-                        log = TRUE, report = TRUE,
+                        log = TRUE, clean = FALSE,
                         verbose = FALSE, quiet = FALSE) {
+
+
+  # Messaging
+  if(quiet) verbose <- FALSE
 
   # Get resume options
   if(is.null(resume)) resume <- ""
@@ -46,27 +54,30 @@ form_mapper <- function(folder, grid, str_val = 10000, ridge_val = 10000,
   check_resume(resume, end, resume_options)
   check_grid(grid)
 
+  announce("setup", quiet)
+
   # Get backup fill dem
-  db <- get_backups(folder, step = "fill")
+  db <- get_previous(folder, step = "fill", where = "flow") %>%
+    dplyr::select(seqno, row, col, elev, drec, upslope, fill_shed, local_shed) %>%
+    add_buffer()
 
   # Get backup inverted dem
-  idb <- get_backups(folder, step = "ilocal")
+  idb <- get_previous(folder, step = "ilocal", where = "flow")
+  if("ldir" %in% names(idb)) idb <- dplyr::rename(idb, "ddir" = "ldir")
+  idb <- dplyr::select(idb, seqno, row, col, elev, drec, ddir, upslope, shedno) %>%
+    add_buffer()
 
   # Get backup pond stats
-  pond <- get_backups(folder, step = "pond", type = "stats")
+  pond <- get_previous(folder, step = "pond", type = "stats", where = "flow") %>%
+    add_buffer(db = db, stats = .)
 
   # Get out locs
-  out_locs <- locs_create(folder, which = c("backup", "form"))
-
-  # Messaging
-  if(quiet) verbose <- FALSE
+  out_locs <- locs_create(folder, which = "form", clean = clean)
 
   # Setup Log
   if(log) {
-    log_file <- list.files(folder, pattern = "_flow.log") %>%
-      stringr::str_replace("flow", "form") %>%
-      file.path(folder, .)
-    if(file.exists(log_file)) file.remove(log_file)
+    log_file <- file.path(folder, paste0(basename(folder), "_form.log"))
+    unlink(list.files(folder, "_form.log", full.names = TRUE))
   } else log_file <- FALSE
 
   start <- Sys.time()
@@ -88,8 +99,9 @@ form_mapper <- function(folder, grid, str_val = 10000, ridge_val = 10000,
     write_start(task, sub_start, log_file)
 
     db_form <- calc_form(db, grid, verbose = verbose)
-    save_backup(locs = out_locs, data = db_form, name = "form")
-    rm(db_form)
+
+    save_output2(data = db_form, name = "form", locs = out_locs,
+                 out_format = out_format, where = "form")
     write_time(sub_start, log_file)
 
     resume <- "weti"
@@ -106,15 +118,26 @@ form_mapper <- function(folder, grid, str_val = 10000, ridge_val = 10000,
     sub_start <- Sys.time()
     write_start(task, sub_start, log_file)
 
-    db_form <- read_shed(out_locs$backup, "form")
+    if(!exists("db_form")) {
+      db_form <- get_previous(folder, step = "form", where = "form") %>%
+        add_buffer()
+    }
+    #db_form <- read_shed(out_locs$backup, "form")
+
     db_weti <- calc_weti(db, grid, verbose = verbose)
+
     db_form <- dplyr::full_join(db_form, db_weti,
-                                by = c("seqno", "col", "row")) %>%
-      dplyr::mutate(lnqarea = dplyr::if_else(aspect > -1, log(qarea), 0),
+                                by = c("seqno", "col", "row", "buffer")) %>%
+      dplyr::mutate(lnqarea1 = dplyr::if_else(aspect > -1, log(qarea1), 0),
+                    lnqarea2 = dplyr::if_else(aspect > -1, log(qarea2), 0),
                     new_asp = dplyr::if_else(aspect > -1, aspect + 45, 0),
                     new_asp = dplyr::if_else(new_asp > 360,
-                                             new_asp -360, new_asp))
-    save_backup(locs = out_locs, data = db_form, name = "weti")
+                                             new_asp -360, new_asp),
+                    lnqarea1 = round(lnqarea1, 3),
+                    lnqarea2 = round(lnqarea2, 3))
+
+    save_output2(data = db_form, name = "weti", locs = out_locs,
+                 out_format = out_format, where = "form")
     rm(db_form, db_weti)
     write_time(sub_start, log_file)
 
@@ -133,8 +156,10 @@ form_mapper <- function(folder, grid, str_val = 10000, ridge_val = 10000,
     write_start(task, sub_start, log_file)
     db_relz <- calc_relz(db, idb, str_val = str_val, ridge_val = ridge_val,
                          pond = pond, verbose = verbose)
-    save_backup(locs = out_locs, data = db_relz, name = "relief")
-    rm(db_relz)
+
+    save_output2(data = db_relz, name = "relief", locs = out_locs,
+                 out_format = out_format, where = "form")
+
     write_time(sub_start, log_file)
 
     resume <- "length"
@@ -151,9 +176,14 @@ form_mapper <- function(folder, grid, str_val = 10000, ridge_val = 10000,
     sub_start <- Sys.time()
     write_start(task, sub_start, log_file)
 
-    db_relz <- read_shed(out_locs$backup, "relief")
+    if(!exists("db_relz")) {
+      db_relz <- get_previous(folder, step = "relief", where = "form") %>%
+        add_buffer()
+    }
     db_length <- calc_length(db, db_relz, verbose = verbose)
-    save_backup(locs = out_locs, data = db_length, name = "length")
+
+    save_output2(data = db_length, name = "length", locs = out_locs,
+                 out_format = out_format, where = "form")
     rm(db_length, db_relz)
     write_time(sub_start, log_file)
 
@@ -163,28 +193,6 @@ form_mapper <- function(folder, grid, str_val = 10000, ridge_val = 10000,
     return()
   }
 
-  # Save output -------------------------------------------------------------
-  task <- "saving output"
-  announce(task, quiet)
-
-  db <- dplyr::select(db, -data)
-
-  save_output(out_locs, out_format,
-              which = c("weti", "relief", "length"),
-              where = "form", add_db = db)
-
   # Save final time
   run_time(start, log_file, quiet)
-}
-
-get_backups <- function(folder, step, type = "db") {
-
-  if(!dir.exists(folder)) stop("This folder doesn't exist: ", folder, call. = FALSE)
-  f <- list.files(file.path(folder, "backup"), pattern = step,
-                  recursive = TRUE, full.names = TRUE)
-  if(length(f) > 1) stop("There is more than one eligable ", step, " file:\n",
-                         paste0(f, collapse = "\n"), call. = FALSE)
-  if(length(f) == 0) stop("There are no eligable ", step, " files",
-                          call. = FALSE)
-  readr::read_rds(f)[[type]]
 }

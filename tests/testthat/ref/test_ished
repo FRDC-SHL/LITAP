@@ -350,7 +350,7 @@
 498   498 FALSE     17 2.241  651        163       226       3           17   4
 499   499 FALSE     17 2.161  652        164       227       3           17   4
 500   500 FALSE     17 2.099  653        165       228       3           17   4
-    col missing buffer elev_orig edge_map ldir flatcell
+    col missing buffer elev_orig edge_map ddir flatcell
 150 150      NA   TRUE        NA     TRUE   NA       NA
 151 151      NA   TRUE        NA     TRUE   NA       NA
 152 152      NA   TRUE        NA     TRUE   NA       NA
