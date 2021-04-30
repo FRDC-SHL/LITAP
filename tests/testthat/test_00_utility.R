@@ -95,3 +95,15 @@ test_that("slope_gc works as expected", {
     expect_equal(s$scc[!!i], (2 * s$elev[!!i] - s$elev[!!i + max_cols] - s$elev[!!i - max_cols]) / (grid^2))
   }
 
+})
+
+test_that("merge_flow_form() works as expected", {
+  dir <- system.file("extdata", "testELEV", package = "LITAP")
+  expect_silent(t <- merge_flow_form(folder = dir)) %>%
+    expect_s3_class("data.frame")
+
+  expect_gt(nrow(t), 10000)
+  expect_gt(ncol(t), 50)
+
+  expect_false(any(stringr::str_detect(names(t), "\\.x|\\.y")))
+})
