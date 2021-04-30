@@ -28,6 +28,9 @@ from the dem file (see Details).}
 
 \item{crule}{Character. Location of CRULE file}
 
+\item{n_remove}{Numeric. Number of cells (rows/columns) to remove around the
+edge of the dem before deriving the A Rules.}
+
 \item{procedure}{Character. Which LSM procedure to use. One of \code{lsm}
 (Original LandMapR program) or \code{bc_pem} (newer BC-PEM Direct-to-Site-SEries
 DSS program).}
@@ -36,6 +39,13 @@ DSS program).}
 each seqno in the weti dem file, OR must be provided as an index file here.
 With a \code{zone} defined for each \code{seqno}. \code{zone} file can be either dem (.dem),
 Excel (.xlsx, .xls), or text (.txt, .csv, .dat)}
+
+\item{out_format}{Character. What format should the data be output as? "csv"
+for Comma-separated values, "dbf" for dbf database files, or "rds" for R
+data format.}
+
+\item{clean}{Logical. Remove all output files from previous runs in this
+folder?}
 
 \item{resume}{Character. From which stage should the run be resumed? (see
 Details below)}
@@ -96,5 +106,6 @@ facet_mapper(folder = "./testELEV/", arule = arule, crule = crule)
 
 # Clean up (remove all output)
 unlink("./testELEV/", recursive = TRUE)
+
 
 }

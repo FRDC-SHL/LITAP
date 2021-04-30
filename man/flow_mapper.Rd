@@ -47,6 +47,10 @@ pit removal}
 \item{out_folder}{Character. Folder in which to store output files. Defaults
 to folder in the same location and with the same name as the dem file}
 
+\item{out_format}{Character. What format should the data be output as? "csv"
+for Comma-separated values, "dbf" for dbf database files, or "rds" for R
+data format.}
+
 \item{clean}{Logical. Remove all backup files and output files from previous
 runs in this folder?}
 

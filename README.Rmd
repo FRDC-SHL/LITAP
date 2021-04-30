@@ -18,7 +18,7 @@ Currently LITAP includes functions
 - `facet_mapper()` - based on FacetMapR
 - `wepp_mapper()` - based on WeppMapR
 
-See the companion website for more details: <http://steffilazerte.github.io/LITAP>
+See the companion website for more details: <http://steffilazerte.github.io/LITAP_docs/>
 
 ## Installation
 
