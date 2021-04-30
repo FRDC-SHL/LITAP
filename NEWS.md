@@ -1,3 +1,7 @@
+# LITAP 0.4.1 (2021-04-30)
+- Added `slope_gc()` to calculate slope gradients and curvature (added to `dem_fill` through `flow_mapper()`)
+- Added `merge_flow_form()` to create a single dem file from `flow_mapper()` `dem_fill` and all `form_mapper()` outputs.
+
 # LITAP 0.4.0 (2021-02-12)
 
 - Added `facet_mapper()` based on FacetMapR
