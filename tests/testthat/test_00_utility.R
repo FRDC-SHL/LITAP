@@ -68,3 +68,30 @@ test_that("get_dir returns correct direction given ddir_opts", {
   expect_equal(get_dir(row = 2, col = 1, row_f = 1, col_f = 2, c(3, 6)), 6)
   expect_equal(get_dir(row = 2, col = 1, row_f = 1, col_f = 2, c(4, 2)), 4)
 })
+
+test_that("slope_gc works as expected", {
+  grid <- 5
+  expect_silent(s <- slope_gc(test_dem, grid = 5))
+  expect_true(dplyr::all_equal(s[names(test_dem)], test_dem))
+
+  s <- remove_buffer(s)
+
+  # Row / Column Slope gradients
+  expect_equal(s$sgc, abs(s$sgcn), tolerance = 0.00001)
+  expect_equal(s$sgr, abs(s$sgre), tolerance = 0.00001)
+
+  # Row / Column Slope gradients east / north
+  max_cols <- max(s$col)
+  for(i in c(500, 1000, 5000, 10000, 16000, 20000,
+             24000, 26000, 30000, 32000, 34000)) {
+    expect_equal(s$sgre[!!i], (s$elev[!!i - 1] - s$elev[!!i + 1]) / (2 * 5))
+    expect_equal(s$sgcn[!!i], (s$elev[!!i + max_cols] - s$elev[!!i - max_cols]) / (2 * 5))
+  }
+
+  # Row / Column Slope curvature
+  for(i in c(500, 1000, 5000, 10000, 16000, 20000,
+             24000, 26000, 30000, 32000, 34000)) {
+    expect_equal(s$scr[!!i], (2 * s$elev[!!i] - s$elev[!!i - 1]- s$elev[!!i + 1]) / (grid^2))
+    expect_equal(s$scc[!!i], (2 * s$elev[!!i] - s$elev[!!i + max_cols] - s$elev[!!i - max_cols]) / (grid^2))
+  }
+
