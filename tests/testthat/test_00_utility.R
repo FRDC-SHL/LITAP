@@ -1,5 +1,3 @@
-context("Utility Functions")
-
 test_that("get_dir returns correct direction", {
   expect_equal(get_dir(row = 1, col = 2, row_f = 2, col_f = 1), 1)
   expect_equal(get_dir(row = 1, col = 1, row_f = 2, col_f = 1), 2)
@@ -71,12 +69,17 @@ test_that("get_dir returns correct direction given ddir_opts", {
 
 test_that("slope_gc works as expected", {
   grid <- 5
-  expect_silent(s <- slope_gc(test_dem, grid = 5))
+  expect_silent(s <- slope_gc(test_dem, grid = grid))
   expect_true(dplyr::all_equal(s[names(test_dem)], test_dem))
 
   s <- remove_buffer(s)
 
   # Row / Column Slope gradients
+  expect_true(all(s$sgc != 0, na.rm = TRUE))
+  expect_true(all(s$sgr != 0, na.rm = TRUE))
+  expect_true(all(s$sgcn != 0, na.rm = TRUE))
+  expect_true(all(s$sgre != 0, na.rm = TRUE))
+
   expect_equal(s$sgc, abs(s$sgcn), tolerance = 0.00001)
   expect_equal(s$sgr, abs(s$sgre), tolerance = 0.00001)
 
@@ -95,6 +98,28 @@ test_that("slope_gc works as expected", {
     expect_equal(s$scc[!!i], (2 * s$elev[!!i] - s$elev[!!i + max_cols] - s$elev[!!i - max_cols]) / (grid^2))
   }
 
+  # Hills
+  expect_true(all(s$hill_r_dir %in% c(1, 4)))
+  expect_true(all(s$hill_c_dir %in% c(1, 3)))
+  expect_true(all(s$hill_r_dir[s$sgre < 0] == 4))
+  expect_true(all(s$hill_r_dir[s$sgre > 0] == 1))
+  expect_true(all(s$hill_c_dir[s$sgcn < 0] == 3))
+  expect_true(all(s$hill_c_dir[s$sgcn > 0] == 1))
+
+  expect_lte(max(s$hill_r_n), max(s$col))
+  expect_lte(max(s$hill_c_n), max(s$row))
+
+  expect_true(all(s$hill_r_n[410:416] == 1))
+  expect_true(all(s$hill_r_cell[410:416] == 36:42))
+
+  expect_true(all(s$hill_r_n[417:425] == 2))
+  expect_true(all(s$hill_r_cell[417:425] == 1:9))
+
+  expect_true(all(s$hill_c_n[s$col == 122][1:10] == 1))
+  expect_true(all(s$hill_c_cell[s$col == 122][1:10] == 1:10))
+
+  expect_true(all(s$hill_c_n[s$col == 122][59:68] == 5))
+  expect_true(all(s$hill_c_cell[s$col == 122][59:68] == 1:10))
 })
 
 test_that("merge_flow_form() works as expected", {

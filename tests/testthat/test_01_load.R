@@ -1,4 +1,3 @@
-context("Loading DEM")
 f <- system.file("extdata", "testELEV.dbf", package = "LITAP")
 
 expect_values <- function(d) {
@@ -13,23 +12,15 @@ expect_values <- function(d) {
 
 # Load dem files ----------------------------------------------------------
 test_that("DEM files load", {
-  # skip_on_cran()
-  # skip_on_appveyor()
-  # skip_on_travis()
-
-  # file <- "./FES4 Input files/FES04Elev.DBF"
-  # expect_silent(d <- load_dem(file))
-
   file <- system.file("extdata", "testELEV.dbf", package = "LITAP")
   expect_silent(d <- load_dem(file))
-  expect_is(d, "data.frame")
+  expect_s3_class(d, "data.frame")
 })
 
 test_that("Grid files load and prep", {
   skip_on_cran()
-  skip_on_appveyor()
-  skip_on_travis()
-  file <- "./FES4 Input files/FES04_9n3_Original_SurferGrid.grd"
+  skip_on_ci()
+  file <- "../../../FES4 Input files/FES04_9n3_Original_SurferGrid.grd"
   expect_silent(d_raw <<- load_raster(file))
   expect_equal(nrow(d_raw), 434421)
   expect_equivalent(min(d_raw$elev), 204.5368, tolerance = 0.00001)
@@ -39,13 +30,10 @@ test_that("Grid files load and prep", {
   expect_values(d)
 })
 
-#d_raw <- load_raster("./FES4 Input files/FES04_9n3_Original_SurferGrid.grd")
-
 test_that("AscII Grid files load and prep", {
   skip_on_cran()
-  skip_on_appveyor()
-  skip_on_travis()
-  file <- "./FES4 Input files/FES04_SuferGridAscII.grd"
+  skip_on_ci()
+  file <- "../../../FES4 Input files/FES04_SuferGridAscII.grd"
   # Weird warning only produced in test_that env ?
   suppressWarnings(expect_error(expect_message(d <- load_raster(file), NA), NA))
   expect_equivalent(d_raw, d, tolerance = 0.00001)
@@ -57,15 +45,14 @@ test_that("AscII Grid files load and prep", {
 
 test_that("ArcGis files load", {
   skip_on_cran()
-  skip_on_appveyor()
-  skip_on_travis()
-  file <- "./FES4 Input files/FES04_ARCGRID"
+  skip_on_ci()
+  file <- "../../../FES4 Input files/FES04_ARCGRID"
   expect_silent(d <- load_raster(file))
   expect_equivalent(d_raw, d, tolerance = 0.00001)  ## PROBLEM!
   expect_silent(d <- load_file(file, verbose = FALSE))
   expect_values(d)
 
-  file <- "./FES4 Input files/FES04_ArcAscIIGrid.asc"
+  file <- "../../../FES4 Input files/FES04_ArcAscIIGrid.asc"
   expect_silent(d <- load_raster(file))
   expect_equivalent(d_raw, d, tolerance = 0.00001)
   expect_silent(d <- load_file(file, verbose = FALSE))
@@ -74,9 +61,8 @@ test_that("ArcGis files load", {
 
 test_that("GeoTif files load", {
   skip_on_cran()
-  skip_on_appveyor()
-  skip_on_travis()
-  file <- "./FES4 Input files/FES04_GeoTiff.tif"
+  skip_on_ci()
+  file <- "../../../FES4 Input files/FES04_GeoTiff.tif"
   expect_silent(d <- load_raster(file))
   expect_equivalent(d_raw, d, tolerance = 0.00001)
   expect_silent(d <- load_file(file, verbose = FALSE))
@@ -85,9 +71,8 @@ test_that("GeoTif files load", {
 
 test_that("Float Grid files laod", {
   skip_on_cran()
-  skip_on_appveyor()
-  skip_on_travis()
-  file <- "./FES4 Input files/FloatGrid.flt"
+  skip_on_ci()
+  file <- "../../../FES4 Input files/FloatGrid.flt"
   expect_silent(d <- load_raster(file))
   expect_equivalent(d_raw, d, tolerance = 0.00001)
   expect_silent(d <- load_file(file, verbose = FALSE))
@@ -96,10 +81,8 @@ test_that("Float Grid files laod", {
 
 test_that("Text files load", {
   skip_on_cran()
-  skip_on_appveyor()
-  skip_on_travis()
-
-  file <- "./FES4 Input files/FES04_XYZGrid.dat"
+  skip_on_ci()
+  file <- "../../../FES4 Input files/FES04_XYZGrid.dat"
   expect_silent(d <- load_txt(file))
   expect_equivalent(d_raw,
                     dplyr::arrange(d, dplyr::desc(y), x),
@@ -107,7 +90,7 @@ test_that("Text files load", {
   expect_silent(d <- load_file(file, verbose = FALSE))
   expect_values(d)
 
-  file <- "./FES4 Input files/FES04_XYZ.dat"
+  file <- "../../../FES4 Input files/FES04_XYZ.dat"
   expect_silent(d <- load_txt(file))
   expect_equivalent(d_raw, dplyr::arrange(d, dplyr::desc(y), x),
                     tolerance = 0.00001)
@@ -117,9 +100,8 @@ test_that("Text files load", {
 
 test_that("Excel files load", {
   skip_on_cran()
-  skip_on_appveyor()
-  skip_on_travis()
-  file <- "./FES4 Input files/FES04_XYZ.xlsx"
+  skip_on_ci()
+  file <- "../../../FES4 Input files/FES04_XYZ.xlsx"
   expect_error(d <- load_excel(file), NA)
   expect_equivalent(d_raw, dplyr::arrange(d, dplyr::desc(y), x),
                     tolerance = 0.00001)
@@ -129,7 +111,9 @@ test_that("Excel files load", {
 
 test_that("DEM files prepared", {
   expect_error(d <- load_file(f))
-  expect_message(d <- load_file(f, nrow = 150, ncol = 150))
+  expect_message(d <- load_file(f, nrow = 150, ncol = 150), "Using supplied") %>%
+    expect_message("Adding buffer") %>%
+    expect_message("Formating grid")
   expect_silent(d <- load_file(f, nrow = 150, ncol = 150, verbose = FALSE))
   expect_equal(max(d$row, na.rm = TRUE), 150 + 2)
   expect_equal(max(d$col, na.rm = TRUE), 150 + 2)
@@ -152,7 +136,7 @@ test_that("Prep DB correct subset/buffer/edge", {
     cmax <- (clim[2] - clim[1] + 1 + 2) # +2 for buffer
 
     # Subset
-    expect_is(d, "data.frame")
+    expect_s3_class(d, "data.frame")
     expect_equal(max(d$row), rmax)
     expect_equal(max(d$col), cmax)
     expect_equal(max(d$seqno), rmax * cmax)
@@ -176,23 +160,42 @@ test_that("Prep DB correct subset/buffer/edge", {
 test_that("Informative warning/errors", {
 
   # Incorrect nrow/ncol
-  for(i in 1:3) expect_error(load_file(f, nrow = sample(1:149, 1), ncol = sample(1:149, 1)),
-                             "Number of rows and columns does not match the total number of cells")
+  for(i in 1:3) {
+    expect_error(load_file(f, nrow = sample(1:149, 1), ncol = sample(1:149, 1)),
+                 "Number of rows and columns does not match the total number of cells") %>%
+      expect_message("Using supplied") %>%
+      expect_message("Adding buffer") %>%
+      expect_message("Formating grid")
+  }
 
   # Subset too small
   expect_error(load_file(f, nrow = 150, ncol = 150, clim = c(1,1), rlim = c(1,1)),
-               "Subset is too small \\(less than 2x2\\)")
+               "Subset is too small \\(less than 2x2\\)") %>%
+    expect_message("Using supplied") %>%
+    expect_message("Subsetting data") %>%
+    expect_message("Formating grid")
 
   # Subset too big
   expect_error(load_file(f, nrow = 150, ncol = 150, clim = c(1, 160)),
-               "Subset cannot be bigger than data")
+               "Subset cannot be bigger than data") %>%
+    expect_message("Using supplied") %>%
+    expect_message("Subsetting data") %>%
+    expect_message("Formating grid")
 
   # Subset incorrect
-  for(i in c(1, NA, c("A", "B"))) expect_error(load_file(f, nrow = 150, ncol = 150, clim = i),
-                                               "clim and rlim must be each be a vector of two")
+  for(i in c(1, NA, c("A", "B"))) {
+    expect_error(load_file(f, nrow = 150, ncol = 150, clim = i),
+                 "clim and rlim must be each be a vector of two") %>%
+      expect_message("Using supplied") %>%
+      expect_message("Subsetting data")
+  }
 
-  for(i in c(1, NA, c("A", "B"))) expect_error(load_file(f, nrow = 150, ncol = 150, rlim = i),
-                                               "clim and rlim must be each be a vector of two")
+  for(i in c(1, NA, c("A", "B"))) {
+    expect_error(load_file(f, nrow = 150, ncol = 150, rlim = i),
+                 "clim and rlim must be each be a vector of two") %>%
+      expect_message("Using supplied") %>%
+      expect_message("Subsetting data")
+  }
 })
 
 

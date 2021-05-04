@@ -1,5 +1,3 @@
-context("form_mapper() sub-routines")
-
 test_that("calc_stream", {
 
   dir <- "/home/steffi/Projects/Business/LandmapR/Runs - LITAP/11_Ab02PV/"
@@ -11,7 +9,7 @@ test_that("calc_stream", {
   expect_silent(db <- get_previous(dir, step = "fill", where = "flow") %>%
                   dplyr::select(seqno, row, col, elev, drec, upslope, fill_shed, local_shed) %>%
                   add_buffer()) %>%
-    expect_is("data.frame")
+    expect_s3_class("data.frame")
 
   expect_silent({
     pond <- get_previous(dir, step = "pond", type = "stats", where = "flow")
@@ -42,7 +40,8 @@ test_that("calc_stream", {
 
 
 
-  db2 <- get_previous("/home/steffi/Projects/Business/LandmapR/Runs - LITAP/Munger Test - LITAP/m35ELEV/",
+  db2 <- get_previous(paste0("/home/steffi/Projects/Business/LandmapR/Runs - ",
+                             "LITAP/Munger Test - LITAP/m35ELEV/"),
                      step = "fill", where = "flow") %>%
     dplyr::select(seqno, row, col, elev, drec, upslope, fill_shed, local_shed) %>%
     add_buffer()
@@ -52,35 +51,32 @@ test_that("calc_stream", {
 })
 
 test_that("Sub-functions", {
-  flow_mapper(f, nrow = 11, ncol = 11, out_folder = dir, report = FALSE)
+  suppressMessages(flow_mapper(f, nrow = 11, ncol = 11,
+                               out_folder = dir, report = FALSE))
   grid <- 5
 
   # DB files
   expect_silent(db <- get_previous(dir, step = "fill", where = "flow")) %>%
-    expect_is("data.frame")
+    expect_s3_class("data.frame")
   db <- add_buffer(db)
 
   expect_silent(idb <- get_previous(dir, step = "ilocal", where = "flow")) %>%
-    expect_is("data.frame")
+    expect_s3_class("data.frame")
   idb <- add_buffer(idb)
 
   # Form
   expect_silent(d <- calc_form(db, grid))
-  expect_known_output(as.data.frame(d)[150:500,],
-                      "./ref/test_calc_form", print = TRUE)
+  expect_snapshot_output(d)
 
   # Weti
   expect_silent(d <- calc_weti(db, grid))
-  expect_known_output(as.data.frame(d)[150:500,],
-                      "./ref/test_calc_weti", print = TRUE)
+  expect_snapshot_output(d)
 
   # Relief
   expect_silent(db_relz <- calc_relz(db, idb))
-  expect_known_output(as.data.frame(db_relz)[150:500,],
-                      "./ref/test_calc_relz", print = TRUE)
+  expect_snapshot_output(d)
 
   # Length
   expect_silent(d <- calc_length(db, db_relz))
-  expect_known_output(as.data.frame(d)[150:500,],
-                      "./ref/test_calc_length", print = TRUE)
+  expect_snapshot_output(d)
 })
