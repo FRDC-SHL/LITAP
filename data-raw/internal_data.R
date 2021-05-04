@@ -63,6 +63,8 @@ test_dem <- load_file("../Runs - FlowMapR/Steffi_LandMapR_tests/11_Ab02PV/FlowMa
                       edge = FALSE) %>%
   add_buffer()
 
-usethis::use_data(fix_names, match_names, arule_weti, arule_relief, test_dem,
+usethis::use_data(fix_names, match_names, arule_weti, arule_relief,
                   internal = TRUE, overwrite = TRUE)
+usethis::use_data(test_dem, internal = FALSE, overwrite = TRUE)
+
 
