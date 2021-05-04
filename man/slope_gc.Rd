@@ -22,7 +22,9 @@ Assume the following cells, and the calculations on elevation for focal point
 5:
 
 c7  c8  c9
+
 c4  c5  c6
+
 c1  c2  c3
 
 \strong{Slope gradients and curvature}

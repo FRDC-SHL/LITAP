@@ -8,7 +8,9 @@
 #' 5:
 #'
 #'  c7  c8  c9
+#'
 #'  c4  c5  c6
+#'
 #'  c1  c2  c3
 #'
 #'  **Slope gradients and curvature**
