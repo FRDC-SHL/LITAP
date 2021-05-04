@@ -8,6 +8,8 @@ slope_gc(db, grid = 1)
 }
 \arguments{
 \item{db}{Dataframe dem}
+
+\item{grid}{Numeric. Grid size for the original dem}
 }
 \value{
 

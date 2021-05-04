@@ -20,6 +20,8 @@ devtools::check()
 
 # Update website and reports
 pkgdown::build_site(lazy = TRUE)
+pkgdown::build_reference_index()
+pkgdown::build_reference()
 file.copy(from = "docs", to = "../LITAP_docs/", recursive = TRUE)
 # Move site to LITAP_docs
 

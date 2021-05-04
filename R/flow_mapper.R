@@ -272,7 +272,7 @@ flow_mapper <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
 
     # Calculate slope gradients and curvatures
 
-    db_fill$db <- slope_gc(db_fill$db)
+    db_fill$db <- slope_gc(db_fill$db, grid = 1)
 
     save_backup(locs = out_locs,
                 data = list("db" = db_fill$db, "stats" = db_fill$stats),

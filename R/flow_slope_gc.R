@@ -53,8 +53,7 @@
 #'  - hill_c_cell: Same as for row.
 #'
 #' @param db Dataframe dem
-#'
-#' @inheritParams args
+#' @param grid Numeric. Grid size for the original dem
 #'
 #' @return
 #'
