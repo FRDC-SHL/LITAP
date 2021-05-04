@@ -57,11 +57,14 @@ Project) (among other metrics).  Based on FacetMapR by R. A. (Bob) MacMillan,
 LandMapper Environmental Solutions.
 }
 \examples{
+
+\dontrun{
 # First need to run flow_mapper()
 flow_mapper(file = system.file("extdata", "testELEV.dbf", package = "LITAP"),
            out_folder = "./testELEV/", nrow = 150, ncol = 150)
 
 # Now can run wepp_mapper()
 wepp_mapper(folder = "./testELEV/", grid = 5)
+}
 
 }

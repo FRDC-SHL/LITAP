@@ -340,7 +340,6 @@ calc_stream4 <- function(db, str_val = 10000, verbose = TRUE) {
 calc_pit <- function(db, pond = NULL, verbose) {
 
   if(is.null(pond) || nrow(pond) == 0) {
-    browser()
     temp <- db %>%
       dplyr::filter(ddir == 5) %>%
       dplyr::select(shedno, pit_seqno = seqno,
