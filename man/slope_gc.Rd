@@ -2,7 +2,7 @@
 % Please edit documentation in R/flow_slope_gc.R
 \name{slope_gc}
 \alias{slope_gc}
-\title{Calculate slope gradient and curvature}
+\title{Calculate slope gradient and curvature, and hills}
 \usage{
 slope_gc(db, grid = 1)
 }
@@ -13,14 +13,19 @@ slope_gc(db, grid = 1)
 
 }
 \description{
-Computes row (east/west) and column (north/south) slope gradients and curvatures.
+Computes row (east/west) and column (north/south) slope gradients and
+curvatures. Also calculates hill slopes as points when slope gradients switch
+directions
 }
 \details{
-Assume the following cells, and the calculations on elevation for point 5:
+Assume the following cells, and the calculations on elevation for focal point
+5:
 
 c7  c8  c9
 c4  c5  c6
 c1  c2  c3
+
+\strong{Slope gradients and curvature}
 \itemize{
 \item Row slope gradient towards east (sgre): (c4 - c6) / (2 * grid)
 \itemize{
@@ -40,6 +45,29 @@ c1  c2  c3
 
 Where missing neighbours, assume same elevation as central point (i.e.
 assume an extension of the field).
+
+Zero values replaced with arbitrarily small value, 0.00001
+
+For gradients, zero values replaced with arbitrarily small value (0.00001)
+but with the sign of the previous point (i.e. to left (n4, west) if row; to
+bottom (n2, south) if column). If that previous point is missing, look to
+next point (i.e. n6 or n8). If cannot resolve by working through points,
+assign to positive.
+
+\strong{Hill slopes}
+\itemize{
+\item hill_r_n: Number of hillslopes in that row. It goes from 1 to whatever it
+ends. Hillslope no changes when it goes from downslope to upslope or from
+upslope to downslope (SGRE changes sign)
+\item hill_r_dir: Direction the slope is facing, east facing as 1 and west
+facing as 4, all cells with the same hillslope no. have same hillslope
+direction
+\item hill_r_cell: Order no of the cell in the hillslope, starts from 1 to how
+many cells there are in a given hillslope
+\item hill_c_n: Same as for row, changes when SGCN changes sign
+\item hill_c_dir: Same as for row, north facing as 1 and south facing as 3
+\item hill_c_cell: Same as for row.
+}
 }
 \examples{
 
