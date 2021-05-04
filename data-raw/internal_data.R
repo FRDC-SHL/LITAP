@@ -57,6 +57,14 @@ arule_weti <- c("prof", "plan", "slope_pct", "aspect", "qweti",
                 "qarea", "lnqarea", "new_asp")
 arule_relief <- c("pctz2st", "pctz2pit", "z2pit")
 
+
+test_dem <- load_file("../Runs - FlowMapR/Steffi_LandMapR_tests/11_Ab02PV/FlowMapR/021ELEV.DBF",
+                      nrow = 184, ncol = 187, missing_value = -9999,
+                      edge = FALSE) %>%
+  add_buffer()
+
 usethis::use_data(fix_names, match_names, arule_weti, arule_relief,
                   internal = TRUE, overwrite = TRUE)
+usethis::use_data(test_dem, internal = FALSE, overwrite = TRUE)
+
 

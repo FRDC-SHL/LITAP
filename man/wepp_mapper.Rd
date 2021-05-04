@@ -30,6 +30,13 @@ channels into segments}
 channel cells. #' Cells with an upslope value larger than this are
 considered channel cells}
 
+\item{out_format}{Character. What format should the data be output as? "csv"
+for Comma-separated values, "dbf" for dbf database files, or "rds" for R
+data format.}
+
+\item{clean}{Logical. Remove all output files from previous runs in this
+folder?}
+
 \item{resume}{Character. From which stage should the run be resumed? (see
 Details below)}
 
@@ -50,11 +57,14 @@ Project) (among other metrics).  Based on FacetMapR by R. A. (Bob) MacMillan,
 LandMapper Environmental Solutions.
 }
 \examples{
+
+\dontrun{
 # First need to run flow_mapper()
 flow_mapper(file = system.file("extdata", "testELEV.dbf", package = "LITAP"),
            out_folder = "./testELEV/", nrow = 150, ncol = 150)
 
 # Now can run wepp_mapper()
-wepp_mapper(folder = "./testELEV/")
+wepp_mapper(folder = "./testELEV/", grid = 5)
+}
 
 }

@@ -9,7 +9,7 @@ devtools::check()
 
 
 # Create reports and save to vignettes
-# source("../formal_tests_reports_flow.R.R")
+# source("../formal_tests_reports_flow.R")
 # source("../formal_tests_reports_form.R")
 # source("../formal_tests_reports_facet.R")
 # source("../formal_tests_reports_wepp.R")
@@ -20,7 +20,7 @@ devtools::check()
 
 # Update website and reports
 pkgdown::build_site(lazy = TRUE)
-file.copy(from = "docs", to = "../LITAP_docs/docs", recursive = TRUE)
+file.copy(from = "docs", to = "../LITAP_docs/", recursive = TRUE)
 # Move site to LITAP_docs
 
 

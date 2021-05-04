@@ -38,6 +38,7 @@
 #'     \item \code{local} (Initial Pit Removal)
 #'     \item \code{pond} (Calculating Pond Shed Statistics - Second Pit Removal)
 #'     \item \code{fill} (Calculating Fill Shed Statistics - Third Pit Removal)
+#'     \item \code{slope} (Slope Gradient and Curvature values)
 #'     \item \code{inverted} (Calculating Directions on Inverted DEM)
 #'     \item \code{iwatersheds} (Calculating Inverted Watersheds)
 #'     \item \code{ilocal} (Initial Inverted Pit Removal)
@@ -70,7 +71,7 @@ flow_mapper <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
   if(is.null(resume)) resume <- ""
   if(is.null(end)) end <- ""
   resume_options <- c("", "directions", "watersheds",
-                    "local", "pond", "fill",
+                    "local", "pond", "fill", "slope",
                     "inverted", "iwatersheds",
                     "ilocal", "report")
   check_resume(resume, end, resume_options)
@@ -130,6 +131,9 @@ flow_mapper <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
   }
 
   # Calculate directions -------------------------------------------------------
+
+
+
   task <- "calculating directions"
   if(resume == "" | resume == "directions") {
     announce(task, quiet)
@@ -137,13 +141,11 @@ flow_mapper <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
     write_start(task, sub_start, log_file)
 
     db_dir <- calc_ddir2(db_start, verbose = verbose)
-
     save_backup(locs = out_locs, data = list("db" = db_dir), name = "dir")
-
     write_time(sub_start, log_file)
 
+    resume <- ""
   } else  skip_task(task, log_file, quiet)
-
   if(end == "directions") {
     run_time(start, log_file, quiet)
     return()
@@ -152,12 +154,12 @@ flow_mapper <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
 
   # Calculate watersheds -------------------------------------------------------
   task <- "calculating watersheds"
-  if(resume == "watersheds") db_dir <- read_shed(out_locs$backup, "dir")
-  if(resume %in% c("", "watersheds")) {
-
+  if(resume == "" | resume == "watersheds") {
     announce(task, quiet)
     sub_start <- Sys.time()
     write_start(task, sub_start, log_file)
+
+    if(!exists("db_dir")) db_dir <- read_shed(out_locs$backup, "dir")
 
     db_initial <- list()
     db_initial$db <- calc_shed4(db_dir)
@@ -176,9 +178,9 @@ flow_mapper <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
                 name = "initial")
 
     write_time(sub_start, log_file)
+    resume <- ""
 
   } else skip_task(task, log_file, quiet)
-
   if(end == "watersheds") {
     run_time(start, log_file, quiet)
     return()
@@ -186,15 +188,16 @@ flow_mapper <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
 
   # Remove initial pits --------------------------------------------------------
   task <- "removing initial pits"
-  if(resume == "local") db_initial <- read_shed(out_locs$backup, "initial")
-  if(resume %in% c("", "watersheds", "local")) {
-
+  if(resume == "" | resume == "local") {
     announce(task, quiet)
     sub_start <- Sys.time()
     write_start(task, sub_start, log_file)
 
+    if(!exists("db_initial")) db_initial <- read_shed(out_locs$backup, "initial")
+
     # Pit removal
-    db_local <- first_pitr1(db_initial$db, max_area = max_area, max_depth = max_depth, verbose = verbose)
+    db_local <- first_pitr1(db_initial$db, max_area = max_area,
+                            max_depth = max_depth, verbose = verbose)
 
     # Stats
     stats_local <- pit_stat1(db_local) %>%
@@ -204,8 +207,8 @@ flow_mapper <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
     save_backup(locs = out_locs, data = db_local, name = "local")
     write_time(sub_start, log = log_file)
 
+    resume <- ""
   } else skip_task(task, log_file, quiet)
-
   if(end == "local") {
     run_time(start, log_file, quiet)
     return()
@@ -214,12 +217,12 @@ flow_mapper <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
   # Calc pond Sheds ---------------------------------------------------------
   task <- "calculating pond (global) watersheds"
 
-  if(resume == "pond") db_local <- read_shed(out_locs$backup, "local")
-  if(resume %in% c("", "watersheds", "local", "pond")) {
-
+  if(resume == "" | resume == "pond") {
     announce(task, quiet)
     sub_start <- Sys.time()
     write_start(task, sub_start, log_file)
+
+    if(!exists("db_local")) db_local <- read_shed(out_locs$backup, "local")
 
     if(length(unique(db_local$db$shedno[!is.na(db_local$db$shedno)])) > 1){
       db_pond <- second_pitr1(db_local$db, verbose = verbose) #also 2nd vol2fl and parea
@@ -231,9 +234,8 @@ flow_mapper <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
     }
     save_backup(locs = out_locs, data = list("db" = db_pond$db, "stats" = db_pond$stats), name = "pond")
     write_time(sub_start, log_file)
-
+    resume <- ""
   } else skip_task(task, log_file, quiet)
-
   if(end == "pond") {
     run_time(start, log_file, quiet)
     return()
@@ -241,18 +243,16 @@ flow_mapper <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
 
   # Calc fill sheds ---------------------------------------------------------
   task <- "calculating fill patterns"
-
-  if(resume == "fill") {
-    db_initial <- read_shed(out_locs$backup, "initial")
-    db_local <- read_shed(out_locs$backup, "local")
-    db_pond <- read_shed(out_locs$backup, "pond")
-  }
-
-  if(resume %in% c("", "watersheds", "local", "pond", "fill")) {
-
+  if(resume == "" | resume == "fill") {
     announce(task, quiet)
     sub_start <- Sys.time()
     write_start(task, sub_start, log_file)
+
+    if(!exists("db_initial") | !exists("db_local") | !exists("db_pond")) {
+      db_initial <- read_shed(out_locs$backup, "initial")
+      db_local <- read_shed(out_locs$backup, "local")
+      db_pond <- read_shed(out_locs$backup, "pond")
+    }
 
     if(length(unique(db_local$db$shedno[!is.na(db_local$db$shedno)])) > 1){
 
@@ -270,7 +270,13 @@ flow_mapper <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
       db_fill$stats <- tibble::tibble()
     }
 
-    save_backup(locs = out_locs, data = list("db" = db_fill$db, "stats" = db_fill$stats), name = "fill")
+    # Calculate slope gradients and curvatures
+
+    db_fill$db <- slope_gc(db_fill$db)
+
+    save_backup(locs = out_locs,
+                data = list("db" = db_fill$db, "stats" = db_fill$stats),
+                name = "fill")
     write_time(sub_start, log_file)
 
     if(nrow(db_fill$stats) > 0) {
@@ -280,21 +286,25 @@ flow_mapper <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
         dplyr::mutate(edge_pit = FALSE) %>%
         dplyr::arrange(shedno)
 
-      save_backup(locs = out_locs, data = list("db" = db_fill$db, "stats" = pit), name = "pit")
+      save_backup(locs = out_locs,
+                  data = list("db" = db_fill$db, "stats" = pit),
+                  name = "pit")
     } else if(!quiet) message("  Only a single watershed: No pit outputs")
 
+    resume <- ""
   } else skip_task(task, log_file, quiet)
-
   if(end == "fill") {
     run_time(start, log_file, quiet)
     return()
   }
 
+
   # Inverted DEM --------------------------------------------------------------
   task <- "inverting dem"
   announce(task, quiet)
   task <- "calculating inverted directions"
-  if(resume %in%  c(cont_reg, "inverted")) {
+  if(resume == "" | resume == "inverted") {
+
     db_invert <- read_shed(out_locs$backup, "local")$db %>%
       dplyr::select(elev, seqno, row, col, missing, buffer, elev_orig, edge_map) %>%
       invert()
@@ -309,8 +319,8 @@ flow_mapper <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
     save_backup(locs = out_locs, data = list("db" = db_idir), name = "idir")
     write_time(sub_start, log_file)
 
+    resume <- ""
   } else skip_task(task, log_file, quiet)
-
   if(end == "idirections") {
     run_time(start, log_file, quiet)
     return()
@@ -319,19 +329,18 @@ flow_mapper <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
   # Inverted Watersheds --------------------------------------------------------
   task <- "calculating inverted watersheds"
 
-  if(resume == "iwatersheds") db_idir <- read_shed(out_locs$backup, "idir")
-  if(resume %in% c(cont_reg, "inverted", "iwatersheds")) {
-
+  if(resume == "" | resume == "iwatersheds") {
     announce(task, quiet)
     sub_start <- Sys.time()
     write_start(task, sub_start, log_file)
 
+    if(!exists("db_idir")) db_idir <- read_shed(out_locs$backup, "idir")
+
     db_iinitial <- calc_shed4(db_idir)
     save_backup(locs = out_locs, data = list("db" = db_iinitial), name = "iinitial")
     write_time(sub_start, log_file)
-
+    resume <- ""
   } else skip_task(task, log_file, quiet)
-
   if(end == "iwatersheds") {
     run_time(start, log_file, quiet)
     return()
@@ -341,13 +350,15 @@ flow_mapper <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
   # Invert Remove Initial Pits -----------------------------------------------
   task <- "removing inverted initial pits"
 
-  if(resume == "ilocal") db_iinitial <- read_shed(out_locs$backup, "iinitial")
-  if(resume %in% c(cont_reg, "inverted", "iwatersheds", "ilocal")) {
+  if(resume %in% c("", "ilocal")) {
     announce(task, quiet)
     sub_start <- Sys.time()
     write_start(task, sub_start, log_file)
 
-    db_ilocal <- first_pitr1(db_iinitial, max_area = max_area, max_depth = max_depth, verbose = verbose)
+    if(!exists("db_iinitial")) db_iinitial <- read_shed(out_locs$backup, "iinitial")
+
+    db_ilocal <- first_pitr1(db_iinitial, max_area = max_area,
+                             max_depth = max_depth, verbose = verbose)
     #db_ilocal$pond_shed <- db_ilocal$local_shed
 
     if(length(unique(db_ilocal$shedno[!is.na(db_ilocal$shedno)])) > 1) {
@@ -358,7 +369,7 @@ flow_mapper <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
 
     save_backup(locs = out_locs, data = list("db" = db_ilocal, "stats" = ipit), name = "ilocal")
     write_time(sub_start, log_file)
-
+    resume <- ""
   } else skip_task(task, log_file, quiet)
 
 

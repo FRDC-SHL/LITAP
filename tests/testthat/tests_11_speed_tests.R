@@ -1,4 +1,3 @@
-context("Speed tests")
 
 test_that("trace_flow()", {
   skip("never run")

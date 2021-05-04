@@ -1,5 +1,3 @@
-context("wepp_mapper internal")
-
 test_that("mark_neighbours evaluates correctly", {
 
   # No neighbouring channel

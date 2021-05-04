@@ -1,5 +1,5 @@
-context("flow_mapper() sub-routines")
-f <- load_file(system.file("extdata", "testELEV.dbf", package = "LITAP"), nrow = 150, ncol = 150)
+suppressMessages(f <- load_file(system.file("extdata", "testELEV.dbf", package = "LITAP"),
+                                nrow = 150, ncol = 150))
 
 test_that("Sub-functions", {
   # Directions

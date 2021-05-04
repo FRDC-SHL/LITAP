@@ -47,6 +47,10 @@ pit removal}
 \item{out_folder}{Character. Folder in which to store output files. Defaults
 to folder in the same location and with the same name as the dem file}
 
+\item{out_format}{Character. What format should the data be output as? "csv"
+for Comma-separated values, "dbf" for dbf database files, or "rds" for R
+data format.}
+
 \item{clean}{Logical. Remove all backup files and output files from previous
 runs in this folder?}
 
@@ -86,6 +90,7 @@ the following:
 \item \code{local} (Initial Pit Removal)
 \item \code{pond} (Calculating Pond Shed Statistics - Second Pit Removal)
 \item \code{fill} (Calculating Fill Shed Statistics - Third Pit Removal)
+\item \code{slope} (Slope Gradient and Curvature values)
 \item \code{inverted} (Calculating Directions on Inverted DEM)
 \item \code{iwatersheds} (Calculating Inverted Watersheds)
 \item \code{ilocal} (Initial Inverted Pit Removal)

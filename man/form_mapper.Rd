@@ -13,7 +13,7 @@ form_mapper(
   resume = NULL,
   end = NULL,
   log = TRUE,
-  clean = TRUE,
+  clean = FALSE,
   verbose = FALSE,
   quiet = FALSE
 )
@@ -27,6 +27,10 @@ form_mapper(
 
 \item{ridge_val}{Numeric. Definition of a ridge (number of downslope cells)}
 
+\item{out_format}{Character. What format should the data be output as? "csv"
+for Comma-separated values, "dbf" for dbf database files, or "rds" for R
+data format.}
+
 \item{resume}{Character. From which stage should the run be resumed? (see
 Details below)}
 
@@ -34,6 +38,9 @@ Details below)}
 (see Details below)}
 
 \item{log}{Logical. Create log file recording progress?}
+
+\item{clean}{Logical. Remove all output files from previous runs in this
+folder?}
 
 \item{verbose}{Logical. Output extra progress messages.}
 

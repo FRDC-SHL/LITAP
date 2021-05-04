@@ -1,7 +1,3 @@
-context("Facet Internal")
-
-test_that("fuza")
-
 test_that("fuzc_sum()", {
   skip("test")
   crule <- load_extra("../TestFiles/Munger Test - LITAP/LM3CRULE.dbf",

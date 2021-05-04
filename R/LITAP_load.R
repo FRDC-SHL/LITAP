@@ -67,6 +67,9 @@
 load_file <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
                       rlim = NULL, clim = NULL, edge = TRUE, verbose = TRUE) {
 
+  if(!file.exists(file)) stop("Cannot locate ", file,
+                              " relative to working directory, ", getwd(),
+                              call. = FALSE)
   ext <- tolower(tools::file_ext(file))
 
   if(ext %in% c("grd", "tif", "adf", "asc", "flt", "")) {
