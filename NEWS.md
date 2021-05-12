@@ -1,3 +1,6 @@
+# LITAP (development version)
+- Load files forces to numeric (fixes problems where some imports in character)
+
 # LITAP 0.4.1 (2021-04-30)
 - Added `slope_gc()` to calculate slope gradients and curvature (added to `dem_fill` through `flow_mapper()`)
 - Added `merge_flow_form()` to create a single dem file from `flow_mapper()` `dem_fill` and all `form_mapper()` outputs.

@@ -195,8 +195,9 @@ db_format <- function(db, nrow, ncol, missing_value = -9999, verbose) {
     dplyr::mutate(seqno = 1:length(elev),
                   row = sort(rep(1:nrow, length(elev)/nrow)),
                   col = rep(1:ncol, length(elev)/ncol),
-                  missing = elev == missing_value) %>%
-    dplyr::mutate(elev = replace(elev, missing, NA))
+                  missing = elev == missing_value,
+                  elev = replace(elev, missing, NA)) %>%
+    dplyr::mutate(dplyr::across(-"missing", as.numeric))
 }
 
 db_prep <- function(db, clim, rlim, edge, verbose) {

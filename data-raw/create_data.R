@@ -10,6 +10,10 @@ d <- load_file("../Runs - FlowMapR/Steffi_LandMapR_tests/01_H1/FlowMapR/H10Elev.
 
 foreign::write.dbf(as.data.frame(d), "./inst/extdata/testELEV_mini.dbf")
 
+d$ELEV <- as.character(d$ELEV)
+foreign::write.dbf(as.data.frame(d), "./inst/extdata/testELEV_mini_chr.dbf")
+
+
 # Dem for vignettes
 clim <- c(26, 175)
 rlim <- c(26, 175)

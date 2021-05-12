@@ -15,6 +15,16 @@ test_that("DEM files load", {
   file <- system.file("extdata", "testELEV.dbf", package = "LITAP")
   expect_silent(d <- load_dem(file))
   expect_s3_class(d, "data.frame")
+
+
+  file <- system.file("extdata", "testELEV_mini_chr.dbf", package = "LITAP")
+  expect_silent(d <- load_dem(file))
+  expect_s3_class(d, "data.frame")
+  expect_message(d <- load_file(file, nrow = 11, ncol = 11), "Using supplied") %>%
+    expect_message("Adding buffer") %>%
+    expect_message("Formating grid")
+  expect_s3_class(d, "data.frame")
+  expect_type(d$elev, "double")
 })
 
 test_that("Grid files load and prep", {
@@ -120,6 +130,8 @@ test_that("DEM files prepared", {
   expect_equal(max(d$seqno, na.rm = TRUE), nrow(d))
   expect_equal(max(d$elev, na.rm = TRUE), 681.223)
   expect_equal(min(d$elev, na.rm = TRUE), 668.858)
+
+
 })
 
 test_that("Prep DB correct subset/buffer/edge", {
