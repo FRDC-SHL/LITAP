@@ -15,8 +15,8 @@ foreign::write.dbf(as.data.frame(d), "./inst/extdata/testELEV_mini_chr.dbf")
 
 
 # Dem for vignettes
-clim <- c(26, 175)
-rlim <- c(26, 175)
+clim <- c(86, 175)
+rlim <- c(86, 175)
 # clim <- NULL
 # rlim <- NULL
 d <- load_file("../Runs - FlowMapR/Steffi_LandMapR_tests/11_Ab02PV/FlowMapR/021ELEV.DBF",
@@ -27,7 +27,7 @@ d <- load_file("../Runs - FlowMapR/Steffi_LandMapR_tests/11_Ab02PV/FlowMapR/021E
 foreign::write.dbf(as.data.frame(d), "./inst/extdata/testELEV.dbf")
 
 # Run to get output of subset dem for vignettes
-flow_mapper(file = "./inst/extdata/testELEV.dbf", nrow = 150, ncol = 150,
+flow_mapper(file = "./inst/extdata/testELEV.dbf", nrow = 90, ncol = 90,
             max_area = 1, max_depth = 0.1)
 form_mapper(folder = "./inst/extdata/testELEV", grid = 10,
             str_val = 1000, ridge_val = 1000)
@@ -35,4 +35,5 @@ facet_mapper(folder = "./inst/extdata/testELEV",
              arule = system.file("extdata", "arule.dbf", package = "LITAP"),
              crule = system.file("extdata", "crule.dbf", package = "LITAP"))
 
+unlink("./inst/extdata/testELEV/backup/", recursive = TRUE)
 

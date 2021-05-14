@@ -35,10 +35,17 @@ First load the LITAP package:
 library(LITAP)
 ```
 
+
+Here we will use the "testELEV.dbf" included in the package. You can copy it to your working directory with:
+
+```{r, eval = FALSE}
+file.copy(system.file("extdata", "testELEV.dbf", package = "LITAP"), ".")
+```
+
 The only required parameters are the location of the dem file (`file`) and the number of rows and the number of columns (`nrow` and `ncol`) in the dem file.
 
 ```{r}
-flow_mapper(file = "testELEV.dbf", nrow = 150, ncol = 150)
+flow_mapper(file = "testELEV.dbf", nrow = 90, ncol = 90)
 ```
 
 ## Pit removal parameters
@@ -49,7 +56,7 @@ The maximum size of initial watersheds which will be removed in the first step c
 - `max_depth` represents the maximum depth of a pit (difference between the elevation of the pour point and the elevation of the pit centre) of a watershed to be removed in the initial step
 
 ```{r}
-flow_mapper(file = "testELEV.dbf", nrow = 150, ncol = 150, 
+flow_mapper(file = "testELEV.dbf", nrow = 90, ncol = 90, 
             max_area = 5, max_depth = 0.2)
 ```
 
@@ -63,13 +70,13 @@ A LITAP run saves all output from `flow_mapper()` into two folders: `backup` and
 You can specify where these output folders/files should be saved with `out_folder`. Otherwise the folders will be created in the folder of the original Elev.dbf file, which may not be desirable. Note that folder locations are relative to working directory of the R session.
 
 ```{r}
-flow_mapper(file = "testELEV.dbf", nrow = 150, ncol = 150, out_folder = "./Output/")
+flow_mapper(file = "testELEV.dbf", nrow = 90, ncol = 90, out_folder = "./Output/")
 ```
 
 To clean up any old files before conducting a new run, use `clean = TRUE`. __Careful, this will remove all backup files from previous runs making it impossible to resume a run!__
 
 ```{r}
-flow_mapper(file = "testELEV.dbf", nrow = 150, ncol = 150, out_folder = "./Output/", clean = TRUE)
+flow_mapper(file = "testELEV.dbf", nrow = 90, ncol = 90, out_folder = "./Output/", clean = TRUE)
 ```
 
 ## Different input file types
@@ -90,8 +97,8 @@ flow_mapper(file = "testELEV")     # ArcGis Gridfile folder (contains .hdr files
 To conduct a run on only a subset of the dem you can specify row and column limits (`rlim` and `clim` respectively):
 
 ```{r}
-flow_mapper(file = "testELEV.dbf", nrow = 150, ncol = 150, 
-            rlim = c(50,100), clim = c(50,100))
+flow_mapper(file = "testELEV.dbf", nrow = 90, ncol = 90, 
+            rlim = c(50,80), clim = c(50,80))
 ```
 
 ## Output messages
@@ -99,13 +106,13 @@ flow_mapper(file = "testELEV.dbf", nrow = 150, ncol = 150,
 To include detailed output, use `verbose = TRUE`:
 
 ```{r}
-flow_mapper(file = "testELEV.dbf", nrow = 150, ncol = 150, verbose = TRUE)
+flow_mapper(file = "testELEV.dbf", nrow = 90, ncol = 90, verbose = TRUE)
 ```
 
 To prevent all output, use `quiet = TRUE`:
 
 ```{r}
-flow_mapper(file = "testELEV.dbf", nrow = 150, ncol = 150, quiet = TRUE)
+flow_mapper(file = "testELEV.dbf", nrow = 90, ncol = 90, quiet = TRUE)
 ```
 
 ## Resuming a run
@@ -114,14 +121,14 @@ Each run of LITAP goes through 10 steps. A run can be halted or resumed at step 
 For example, to resume with calculating pond statistics (step 5) and continue to the end of the run:
 
 ```{r}
-flow_mapper(file = "testELEV.dbf", nrow = 150, ncol = 150, 
+flow_mapper(file = "testELEV.dbf", nrow = 90, ncol = 90, 
             resume = "pond")
 ```
 
 Or to resume from pond statistics and to end just after calculating fill statistics (step 6):
 
 ```{r}
-flow_mapper(file = "testELEV.dbf", nrow = 150, ncol = 150, 
+flow_mapper(file = "testELEV.dbf", nrow = 90, ncol = 90, 
             resume = "pond", end = "fill")
 ```
 

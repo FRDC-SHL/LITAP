@@ -121,27 +121,25 @@ test_that("Excel files load", {
 
 test_that("DEM files prepared", {
   expect_error(d <- load_file(f))
-  expect_message(d <- load_file(f, nrow = 150, ncol = 150), "Using supplied") %>%
+  expect_message(d <- load_file(f, nrow = 90, ncol = 90), "Using supplied") %>%
     expect_message("Adding buffer") %>%
     expect_message("Formating grid")
-  expect_silent(d <- load_file(f, nrow = 150, ncol = 150, verbose = FALSE))
-  expect_equal(max(d$row, na.rm = TRUE), 150 + 2)
-  expect_equal(max(d$col, na.rm = TRUE), 150 + 2)
+  expect_silent(d <- load_file(f, nrow = 90, ncol = 90, verbose = FALSE))
+  expect_equal(max(d$row, na.rm = TRUE), 90 + 2)
+  expect_equal(max(d$col, na.rm = TRUE), 90 + 2)
   expect_equal(max(d$seqno, na.rm = TRUE), nrow(d))
-  expect_equal(max(d$elev, na.rm = TRUE), 681.223)
-  expect_equal(min(d$elev, na.rm = TRUE), 668.858)
-
-
+  expect_equal(max(d$elev, na.rm = TRUE), 679.974)
+  expect_equal(min(d$elev, na.rm = TRUE), 669.989)
 })
 
 test_that("Prep DB correct subset/buffer/edge", {
   for(i in 1:3) {
-    rlim <- sample(1:147, 1)
-    rlim <- c(rlim, sample((rlim+2):150, 1))
-    clim <- sample(1:147, 1)
-    clim <- c(clim, sample((clim+2):150, 1))
+    rlim <- sample(1:87, 1)
+    rlim <- c(rlim, sample((rlim+2):90, 1))
+    clim <- sample(1:87, 1)
+    clim <- c(clim, sample((clim+2):90, 1))
 
-    expect_silent(d <- load_file(f, nrow = 150, ncol = 150,
+    expect_silent(d <- load_file(f, nrow = 90, ncol = 90,
                                  clim = clim, rlim = rlim, verbose = FALSE))
 
     rmax <- (rlim[2] - rlim[1] + 1 + 2) # +2 for buffer
@@ -173,7 +171,7 @@ test_that("Informative warning/errors", {
 
   # Incorrect nrow/ncol
   for(i in 1:3) {
-    expect_error(load_file(f, nrow = sample(1:149, 1), ncol = sample(1:149, 1)),
+    expect_error(load_file(f, nrow = sample(1:79, 1), ncol = sample(1:79, 1)),
                  "Number of rows and columns does not match the total number of cells") %>%
       expect_message("Using supplied") %>%
       expect_message("Adding buffer") %>%
@@ -181,14 +179,14 @@ test_that("Informative warning/errors", {
   }
 
   # Subset too small
-  expect_error(load_file(f, nrow = 150, ncol = 150, clim = c(1,1), rlim = c(1,1)),
+  expect_error(load_file(f, nrow = 90, ncol = 90, clim = c(1,1), rlim = c(1,1)),
                "Subset is too small \\(less than 2x2\\)") %>%
     expect_message("Using supplied") %>%
     expect_message("Subsetting data") %>%
     expect_message("Formating grid")
 
   # Subset too big
-  expect_error(load_file(f, nrow = 150, ncol = 150, clim = c(1, 160)),
+  expect_error(load_file(f, nrow = 90, ncol = 90, clim = c(1, 160)),
                "Subset cannot be bigger than data") %>%
     expect_message("Using supplied") %>%
     expect_message("Subsetting data") %>%
@@ -196,14 +194,14 @@ test_that("Informative warning/errors", {
 
   # Subset incorrect
   for(i in c(1, NA, c("A", "B"))) {
-    expect_error(load_file(f, nrow = 150, ncol = 150, clim = i),
+    expect_error(load_file(f, nrow = 90, ncol = 90, clim = i),
                  "clim and rlim must be each be a vector of two") %>%
       expect_message("Using supplied") %>%
       expect_message("Subsetting data")
   }
 
   for(i in c(1, NA, c("A", "B"))) {
-    expect_error(load_file(f, nrow = 150, ncol = 150, rlim = i),
+    expect_error(load_file(f, nrow = 90, ncol = 90, rlim = i),
                  "clim and rlim must be each be a vector of two") %>%
       expect_message("Using supplied") %>%
       expect_message("Subsetting data")

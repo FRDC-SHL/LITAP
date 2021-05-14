@@ -13,7 +13,7 @@
 #'
 #' # First need to run flow_mapper()
 #' flow_mapper(file = system.file("extdata", "testELEV.dbf", package = "LITAP"),
-#'            out_folder = "./testELEV/", nrow = 150, ncol = 150)
+#'            out_folder = "./testELEV/", nrow = 90, ncol = 90)
 #'
 #' # Then run form_mapper()
 #' form_mapper(folder = "./testELEV/", grid = 5)

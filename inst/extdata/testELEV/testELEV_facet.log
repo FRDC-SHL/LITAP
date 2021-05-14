@@ -1,0 +1,17 @@
+Run options:
+
+  Input folder = /home/steffi/Projects/Business/LandmapR/LITAP/inst/extdata/testELEV
+  arule file =  /home/steffi/Projects/Business/LandmapR/LITAP/inst/extdata/arule.dbf
+  crule file = /home/steffi/Projects/Business/LandmapR/LITAP/inst/extdata/crule.dbf
+  n_remove = 9
+  Procedure = lsm
+
+
+Run started: 2021-05-14 12:04:43
+
+Started calculating fuzzy attributes at: 2021-05-14 12:04:43
+  Total time: 0
+Started calculating classes at: 2021-05-14 12:04:43
+  Total time: 0
+
+Total run time: 0 min

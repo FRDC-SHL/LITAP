@@ -89,19 +89,19 @@ library(LITAP)
 First, specify the dem file and the number of rows and columns:
 
 ```{r, eval = FALSE}
-flow_mapper(file = "testELEV.dbf", nrow = 150, ncol = 150)
+flow_mapper(file = "testELEV.dbf", nrow = 90, ncol = 90)
 ```
 
 Can also specify pit removal parameters:
 
 ```{r, eval = FALSE}
-flow_mapper(file = "testELEV.dbf", nrow = 150, ncol = 150, 
+flow_mapper(file = "testELEV.dbf", nrow = 90, ncol = 90, 
              max_area = 5, max_depth = 0.2)
 ```
 
 As well as the location of output files:
 ```{r}
-flow_mapper(file = "testELEV.dbf", nrow = 150, ncol = 150, out_folder = "./Output/")
+flow_mapper(file = "testELEV.dbf", nrow = 90, ncol = 90, out_folder = "./Output/")
 ```
 
 ## Basic Usage: `form_mapper()`

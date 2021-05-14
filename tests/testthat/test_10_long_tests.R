@@ -3,7 +3,7 @@ test_that("flow_mapper()", {
   expect_message(flow_mapper(file = system.file("extdata", "testELEV.dbf",
                                                 package = "LITAP"),
                              out_folder = "./test_long/",
-                             nrow = 150, ncol = 150, report = FALSE)) %>%
+                             nrow = 90, ncol = 90, report = FALSE)) %>%
     expect_message("CALCULATING WATERSHEDS") %>%
     expect_message("REMOVING INITIAL PITS") %>%
     expect_message("CALCULATING POND \\(GLOBAL\\) WATERSHEDS") %>%

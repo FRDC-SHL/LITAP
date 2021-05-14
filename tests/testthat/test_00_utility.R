@@ -127,7 +127,7 @@ test_that("merge_flow_form() works as expected", {
   expect_silent(t <- merge_flow_form(folder = dir)) %>%
     expect_s3_class("data.frame")
 
-  expect_gt(nrow(t), 10000)
+  expect_gt(nrow(t), 5000)
   expect_gt(ncol(t), 50)
 
   expect_false(any(stringr::str_detect(names(t), "\\.x|\\.y")))

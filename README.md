@@ -86,20 +86,20 @@ library(LITAP)
 First, specify the dem file and the number of rows and columns:
 
 ``` r
-flow_mapper(file = "testELEV.dbf", nrow = 150, ncol = 150)
+flow_mapper(file = "testELEV.dbf", nrow = 90, ncol = 90)
 ```
 
 Can also specify pit removal parameters:
 
 ``` r
-flow_mapper(file = "testELEV.dbf", nrow = 150, ncol = 150, 
+flow_mapper(file = "testELEV.dbf", nrow = 90, ncol = 90, 
              max_area = 5, max_depth = 0.2)
 ```
 
 As well as the location of output files:
 
 ``` r
-flow_mapper(file = "testELEV.dbf", nrow = 150, ncol = 150, out_folder = "./Output/")
+flow_mapper(file = "testELEV.dbf", nrow = 90, ncol = 90, out_folder = "./Output/")
 ```
 
     ## CALCULATING DIRECTIONS
@@ -124,7 +124,7 @@ flow_mapper(file = "testELEV.dbf", nrow = 150, ncol = 150, out_folder = "./Outpu
 
     ## CREATING REPORT
 
-    ## Run took: 0.49 min
+    ## Run took: 0.2 min
 
 ## Basic Usage: `form_mapper()`
 
@@ -145,7 +145,7 @@ form_mapper(folder = "./Output/", grid = 5)
 
     ## CALCULATING SLOPE LENGTH
 
-    ## Run took: 0.23 min
+    ## Run took: 0.1 min
 
 Optionally, users can also define channels and ridges according to the
 number of up-/down-slope cells that flow through the cell in question.

@@ -1,5 +1,12 @@
 suppressMessages(f <- load_file(system.file("extdata", "testELEV.dbf", package = "LITAP"),
-                                nrow = 150, ncol = 150))
+                                nrow = 90, ncol = 90))
+
+sub_dem <- function(dem, s) {
+  dem %>%
+    dplyr::slice(s) %>%
+    dplyr::mutate(dplyr::across(where(is.numeric), round, digits = 5))
+}
+
 
 test_that("Sub-functions", {
   # Directions
