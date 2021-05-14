@@ -1,10 +1,10 @@
 ---
-title: "Mapping flow: Getting Started"
+title: "Getting Started with mapping flow"
 author: "Steffi LaZerte"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{LITAP}
+  %\VignetteIndexEntry{Getting Started with mapping flow}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -162,6 +162,7 @@ Remove pits which are smaller than the maximum area and depth (and which are not
 
 
 ```{r, include = FALSE}
+unlink("./testELEV.dbf")
 unlink("./testELEV/", recursive = TRUE)
 unlink("./Output/", recursive = TRUE)
 ```

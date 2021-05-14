@@ -38,7 +38,7 @@ library(LITAP)
 
 # Save output to working directory
 flow_mapper(system.file("extdata", "testELEV.dbf", package = "LITAP"),
-            out_folder = "./testELEV/", nrow = 150, ncol = 150, clean = TRUE) 
+            out_folder = "./testELEV/", nrow = 90, ncol = 90, clean = TRUE) 
 ```
 
 We will load the rds file (R data files) for the final dems and stats file.
@@ -351,6 +351,6 @@ if(pdf) cat("\\newpage")
 ```
 
 ```{r, include = FALSE}
-unlink("./testELEV")
+unlink("./testELEV", recursive = TRUE)
 ```
 
