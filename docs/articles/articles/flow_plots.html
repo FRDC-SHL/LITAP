@@ -117,7 +117,7 @@
 <pre><code>## REMOVING INVERTED INITIAL PITS</code></pre>
 <pre><code>## SAVING OUTPUT</code></pre>
 <pre><code>## CREATING REPORT</code></pre>
-<pre><code>## Run took: 0.21 min</code></pre>
+<pre><code>## Run took: 0.22 min</code></pre>
 <p>We will load the rds file (R data files) for the final dems and stats file.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">dem</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span><span class="op">(</span><span class="st">"./testELEV/flow/dem_fill.rds"</span><span class="op">)</span>
@@ -214,7 +214,7 @@
 <p>You can also highlight watersheds</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../../reference/flow_plot.html">flow_plot</a></span><span class="op">(</span>db <span class="op">=</span> <span class="va">dem</span>, type <span class="op">=</span> <span class="st">"elevation"</span>, shed <span class="op">=</span> <span class="cn">TRUE</span>, shed_type <span class="op">=</span> <span class="st">"initial"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Initial Watersheds"</span><span class="op">)</span></code></pre></div>
+  <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Initial Watersheds"</span><span class="op">)</span></code></pre></div>
 <p><img src="flow_plots_files/figure-html/unnamed-chunk-30-1.png" width="90%"></p>
 <div id="watershed-pits" class="section level3">
 <h3 class="hasAnchor">

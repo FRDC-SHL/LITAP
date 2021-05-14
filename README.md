@@ -21,24 +21,12 @@ surficial hydrology, soil erosion, landscape zoning, hydrologic response
 units and buffer zone delineation.
 
 LITAP is a project funded by Agriculture and Agri-Food Canada and
-directed by [Dr. Li,
-Sheng](https://profils-profiles.science.gc.ca/en/profile/sheng-li-phd).
+directed by [Dr. Sheng
+Li](https://profils-profiles.science.gc.ca/en/profile/sheng-li-phd).
 
 See articles for new features specific to LITAP (coming soon)!
 
-LITAP is founded on R. A. (Bob) MacMillan’s LandMapR suite of programs
-and is extended to feature new parameters and methodology. This project
-is actively underdevelopment and we plan to add more features to support
-modelling of surficial hydrology, soil erosion, landscape zoning,
-hydrologic response units and buffer zone delineation.
-
-LITAP is a project funded by Agrifood and Agriculture Canada and
-directed by [Dr. Li,
-Sheng](https://profils-profiles.science.gc.ca/en/profile/sheng-li-phd).
-
-See this article for new features specific to LITAP (coming soon)!
-
-Currently LITAP includes functions
+Currently LITAP includes major functions
 
 -   `flow_mapper()` - based on FlowMapR
 -   `form_mapper()` - based on FormMapR
@@ -46,7 +34,7 @@ Currently LITAP includes functions
 -   `wepp_mapper()` - based on WeppMapR
 
 See the companion website for more details:
-<http://FRDC-SHL.github.io/LITAP/>
+<https://FRDC-SHL.github.io/LITAP/>
 
 ## Installation
 
