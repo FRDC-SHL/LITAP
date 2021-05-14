@@ -11,9 +11,6 @@ slope_gc(db, grid = 1)
 
 \item{grid}{Numeric. Grid size for the original dem}
 }
-\value{
-
-}
 \description{
 Computes row (east/west) and column (north/south) slope gradients and
 curvatures. Also calculates hill slopes as points when slope gradients switch

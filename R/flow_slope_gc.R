@@ -4,6 +4,7 @@
 #' curvatures. Also calculates hill slopes as points when slope gradients switch
 #' directions
 #'
+#' @details
 #' Assume the following cells, and the calculations on elevation for focal point
 #' 5:
 #'
@@ -54,8 +55,6 @@
 #'
 #' @param db Dataframe dem
 #' @param grid Numeric. Grid size for the original dem
-#'
-#' @return
 #'
 #' @examples
 #'

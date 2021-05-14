@@ -12,8 +12,9 @@ vignette: >
 ```{r, include = FALSE}
 # rmarkdown::pdf_document
 # rmarkdown::html_vignette
-knitr::opts_chunk$set(fig.width = 15, fig.height = 10, tidy = TRUE, eval = TRUE)
-file.copy(system.file("extdata", "testELEV.dbf", package = "LITAP"), ".")
+knitr::opts_chunk$set(fig.width = 15, fig.height = 10, eval = TRUE)
+file.copy(system.file("extdata", "testELEV.dbf", package = "LITAP"), ".", 
+          overwrite = TRUE)
 ```
 
 <style>
