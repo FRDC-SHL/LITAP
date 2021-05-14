@@ -24,7 +24,7 @@ LITAP is a project funded by Agriculture and Agri-Food Canada and
 directed by [Dr. Li,
 Sheng](https://profils-profiles.science.gc.ca/en/profile/sheng-li-phd).
 
-See this article for new features specific to LITAP (coming soon)!
+See articles for new features specific to LITAP (coming soon)!
 
 LITAP is founded on R. A. (Bob) MacMillan’s LandMapR suite of programs
 and is extended to feature new parameters and methodology. This project
@@ -46,7 +46,7 @@ Currently LITAP includes functions
 -   `wepp_mapper()` - based on WeppMapR
 
 See the companion website for more details:
-<http://steffilazerte.github.io/LITAP_docs/>
+<http://FRDC-SHL.github.io/LITAP/>
 
 ## Installation
 
@@ -54,7 +54,7 @@ Use the `remotes` package to directly install R packages from github:
 
 ``` r
 install.packages("remotes") # If not already installed
-remotes::install_github("steffilazerte/LITAP") 
+remotes::install_github("FRDC-SHL/LITAP") 
 ```
 
 ## Example files
@@ -81,7 +81,7 @@ library(LITAP)
 
     ## LITAP v0.4.1.9000
     ## LITAP is still in development; Help us by submitting bugs/feature requests: 
-    ## http://github.com/steffilazerte/LITAP/issues
+    ## http://github.com/FRDC-SHL/LITAP/issues
 
 First, specify the dem file and the number of rows and columns:
 
@@ -223,5 +223,5 @@ folders “flow”, “form”, “facet” and “wepp”. Backup files (for
 html report summarizing the `flow_mapper()` run is included in the
 output folder (`testELEV_final_report.html`).
 
-See the [LITAP website](http://steffilazerte.github.io/LITAP_docs/)
-hosted on github for more details and examples
+See the [LITAP website](http://FRDC-SHL.github.io/LITAP/) for more
+details and examples

@@ -2,7 +2,7 @@
   packageStartupMessage("LITAP v", utils::packageVersion("LITAP"), "\n",
                         "LITAP is still in development; Help us by submitting ",
                         "bugs/feature requests: \n",
-                        "http://github.com/steffilazerte/LITAP/issues")
+                        "http://github.com/FRDC-SHL/LITAP/issues")
 }
 
 
