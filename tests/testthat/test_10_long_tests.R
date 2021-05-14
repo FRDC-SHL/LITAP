@@ -1,5 +1,6 @@
 test_that("flow_mapper()", {
   skip_on_cran()
+  set.seed(4444)
   expect_message(flow_mapper(file = system.file("extdata", "testELEV.dbf",
                                                 package = "LITAP"),
                              out_folder = "./test_long/",
@@ -19,6 +20,7 @@ test_that("flow_mapper()", {
 
 test_that("form_mapper()", {
   skip_on_cran()
+  set.seed(4444)
   expect_message(form_mapper(folder = "./test_long/", grid = 5)) %>%
     expect_message("CALCULATING FORM") %>%
     expect_message("CALCULATING WETNESS INDICES") %>%
@@ -33,20 +35,11 @@ test_that("flow_mapper() output", {
   set.seed(4444)
   s <- sample(1:8400, size = 500)
 
-  step <- "flow"
-
-  for(i in list.files(glue::glue("./test_long/{step}/"), pattern = "*.rds",
+  for(i in list.files("./test_long/flow/", pattern = "*.rds",
                       full.names = TRUE, recursive = TRUE)){
-
-    # Subsample dem files (HUGE!)
-    if(stringr::str_detect(i, "dem_[a-z]+.rds$")) {
-      readRDS(i) %>%
-        dplyr::slice(s) %>%
-        saveRDS(i)
-    }
-
-    p <- file.path(glue::glue("./test_long/{step}/"), basename(i))
-    if(interactive()) message(p) else expect_snapshot_file(path = p)
+    readRDS(i) %>%
+      sub_dem(s) %>%
+      expect_snapshot_value(style = "json2")
   }
 })
 
@@ -56,20 +49,13 @@ test_that("form_mapper() output", {
   set.seed(4444)
   s <- sample(1:8400, size = 500)
 
-  step <- "form"
-
-  for(i in list.files(glue::glue("./test_long/{step}/"),
+  for(i in list.files("./test_long/form/",
                       pattern = "(form|length|relz|weti)[.]*.rds",
                       full.names = TRUE, recursive = TRUE)){
 
-    # Subsample dem files (HUGE!)
-    if(stringr::str_detect(i, "dem_[a-z]+.rds$")) {
-      readRDS(i) %>%
-        dplyr::slice(s) %>%
-        saveRDS(i)
-    }
-
-    p <- file.path(glue::glue("./test_long/{step}/"), basename(i))
-    if(interactive()) message(p) else expect_snapshot_file(path = p)
+    readRDS(i) %>%
+      sub_dem(s) %>%
+      dplyr::select(-dplyr::any_of(c("cell_t", "count_d", "count_o", "elev_sum"))) %>%
+      expect_snapshot_value(style = "json2")
   }
 })
