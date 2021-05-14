@@ -10,6 +10,7 @@ expect_values <- function(d) {
 
 
 
+
 # Load dem files ----------------------------------------------------------
 test_that("DEM files load", {
   file <- system.file("extdata", "testELEV.dbf", package = "LITAP")
@@ -30,8 +31,10 @@ test_that("DEM files load", {
 test_that("Grid files load and prep", {
   skip_on_cran()
   skip_on_ci()
-  file <- "../../../FES4 Input files/FES04_9n3_Original_SurferGrid.grd"
-  expect_silent(d_raw <<- load_raster(file))
+  file <- "input_files/FES04_9n3_Original_SurferGrid.grd"
+  d_raw <- load_raster("input_files/FES04_9n3_Original_SurferGrid.grd")
+
+  expect_silent(d_raw <- load_raster(file))
   expect_equal(nrow(d_raw), 434421)
   expect_equivalent(min(d_raw$elev), 204.5368, tolerance = 0.00001)
   expect_equivalent(max(d_raw$elev), 233.1556, tolerance = 0.00001)
@@ -43,7 +46,9 @@ test_that("Grid files load and prep", {
 test_that("AscII Grid files load and prep", {
   skip_on_cran()
   skip_on_ci()
-  file <- "../../../FES4 Input files/FES04_SuferGridAscII.grd"
+  file <- "input_files/FES04_SuferGridAscII.grd"
+  d_raw <- load_raster("input_files/FES04_9n3_Original_SurferGrid.grd")
+
   # Weird warning only produced in test_that env ?
   suppressWarnings(expect_error(expect_message(d <- load_raster(file), NA), NA))
   expect_equivalent(d_raw, d, tolerance = 0.00001)
@@ -56,13 +61,15 @@ test_that("AscII Grid files load and prep", {
 test_that("ArcGis files load", {
   skip_on_cran()
   skip_on_ci()
-  file <- "../../../FES4 Input files/FES04_ARCGRID"
+  file <- "input_files/FES04_ARCGRID"
   expect_silent(d <- load_raster(file))
+  d_raw <- load_raster("input_files/FES04_9n3_Original_SurferGrid.grd")
+
   expect_equivalent(d_raw, d, tolerance = 0.00001)  ## PROBLEM!
   expect_silent(d <- load_file(file, verbose = FALSE))
   expect_values(d)
 
-  file <- "../../../FES4 Input files/FES04_ArcAscIIGrid.asc"
+  file <- "input_files/FES04_ArcAscIIGrid.asc"
   expect_silent(d <- load_raster(file))
   expect_equivalent(d_raw, d, tolerance = 0.00001)
   expect_silent(d <- load_file(file, verbose = FALSE))
@@ -72,7 +79,9 @@ test_that("ArcGis files load", {
 test_that("GeoTif files load", {
   skip_on_cran()
   skip_on_ci()
-  file <- "../../../FES4 Input files/FES04_GeoTiff.tif"
+  file <- "input_files/FES04_GeoTiff.tif"
+  d_raw <- load_raster("input_files/FES04_9n3_Original_SurferGrid.grd")
+
   expect_silent(d <- load_raster(file))
   expect_equivalent(d_raw, d, tolerance = 0.00001)
   expect_silent(d <- load_file(file, verbose = FALSE))
@@ -82,7 +91,9 @@ test_that("GeoTif files load", {
 test_that("Float Grid files laod", {
   skip_on_cran()
   skip_on_ci()
-  file <- "../../../FES4 Input files/FloatGrid.flt"
+  file <- "input_files/FloatGrid.flt"
+  d_raw <- load_raster("input_files/FES04_9n3_Original_SurferGrid.grd")
+
   expect_silent(d <- load_raster(file))
   expect_equivalent(d_raw, d, tolerance = 0.00001)
   expect_silent(d <- load_file(file, verbose = FALSE))
@@ -92,7 +103,9 @@ test_that("Float Grid files laod", {
 test_that("Text files load", {
   skip_on_cran()
   skip_on_ci()
-  file <- "../../../FES4 Input files/FES04_XYZGrid.dat"
+  file <- "input_files/FES04_XYZGrid.dat"
+  d_raw <- load_raster("input_files/FES04_9n3_Original_SurferGrid.grd")
+
   expect_silent(d <- load_txt(file))
   expect_equivalent(d_raw,
                     dplyr::arrange(d, dplyr::desc(y), x),
@@ -100,7 +113,7 @@ test_that("Text files load", {
   expect_silent(d <- load_file(file, verbose = FALSE))
   expect_values(d)
 
-  file <- "../../../FES4 Input files/FES04_XYZ.dat"
+  file <- "input_files/FES04_XYZ.dat"
   expect_silent(d <- load_txt(file))
   expect_equivalent(d_raw, dplyr::arrange(d, dplyr::desc(y), x),
                     tolerance = 0.00001)
@@ -111,7 +124,9 @@ test_that("Text files load", {
 test_that("Excel files load", {
   skip_on_cran()
   skip_on_ci()
-  file <- "../../../FES4 Input files/FES04_XYZ.xlsx"
+  file <- "input_files/FES04_XYZ.xlsx"
+  d_raw <- load_raster("input_files/FES04_9n3_Original_SurferGrid.grd")
+
   expect_error(d <- load_excel(file), NA)
   expect_equivalent(d_raw, dplyr::arrange(d, dplyr::desc(y), x),
                     tolerance = 0.00001)
