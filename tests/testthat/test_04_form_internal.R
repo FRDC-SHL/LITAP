@@ -74,7 +74,7 @@ test_that("Sub-functions", {
 
   # Relief
   expect_silent(db_relz <- calc_relz(db, idb))
-  expect_snapshot_output(d)
+  expect_snapshot_output(db_relz)
 
   # Length
   expect_silent(d <- calc_length(db, db_relz))

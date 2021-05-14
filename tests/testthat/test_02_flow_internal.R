@@ -9,52 +9,59 @@ sub_dem <- function(dem, s) {
 
 
 test_that("Sub-functions", {
+
+  set.seed(777)
+  s <- sample(1:8400, size = 500)
+
   # Directions
-  expect_message(d <- calc_ddir2(f), NA)
-  expect_known_output(as.data.frame(d)[150:500,],
-                      "./ref/test_calc_ddir", print = TRUE)
+  expect_silent(d <- calc_ddir2(f)) %>%
+    sub_dem(s) %>%
+    expect_snapshot_value(style = "json2")
 
   # Watersheds"
-  expect_silent(d <- calc_shed4(d))
-  expect_known_output(as.data.frame(d)[150:500,],
-                      "./ref/test_calc_shed", print = TRUE)
+  expect_silent(d <- calc_shed4(d)) %>%
+    sub_dem(s) %>%
+    expect_snapshot_value(style = "json2")
 
   #Initial Pit Removal
-  expect_silent(d_local <- first_pitr1(d, max_area = 10, max_depth = 5))
-  expect_known_output(as.data.frame(d)[150:500,],
-                      "./ref/test_local", print = TRUE)
+  expect_silent(d_local <- first_pitr1(d, max_area = 10, max_depth = 5)) %>%
+    sub_dem(s) %>%
+    expect_snapshot_value(style = "json2")
 
   # Pond Pit Removal
   expect_silent(d_pond <- second_pitr1(d_local))
-  expect_known_output(as.data.frame(d)[150:500,],
-                      "./ref/test_pond", print = TRUE)
-  d_local <- dplyr::left_join(d_local, dplyr::select(d_pond$db, local_shed, pond_shed) %>%
-                                dplyr::distinct(), by = "local_shed")
+  expect_snapshot_value(sub_dem(d_pond$db, s), style = "json2")
+  expect_snapshot_value(sub_dem(d_pond$stats, s), style = "json2")
+
+  d_local <- dplyr::left_join(d_local,
+                              dplyr::select(d_pond$db, local_shed, pond_shed) %>%
+                                dplyr::distinct(),
+                              by = "local_shed")
 
   # Fill Pit Removal
   expect_silent(d_fill <- third_pitr1(d_local))
-  expect_known_output(as.data.frame(d)[150:500,],
-                      "./ref/test_fill", print = TRUE)
+  expect_snapshot_value(sub_dem(d_fill$db, s), style = "json2")
+  expect_snapshot_value(sub_dem(d_fill$stats, s), style = "json2")
 
   # Inversion
-  expect_silent(d <- invert(f))
-  expect_known_output(as.data.frame(d)[150:500,],
-                      "./ref/test_iinitial", print = TRUE)
+  expect_silent(d <- invert(f)) %>%
+    sub_dem(s) %>%
+    expect_snapshot_value(style = "json2")
 
   # Inverted directions
-  expect_message(d <- calc_ddir2(d), NA)
-  expect_known_output(as.data.frame(d)[150:500,],
-                      "./ref/test_iddir", print = TRUE)
+  expect_silent(d <- calc_ddir2(d)) %>%
+    sub_dem(s) %>%
+    expect_snapshot_value(style = "json2")
 
   # Inverted Watersheds
-  expect_silent(d <- calc_shed4(d))
-  expect_known_output(as.data.frame(d)[150:500,],
-                      "./ref/test_ished", print = TRUE)
+  expect_silent(d <- calc_shed4(d)) %>%
+    sub_dem(s) %>%
+    expect_snapshot_value(style = "json2")
 
   # Inverted Initial Pit Removal
-  expect_silent(d <- first_pitr1(d, max_area = 10, max_depth = 5))
-  expect_known_output(as.data.frame(d)[150:500,],
-                      "./ref/test_ilocal", print = TRUE)
+  expect_silent(d <- first_pitr1(d, max_area = 10, max_depth = 5)) %>%
+    sub_dem(s) %>%
+    expect_snapshot_value(style = "json2")
 })
 
 test_that("elev_diff calculated correctly", {

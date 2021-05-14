@@ -15,25 +15,61 @@ test_that("flow_mapper()", {
     expect_message("SAVING OUTPUT") %>%
     expect_message("SKIPPING CREATING REPORT") %>%
     expect_message("Run took:")
-
-  for(i in list.files("./test_long/", pattern = ".rds",
-                      recursive = TRUE)){
-    expect_snapshot_file(path = file.path("./test_long", i))
-  }
 })
-
 
 test_that("form_mapper()", {
   skip_on_cran()
-  expect_message(form_mapper(folder = "./test_long", grid = 5)) %>%
+  expect_message(form_mapper(folder = "./test_long/", grid = 5)) %>%
     expect_message("CALCULATING FORM") %>%
     expect_message("CALCULATING WETNESS INDICES") %>%
     expect_message("CALCULATING RELIEF DERIVITIVES") %>%
     expect_message("CALCULATING SLOPE LENGTH") %>%
     expect_message("Run took:")
+})
 
-  for(i in list.files("./test_long", pattern = "(form|length|relz|weti)[.]*.rds",
-                      recursive = TRUE)){
-    expect_snapshot_file(path = file.path("./test_long", i))
+test_that("flow_mapper() output", {
+  skip_on_cran()
+
+  set.seed(4444)
+  s <- sample(1:8400, size = 500)
+
+  step <- "flow"
+
+  for(i in list.files(glue::glue("./test_long/{step}/"), pattern = "*.rds",
+                      full.names = TRUE, recursive = TRUE)){
+
+    # Subsample dem files (HUGE!)
+    if(stringr::str_detect(i, "dem_[a-z]+.rds$")) {
+      readRDS(i) %>%
+        dplyr::slice(s) %>%
+        saveRDS(i)
     }
+
+    p <- file.path(glue::glue("./test_long/{step}/"), basename(i))
+    if(interactive()) message(p) else expect_snapshot_file(path = p)
+  }
+})
+
+test_that("form_mapper() output", {
+  skip_on_cran()
+
+  set.seed(4444)
+  s <- sample(1:8400, size = 500)
+
+  step <- "form"
+
+  for(i in list.files(glue::glue("./test_long/{step}/"),
+                      pattern = "(form|length|relz|weti)[.]*.rds",
+                      full.names = TRUE, recursive = TRUE)){
+
+    # Subsample dem files (HUGE!)
+    if(stringr::str_detect(i, "dem_[a-z]+.rds$")) {
+      readRDS(i) %>%
+        dplyr::slice(s) %>%
+        saveRDS(i)
+    }
+
+    p <- file.path(glue::glue("./test_long/{step}/"), basename(i))
+    if(interactive()) message(p) else expect_snapshot_file(path = p)
+  }
 })
