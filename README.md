@@ -1,6 +1,11 @@
 LITAP
 ================
 
+<!-- badges: start -->
+
+[![R-CMD-check](https://github.com/FRDC-SHL/LITAP/workflows/R-CMD-check/badge.svg)](https://github.com/FRDC-SHL/LITAP/actions)
+<!-- badges: end -->
+
 **Landscape Integrated Terrain Analysis Package (LITAP)**
 
 LITAP is a software package aimed at providing open access code for

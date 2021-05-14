@@ -15,3 +15,4 @@ FES4 Input files
 ^doc$
 ^Meta$
 ^RELEASE.R$
+^\.github$

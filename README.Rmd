@@ -3,8 +3,12 @@ title: "LITAP"
 output: github_document
 ---
 
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/FRDC-SHL/LITAP/workflows/R-CMD-check/badge.svg)](https://github.com/FRDC-SHL/LITAP/actions)
+<!-- badges: end -->
+
 ```{r, include = FALSE}
-knitr::opts_chunk$set(fig.width = 15, fig.height = 10, tidy = TRUE, eval = TRUE)
+knitr::opts_chunk$set(fig.width = 15, fig.height = 10, eval = TRUE)
 ```
 
 __Landscape Integrated Terrain Analysis Package (LITAP)__
