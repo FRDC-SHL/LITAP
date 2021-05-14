@@ -1,9 +1,37 @@
 LITAP
 ================
 
-**Landscape Integrated Terrain Analysis Package (LITAP)** for the
-analysis of waterflow based on elevation data and pit removals. Based on
-R. A. (Bob) MacMillan’s LandMapR suite of programs.
+**Landscape Integrated Terrain Analysis Package (LITAP)**
+
+LITAP is a software package aimed at providing open access code for
+terrain analysis and landscape and hydrology models built on terrain
+attributes. A major component of LITAP is founded on R. A. (Bob)
+MacMillan’s LandMapR suite of programs for flow topology and landform
+segmentation analyses with extended new parameters and methodologies
+developed by Drs. Sheng Li and Steffi LaZerte. Another component of
+LITAP focuses on the calculations and uses of directional terrain
+attributes developed by Dr. Sheng Li. This project is actively under
+development and we plan to add more features to support modelling of
+surficial hydrology, soil erosion, landscape zoning, hydrologic response
+units and buffer zone delineation.
+
+LITAP is a project funded by Agriculture and Agri-Food Canada and
+directed by [Dr. Li,
+Sheng](https://profils-profiles.science.gc.ca/en/profile/sheng-li-phd).
+
+See this article for new features specific to LITAP (coming soon)!
+
+LITAP is founded on R. A. (Bob) MacMillan’s LandMapR suite of programs
+and is extended to feature new parameters and methodology. This project
+is actively underdevelopment and we plan to add more features to support
+modelling of surficial hydrology, soil erosion, landscape zoning,
+hydrologic response units and buffer zone delineation.
+
+LITAP is a project funded by Agrifood and Agriculture Canada and
+directed by [Dr. Li,
+Sheng](https://profils-profiles.science.gc.ca/en/profile/sheng-li-phd).
+
+See this article for new features specific to LITAP (coming soon)!
 
 Currently LITAP includes functions
 
@@ -13,7 +41,7 @@ Currently LITAP includes functions
 -   `wepp_mapper()` - based on WeppMapR
 
 See the companion website for more details:
-<http://steffilazerte.github.io/LITAP>
+<http://steffilazerte.github.io/LITAP_docs/>
 
 ## Installation
 
@@ -46,8 +74,7 @@ Load the package:
 library(LITAP)
 ```
 
-    ## LITAP v0.4.0
-    ## Please note that 'LITAP' is based on Bob MacMillan's LandMapper suite of programs.
+    ## LITAP v0.4.1.9000
     ## LITAP is still in development; Help us by submitting bugs/feature requests: 
     ## http://github.com/steffilazerte/LITAP/issues
 
@@ -191,5 +218,5 @@ folders “flow”, “form”, “facet” and “wepp”. Backup files (for
 html report summarizing the `flow_mapper()` run is included in the
 output folder (`testELEV_final_report.html`).
 
-See the [LITAP website](http://steffilazerte.github.io/LITAP_docs/) hosted on
-github for more details and examples
+See the [LITAP website](http://steffilazerte.github.io/LITAP_docs/)
+hosted on github for more details and examples

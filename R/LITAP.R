@@ -1,7 +1,5 @@
 .onAttach <- function(libname, pkgname) {
   packageStartupMessage("LITAP v", utils::packageVersion("LITAP"), "\n",
-                        "Please note that 'LITAP' is based on Bob MacMillan's ",
-                        "LandMapper suite of programs.\n",
                         "LITAP is still in development; Help us by submitting ",
                         "bugs/feature requests: \n",
                         "http://github.com/steffilazerte/LITAP/issues")
