@@ -43,7 +43,7 @@
 #'  - hill_r_n: Number of hillslopes in that row. It goes from 1 to whatever it
 #'  ends. Hillslope no changes when it goes from downslope to upslope or from
 #'  upslope to downslope (SGRE changes sign)
-#'  - hill_r_dir: Direction the slope is facing, east facing as 1 and west
+#'  - hill_r_dir: Direction the slope is facing, east facing as 2 and west
 #'  facing as 4, all cells with the same hillslope no. have same hillslope
 #'  direction
 #'  - hill_r_cell: Order no of the cell in the hillslope, starts from 1 to how
@@ -52,6 +52,10 @@
 #'  - hill_c_n: Same as for row, changes when SGCN changes sign
 #'  - hill_c_dir: Same as for row, north facing as 1 and south facing as 3
 #'  - hill_c_cell: Same as for row.
+#'
+#'  Directions:
+#'
+#'  N (1) -> E (2) -> S (3) -> W (4)
 #'
 #' @param db Dataframe dem
 #' @param grid Numeric. Grid size for the original dem
@@ -126,7 +130,7 @@ slope_gc <- function(db, grid = 1) {
   # Hillslope records
   db_slopes %>%
     # Get east/west or north/south facing
-    dplyr::mutate(hill_r_dir = dplyr::if_else(sgre > 0, 1, 4),      # 1 = east, 4 = west
+    dplyr::mutate(hill_r_dir = dplyr::if_else(sgre > 0, 2, 4),      # 2 = east, 4 = west
                   hill_c_dir = dplyr::if_else(sgcn > 0, 1, 3)) %>%  # 1 = north, 3 = south
 
     # Label east/west hillslopes
