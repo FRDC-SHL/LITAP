@@ -326,11 +326,11 @@ load_extra <- function(file, type) {
   extra
 }
 
-format_rule <- function(rule, type) {
+format_rule <- function(rule, type, quiet) {
   if(!type %in% c("arule", "crule")) {
     stop("'type' must be either 'arule' or 'crule'", call. = FALSE)
   }
-  message("Formatting ", type, " file")
+  if(!quiet) message("Formatting ", type, " file")
   rule <- dplyr::mutate_if(rule, ~!is.numeric(.), tolower)
 
   msg <- vector()
@@ -345,7 +345,7 @@ format_rule <- function(rule, type) {
         attr_in,
         c("slope" = "slope_pct")))
   }
-  message(paste0(msg, collapse = "\n"))
+  if(!quiet) message(paste0(msg, collapse = "\n"))
 
   if(!"zone" %in% names(rule)) rule <- dplyr::mutate(rule, zone = 0)
   rule
