@@ -193,8 +193,8 @@ get_previous <- function(folder, step, where = "backup", type = "dem") {
   if(!dir.exists(folder)) stop("This folder doesn't exist: ", folder, call. = FALSE)
 
   f <- list.files(file.path(folder, where), pattern = step,
-                  recursive = TRUE, full.names = TRUE) %>%
-    stringr::str_subset(type)
+                  recursive = TRUE, full.names = TRUE)
+  f <- f[stringr::str_detect(basename(f), type)]
 
   if(length(f) > 1) stop("There is more than one eligable ", step, " for type ",
                          type, "\n(",
