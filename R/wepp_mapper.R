@@ -32,7 +32,6 @@
 wepp_mapper <- function(folder, grid,
                         chan_length = 200,
                         upslope_threshold = 300,
-                        out_format = "rds",
                         clean = FALSE,
                         resume = NULL, end = NULL,
                         log = TRUE,
@@ -51,6 +50,9 @@ wepp_mapper <- function(folder, grid,
                       "new_ups_final")
 
   check_resume(resume, end, resume_options)
+
+  # Get out format
+  out_format <- get_format(folder, where = "flow")
 
   # Get backup fill dem
   db <- get_previous(folder, step = "fill", where = "flow")

@@ -10,10 +10,6 @@ Details below)}
 \item{end}{Character. If ending a run after a particular step, which step
 (see Details below)}
 
-\item{out_format}{Character. What format should the data be output as? "csv"
-for Comma-separated values, "dbf" for dbf database files, or "rds" for R
-data format.}
-
 \item{clean}{Logical. Remove all output files from previous runs in this
 folder?}
 

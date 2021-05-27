@@ -11,7 +11,6 @@ facet_mapper(
   n_remove = 9,
   procedure = "lsm",
   zone = NULL,
-  out_format = "rds",
   clean = FALSE,
   resume = NULL,
   end = NULL,
@@ -39,10 +38,6 @@ DSS program).}
 each seqno in the weti dem file, OR must be provided as an index file here.
 With a \code{zone} defined for each \code{seqno}. \code{zone} file can be either dem (.dem),
 Excel (.xlsx, .xls), or text (.txt, .csv, .dat)}
-
-\item{out_format}{Character. What format should the data be output as? "csv"
-for Comma-separated values, "dbf" for dbf database files, or "rds" for R
-data format.}
 
 \item{clean}{Logical. Remove all output files from previous runs in this
 folder?}

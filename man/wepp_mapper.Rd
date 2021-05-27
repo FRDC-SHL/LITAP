@@ -9,7 +9,6 @@ wepp_mapper(
   grid,
   chan_length = 200,
   upslope_threshold = 300,
-  out_format = "rds",
   clean = FALSE,
   resume = NULL,
   end = NULL,
@@ -29,10 +28,6 @@ channels into segments}
 \item{upslope_threshold}{Numeric. Threshold of upslope cells to define
 channel cells. #' Cells with an upslope value larger than this are
 considered channel cells}
-
-\item{out_format}{Character. What format should the data be output as? "csv"
-for Comma-separated values, "dbf" for dbf database files, or "rds" for R
-data format.}
 
 \item{clean}{Logical. Remove all output files from previous runs in this
 folder?}

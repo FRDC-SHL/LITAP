@@ -3,11 +3,20 @@ save_basic <- function(data, name, locs, out_format, where) {
   name <- paste0(name, ".", out_format)
   if(stringr::str_detect(name, ".rds$")) readr::write_rds(data, file.path(file_out, name))
   if(stringr::str_detect(name, ".csv$")) readr::write_csv(data, file.path(file_out, name))
-  if(stringr::str_detect(name, ".dbf$")) foreign::write.dbf(data, file.path(file_out, name))
+  if(stringr::str_detect(name, ".dbf$")) {
+    if("profile" %in% names(data)) {
+      data <- dplyr::mutate(data, profile = as.character(profile))
+    }
+      foreign::write.dbf(as.data.frame(data), file.path(file_out, name))
+  }
 }
 
 save_output <- function(data, stats = NULL, name, locs, out_format, where,
                          add_db = NULL) {
+  # Remove lists to create flat files
+  lsts <- names(data)[sapply(data, is.list)]
+  data <- dplyr::select(data, -dplyr::all_of(lsts))
+
   if(!is.null(add_db)) {
     data <- dplyr::left_join(data, add_db, by = "seqno")
   }
@@ -29,7 +38,9 @@ save_shed <- function(file_out, obj, name, clean = FALSE){
 
   if(stringr::str_detect(name, ".rds$")) readr::write_rds(obj, file.path(file_out, name))
   if(stringr::str_detect(name, ".csv$")) readr::write_csv(obj, file.path(file_out, name))
-  if(stringr::str_detect(name, ".dbf$")) foreign::write.dbf(obj, file.path(file_out, name))
+  if(stringr::str_detect(name, ".dbf$")) {
+    foreign::write.dbf(as.data.frame(obj), file.path(file_out, name))
+  }
 }
 
 read_shed <- function(file_out, name){
@@ -163,12 +174,36 @@ get_previous <- function(folder, step, where, type = "dem") {
                          paste0(f, collapse = "\n"), ")", call. = FALSE)
   if(length(f) == 0) stop("There are no eligable ", step, " for type ", type, " files",
                           call. = FALSE)
-  r <- readr::read_rds(f) %>%
-    dplyr::select(-dplyr::contains("_buffer"))
 
-  if(any(class(r) == "list")) {
-    type <- dplyr::if_else(type == "dem", "db", type)
-    r <- r[[type]]
-  }
-  r
+  ext <- get_format(folder, where)
+
+  if(ext == "rds") r <- readr::read_rds(f)
+  if(ext == "csv") r <- readr::read_csv(f, col_types = readr::cols())
+  if(ext == "dbf") r <- foreign::read.dbf(f)
+
+  dplyr::select(r, -dplyr::contains("buffer"))
+}
+
+#' Guess format from previous files
+#'
+#' @param folder Location of Project
+#' @param where backup, Flow, Form, etc.
+#'
+#' @noRd
+get_format <- function(folder, where) {
+  if(!dir.exists(folder)) stop("This folder doesn't exist: ", folder, call. = FALSE)
+
+  ext <- list.files(file.path(folder, where), recursive = TRUE, full.names = TRUE) %>%
+    stringr::str_extract("[a-z]{3,4}$") %>%
+    unique()
+
+  if(length(ext) > 1) stop(
+    "There is more than one eligable output format ",
+    "for `", where, "`.\n",
+    "Consider re-running `flow_mapper()` with the argument `clean = TRUE`\n",
+    "(this will remove all files before starting)", call. = FALSE)
+  if(length(ext) == 0) stop("There are no eligable output formats. ",
+                          "Did the `", where, "` step complete successfully?",
+                          call. = FALSE)
+  ext
 }

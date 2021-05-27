@@ -38,11 +38,9 @@
 #' @export
 
 form_mapper <- function(folder, grid, str_val = 10000, ridge_val = 10000,
-                        out_format = "rds",
                         resume = NULL, end = NULL,
                         log = TRUE, clean = FALSE,
                         verbose = FALSE, quiet = FALSE) {
-
 
   # Messaging
   if(quiet) verbose <- FALSE
@@ -55,6 +53,9 @@ form_mapper <- function(folder, grid, str_val = 10000, ridge_val = 10000,
   check_grid(grid)
 
   announce("setup", quiet)
+
+  # Get out format
+  out_format <- get_format(folder, where = "flow")
 
   # Get backup fill dem
   db <- get_previous(folder, step = "fill", where = "flow") %>%

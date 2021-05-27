@@ -9,7 +9,6 @@ form_mapper(
   grid,
   str_val = 10000,
   ridge_val = 10000,
-  out_format = "rds",
   resume = NULL,
   end = NULL,
   log = TRUE,
@@ -26,10 +25,6 @@ form_mapper(
 \item{str_val}{Numeric. Definition of a stream (number of upslope cells)}
 
 \item{ridge_val}{Numeric. Definition of a ridge (number of downslope cells)}
-
-\item{out_format}{Character. What format should the data be output as? "csv"
-for Comma-separated values, "dbf" for dbf database files, or "rds" for R
-data format.}
 
 \item{resume}{Character. From which stage should the run be resumed? (see
 Details below)}
