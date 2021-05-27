@@ -17,7 +17,7 @@ arule_derive <- function(weti, relief, n_remove) {
                                    p25 = ~stats::quantile(., 0.25, na.rm = TRUE),
                                    p10 = ~stats::quantile(., 0.1, na.rm = TRUE))))
 
-  a <- arule_template() %>%
+  arule_template() %>%
     dplyr::mutate(b = c(big_or_min(perc$prof_p90, 0.1),
                         big_or_min(perc$prof_p10, -0.1),
                         0,

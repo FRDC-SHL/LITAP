@@ -82,7 +82,9 @@ fuzc_sum <- function(fuzzattr, crule) {
     dplyr::group_by(.data$zone, .data$f_name) %>%
     dplyr::summarize(data = suppressMessages(list(dplyr::bind_cols(data)))) %>%
     dplyr::ungroup() %>%
-    dplyr::mutate(data = purrr::map(data, rowSums, na.rm = TRUE)) %>%
+    dplyr::mutate(data = purrr::map(data, rowSums, na.rm = TRUE),
+                  f_name = factor(f_name, levels = crule_order)) %>%
+    dplyr::arrange(f_name) %>%
     tidyr::pivot_wider(names_from = f_name, values_from = data) %>%
     tidyr::unnest(cols = c(-"zone", dplyr::everything())) %>%
     dplyr::mutate(seqno = seqnos)
@@ -109,7 +111,8 @@ fuzc_max <- function(f) {
   }
 
   dplyr::mutate(temp,
-                max_facet = n[max_facet],
-                max_2nd_facet = n[max_2nd_facet]) %>%
+                max_facet_name = n[max_facet],
+                max_2nd_facet_name = n[max_2nd_facet]) %>%
     dplyr::bind_cols(f, .)
+
 }

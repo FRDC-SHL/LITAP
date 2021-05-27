@@ -66,7 +66,7 @@ FacetMapR by R. A. (Bob) MacMillan, LandMapper Environmental Solutions.
 }
 \details{
 Based on the technique described in Li et al. 2011, if no \code{arule} file is
-provided, the ARULE cutoffs are calulated from the \code{form_mapper()} dem
+provided, the ARULE cutoffs are calculated from the \code{form_mapper()} dem
 files. These A Rules are saved as \code{afile_derived.csv} in the \code{folder}
 provided.
 

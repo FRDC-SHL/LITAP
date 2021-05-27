@@ -22,7 +22,7 @@
 #'
 #' @details
 #'   Based on the technique described in Li et al. 2011, if no `arule` file is
-#'   provided, the ARULE cutoffs are calulated from the `form_mapper()` dem
+#'   provided, the ARULE cutoffs are calculated from the `form_mapper()` dem
 #'   files. These A Rules are saved as `afile_derived.csv` in the `folder`
 #'   provided.
 #'
@@ -183,7 +183,7 @@ facet_mapper <- function(folder, arule = NULL, crule, n_remove = 9,
   # Run start to log
   write_log("\nRun started: ", start, "\n", log = log_file)
 
-  # Facets ------------------------------------------------------------------
+  # Facets - fuzzy attributes ------------------------------------------------
   task <- "calculating fuzzy attributes"
   if(resume == "" || resume == "attributes"){
     announce(task, quiet)
@@ -207,7 +207,7 @@ facet_mapper <- function(folder, arule = NULL, crule, n_remove = 9,
     return()
   }
 
-
+  # Facets - classes ------------------------------------------------
   task <- "calculating classes"
   if(resume == "" || resume == "classes"){
     announce(task, quiet)

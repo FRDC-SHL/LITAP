@@ -63,7 +63,13 @@ test_dem <- load_file("../Runs - FlowMapR/Steffi_LandMapR_tests/11_Ab02PV/FlowMa
                       edge = FALSE) %>%
   add_buffer()
 
-usethis::use_data(fix_names, match_names, arule_weti, arule_relief,
+crule_order <- foreign::read.dbf(system.file("extdata", "crule.dbf", package = "LITAP")) %>%
+  dplyr::pull(F_NAME) %>%
+  unique() %>%
+  tolower()
+
+
+usethis::use_data(fix_names, match_names, arule_weti, arule_relief, crule_order,
                   internal = TRUE, overwrite = TRUE)
 usethis::use_data(test_dem, internal = FALSE, overwrite = TRUE)
 
