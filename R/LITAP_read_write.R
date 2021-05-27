@@ -1,11 +1,3 @@
-save_backup <- function(locs, data, name) {
-  if(is.data.frame(data) || (is.list(data) && all(names(data) == c("db", "stats")))) {
-    save_shed(locs$backup, data, paste0(name, ".rds"))
-  } else if(names(data) == "db") {
-    save_shed(locs$backup, data$db, paste0(name, ".rds"))
-  }
-}
-
 save_basic <- function(data, name, locs, out_format, where) {
   file_out <- locs[[where]]
   name <- paste0(name, ".", out_format)
@@ -14,7 +6,7 @@ save_basic <- function(data, name, locs, out_format, where) {
   if(stringr::str_detect(name, ".dbf$")) foreign::write.dbf(data, file.path(file_out, name))
 }
 
-save_output2 <- function(data, stats = NULL, name, locs, out_format, where,
+save_output <- function(data, stats = NULL, name, locs, out_format, where,
                          add_db = NULL) {
   if(!is.null(add_db)) {
     data <- dplyr::left_join(data, add_db, by = "seqno")
@@ -26,36 +18,6 @@ save_output2 <- function(data, stats = NULL, name, locs, out_format, where,
   } else {
     data <- remove_buffer(data)
     save_shed(locs[[where]], data, paste0("dem_", name, ".", out_format))
-  }
-}
-
-
-save_output <- function(locs, out_format,
-                        which = c("local", "pond", "fill", "pit", "ilocal"),
-                        where = "flow", add_db = NULL) {
-
-  for(name in which) {
-    if(file.exists(file.path(locs[["backup"]], paste0(name , ".rds")))) {
-      data <- read_shed(locs[["backup"]], name)
-
-      if(name %in% c("fill", "ilocal", "form", "weti", "relief", "length",
-                     "fuzc", "fuza")) {
-        if("db" %in% names(data)) db <- data$db else db <- data
-        if("data" %in% names(db)) db <- dplyr::select(db, -data)
-
-        if(!is.null(add_db)) {
-          suppressMessages(db <- dplyr::left_join(db, add_db))
-        }
-
-        save_shed(locs[[where]], db,
-                  paste0("dem_", name, ".", out_format), clean = TRUE)
-      }
-
-      if("stats" %in% names(data) && nrow(data$stats) > 0) {
-        s <- remove_buffer(data$db, data$stats)
-        save_shed(locs[[where]], s, paste0("stats_", name, ".", out_format))
-      }
-    }
   }
 }
 
@@ -170,7 +132,7 @@ remove_buffer <- function(db, stats = NULL) {
 
 }
 
-locs_create <- function(out_folder, which = c("backup", "flow"), clean) {
+locs_create <- function(out_folder, which, clean) {
   out_locs <- list()
   for(i in which) out_locs[i] <- file.path(out_folder, i)
   if(clean) lapply(out_locs, unlink, recursive = TRUE)
@@ -188,7 +150,7 @@ locs_create <- function(out_folder, which = c("backup", "flow"), clean) {
 #'
 #'
 #' @noRd
-get_previous <- function(folder, step, where = "backup", type = "dem") {
+get_previous <- function(folder, step, where, type = "dem") {
 
   if(!dir.exists(folder)) stop("This folder doesn't exist: ", folder, call. = FALSE)
 
