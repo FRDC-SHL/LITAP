@@ -14,21 +14,25 @@ calc_form <- function(db, grid = 10, verbose = FALSE) {
            elev_n6, elev_n7, elev_n8, elev_n9),
       ~sum(is.na(c(..1, ..2, ..3, ..4, ..5, ..6, ..7, ..8, ..9))))) %>%
     #dplyr::filter(sum_elev == 0) %>%
-    dplyr::mutate(slope_x = (elev_n6 - elev_n4) / (2 * grid),
-                  slope_y = (elev_n2 - elev_n8) / (2 * grid),
+    dplyr::mutate(slope_x = dplyr::if_else(sum_elev > 0, NA_real_,
+                                           (elev_n6 - elev_n4) / (2 * grid)),
+                  slope_y = dplyr::if_else(sum_elev > 0, NA_real_,
+                                           (elev_n2 - elev_n8) / (2 * grid)),
                   slope_pct = sqrt(slope_x^2 + slope_y^2),
                   slope_deg = rad_deg(atan(slope_pct/100)),
-                  aspect = aspect(slope_x, slope_y, slope_pct),
+                  aspect = dplyr::if_else(sum_elev > 0 & !is.na(elev), 360,
+                                          aspect(slope_x, slope_y, slope_pct)),
+                  aspect = round(aspect),
                   prof_aspect = dplyr::if_else(aspect > 180, aspect - 180, aspect),
                   plan_aspect = dplyr::if_else((prof_aspect + 90) > 180,
                                                prof_aspect + 90 - 180,
                                                prof_aspect + 90),
-                  prof = dplyr::if_else(sum_elev > 0, as.numeric(NA),
+                  prof = dplyr::if_else(sum_elev > 0, NA_real_,
                                         prof_plan(prof_aspect, elev_n1, elev_n2,
                                                   elev_n3, elev_n4, elev_n5,
                                                   elev_n6, elev_n7, elev_n8,
                                                   elev_n9, grid, slope_pct)),
-                  plan = dplyr::if_else(sum_elev > 0, as.numeric(NA),
+                  plan = dplyr::if_else(sum_elev > 0, NA_real_,
                                         prof_plan(plan_aspect, elev_n1, elev_n2,
                                                   elev_n3, elev_n4, elev_n5,
                                                   elev_n6, elev_n7, elev_n8,
@@ -67,27 +71,33 @@ aspect <- function(slope_x, slope_y, slope_pct) {
                    slope_x == 0 & slope_y > 0 ~ 360,
                    TRUE ~ as.numeric(NA))
 }
+
 prof_plan <- function(aspect, elev_n1, elev_n2, elev_n3,
                        elev_n4, elev_n5, elev_n6, elev_n7, elev_n8, elev_n9,
                        grid, slope_pct){
+
   x1 <- 2 + sin(deg_rad(aspect))
   y1 <- 2 - cos(deg_rad(aspect))
   x2 <- 2 - sin(deg_rad(aspect))
   y2 <- 2 + cos(deg_rad(aspect))
 
   z1 <- dplyr::case_when(
-    aspect <= 90 ~ ((2 - y1) * ((elev_n9 * (x1 - 2)) + (elev_n8 * (3 - x1)))) +
-      ((y1 - 1) * ((elev_n6 * (x1 - 2)) + (elev_n5 * (3 - x1)))),
-    aspect > 90 ~ ((3 - y1) * ((elev_n6 * (x1 - 2)) + (elev_n5 * (3 - x1)))) +
-      ((y1 - 2) * ((elev_n3 * (x1 - 2)) + (elev_n2 * (3 - x1)))))
+    aspect <= 90 ~ (2 - y1) * ((elev_n9 * (x1 - 2)) + (elev_n8 * (3 - x1))),
+    aspect > 90 ~ ((3 - y1) * ((elev_n6 * (x1 - 2)) + (elev_n5 * (3 - x1)))))
+
+  z1 <- dplyr::case_when(
+    aspect <= 90 ~ z1 + ((y1 - 1) * ((elev_n6 * (x1 - 2)) + (elev_n5 * (3 - x1)))),
+    aspect > 90 ~ z1 + ((y1 - 2) * ((elev_n3 * (x1 - 2)) + (elev_n2 * (3 - x1)))))
 
   z2 <- dplyr::case_when(
-    aspect <= 90 ~ ((3 - y2) * ((elev_n5 * (x2 - 1)) + (elev_n4 * (2 - x2)))) +
-      ((y2 - 2) * ((elev_n2 * (x2 - 1)) + (elev_n1 * (2 - x2)))),
-    aspect > 90 ~ ((2 - y2) * ((elev_n8 * (x2 - 1)) + (elev_n7 * (2 - x2)))) +
-      ((y2 - 1) * ((elev_n5 * (x2 - 1)) + (elev_n4 * (2 - x2)))))
+    aspect <= 90 ~ (3 - y2) * ((elev_n5 * (x2 - 1)) + (elev_n4 * (2 - x2))),
+    aspect > 90 ~ (2 - y2) * ((elev_n8 * (x2 - 1)) + (elev_n7 * (2 - x2))))
 
-  dplyr::case_when(
+  z2 <- dplyr::case_when(
+    aspect <= 90 ~ z2 + ((y2 - 2) * ((elev_n2 * (x2 - 1)) + (elev_n1 * (2 - x2)))),
+    aspect > 90 ~ z2 + ((y2 - 1) * ((elev_n5 * (x2 - 1)) + (elev_n4 * (2 - x2)))))
+
+ dplyr::case_when(
     slope_pct <= 0 ~ 0,
     TRUE ~ rad_deg(atan((((2 * elev_n5) - z1 - z2) / (grid * grid)))))
 }
