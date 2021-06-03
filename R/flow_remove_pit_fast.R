@@ -19,7 +19,8 @@ first_pitr1 <- function(db, max_area = 10, max_depth = 0.5, verbose = FALSE) {
     w_stats <- pit_stat1(db, verbose = verbose) %>%
       out_stat() %>%
       dplyr::arrange(dplyr::desc(pit_elev), varatio) %>%
-      dplyr::mutate(remove = (pit_area <= max_area | ((pour_elev - pit_elev) <= max_depth)) &
+      dplyr::mutate(remove = (pit_area <= max_area |
+                                ((pour_elev - pit_elev) <= max_depth)) &
                       !edge_pit) #which to remove (only if not edge pit!)
 
     # In sequence, for each watershed that should be removed
@@ -42,7 +43,8 @@ first_pitr1 <- function(db, max_area = 10, max_depth = 0.5, verbose = FALSE) {
           dplyr::filter(!(shedno %in% sheds)) %>%
           dplyr::bind_rows(pit_stat1(db, w = sheds, verbose = verbose)) %>%
           # Which to remove
-          dplyr::mutate(remove = (pit_area <= max_area | ((pour_elev - pit_elev) <= max_depth)) &
+          dplyr::mutate(remove = (pit_area <= max_area |
+                                    ((pour_elev - pit_elev) <= max_depth)) &
                           !edge_pit) %>% #which to remove (only if not edge pit!)
           # Sort order
           dplyr::arrange(dplyr::desc(pit_elev), varatio)
@@ -58,7 +60,7 @@ first_pitr1 <- function(db, max_area = 10, max_depth = 0.5, verbose = FALSE) {
                                                               .data$drains_to))
         }
 
-        w_stats <-out_stat(w_stats)
+        w_stats <- out_stat(w_stats)
 
       } else done <- TRUE
     }
@@ -71,12 +73,10 @@ first_pitr1 <- function(db, max_area = 10, max_depth = 0.5, verbose = FALSE) {
   db <- calc_upslopes(db, type = "elev_diff")
 
   # Save as local_shed numbers
-  db <- dplyr::mutate(db,
-                      local_shed = shedno,
-                      local_ddir = ddir,
-                      local_elev_diff = elev_diff)
-
-  return(db)
+  dplyr::mutate(db,
+                local_shed = shedno,
+                local_ddir = ddir,
+                local_elev_diff = elev_diff)
 }
 
 second_pitr1 <- function(db, verbose = FALSE) {
@@ -211,7 +211,7 @@ second_pitr1 <- function(db, verbose = FALSE) {
 
   if(verbose) message("\n")
 
-  return(list("db" = db, "stats" = pond))
+  list("db" = db, "stats" = pond)
 }
 
 third_pitr1 <- function(db, verbose = FALSE) {
@@ -328,7 +328,7 @@ third_pitr1 <- function(db, verbose = FALSE) {
   if(verbose) message("    Calculating new elevation differences")
   db <- calc_upslopes(db, type = "elev_diff")
 
-  return(list("db" = db, "stats" = fill))
+  list("db" = db, "stats" = fill)
 }
 
 remove_pit1 <- function(w_rm, w_stats, db, update_elev = FALSE, verbose = FALSE) {

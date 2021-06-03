@@ -1,11 +1,10 @@
 join_slopes <- function(u1, u2) {
-  return(na_omit(c(u1, u2)))
+  na_omit(c(u1, u2))
 }
 
 get_track <- function(shed_list, track) {
   t <- sapply(lapply(shed_list, FUN = function(x, track) x[track %in% x], track), length)
-  t <- as.numeric(names(t[t > 0]))
-  return(t)
+  as.numeric(names(t[t > 0]))
 }
 
 calc_shed4 <- function(db, verbose = FALSE) {
@@ -133,5 +132,5 @@ get_all_flow <- function(db) {
     m <- cbind(m, m1)
     if(all(is.na(m[,ncol(m)]))) end <- TRUE
   }
-  return(m)
+  m
 }

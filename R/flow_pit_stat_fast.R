@@ -128,7 +128,7 @@ pit_stat1 <- function(db, w = NULL, verbose = FALSE) {
                                 dplyr::distinct(), by = "shedno")
   }
 
-  return(stats)
+  stats
 }
 
 out_stat <- function(pit_stat) {

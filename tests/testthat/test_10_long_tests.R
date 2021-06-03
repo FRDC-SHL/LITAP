@@ -13,7 +13,6 @@ test_that("flow_mapper()", {
     expect_message("CALCULATING INVERTED DIRECTIONS") %>%
     expect_message("CALCULATING INVERTED WATERSHEDS") %>%
     expect_message("REMOVING INVERTED INITIAL PITS") %>%
-    expect_message("SAVING OUTPUT") %>%
     expect_message("SKIPPING CREATING REPORT") %>%
     expect_message("Run took:")
 })

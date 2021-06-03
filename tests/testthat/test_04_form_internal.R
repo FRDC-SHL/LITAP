@@ -52,7 +52,7 @@ test_that("calc_stream", {
 
 test_that("Sub-functions", {
   suppressMessages(flow_mapper(f, nrow = 11, ncol = 11,
-                               out_folder = dir, report = FALSE))
+                               out_folder = dir, report = FALSE, clean = TRUE))
   grid <- 5
 
   # DB files
