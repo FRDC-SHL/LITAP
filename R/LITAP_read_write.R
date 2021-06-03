@@ -165,7 +165,7 @@ get_previous <- function(folder, step, where, type = "dem") {
 
   if(!dir.exists(folder)) stop("This folder doesn't exist: ", folder, call. = FALSE)
 
-  f <- list.files(file.path(folder, where), pattern = step,
+  f <- list.files(file.path(folder, where), pattern = paste0("_", step),
                   recursive = TRUE, full.names = TRUE)
   f <- f[stringr::str_detect(basename(f), type)]
 
@@ -181,7 +181,7 @@ get_previous <- function(folder, step, where, type = "dem") {
   if(ext == "csv") r <- readr::read_csv(f, col_types = readr::cols())
   if(ext == "dbf") r <- foreign::read.dbf(f)
 
-  dplyr::select(r, -dplyr::contains("buffer"))
+  dplyr::select(r, -dplyr::contains("_buffer"))
 }
 
 #' Guess format from previous files
