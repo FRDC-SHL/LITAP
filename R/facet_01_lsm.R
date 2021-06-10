@@ -66,6 +66,8 @@ lsm_fuzc <- function(fuzzattr, crule) {
 }
 
 fuzc_sum <- function(fuzzattr, crule) {
+  crule_order <- unique(crule$f_name)
+
   f <- fuzzattr %>%
     dplyr::select("seqno", "zone",
                   tidyselect::all_of(unique(crule$fuzattr))) %>%
