@@ -84,8 +84,8 @@ calc_weti <- function(db, grid, verbose) {
                                 na.rm = TRUE),  # How many higher cells?
                      out_t = sum(status %in% c("lower", "lower_drec"),
                                  na.rm = TRUE),  # How many lower cells?
-                     qarea1 = qarea1,
-                     qarea2 = qarea2,
+                     qarea1 = !!qarea1, # starting area
+                     qarea2 = !!qarea2, # starting area
                      cell_t = 0,
                      count_d = 0,
                      count_o = 0,

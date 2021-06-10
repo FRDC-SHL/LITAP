@@ -13,7 +13,7 @@ calc_relz <- function(db, idb, str_val, ridge_val, pond = NULL,
     dplyr::mutate(shedno = local_shed) %>%
     calc_pit3(pond = pond, verbose = verbose)
 
-  if(verbose) message("  Calculating ridges")
+  if(verbose) message("  Calculating ridges") # Inverse
   ridges <- calc_stream3(idb, str_val = ridge_val, verbose = verbose) %>%
     dplyr::rename(cr_row = str_row, cr_col = str_col, cr_elev = str_elev,
                   z2cr = z2st, n2cr = n2st) %>%
