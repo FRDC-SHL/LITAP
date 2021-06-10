@@ -120,7 +120,6 @@ form_mapper <- function(folder, grid, str_val = 10000, ridge_val = 10000,
       db_form <- get_previous(folder, step = "form", where = "form") %>%
         add_buffer()
     }
-    #db_form <- read_shed(out_locs$backup, "form")
 
     db_weti <- calc_weti(db, grid, verbose = verbose)
 
@@ -178,7 +177,7 @@ form_mapper <- function(folder, grid, str_val = 10000, ridge_val = 10000,
       db_relz <- get_previous(folder, step = "relief", where = "form") %>%
         add_buffer()
     }
-    db_length <- calc_length(db, db_relz, verbose = verbose)
+    db_length <- calc_length(db, db_relz, grid = grid, verbose = verbose)
 
     save_output(data = db_length, name = "length", locs = out_locs,
                 out_format = out_format, where = "form")
