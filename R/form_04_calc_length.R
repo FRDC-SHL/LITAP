@@ -1,6 +1,6 @@
 #calc_len3
 
-calc_length <- function(db, relz, grid = 5, verbose = FALSE){
+calc_length <- function(db, relz, grid, verbose){
 
   relz <- dplyr::left_join(relz, dplyr::select(db, seqno, row, col),
                            by = c("seqno", "row", "col"))

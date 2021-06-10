@@ -1,4 +1,4 @@
-first_pitr1 <- function(db, max_area = 10, max_depth = 0.5, verbose = FALSE) {
+first_pitr1 <- function(db, max_area, max_depth, verbose) {
 
   # Working with initial_shed
   db$shedno <- db$initial_shed
@@ -79,7 +79,7 @@ first_pitr1 <- function(db, max_area = 10, max_depth = 0.5, verbose = FALSE) {
                 local_elev_diff = elev_diff)
 }
 
-second_pitr1 <- function(db, verbose = FALSE) {
+second_pitr1 <- function(db, verbose) {
 
   # Working with local_shed
   db$shedno <- db$local_shed
@@ -214,7 +214,7 @@ second_pitr1 <- function(db, verbose = FALSE) {
   list("db" = db, "stats" = pond)
 }
 
-third_pitr1 <- function(db, verbose = FALSE) {
+third_pitr1 <- function(db, verbose) {
 
   # Working with local_shed
   db$shedno <- db$local_shed
@@ -331,7 +331,7 @@ third_pitr1 <- function(db, verbose = FALSE) {
   list("db" = db, "stats" = fill)
 }
 
-remove_pit1 <- function(w_rm, w_stats, db, update_elev = FALSE, verbose = FALSE) {
+remove_pit1 <- function(w_rm, w_stats, db, update_elev, verbose) {
 
   w_rm <- w_rm %>%
     dplyr::mutate(direction = ifelse(pit_elev >= pit_elev_out, "out", "in"))

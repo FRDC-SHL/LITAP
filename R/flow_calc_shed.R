@@ -7,7 +7,7 @@ get_track <- function(shed_list, track) {
   as.numeric(names(t[t > 0]))
 }
 
-calc_shed4 <- function(db, verbose = FALSE) {
+calc_shed4 <- function(db, verbose) {
 
   db_orig <- db
 

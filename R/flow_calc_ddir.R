@@ -1,5 +1,5 @@
 
-calc_ddir2 <- function(db, verbose = FALSE) {
+calc_ddir2 <- function(db, verbose) {
 
   # Calculate elevation of 'shifted' directions (neighbours)
   db <- nb_values(db, max_cols = max(db$col), "elev")
@@ -115,7 +115,7 @@ calc_ddir2 <- function(db, verbose = FALSE) {
   # Shouldn't be necessary anymore, as specified lowest cell already?
 }
 
-calc_ddir <- function(db, verbose = FALSE, n_clusters = 7) {
+calc_ddir <- function(db, verbose, n_clusters) {
 
   # Surround in impossible elevation
   db <- add_buffer(db) %>%
