@@ -83,7 +83,7 @@ fuzc_sum <- function(fuzzattr, crule) {
     dplyr::group_by(.data$zone, .data$f_name) %>%
     dplyr::summarize(data = suppressMessages(list(dplyr::bind_cols(data)))) %>%
     dplyr::ungroup() %>%
-    dplyr::mutate(data = purrr::map(data, rowSums, na.rm = TRUE),
+    dplyr::mutate(data = purrr::map(data, ~round(rowSums(., na.rm = TRUE))),
                   f_name = factor(f_name, levels = crule_order)) %>%
     dplyr::arrange(f_name) %>%
     tidyr::pivot_wider(names_from = f_name, values_from = data) %>%
