@@ -112,6 +112,8 @@ fuzc_max <- function(f) {
   }
 
   dplyr::mutate(temp,
+                max_facet = replace(max_facet, max_value == 0, NA_real_),
+                max_2nd_facet = replace(max_2nd_facet, max_2nd_value == 0, NA_real_),
                 max_facet_name = n[max_facet],
                 max_2nd_facet_name = n[max_2nd_facet]) %>%
     dplyr::bind_cols(f, .)
