@@ -331,7 +331,7 @@ third_pitr1 <- function(db, verbose) {
   list("db" = db, "stats" = fill)
 }
 
-remove_pit1 <- function(w_rm, w_stats, db, update_elev, verbose) {
+remove_pit1 <- function(w_rm, w_stats, db, update_elev = FALSE, verbose) {
 
   w_rm <- w_rm %>%
     dplyr::mutate(direction = ifelse(pit_elev >= pit_elev_out, "out", "in"))

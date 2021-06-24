@@ -22,19 +22,18 @@ lsm_fuza <- function(attr, arule, procedure) {
 
   # Create holder data
   fuzzattr <- dplyr::select(attr, "seqno", "new_asp")
-
   # Calculate fuzzy attributes for each cell
   for(a in seq_len(nrow(arule))) {
     f <- dplyr::filter(attr, .data$zone == arule$zone[a])
     f <- dplyr::mutate(
       f,
       !! arule$class_out[a] := arule_models(
-        model = arule$model[a],
+        model = !!arule$model_no[a],
         x = !!rlang::sym(arule$attr_in[a]),
-        b = arule$b[a],
-        b_low = arule$b_low[a], b_hi = arule$b_hi[a],
-        b1 = arule$b1[a], b2 = arule$b2[a],
-        d = arule$d[a])) %>%
+        b = !!arule$b[a],
+        b_low = !!arule$b_low[a], b_hi = !!arule$b_hi[a],
+        b1 = !!arule$b1[a], b2 = !!arule$b2[a],
+        d = !!arule$d[a])) %>%
       dplyr::select("seqno", "zone", tidyselect::any_of(arule$class_out[a]))
 
     fuzzattr[f$seqno, names(f)] <- f

@@ -93,13 +93,15 @@ facet_mapper <- function(folder, arule = NULL, crule, n_remove = 9,
 
   # Get fill dem (flow_mapper)
   db <- get_previous(folder, step = "fill", where = "flow") %>%
-    dplyr::select(seqno, row, col, elev, drec, upslope, fill_shed, local_shed) %>%
+    dplyr::select("seqno", "row", "col", "elev", "drec", "upslope",
+                  "fill_shed", "local_shed") %>%
     add_buffer()
 
   # Get form dem (form_mapper)
   weti <- get_previous(folder, step = "weti", where = "form") %>%
     dplyr::select(-tidyselect::any_of(c("seqno_buffer", "drec_buffer"))) %>%
-    dplyr::rename(qweti = "qweti1", qarea = "qarea1", lnqarea = "lnqarea1") %>%
+    dplyr::rename("qweti" = "qweti1", "qarea" = "qarea1",
+                  "lnqarea" = "lnqarea1") %>%
     add_buffer()
 
   relief <- get_previous(folder, step = "relief", where = "form") %>%

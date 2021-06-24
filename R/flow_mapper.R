@@ -164,8 +164,8 @@ flow_mapper <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
       add_buffer()
     }
 
-    db_initial <- calc_shed4(db_dir)
-    stats_initial <- pit_stat1(db_initial) %>%
+    db_initial <- calc_shed4(db_dir, verbose = verbose)
+    stats_initial <- pit_stat1(db_initial, verbose = verbose) %>%
       out_stat()
 
     # Calc stats for first vol2fl
@@ -207,7 +207,7 @@ flow_mapper <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
                             max_depth = max_depth, verbose = verbose)
 
     # Stats
-    stats_local <- pit_stat1(db_local) %>%
+    stats_local <- pit_stat1(db_local, verbose = verbose) %>%
       out_stat()
 
     save_output(data = db_local, stats = stats_local, name = "local", locs = out_locs,
@@ -366,7 +366,7 @@ flow_mapper <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
       db_idir <- get_previous(folder, step = "idir", where = "flow")
     }
 
-    db_iinitial <- calc_shed4(db_idir)
+    db_iinitial <- calc_shed4(db_idir, verbose = verbose)
     save_output(data = db_iinitial, name = "iinitial", locs = out_locs,
                 out_format = out_format, where = "flow")
 
@@ -395,7 +395,7 @@ flow_mapper <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
                              max_depth = max_depth, verbose = verbose)
 
     if(length(unique(db_ilocal$shedno[!is.na(db_ilocal$shedno)])) > 1) {
-      stats_ipit <- pit_stat1(db_ilocal) %>%
+      stats_ipit <- pit_stat1(db_ilocal, verbose = verbose) %>%
         out_stat() %>%
         dplyr::mutate(edge_pit = FALSE)
     } else stats_ipit <- tibble::tibble()

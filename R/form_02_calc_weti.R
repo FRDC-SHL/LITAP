@@ -115,8 +115,9 @@ calc_weti <- function(db, grid, verbose) {
     dplyr::select("drec", "qarea_flat1" = "qarea1", "qarea_flat2" = "qarea2")
 
   db_c_temp <- dplyr::inner_join(
-    dplyr::select("db_c", "seqno", "qarea1", "qarea2"),
-    db_flat, by = c("seqno" = "drec")) %>%
+    dplyr::select(db_c, "seqno", "qarea1", "qarea2"),
+    db_flat,
+    by = c("seqno" = "drec")) %>%
     dplyr::group_by(.data$seqno, .data$qarea1, .data$qarea2) %>%
     dplyr::summarize(qarea_flat1 = sum(.data$qarea_flat1),
                      qarea_flat2 = sum(.data$qarea_flat2)) %>%
