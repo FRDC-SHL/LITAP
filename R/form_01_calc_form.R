@@ -55,7 +55,12 @@ calc_form <- function(db, grid, verbose) {
   db[db$row == 2, vals] <- db[db$row == 3, vals] # First row
   db[db$row == max(db$row) - 1, vals] <- db[db$row == max(db$row) - 2, vals]   # Last row
 
-  db
+  # Make missing values 0 where required
+  db %>%
+    dplyr::mutate(
+      prof = replace(.data$prof, is.na(.data$prof) & !is.na(.data$elev), 0),
+      plan = replace(.data$plan, is.na(.data$plan) & !is.na(.data$elev), 0),
+      slope_pct = replace(.data$slope_pct, is.na(.data$slope_pct) & !is.na(.data$elev), 0))
 }
 
 aspect <- function(slope_x, slope_y, slope_pct) {
