@@ -19,20 +19,23 @@ calc_weti <- function(db, grid, verbose) {
     dplyr::mutate(order = 1:dplyr::n()) %>%
     dplyr::select("seqno", "elev", "drec", "order") %>%
     dplyr::arrange(seqno) %>%
-    nb_values(max_cols = max(db$col), col = c("elev", "seqno", "order"), format = "wide") %>%
-    tidyr::nest(n1 = c("seqno", "elev", "drec", "order", tidyselect::contains("n1")),
-                n2 = c("seqno", "elev", "drec", "order", tidyselect::contains("n2")),
-                n3 = c("seqno", "elev", "drec", "order", tidyselect::contains("n3")),
-                n4 = c("seqno", "elev", "drec", "order", tidyselect::contains("n4")),
-                n5 = c("seqno", "elev", "drec", "order", tidyselect::contains("n5")),
-                n6 = c("seqno", "elev", "drec", "order", tidyselect::contains("n6")),
-                n7 = c("seqno", "elev", "drec", "order", tidyselect::contains("n7")),
-                n8 = c("seqno", "elev", "drec", "order", tidyselect::contains("n8")),
-                n9 = c("seqno", "elev", "drec", "order", tidyselect::contains("n9"))) %>%
+    nb_values(max_cols = max(db$col), col = c("elev", "seqno", "order"),
+              format = "wide") %>%
+    tidyr::nest(
+      n1 = c("seqno", "elev", "drec", "order", tidyselect::contains("n1")),
+      n2 = c("seqno", "elev", "drec", "order", tidyselect::contains("n2")),
+      n3 = c("seqno", "elev", "drec", "order", tidyselect::contains("n3")),
+      n4 = c("seqno", "elev", "drec", "order", tidyselect::contains("n4")),
+      n5 = c("seqno", "elev", "drec", "order", tidyselect::contains("n5")),
+      n6 = c("seqno", "elev", "drec", "order", tidyselect::contains("n6")),
+      n7 = c("seqno", "elev", "drec", "order", tidyselect::contains("n7")),
+      n8 = c("seqno", "elev", "drec", "order", tidyselect::contains("n8")),
+      n9 = c("seqno", "elev", "drec", "order", tidyselect::contains("n9"))) %>%
     tidyr::pivot_longer(cols = tidyselect::everything()) %>%
     dplyr::mutate(
       n = stringr::str_remove(name, "n"),
-      value = purrr::map(value, ~dplyr::rename_all(., ~stringr::str_remove(., "[0-9]{1}"))),
+      value = purrr::map(value,
+                         ~dplyr::rename_all(., ~stringr::str_remove(., "[0-9]{1}"))),
       value = purrr::map2(
         value, n,
         ~dplyr::mutate(.x,
@@ -43,9 +46,10 @@ calc_weti <- function(db, grid, verbose) {
       value = purrr::map(
         value,
         ~dplyr::mutate(.,
-                       status = dplyr::case_when(elev_n > elev ~ "higher",  # Neighbour higher
-                                                 elev_n < elev ~ "lower",   # Neighbour lower
-                                                 TRUE ~ "no_flow"),         # Equal, no flow
+                       status = dplyr::case_when(
+                         elev_n > elev ~ "higher",  # Neighbour higher
+                         elev_n < elev ~ "lower",   # Neighbour lower
+                         TRUE ~ "no_flow"),         # Equal, no flow
                        status_drec = drec == seqno_n & drec != seqno, # Equal, but flows
                        elev_diff = elev_n - elev,
                        tan_f = (elev - elev_n) / deltax,   # From focal cell perspective
@@ -57,12 +61,12 @@ calc_weti <- function(db, grid, verbose) {
 
   # Which cells flow to drec (not by elev)
   db_drec <- db_n %>%
-    dplyr::group_by(seqno) %>%
-    dplyr::filter(all(status != "lower") & status_drec) %>%
+    dplyr::group_by(.data$seqno) %>%
+    dplyr::filter(all(.data$status != "lower") & .data$status_drec) %>%
     dplyr::ungroup()
 
   # Which should be evaluated BEFORE their drain points?
-  db_first <- dplyr::filter(db_drec, order < order_n)
+  db_first <- dplyr::filter(db_drec, .data$order < .data$order_n)
 
   db_n$status[db_n$seqno %in% db_first$seqno & db_n$status_drec] <- "lower_drec"
   db_n$match <- paste0(db_n$seqno, "_", db_n$seqno_n)
@@ -73,26 +77,29 @@ calc_weti <- function(db, grid, verbose) {
 
   # Only cells which have higher neighbours
   db_n_sub <- db_n %>%
-    dplyr::select(seqno, seqno_n, order, order_n, diag, elev_diff, status, tan2_f) %>%
-    dplyr::filter(!is.na(elev_diff), status %in% c("higher", "higher_drec"))
+    dplyr::select("seqno", "seqno_n", "order", "order_n", "diag",
+                  "elev_diff", "status", "tan2_f") %>%
+    dplyr::filter(!is.na(.data$elev_diff),
+                  .data$status %in% c("higher", "higher_drec"))
 
   db_c <- db_n %>%
-    dplyr::filter(!is.na(elev_diff)) %>%
-    dplyr::group_by(seqno) %>%
-    dplyr::summarize(drec = drec[1],
-                     in_t = sum(status %in% c("higher", "higher_drec"),
-                                na.rm = TRUE),  # How many higher cells?
-                     out_t = sum(status %in% c("lower", "lower_drec"),
-                                 na.rm = TRUE),  # How many lower cells?
-                     qarea1 = !!qarea1, # starting area
-                     qarea2 = !!qarea2, # starting area
-                     cell_t = 0,
-                     count_d = 0,
-                     count_o = 0,
-                     elev_sum = 0,
-                     sumtanbl = sum(tan2_f[status == "lower"], na.rm = TRUE),
-                     qc1 = NA,
-                     qc2 = NA)
+    dplyr::filter(!is.na(.data$elev_diff)) %>%
+    dplyr::group_by(.data$seqno) %>%
+    dplyr::summarize(
+      drec = .data$drec[1],
+      in_t = sum(.data$status %in% c("higher", "higher_drec"),
+                 na.rm = TRUE),  # How many higher cells?
+      out_t = sum(.data$status %in% c("lower", "lower_drec"),
+                  na.rm = TRUE),  # How many lower cells?
+      qarea1 = !!qarea1, # starting area
+      qarea2 = !!qarea2, # starting area
+      cell_t = 0,
+      count_d = 0,
+      count_o = 0,
+      elev_sum = 0,
+      sumtanbl = sum(.data$tan2_f[.data$status == "lower"], na.rm = TRUE),
+      qc1 = NA,
+      qc2 = NA)
 
   if(verbose) message("  Trace wetness")
   while(any(db_c$in_t >= 0 & db_c$out_t !=0)) {
@@ -104,17 +111,18 @@ calc_weti <- function(db, grid, verbose) {
   # For cells which have no lower cells and were not already evaluated
   # (i.e. sumtanbl == 0) push to drec
   db_flat <- db_c %>%
-    dplyr::filter(seqno %in% db_after) %>%
-    dplyr::select(drec, qarea_flat1 = qarea1, qarea_flat2 = qarea2)
+    dplyr::filter(.data$seqno %in% !!db_after) %>%
+    dplyr::select("drec", "qarea_flat1" = "qarea1", "qarea_flat2" = "qarea2")
 
-  db_c_temp <- dplyr::inner_join(dplyr::select(db_c, seqno, qarea1, qarea2),
-                                 db_flat, by = c("seqno" = "drec")) %>%
-    dplyr::group_by(seqno, qarea1, qarea2) %>%
-    dplyr::summarize(qarea_flat1 = sum(qarea_flat1),
-                     qarea_flat2 = sum(qarea_flat2)) %>%
-    dplyr::mutate(qarea1 = qarea1 + qarea_flat1,
-                  qarea2 = qarea2 + qarea_flat2) %>%
-    dplyr::select(-qarea_flat1, -qarea_flat2)
+  db_c_temp <- dplyr::inner_join(
+    dplyr::select("db_c", "seqno", "qarea1", "qarea2"),
+    db_flat, by = c("seqno" = "drec")) %>%
+    dplyr::group_by(.data$seqno, .data$qarea1, .data$qarea2) %>%
+    dplyr::summarize(qarea_flat1 = sum(.data$qarea_flat1),
+                     qarea_flat2 = sum(.data$qarea_flat2)) %>%
+    dplyr::mutate(qarea1 = .data$qarea1 + .data$qarea_flat1,
+                  qarea2 = .data$qarea2 + .data$qarea_flat2) %>%
+    dplyr::select(-"qarea_flat1", -"qarea_flat2")
 
   db_c$qarea1[db_c$seqno %in% db_c_temp$seqno] <- db_c_temp$qarea1
   db_c$qarea2[db_c$seqno %in% db_c_temp$seqno] <- db_c_temp$qarea2
@@ -124,12 +132,13 @@ calc_weti <- function(db, grid, verbose) {
 
   # Shouldn't this be all +1?
   db_weti <- db_c %>%
-    dplyr::mutate(qweti1 = dplyr::if_else(qc1 > 1, log(qc1), log(1 + qc1)),
-                  qweti2 = dplyr::if_else(qc2 > 1, log(qc2), log(1 + qc2)),
-                  qarea1 = round(qarea1, 2),
-                  qarea2 = round(qarea2, 2),
-                  qweti1 = round(qweti1, 2),
-                  qweti2 = round(qweti2, 2))
+    dplyr::mutate(
+      qweti1 = dplyr::if_else(.data$qc1 > 1, log(.data$qc1), log(1 + .data$qc1)),
+      qweti2 = dplyr::if_else(.data$qc2 > 1, log(.data$qc2), log(1 + .data$qc2)),
+      qarea1 = round(.data$qarea1, 2),
+      qarea2 = round(.data$qarea2, 2),
+      qweti1 = round(.data$qweti1, 2),
+      qweti2 = round(.data$qweti2, 2))
 
   dplyr::full_join(db_weti, db, by = c("seqno", "drec")) %>%
     dplyr::arrange(seqno)
