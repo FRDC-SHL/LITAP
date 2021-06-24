@@ -104,6 +104,7 @@ facet_mapper <- function(folder, arule = NULL, crule, n_remove = 9,
                   "lnqarea" = "lnqarea1") %>%
     add_buffer()
 
+  # Get relief dem (form_mapper)
   relief <- get_previous(folder, step = "relief", where = "form") %>%
     dplyr::select(-tidyselect::any_of(c("seqno_buffer", "drec_buffer"))) %>%
     add_buffer()
@@ -199,7 +200,6 @@ facet_mapper <- function(folder, arule = NULL, crule, n_remove = 9,
     save_output(data = fuzzattr, name = "fuza", locs = out_locs,
                 out_format = out_format, where = "facet",
                 add_db = dplyr::select(db, "seqno", "buffer", "row", "col"))
-    #save_backup(locs = out_locs, data = fuzzattr, name = "fuza")
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
