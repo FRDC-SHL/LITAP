@@ -78,7 +78,7 @@ b_calcs <- function(calc, b, d, b_low, b_hi, btype) {
 
 
 arule_template <- function() {
-  dplyr::tribble(~sortorder, ~file_in,   ~attr_in,   ~class_out,   ~model, ~calc,
+  dplyr::tribble(~sortorder, ~file_in,   ~attr_in,   ~class_out,   ~model_no, ~calc,
                  1,          "formfile", "PROF",     "CONVEX_D",   4,         "bd1",
                  2,          "formfile", "PROF",     "CONCAVE_D",  5,         "bd2",
                  3,          "formfile", "PROF",     "PLANAR_D",   1,         "lhd",
