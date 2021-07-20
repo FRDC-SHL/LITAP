@@ -3,8 +3,8 @@
 # Based on FormMapR calc_form: Computes slope, aspect & curvatures
 calc_form <- function(db, grid, verbose) {
 
-  # slope, aspect, prof, plan
-  db <- db %>%
+    # slope, aspect, prof, plan
+  form <- db %>%
     dplyr::select("seqno", "elev", "row", "col", "buffer") %>%
     nb_values(max_cols = max(db$col), format = "wide") %>%
     dplyr::mutate_at(.vars = dplyr::vars(dplyr::contains("elev_n")),
@@ -37,7 +37,7 @@ calc_form <- function(db, grid, verbose) {
                                                   elev_n3, elev_n4, elev_n5,
                                                   elev_n6, elev_n7, elev_n8,
                                                   elev_n9, grid, slope_pct))) %>%
-    dplyr::select("seqno", "row", "col", "slope_pct", "slope_deg",
+    dplyr::select("seqno", "elev", "row", "col", "slope_pct", "slope_deg",
                   "aspect", "prof", "plan", "buffer") %>%
     dplyr::mutate(slope_pct = round(slope_pct, 3),
                   slope_deg = round(slope_deg, 3),
@@ -50,17 +50,18 @@ calc_form <- function(db, grid, verbose) {
   vals <- c("slope_pct", "slope_deg", "aspect", "prof", "plan")
 
   # Note that first and last row over write corners (assume buffer)
-  db[db$col == 2, vals] <- db[db$col == 3, vals] # Left Column
-  db[db$col == max(db$col) - 1, vals] <- db[db$col == max(db$col) - 2, vals]   # Right Column
-  db[db$row == 2, vals] <- db[db$row == 3, vals] # First row
-  db[db$row == max(db$row) - 1, vals] <- db[db$row == max(db$row) - 2, vals]   # Last row
+  form[form$col == 2, vals] <- form[form$col == 3, vals] # Left Column
+  form[form$col == max(form$col) - 1, vals] <- form[form$col == max(form$col) - 2, vals]   # Right Column
+  form[form$row == 2, vals] <- form[form$row == 3, vals] # First row
+  form[form$row == max(form$row) - 1, vals] <- form[form$row == max(form$row) - 2, vals]   # Last row
 
   # Make missing values 0 where required
-  db %>%
+  form %>%
     dplyr::mutate(
       prof = replace(.data$prof, is.na(.data$prof) & !is.na(.data$elev), 0),
       plan = replace(.data$plan, is.na(.data$plan) & !is.na(.data$elev), 0),
-      slope_pct = replace(.data$slope_pct, is.na(.data$slope_pct) & !is.na(.data$elev), 0))
+      slope_pct = replace(.data$slope_pct, is.na(.data$slope_pct) & !is.na(.data$elev), 0),
+      slope_deg = replace(.data$slope_deg, is.na(.data$slope_deg) & !is.na(.data$elev), 0))
 }
 
 aspect <- function(slope_x, slope_y, slope_pct) {
