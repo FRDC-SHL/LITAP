@@ -124,7 +124,7 @@ form_mapper <- function(folder, grid, str_val = 10000, ridge_val = 10000,
     db_weti <- calc_weti(db, grid, verbose = verbose)
 
     db_form <- dplyr::full_join(db_form, db_weti,
-                                by = c("seqno", "elev", "col", "row", "buffer")) %>%
+                                by = c("seqno", "col", "row", "buffer")) %>%
       dplyr::mutate(lnqarea1 = dplyr::if_else(aspect > -1, log(qarea1), 0),
                     lnqarea2 = dplyr::if_else(aspect > -1, log(qarea2), 0),
                     new_asp = dplyr::if_else(aspect > -1, aspect + 45, 0),

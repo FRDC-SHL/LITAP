@@ -61,7 +61,8 @@ calc_form <- function(db, grid, verbose) {
       prof = replace(.data$prof, is.na(.data$prof) & !is.na(.data$elev), 0),
       plan = replace(.data$plan, is.na(.data$plan) & !is.na(.data$elev), 0),
       slope_pct = replace(.data$slope_pct, is.na(.data$slope_pct) & !is.na(.data$elev), 0),
-      slope_deg = replace(.data$slope_deg, is.na(.data$slope_deg) & !is.na(.data$elev), 0))
+      slope_deg = replace(.data$slope_deg, is.na(.data$slope_deg) & !is.na(.data$elev), 0)) %>%
+    dplyr::select(-"elev")
 }
 
 aspect <- function(slope_x, slope_y, slope_pct) {
