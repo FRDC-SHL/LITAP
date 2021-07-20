@@ -111,8 +111,8 @@ load_dem <- function(file, type = "elev") {
   }
 
   # Load file
-  db <- foreign::read.dbf(file)
-  check_names(db, type = type)
+  foreign::read.dbf(file, as.is = TRUE) %>%
+    check_names(type = type)
 }
 
 check_names <- function(db, type) {
@@ -138,6 +138,8 @@ check_names <- function(db, type) {
     stop("Required columns missing from data: '",
          paste0(m, collapse = "', '"), "'")
   }
+
+  if(type == "elev") db <-  dplyr::mutate(db, elev = as.numeric(elev))
 
   # Grab names which are present
   dplyr::select(db, tidyselect::any_of(all_names))
@@ -196,7 +198,7 @@ db_format <- function(db, nrow, ncol, missing_value = -9999, verbose) {
                   row = sort(rep(1:nrow, length(elev)/nrow)),
                   col = rep(1:ncol, length(elev)/ncol),
                   missing = elev == missing_value,
-                  elev = replace(elev, missing, NA)) %>%
+                  elev = replace(elev, missing, NA_real_)) %>%
     dplyr::mutate(dplyr::across(-"missing", as.numeric))
 }
 
