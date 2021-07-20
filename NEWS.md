@@ -1,11 +1,20 @@
-# LITAP (development version)
+# LITAP 0.5.0
 - Load files forces to numeric (fixes problems where some imports in character)
+- Corrected `slope_gc()` directions (fixes #10)
+- Clarify output format and allow csv (fixes #13)
+- `flow_mapper()` has simplified output, similar to the other functions (fixes #12)
+- `facet_mapper()` has facets by number as well as by name, and ordered by crule (fixes #9)
+- `form_mapper()` values that are not on missing cells but can't be calculated 
+due to local missingness, are assigned 0
+- Can load files even if `dem` in folder name (fixes #7)
+- Add rounding to match original LandMapR values where possible
+- Fix bug where grid parameter not passed on in `form_mapper()`
 
-# LITAP 0.4.1 (2021-04-30)
+# LITAP 0.4.1
 - Added `slope_gc()` to calculate slope gradients and curvature (added to `dem_fill` through `flow_mapper()`)
 - Added `merge_flow_form()` to create a single dem file from `flow_mapper()` `dem_fill` and all `form_mapper()` outputs.
 
-# LITAP 0.4.0 (2021-02-12)
+# LITAP 0.4.0
 
 - Added `facet_mapper()` based on FacetMapR
 - Added `wepp_mapper()` based on WeppMapR
@@ -17,11 +26,11 @@
 - Reduced number of output files
 - Updated reports
 
-# LITAP 0.3.1 (2020-01-24)
+# LITAP 0.3.1
 
 - Update to `tidyr` v1.0.0
 
-# LITAP 0.3.0 (2019-07-11)
+# LITAP 0.3.0
 
 - Added `form_mapper()` which mimics FormMapR
 - Renamed `complete_run()` to `flow_mapper()` to clarify what it refers to
@@ -29,16 +38,16 @@
 - Fixed bugs related to incorrect `vol2fl`, `parea` and `mm2fl`
 - Added calculation of cumulative elevation differences to `flow_mapper()` which results in `local_elev_diff` (calculated after pit smoothing) and `elev_diff` (calculated after fill pits)
 
-# LITAP 0.2.1 (2018-06-04)
+# LITAP 0.2.1
 
 - Minor bug fixes relating to fixing large flat pits
 
-# LITAP 0.2.0 (2018-04-13)
+# LITAP 0.2.0
 
 - Major speed improvements, in some cases as much as 30x faster!
 - Added support for multiple input file types (`?load_file` for details)
 
-# LITAP 0.1.0 (2017-08-30)
+# LITAP 0.1.0
 
 - Initial build of LITAP including functions to mimic FlowMapR
 - Runs include log and report of results
