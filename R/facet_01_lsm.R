@@ -36,6 +36,12 @@ lsm_fuza <- function(attr, arule, procedure) {
         d = !!arule$d[a])) %>%
       dplyr::select("seqno", "zone", tidyselect::any_of(arule$class_out[a]))
 
+    #f$prof[8284] # 9.411 vs. 10.085
+
+    # arule_models(x = 10.085, model = 4, b = 14.3190, b_low = 0,
+    #              b_hi = 0, b1 = 9.17350, b2 = 0, d = 5.14550)
+
+
     fuzzattr[f$seqno, names(f)] <- f
   }
 
