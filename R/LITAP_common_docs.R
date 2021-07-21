@@ -5,9 +5,6 @@
 #'   Details below)
 #' @param end Character. If ending a run after a particular step, which step
 #'   (see Details below)
-#' @param out_format Character. What format should the data be output as? "csv"
-#'   for Comma-separated values, "dbf" for dbf database files, or "rds" for R
-#'   data format.
 #' @param clean Logical. Remove all output files from previous runs in this
 #'   folder?
 #' @param report Logical. Create html report of results?

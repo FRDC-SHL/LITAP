@@ -39,7 +39,7 @@ test_that("neighbour_channels identifies neighbouring channel cells", {
                            3.0, 3.0, 3.0, 4.0, 4.5,
                            3.5, 2.5, 3.0, 4.0, 4.6)) %>%
     add_buffer() %>%
-    calc_ddir2() %>%
+    calc_ddir2(verbose = TRUE) %>%
     dplyr::mutate(shedno = 1) %>%
     calc_upslopes()
 
@@ -63,7 +63,7 @@ test_that("mark_chan does channel cells", {
                            3.0, 3.0, 3.0, 4.0, 4.5, 3.0, 3.0, 3.0, 4.0, 4.5,
                            3.5, 2.5, 3.0, 4.0, 4.6, 3.0, 3.0, 3.0, 4.0, 4.5)) %>%
     add_buffer() %>%
-    calc_ddir2() %>%
+    calc_ddir2(verbose = TRUE) %>%
     dplyr::mutate(shedno = 1) %>%
     calc_upslopes()
 

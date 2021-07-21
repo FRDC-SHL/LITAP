@@ -1,5 +1,5 @@
 
-pit_stat1 <- function(db, w = NULL, verbose = FALSE) {
+pit_stat1 <- function(db, w = NULL, verbose) {
 
   if(length(unique(db$shedno[!is.na(db$shedno)])) > 1){ # If more than one watershed
 
@@ -128,7 +128,7 @@ pit_stat1 <- function(db, w = NULL, verbose = FALSE) {
                                 dplyr::distinct(), by = "shedno")
   }
 
-  return(stats)
+  stats
 }
 
 out_stat <- function(pit_stat) {

@@ -8,22 +8,22 @@ test_that("Sub-functions", {
   s <- sample(1:8400, size = 500)
 
   # Directions
-  expect_silent(d <- calc_ddir2(f)) %>%
+  expect_silent(d <- calc_ddir2(f, verbose = FALSE)) %>%
     sub_dem(s) %>%
     expect_snapshot_value(style = "json2")
 
   # Watersheds"
-  expect_silent(d <- calc_shed4(d)) %>%
+  expect_silent(d <- calc_shed4(d, verbose = FALSE)) %>%
     sub_dem(s) %>%
     expect_snapshot_value(style = "json2")
 
   #Initial Pit Removal
-  expect_silent(d_local <- first_pitr1(d, max_area = 10, max_depth = 5)) %>%
+  expect_silent(d_local <- first_pitr1(d, max_area = 10, max_depth = 5, verbose = FALSE)) %>%
     sub_dem(s) %>%
     expect_snapshot_value(style = "json2")
 
   # Pond Pit Removal
-  expect_silent(d_pond <- second_pitr1(d_local))
+  expect_silent(d_pond <- second_pitr1(d_local, verbose = FALSE))
   expect_snapshot_value(sub_dem(d_pond$db, s), style = "json2")
   expect_snapshot_value(sub_dem(d_pond$stats, s), style = "json2")
 
@@ -33,7 +33,7 @@ test_that("Sub-functions", {
                               by = "local_shed")
 
   # Fill Pit Removal
-  expect_silent(d_fill <- third_pitr1(d_local))
+  expect_silent(d_fill <- third_pitr1(d_local, verbose = FALSE))
   expect_snapshot_value(sub_dem(d_fill$db, s), style = "json2")
   expect_snapshot_value(sub_dem(d_fill$stats, s), style = "json2")
 
@@ -43,17 +43,18 @@ test_that("Sub-functions", {
     expect_snapshot_value(style = "json2")
 
   # Inverted directions
-  expect_silent(d <- calc_ddir2(d)) %>%
+  expect_silent(d <- calc_ddir2(d, verbose = FALSE)) %>%
     sub_dem(s) %>%
     expect_snapshot_value(style = "json2")
 
   # Inverted Watersheds
-  expect_silent(d <- calc_shed4(d)) %>%
+  expect_silent(d <- calc_shed4(d, verbose = FALSE)) %>%
     sub_dem(s) %>%
     expect_snapshot_value(style = "json2")
 
   # Inverted Initial Pit Removal
-  expect_silent(d <- first_pitr1(d, max_area = 10, max_depth = 5)) %>%
+  expect_silent(d <- first_pitr1(d, max_area = 10, max_depth = 5,
+                                 verbose = FALSE)) %>%
     sub_dem(s) %>%
     expect_snapshot_value(style = "json2")
 })
@@ -66,9 +67,9 @@ test_that("elev_diff calculated correctly", {
                                      98, 97, 98,
                                      97, 96, 97)) %>%
     add_buffer() %>%
-    calc_ddir2() %>%
-    calc_shed4() %>%
-    first_pitr1(max_area = 0, max_depth = 0) %>%
+    calc_ddir2(verbose = FALSE) %>%
+    calc_shed4(verbose = FALSE) %>%
+    first_pitr1(max_area = 0, max_depth = 0, verbose = FALSE) %>%
     remove_buffer()
 
   expect_equal(db_test$elev_diff, c(0, 0, 0,
@@ -88,9 +89,9 @@ test_that("elev_diff calculated correctly", {
                                      97, 96, 97, 90,
                                      90, 95, 92, 91)) %>%
     add_buffer() %>%
-    calc_ddir2() %>%
-    calc_shed4() %>%
-    first_pitr1(max_area = 0, max_depth = 0) %>%
+    calc_ddir2(verbose = FALSE) %>%
+    calc_shed4(verbose = FALSE) %>%
+    first_pitr1(max_area = 0, max_depth = 0, verbose = FALSE) %>%
     remove_buffer()
 
   #flow_plot(db_test, type = "elev", seqno = TRUE, dir = TRUE)

@@ -99,10 +99,10 @@ test_that("slope_gc works as expected", {
   }
 
   # Hills
-  expect_true(all(s$hill_r_dir %in% c(1, 4)))
+  expect_true(all(s$hill_r_dir %in% c(2, 4)))
   expect_true(all(s$hill_c_dir %in% c(1, 3)))
   expect_true(all(s$hill_r_dir[s$sgre < 0] == 4))
-  expect_true(all(s$hill_r_dir[s$sgre > 0] == 1))
+  expect_true(all(s$hill_r_dir[s$sgre > 0] == 2))
   expect_true(all(s$hill_c_dir[s$sgcn < 0] == 3))
   expect_true(all(s$hill_c_dir[s$sgcn > 0] == 1))
 

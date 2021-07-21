@@ -1,5 +1,5 @@
 
-calc_ddir2 <- function(db, verbose = FALSE) {
+calc_ddir2 <- function(db, verbose) {
 
   # Calculate elevation of 'shifted' directions (neighbours)
   db <- nb_values(db, max_cols = max(db$col), "elev")
@@ -105,7 +105,7 @@ calc_ddir2 <- function(db, verbose = FALSE) {
   }
 
   # Get flow direction (seqno of next cell)
-  db1 <- flow_values(db1, max_cols = max(db$col), col = "seqno") %>%
+  flow_values(db1, max_cols = max(db$col), col = "seqno") %>%
     dplyr::rename(drec = seqno_next)
 
   # Fix circular flow among flat cells
@@ -113,11 +113,9 @@ calc_ddir2 <- function(db, verbose = FALSE) {
 
   # Check for side-by-side pits, replace so one flows into the other
   # Shouldn't be necessary anymore, as specified lowest cell already?
-
-  return(db1)
 }
 
-calc_ddir <- function(db, verbose = FALSE, n_clusters = 7) {
+calc_ddir <- function(db, verbose, n_clusters) {
 
   # Surround in impossible elevation
   db <- add_buffer(db) %>%
@@ -130,7 +128,8 @@ calc_ddir <- function(db, verbose = FALSE, n_clusters = 7) {
 
   if(verbose) message("  1. Identifying adjacent cells")
   db <- dplyr::mutate(db,
-                      adjacent = purrr::map(seqno, ~adj(.x, nrow = max(db$row), ncol = max(db$col))))
+                      adjacent = purrr::map(seqno, ~adj(.x, nrow = max(db$row),
+                                                        ncol = max(db$col))))
 
   if(verbose) message("  2. Identifying adjacent elevations")
 
@@ -224,7 +223,5 @@ calc_ddir <- function(db, verbose = FALSE, n_clusters = 7) {
     }
   }
 
-  db5 <- dplyr::arrange(db5, seqno)
-
-  return(db5)
+  dplyr::arrange(db5, seqno)
 }

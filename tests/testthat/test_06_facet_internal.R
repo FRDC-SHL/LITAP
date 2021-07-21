@@ -14,3 +14,9 @@ test_that("fuzc_sum()", {
 
 
 })
+
+test_that("arule file create", {
+
+
+
+})

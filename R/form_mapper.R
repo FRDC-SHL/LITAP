@@ -38,11 +38,9 @@
 #' @export
 
 form_mapper <- function(folder, grid, str_val = 10000, ridge_val = 10000,
-                        out_format = "rds",
                         resume = NULL, end = NULL,
                         log = TRUE, clean = FALSE,
                         verbose = FALSE, quiet = FALSE) {
-
 
   # Messaging
   if(quiet) verbose <- FALSE
@@ -55,6 +53,9 @@ form_mapper <- function(folder, grid, str_val = 10000, ridge_val = 10000,
   check_grid(grid)
 
   announce("setup", quiet)
+
+  # Get out format
+  out_format <- get_format(folder, where = "flow")
 
   # Get backup fill dem
   db <- get_previous(folder, step = "fill", where = "flow") %>%
@@ -75,34 +76,31 @@ form_mapper <- function(folder, grid, str_val = 10000, ridge_val = 10000,
   out_locs <- locs_create(folder, which = "form", clean = clean)
 
   # Setup Log
-  if(log) {
-    log_file <- file.path(folder, paste0(basename(folder), "_form.log"))
-    unlink(list.files(folder, "_form.log", full.names = TRUE))
-  } else log_file <- FALSE
+  log_file <- log_setup(folder, which = "form", log)
 
   start <- Sys.time()
 
   # File details to log
-  write_log("Run options:", log = log_file)
-  write_log("  Grid size = ", grid, log = log_file)
-  write_log("  Relief derivative values: str_val = ", str_val,
+  log_write("Run options:", log = log_file)
+  log_write("  Grid size = ", grid, log = log_file)
+  log_write("  Relief derivative values: str_val = ", str_val,
             "; ridge_val = ", ridge_val, log = log_file)
 
   # Run start to log
-  write_log("\nRun started: ", start, "\n", log = log_file)
+  log_write("\nRun started: ", start, "\n", log = log_file)
 
   # Form ------------------------------------------------------------------
   task <- "calculating form"
   if(resume == "" || resume == "form"){
     announce(task, quiet)
     sub_start <- Sys.time()
-    write_start(task, sub_start, log_file)
+    log_start(task, sub_start, log_file)
 
     db_form <- calc_form(db, grid, verbose = verbose)
 
-    save_output2(data = db_form, name = "form", locs = out_locs,
-                 out_format = out_format, where = "form")
-    write_time(sub_start, log_file)
+    save_output(data = db_form, name = "form", locs = out_locs,
+                out_format = out_format, where = "form")
+    log_time(sub_start, log_file)
 
     resume <- "weti"
   } else skip_task(task, log_file, quiet)
@@ -116,13 +114,12 @@ form_mapper <- function(folder, grid, str_val = 10000, ridge_val = 10000,
   if(resume == "weti") {
     announce(task, quiet)
     sub_start <- Sys.time()
-    write_start(task, sub_start, log_file)
+    log_start(task, sub_start, log_file)
 
     if(!exists("db_form")) {
       db_form <- get_previous(folder, step = "form", where = "form") %>%
         add_buffer()
     }
-    #db_form <- read_shed(out_locs$backup, "form")
 
     db_weti <- calc_weti(db, grid, verbose = verbose)
 
@@ -136,10 +133,10 @@ form_mapper <- function(folder, grid, str_val = 10000, ridge_val = 10000,
                     lnqarea1 = round(lnqarea1, 3),
                     lnqarea2 = round(lnqarea2, 3))
 
-    save_output2(data = db_form, name = "weti", locs = out_locs,
-                 out_format = out_format, where = "form")
+    save_output(data = db_form, name = "weti", locs = out_locs,
+                out_format = out_format, where = "form")
     rm(db_form, db_weti)
-    write_time(sub_start, log_file)
+    log_time(sub_start, log_file)
 
     resume <- "relief"
   } else skip_task(task, log_file, quiet)
@@ -153,14 +150,14 @@ form_mapper <- function(folder, grid, str_val = 10000, ridge_val = 10000,
   if(resume == "relief"){
     announce(task, quiet)
     sub_start <- Sys.time()
-    write_start(task, sub_start, log_file)
+    log_start(task, sub_start, log_file)
     db_relz <- calc_relz(db, idb, str_val = str_val, ridge_val = ridge_val,
                          pond = pond, verbose = verbose)
 
-    save_output2(data = db_relz, name = "relief", locs = out_locs,
-                 out_format = out_format, where = "form")
+    save_output(data = db_relz, name = "relief", locs = out_locs,
+                out_format = out_format, where = "form")
 
-    write_time(sub_start, log_file)
+    log_time(sub_start, log_file)
 
     resume <- "length"
   } else skip_task(task, log_file, quiet)
@@ -174,18 +171,18 @@ form_mapper <- function(folder, grid, str_val = 10000, ridge_val = 10000,
   if(resume == "length") {
     announce(task, quiet)
     sub_start <- Sys.time()
-    write_start(task, sub_start, log_file)
+    log_start(task, sub_start, log_file)
 
     if(!exists("db_relz")) {
       db_relz <- get_previous(folder, step = "relief", where = "form") %>%
         add_buffer()
     }
-    db_length <- calc_length(db, db_relz, verbose = verbose)
+    db_length <- calc_length(db, db_relz, grid = grid, verbose = verbose)
 
-    save_output2(data = db_length, name = "length", locs = out_locs,
-                 out_format = out_format, where = "form")
+    save_output(data = db_length, name = "length", locs = out_locs,
+                out_format = out_format, where = "form")
     rm(db_length, db_relz)
-    write_time(sub_start, log_file)
+    log_time(sub_start, log_file)
 
   } else skip_task(task, log_file, quiet)
   if(end == "length") {

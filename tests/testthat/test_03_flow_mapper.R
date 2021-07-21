@@ -7,13 +7,14 @@ test_that("Quiet is quiet and that runs resume and end as they should", {
   for(i in resume_options){
     suppressMessages(
       expect_message(flow_mapper(f, nrow = 11, ncol = 11,
-                                 verbose = TRUE, resume = i, end = i,
+                                 verbose = TRUE, resume = !!i, end = !!i,
                                  report = FALSE, log = FALSE,
                                  out_folder = dir), "CALCULATING")
     )
 
     expect_silent(flow_mapper(f, nrow = 11, ncol = 11,
-                              verbose = FALSE, quiet = TRUE, resume = i, end = i,
+                              verbose = FALSE, quiet = TRUE,
+                              resume = !!i, end = !!i,
                               report = FALSE, log = FALSE,
                               out_folder = dir))
   }

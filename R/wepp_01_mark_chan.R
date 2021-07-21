@@ -1,4 +1,4 @@
-mark_chan <- function(db, upslope_threshold = 300) {
+mark_chan <- function(db, upslope_threshold) {
 
   channels <- db %>%
     dplyr::filter(.data$upslope > upslope_threshold) %>%

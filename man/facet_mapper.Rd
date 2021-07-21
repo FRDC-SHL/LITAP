@@ -11,7 +11,6 @@ facet_mapper(
   n_remove = 9,
   procedure = "lsm",
   zone = NULL,
-  out_format = "rds",
   clean = FALSE,
   resume = NULL,
   end = NULL,
@@ -40,10 +39,6 @@ each seqno in the weti dem file, OR must be provided as an index file here.
 With a \code{zone} defined for each \code{seqno}. \code{zone} file can be either dem (.dem),
 Excel (.xlsx, .xls), or text (.txt, .csv, .dat)}
 
-\item{out_format}{Character. What format should the data be output as? "csv"
-for Comma-separated values, "dbf" for dbf database files, or "rds" for R
-data format.}
-
 \item{clean}{Logical. Remove all output files from previous runs in this
 folder?}
 
@@ -66,7 +61,7 @@ FacetMapR by R. A. (Bob) MacMillan, LandMapper Environmental Solutions.
 }
 \details{
 Based on the technique described in Li et al. 2011, if no \code{arule} file is
-provided, the ARULE cutoffs are calulated from the \code{form_mapper()} dem
+provided, the ARULE cutoffs are calculated from the \code{form_mapper()} dem
 files. These A Rules are saved as \code{afile_derived.csv} in the \code{folder}
 provided.
 

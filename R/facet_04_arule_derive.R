@@ -5,19 +5,20 @@ arule_derive <- function(weti, relief, n_remove) {
                      by = "seqno") %>%
     dplyr::filter(.data$row > (n_remove + 1), .data$row < (max(.data$row) - n_remove -1),
                   .data$col > (n_remove + 1), .data$col < (max(.data$col) - n_remove -1)) %>%
-    dplyr::select("prof", "plan", "slope" = "slope_pct", "qweti", "pctz2st", "pctz2pit", "z2pit") %>%
+    dplyr::select("prof", "plan", "slope" = "slope_pct", "qweti",
+                  "pctz2st", "pctz2pit", "z2pit") %>%
     dplyr::summarize(n = dplyr::n(),
                      dplyr::across(
-                       .fns = list(p90 = ~stats::quantile(., 0.9, na.rm = TRUE),
+                       .fns = list(p90 = ~stats::quantile(., 0.90, na.rm = TRUE),
                                    p75 = ~stats::quantile(., 0.75, na.rm = TRUE),
                                    p70 = ~stats::quantile(., 0.70, na.rm = TRUE),
                                    p65 = ~stats::quantile(., 0.65, na.rm = TRUE),
                                    p50 = ~stats::quantile(., 0.50, na.rm = TRUE),
                                    p35 = ~stats::quantile(., 0.35, na.rm = TRUE),
                                    p25 = ~stats::quantile(., 0.25, na.rm = TRUE),
-                                   p10 = ~stats::quantile(., 0.1, na.rm = TRUE))))
+                                   p10 = ~stats::quantile(., 0.10, na.rm = TRUE))))
 
-  a <- arule_template() %>%
+  arule_template() %>%
     dplyr::mutate(b = c(big_or_min(perc$prof_p90, 0.1),
                         big_or_min(perc$prof_p10, -0.1),
                         0,
@@ -77,7 +78,7 @@ b_calcs <- function(calc, b, d, b_low, b_hi, btype) {
 
 
 arule_template <- function() {
-  dplyr::tribble(~sortorder, ~file_in,   ~attr_in,   ~class_out,   ~model, ~calc,
+  dplyr::tribble(~sortorder, ~file_in,   ~attr_in,   ~class_out,   ~model_no, ~calc,
                  1,          "formfile", "PROF",     "CONVEX_D",   4,         "bd1",
                  2,          "formfile", "PROF",     "CONCAVE_D",  5,         "bd2",
                  3,          "formfile", "PROF",     "PLANAR_D",   1,         "lhd",

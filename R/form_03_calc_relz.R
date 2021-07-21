@@ -1,7 +1,7 @@
 # Relief calculations type 3
 
-calc_relz <- function(db, idb, str_val = 10000, ridge_val = 10000, pond = NULL,
-                      verbose = FALSE) {
+calc_relz <- function(db, idb, str_val, ridge_val, pond = NULL,
+                      verbose) {
 
   if(verbose) message("  Calculating streams")
   streams <- db %>%
@@ -13,7 +13,7 @@ calc_relz <- function(db, idb, str_val = 10000, ridge_val = 10000, pond = NULL,
     dplyr::mutate(shedno = local_shed) %>%
     calc_pit3(pond = pond, verbose = verbose)
 
-  if(verbose) message("  Calculating ridges")
+  if(verbose) message("  Calculating ridges") # Inverse
   ridges <- calc_stream3(idb, str_val = ridge_val, verbose = verbose) %>%
     dplyr::rename(cr_row = str_row, cr_col = str_col, cr_elev = str_elev,
                   z2cr = z2st, n2cr = n2st) %>%
@@ -46,7 +46,7 @@ calc_stream_sub <- function(db_shed, db, relz, str_val, verbose) {
 }
 
 
-calc_stream <- function(db, str_val = 10000, verbose = TRUE) {
+calc_stream <- function(db, str_val, verbose) {
   num_dn <- 0
 
   str_row <- 0
@@ -114,7 +114,7 @@ calc_stream <- function(db, str_val = 10000, verbose = TRUE) {
   relz
 }
 
-calc_stream2 <- function(db, str_val = 10000, verbose = TRUE) {
+calc_stream2 <- function(db, str_val, verbose) {
 
   num_dn <- 0
   str_row <- rep(as.numeric(NA), nrow(db))
@@ -187,7 +187,7 @@ calc_stream2 <- function(db, str_val = 10000, verbose = TRUE) {
 
 
 
-calc_stream3 <- function(db, str_val = 10000, verbose = TRUE) {
+calc_stream3 <- function(db, str_val, verbose) {
 
   str_row <- rep(as.numeric(NA), nrow(db))
   str_col <- rep(as.numeric(NA), nrow(db))
@@ -272,7 +272,7 @@ calc_stream3 <- function(db, str_val = 10000, verbose = TRUE) {
 }
 
 
-calc_stream4 <- function(db, str_val = 10000, verbose = TRUE) {
+calc_stream4 <- function(db, str_val, verbose) {
 
   str_row <- rep(as.numeric(NA), nrow(db))
   str_col <- rep(as.numeric(NA), nrow(db))

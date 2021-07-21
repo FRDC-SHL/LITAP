@@ -11,7 +11,7 @@ arule_models <- function(model, x, b, b_low, b_hi, b1, b2, d) {
   if(model == 4) fuzz <- dplyr::if_else(x > b, 1, basic_model(x, b, d))
   if(model == 5) fuzz <- dplyr::if_else(x < b, 1, basic_model(x, b, d))
 
-  fuzz * 100
+  round(fuzz * 100)
 }
 
 

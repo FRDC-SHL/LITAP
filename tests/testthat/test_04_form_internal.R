@@ -52,7 +52,7 @@ test_that("calc_stream", {
 
 test_that("Sub-functions", {
   suppressMessages(flow_mapper(f, nrow = 11, ncol = 11,
-                               out_folder = dir, report = FALSE))
+                               out_folder = dir, report = FALSE, clean = TRUE))
   grid <- 5
 
   # DB files
@@ -69,14 +69,15 @@ test_that("Sub-functions", {
   expect_snapshot_output(d)
 
   # Weti
-  expect_silent(d <- calc_weti(db, grid))
+  expect_silent(d <- calc_weti(db, grid, verbose = FALSE))
   expect_snapshot_output(d)
 
   # Relief
-  expect_silent(db_relz <- calc_relz(db, idb))
+  expect_silent(db_relz <- calc_relz(db, idb, str_val = 10000, ridge_val = 1000,
+                                     verbose = FALSE))
   expect_snapshot_output(db_relz)
 
   # Length
-  expect_silent(d <- calc_length(db, db_relz))
+  expect_silent(d <- calc_length(db, db_relz, grid = 5, verbose = FALSE))
   expect_snapshot_output(d)
 })

@@ -22,20 +22,25 @@ lsm_fuza <- function(attr, arule, procedure) {
 
   # Create holder data
   fuzzattr <- dplyr::select(attr, "seqno", "new_asp")
-
   # Calculate fuzzy attributes for each cell
   for(a in seq_len(nrow(arule))) {
     f <- dplyr::filter(attr, .data$zone == arule$zone[a])
     f <- dplyr::mutate(
       f,
       !! arule$class_out[a] := arule_models(
-        model = arule$model[a],
+        model = !!arule$model_no[a],
         x = !!rlang::sym(arule$attr_in[a]),
-        b = arule$b[a],
-        b_low = arule$b_low[a], b_hi = arule$b_hi[a],
-        b1 = arule$b1[a], b2 = arule$b2[a],
-        d = arule$d[a])) %>%
+        b = !!arule$b[a],
+        b_low = !!arule$b_low[a], b_hi = !!arule$b_hi[a],
+        b1 = !!arule$b1[a], b2 = !!arule$b2[a],
+        d = !!arule$d[a])) %>%
       dplyr::select("seqno", "zone", tidyselect::any_of(arule$class_out[a]))
+
+    #f$prof[8284] # 9.411 vs. 10.085
+
+    # arule_models(x = 10.085, model = 4, b = 14.3190, b_low = 0,
+    #              b_hi = 0, b1 = 9.17350, b2 = 0, d = 5.14550)
+
 
     fuzzattr[f$seqno, names(f)] <- f
   }
@@ -66,6 +71,8 @@ lsm_fuzc <- function(fuzzattr, crule) {
 }
 
 fuzc_sum <- function(fuzzattr, crule) {
+  crule_order <- unique(crule$f_name)
+
   f <- fuzzattr %>%
     dplyr::select("seqno", "zone",
                   tidyselect::all_of(unique(crule$fuzattr))) %>%
@@ -82,7 +89,9 @@ fuzc_sum <- function(fuzzattr, crule) {
     dplyr::group_by(.data$zone, .data$f_name) %>%
     dplyr::summarize(data = suppressMessages(list(dplyr::bind_cols(data)))) %>%
     dplyr::ungroup() %>%
-    dplyr::mutate(data = purrr::map(data, rowSums, na.rm = TRUE)) %>%
+    dplyr::mutate(data = purrr::map(data, ~round(rowSums(., na.rm = TRUE))),
+                  f_name = factor(f_name, levels = crule_order)) %>%
+    dplyr::arrange(f_name) %>%
     tidyr::pivot_wider(names_from = f_name, values_from = data) %>%
     tidyr::unnest(cols = c(-"zone", dplyr::everything())) %>%
     dplyr::mutate(seqno = seqnos)
@@ -109,7 +118,10 @@ fuzc_max <- function(f) {
   }
 
   dplyr::mutate(temp,
-                max_facet = n[max_facet],
-                max_2nd_facet = n[max_2nd_facet]) %>%
+                max_facet = replace(max_facet, max_value == 0, NA_real_),
+                max_2nd_facet = replace(max_2nd_facet, max_2nd_value == 0, NA_real_),
+                max_facet_name = n[max_facet],
+                max_2nd_facet_name = n[max_2nd_facet]) %>%
     dplyr::bind_cols(f, .)
+
 }
