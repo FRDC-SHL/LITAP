@@ -67,7 +67,7 @@ Load the package:
 library(LITAP)
 ```
 
-    ## LITAP v0.4.1.9000
+    ## LITAP v0.5.0
     ## LITAP is still in development; Help us by submitting bugs/feature requests: 
     ## http://github.com/FRDC-SHL/LITAP/issues
 
@@ -108,11 +108,9 @@ flow_mapper(file = "testELEV.dbf", nrow = 90, ncol = 90, out_folder = "./Output/
 
     ## REMOVING INVERTED INITIAL PITS
 
-    ## SAVING OUTPUT
-
     ## CREATING REPORT
 
-    ## Run took: 0.2 min
+    ## Run took: 0.18 min
 
 ## Basic Usage: `form_mapper()`
 

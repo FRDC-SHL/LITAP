@@ -74,7 +74,7 @@ FacetMapR by R. A. (Bob) MacMillan, LandMapper Environmental Solutions." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">LITAP</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
       </span>
     </div>
 
@@ -82,7 +82,7 @@ FacetMapR by R. A. (Bob) MacMillan, LandMapper Environmental Solutions." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa-home"></span>
+    <span class="fa fa-home"></span>
      
   </a>
 </li>
@@ -99,7 +99,7 @@ FacetMapR by R. A. (Bob) MacMillan, LandMapper Environmental Solutions." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/steffilazerte/LITAP">
-    <span class="fas fa-github fa-lg"></span>
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -134,7 +134,6 @@ FacetMapR by R. A. (Bob) MacMillan, LandMapper Environmental Solutions.</p>
   n_remove <span class='op'>=</span> <span class='fl'>9</span>,
   procedure <span class='op'>=</span> <span class='st'>"lsm"</span>,
   zone <span class='op'>=</span> <span class='cn'>NULL</span>,
-  out_format <span class='op'>=</span> <span class='st'>"rds"</span>,
   clean <span class='op'>=</span> <span class='cn'>FALSE</span>,
   resume <span class='op'>=</span> <span class='cn'>NULL</span>,
   end <span class='op'>=</span> <span class='cn'>NULL</span>,
@@ -178,12 +177,6 @@ With a <code>zone</code> defined for each <code>seqno</code>. <code>zone</code> 
 Excel (.xlsx, .xls), or text (.txt, .csv, .dat)</p></td>
     </tr>
     <tr>
-      <th>out_format</th>
-      <td><p>Character. What format should the data be output as? "csv"
-for Comma-separated values, "dbf" for dbf database files, or "rds" for R
-data format.</p></td>
-    </tr>
-    <tr>
       <th>clean</th>
       <td><p>Logical. Remove all output files from previous runs in this
 folder?</p></td>
@@ -215,7 +208,7 @@ Details below)</p></td>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Based on the technique described in Li et al. 2011, if no <code>arule</code> file is
-provided, the ARULE cutoffs are calulated from the <code><a href='form_mapper.html'>form_mapper()</a></code> dem
+provided, the ARULE cutoffs are calculated from the <code><a href='form_mapper.html'>form_mapper()</a></code> dem
 files. These A Rules are saved as <code>afile_derived.csv</code> in the <code>folder</code>
 provided.</p>
 <p>Procedure <code>lsm</code> refers to... Procedure <code>bc_pem</code> refers to...</p>
@@ -233,28 +226,11 @@ I. Methodology. Canadian Journal of Soil Science 91(2), 251-266.
 <a href='https://doi.org/10.1139/CJSS10080'>https://doi.org/10.1139/CJSS10080</a></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples">facet_mapper,Calculate landform facets using LSM logic,Calculate landform facets using LSM logic — facet_mapper,Source: <a href='https://github.com/FRDC-SHL/LITAP/blob/master/R/facet_mapper.R'><code>R/facet_mapper.R</code></a>,facet_mapper.Rd,character(0),facet_mapper,character(0),list(title = "Description", contents = "<p>This function takes backup data frame output from <code><a href='flow_mapper.html'>flow_mapper()</a></code> and\n<code><a href='form_mapper.html'>form_mapper()</a></code> calculates fuzzy attributes (among other metrics).  Based on\nFacetMapR by R. A. (Bob) MacMillan, LandMapper Environmental Solutions.</p>"),list(description = "This function takes backup data frame output from flow_mapper() and\nform_mapper() calculates fuzzy attributes (among other metrics).  Based on\nFacetMapR by R. A. (Bob) MacMillan, LandMapper Environmental Solutions."),<span class='fu'>facet_mapper</span><span class='op'>(</span>
-  <span class='va'>folder</span>,
-  arule <span class='op'>=</span> <span class='cn'>NULL</span>,
-  <span class='va'>crule</span>,
-  n_remove <span class='op'>=</span> <span class='fl'>9</span>,
-  procedure <span class='op'>=</span> <span class='st'>"lsm"</span>,
-  zone <span class='op'>=</span> <span class='cn'>NULL</span>,
-  out_format <span class='op'>=</span> <span class='st'>"rds"</span>,
-  clean <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  resume <span class='op'>=</span> <span class='cn'>NULL</span>,
-  end <span class='op'>=</span> <span class='cn'>NULL</span>,
-  log <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  verbose <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  quiet <span class='op'>=</span> <span class='cn'>FALSE</span>
-<span class='op'>)</span>,list(list(name = "folder", description = "<p>Character. Location of <code><a href='flow_mapper.html'>flow_mapper()</a></code> output</p>"), list(name = "arule", description = "<p>Character. Location of ARULE file. If NULL, A Rules are derived\nfrom the dem file (see Details).</p>"), list(name = "crule", description = "<p>Character. Location of CRULE file</p>"), list(name = "n_remove", description = "<p>Numeric. Number of cells (rows/columns) to remove around the\nedge of the dem before deriving the A Rules.</p>"), 
-    list(name = "procedure", description = "<p>Character. Which LSM procedure to use. One of <code>lsm</code>\n(Original LandMapR program) or <code>bc_pem</code> (newer BC-PEM Direct-to-Site-SEries\nDSS program).</p>"), list(name = "zone", description = "<p>file. If <code>procedure = \"bc_pem\"</code>, zones must either be defined for\neach seqno in the weti dem file, OR must be provided as an index file here.\nWith a <code>zone</code> defined for each <code>seqno</code>. <code>zone</code> file can be either dem (.dem),\nExcel (.xlsx, .xls), or text (.txt, .csv, .dat)</p>"), 
-    list(name = "out_format", description = "<p>Character. What format should the data be output as? \"csv\"\nfor Comma-separated values, \"dbf\" for dbf database files, or \"rds\" for R\ndata format.</p>"), list(name = "clean", description = "<p>Logical. Remove all output files from previous runs in this\nfolder?</p>"), list(name = "resume", description = "<p>Character. From which stage should the run be resumed? (see\nDetails below)</p>"), list(name = "end", description = "<p>Character. If ending a run after a particular step, which step\n(see Details below)</p>"), 
-    list(name = "log", description = "<p>Logical. Create log file recording progress?</p>"), list(name = "verbose", description = "<p>Logical. Output extra progress messages.</p>"), list(name = "quiet", description = "<p>Logical. Suppress all messages.</p>")),TRUE,<div class='input'>
+    <pre class="examples"><div class='input'>
 <span class='co'># First need to run flow_mapper()</span>
 <span class='fu'><a href='flow_mapper.html'>flow_mapper</a></span><span class='op'>(</span>file <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata"</span>, <span class='st'>"testELEV.dbf"</span>, package <span class='op'>=</span> <span class='st'>"LITAP"</span><span class='op'>)</span>,
            out_folder <span class='op'>=</span> <span class='st'>"./testELEV/"</span>, nrow <span class='op'>=</span> <span class='fl'>90</span>, ncol <span class='op'>=</span> <span class='fl'>90</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>CALCULATING DIRECTIONS</span></div><div class='output co'>#&gt; <span class='message'>CALCULATING WATERSHEDS</span></div><div class='output co'>#&gt; <span class='message'>REMOVING INITIAL PITS</span></div><div class='output co'>#&gt; <span class='message'>CALCULATING POND (GLOBAL) WATERSHEDS</span></div><div class='output co'>#&gt; <span class='message'>CALCULATING FILL PATTERNS</span></div><div class='output co'>#&gt; <span class='message'>INVERTING DEM</span></div><div class='output co'>#&gt; <span class='message'>CALCULATING INVERTED DIRECTIONS</span></div><div class='output co'>#&gt; <span class='message'>CALCULATING INVERTED WATERSHEDS</span></div><div class='output co'>#&gt; <span class='message'>REMOVING INVERTED INITIAL PITS</span></div><div class='output co'>#&gt; <span class='message'>SAVING OUTPUT</span></div><div class='output co'>#&gt; <span class='message'>CREATING REPORT</span></div><div class='output co'>#&gt; <span class='message'>Run took: 0.2 min</span></div><div class='input'>
+</div><div class='output co'>#&gt; <span class='message'>CALCULATING DIRECTIONS</span></div><div class='output co'>#&gt; <span class='message'>CALCULATING WATERSHEDS</span></div><div class='output co'>#&gt; <span class='message'>REMOVING INITIAL PITS</span></div><div class='output co'>#&gt; <span class='message'>CALCULATING POND (GLOBAL) WATERSHEDS</span></div><div class='output co'>#&gt; <span class='message'>CALCULATING FILL PATTERNS</span></div><div class='output co'>#&gt; <span class='message'>INVERTING DEM</span></div><div class='output co'>#&gt; <span class='message'>CALCULATING INVERTED DIRECTIONS</span></div><div class='output co'>#&gt; <span class='message'>CALCULATING INVERTED WATERSHEDS</span></div><div class='output co'>#&gt; <span class='message'>REMOVING INVERTED INITIAL PITS</span></div><div class='output co'>#&gt; <span class='message'>CREATING REPORT</span></div><div class='output co'>#&gt; <span class='message'>Run took: 0.18 min</span></div><div class='input'>
 <span class='co'># And form_mapper()</span>
 <span class='fu'><a href='form_mapper.html'>form_mapper</a></span><span class='op'>(</span>folder <span class='op'>=</span> <span class='st'>"./testELEV/"</span>, grid <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>SETUP</span></div><div class='output co'>#&gt; <span class='message'>CALCULATING FORM</span></div><div class='output co'>#&gt; <span class='message'>CALCULATING WETNESS INDICES</span></div><div class='output co'>#&gt; <span class='message'>CALCULATING RELIEF DERIVITIVES</span></div><div class='output co'>#&gt; <span class='message'>CALCULATING SLOPE LENGTH</span></div><div class='output co'>#&gt; <span class='message'>Run took: 0.1 min</span></div><div class='input'>
@@ -271,8 +247,7 @@ I. Methodology. Canadian Journal of Soil Science 91(2), 251-266.
 <span class='fu'><a href='https://rdrr.io/r/base/unlink.html'>unlink</a></span><span class='op'>(</span><span class='st'>"./testELEV/"</span>, recursive <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 
 
-</div>,list(list(title = "Details", contents = "<p>Based on the technique described in Li et al. 2011, if no <code>arule</code> file is\nprovided, the ARULE cutoffs are calulated from the <code><a href='form_mapper.html'>form_mapper()</a></code> dem\nfiles. These A Rules are saved as <code>afile_derived.csv</code> in the <code>folder</code>\nprovided.</p>\n<p>Procedure <code>lsm</code> refers to... Procedure <code>bc_pem</code> refers to...</p>\n<p>For resuming or ending a run, <code>resume</code> or <code>end</code> must be\none of the following:</p><ul>\n<li><p>attributes</p></li>\n<li><p>classes</p></li>\n</ul>\n\n<p>@references\nSheng Li, David A. Lobb, Brian G. McConkey, R. A. MacMillan, Alan Moulin,\nand Walter R. Fraser. 2011. Extracting topographic characteristics of landforms\ntypical of Canadian agricultural landscapes for agri-environmental modeling.\nI. Methodology. Canadian Journal of Soil Science 91(2), 251-266.\n<a href='https://doi.org/10.1139/CJSS10080'>https://doi.org/10.1139/CJSS10080</a></p>", 
-    slug = "details")),2021,list(name = "LITAP", version = "0.4.1.9000", authors = "Steffi LaZerte, Sheng Li, Agriculture and Agri-Food Canada"),list(destination = "dev", mode = "release", version_label = "default", version_tooltip = "Released version", in_dev = FALSE),list(root = "../", title = "LITAP"),list(),list(type = "default", left = "<li>\n  <a href=\"../index.html\">\n    <span class=\"fas fa-home\"></span>\n     \n  </a>\n</li>\n<li>\n  <a href=\"../reference/index.html\">Reference</a>\n</li>\n<li>\n  <a href=\"../articles/index.html\">Articles</a>\n</li>\n<li>\n  <a href=\"../news/index.html\">News</a>\n</li>", right = "<li>\n  <a href=\"https://github.com/steffilazerte/LITAP\">\n    <span class=\"fas fa-github fa-lg\"></span>\n     \n  </a>\n</li>"),list(.present = TRUE),list(version = "1.6.1"),FALSE</pre>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
