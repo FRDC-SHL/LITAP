@@ -1,7 +1,7 @@
 Package: LITAP
 Type: Package
 Title: Landscape Integrated Terrain Analysis Package
-Version: 0.5.0
+Version: 0.5.0.9000
 Authors@R: c(
      person("Steffi", "LaZerte", email = "sel@steffilazerte.ca", role = c("aut","cre")),
      person("Sheng", "Li", email = "sheng.li@canada.ca", role = "aut"),
