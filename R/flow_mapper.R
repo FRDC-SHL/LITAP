@@ -63,7 +63,7 @@
 #' unlink("./testELEV/", recursive = TRUE)
 #'
 #' @export
-flow_mapper <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
+flow_mapper <- function(file, nrow, ncol, grid = NULL, missing_value = -9999,
                         max_area = 10, max_depth = 0.5,
                         out_folder = NULL, out_format = "rds", clean = FALSE,
                         clim = NULL, rlim = NULL,
@@ -99,9 +99,11 @@ flow_mapper <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
 
   start <- Sys.time()
 
-  db_start <- load_file(file, nrow = nrow, ncol = ncol,
+  db_start <- load_file(file, nrow = nrow, ncol = ncol, grid = grid,
                         missing_value = missing_value,
                         clim = clim, rlim = rlim, verbose = verbose)
+
+  if(is.null(grid)) grid <- calc_grid(db_start)
 
   ncol_orig <- ncol
   nrow_orig <- nrow
@@ -112,6 +114,7 @@ flow_mapper <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
   log_write("Run options:", log = log_file)
   log_write("  Dimensions: nrows = ", nrow_orig,
             "; ncols = ", ncol_orig,
+            "; grid = ", grid,
             "; max_area = ", max_area,
             "; max_depth = ", max_depth,
             log = log_file)
@@ -331,7 +334,8 @@ flow_mapper <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
     }
 
     db_invert <- db_local %>%
-      dplyr::select(elev, seqno, row, col, missing, buffer, elev_orig, edge_map) %>%
+      dplyr::select("elev", "seqno", "x", "y", "row", "col", "buffer",
+                    "elev_orig", "edge_map") %>%
       invert()
 
     # Inverted Directions --------------------------------------------------------

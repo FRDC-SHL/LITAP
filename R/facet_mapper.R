@@ -93,7 +93,7 @@ facet_mapper <- function(folder, arule = NULL, crule, n_remove = 9,
 
   # Get fill dem (flow_mapper)
   db <- get_previous(folder, step = "fill", where = "flow") %>%
-    dplyr::select("seqno", "row", "col", "elev", "drec", "upslope",
+    dplyr::select("seqno", "x", "y", "row", "col", "elev", "drec", "upslope",
                   "fill_shed", "local_shed") %>%
     add_buffer()
 
@@ -108,6 +108,9 @@ facet_mapper <- function(folder, arule = NULL, crule, n_remove = 9,
   relief <- get_previous(folder, step = "relief", where = "form") %>%
     dplyr::select(-tidyselect::any_of(c("seqno_buffer", "drec_buffer"))) %>%
     add_buffer()
+
+  # Add details to add to outputs
+  db_add <- dplyr::select(db, "seqno", "elev", "buffer", "x", "y", "row", "col")
 
   # Get out locs
   out_locs <- locs_create(folder, which = "facet", clean = clean)
@@ -197,9 +200,10 @@ facet_mapper <- function(folder, arule = NULL, crule, n_remove = 9,
 
     # Get fuzzy attributes
     fuzzattr <- lsm_fuza(attr = attr, arule = arule, procedure = procedure)
+
     save_output(data = fuzzattr, name = "fuza", locs = out_locs,
                 out_format = out_format, where = "facet",
-                add_db = dplyr::select(db, "seqno", "buffer", "row", "col"))
+                add_db = db_add, debug = debug)
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
@@ -223,8 +227,8 @@ facet_mapper <- function(folder, arule = NULL, crule, n_remove = 9,
     fuzzattr <- lsm_fuzc(fuzzattr, crule = crule) # Also max
     save_output(data = fuzzattr, name = "fuzc", locs = out_locs,
                 out_format = out_format, where = "facet",
-                add_db = dplyr::select(db, "seqno", "buffer", "row", "col"))
-    #save_backup(locs = out_locs, data = fuzzattr, name = "fuzc")
+                add_db = db_add, dynamic_cols = TRUE, debug = debug)
+
     log_time(sub_start, log_file)
     resume <- ""
   }

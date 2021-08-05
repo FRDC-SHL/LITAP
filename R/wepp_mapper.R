@@ -57,7 +57,8 @@ wepp_mapper <- function(folder, grid,
   # Get backup fill dem
   db <- get_previous(folder, step = "fill", where = "flow")
   if("ldir" %in% names(db)) db <- dplyr::rename(db, "ddir" = "ldir")
-  db <- dplyr::select(db, seqno, row, col, elev, drec, ddir, upslope, fill_shed) %>%
+  db <- dplyr::select(db, "seqno", "x", "y", "row", "col", "elev", "drec",
+                      "ddir", "upslope", "fill_shed") %>%
     add_buffer()
 
   # Get fill file

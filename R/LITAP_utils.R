@@ -67,6 +67,11 @@ check_grid <- function(grid) {
   }
 }
 
+calc_grid <- function(db) {
+  x <- sort(unique(db$x))
+  median(x - dplyr::lag(x), na.rm = TRUE)
+}
+
 run_time <- function(start, log_file, quiet) {
   stop <- Sys.time()
   runtime <- round(difftime(stop, start, units = "min"), 2)

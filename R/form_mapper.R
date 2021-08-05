@@ -57,18 +57,20 @@ form_mapper <- function(folder, grid, str_val = 10000, ridge_val = 10000,
   # Get out format
   out_format <- get_format(folder, where = "flow")
 
-  # Get backup fill dem
+    # Get fill dem
   db <- get_previous(folder, step = "fill", where = "flow") %>%
-    dplyr::select(seqno, row, col, elev, drec, upslope, fill_shed, local_shed) %>%
+    dplyr::select("seqno", "x", "y", "row", "col", "elev", "drec", "upslope",
+                  "fill_shed", "local_shed") %>%
     add_buffer()
 
   # Get backup inverted dem
-  idb <- get_previous(folder, step = "ilocal", where = "flow")
+  idb <- get_previous(folder, step = "inverted", where = "flow")
   if("ldir" %in% names(idb)) idb <- dplyr::rename(idb, "ddir" = "ldir")
-  idb <- dplyr::select(idb, seqno, row, col, elev, drec, ddir, upslope, shedno) %>%
+  idb <- dplyr::select(idb, "seqno", "x", "y", "row", "col", "elev", "drec", "ddir",
+                       "upslope", "inverted_shed") %>%
     add_buffer()
 
-  # Get backup pond stats
+  # Get pond stats
   pond <- get_previous(folder, step = "pond", type = "stats", where = "flow") %>%
     add_buffer(db = db, stats = .)
 
