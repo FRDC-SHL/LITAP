@@ -132,3 +132,17 @@ test_that("merge_flow_form() works as expected", {
 
   expect_false(any(stringr::str_detect(names(t), "\\.x|\\.y")))
 })
+
+test_that("calc_grid() correctly assesses grid dimension", {
+  expand.grid(x = 1:100, y = 1:100) %>%
+    calc_grid() %>%
+    expect_equal(1)
+
+  expand.grid(x = seq(1, 100, by = 5), y = seq(1, 100, by = 5)) %>%
+    calc_grid() %>%
+    expect_equal(5)
+
+  expand.grid(x = seq(1, 100, by = 10), y = seq(1, 100, by = 10)) %>%
+    calc_grid() %>%
+    expect_equal(10)
+})
