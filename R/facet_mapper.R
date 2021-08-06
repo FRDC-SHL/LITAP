@@ -71,7 +71,7 @@ facet_mapper <- function(folder, arule = NULL, crule, n_remove = 9,
                          clean = FALSE,
                          resume = NULL, end = NULL,
                          log = TRUE,
-                         verbose = FALSE, quiet = FALSE) {
+                         verbose = FALSE, quiet = FALSE, debug = FALSE) {
 
   # Messaging
   if(quiet) verbose <- FALSE
@@ -105,7 +105,7 @@ facet_mapper <- function(folder, arule = NULL, crule, n_remove = 9,
     add_buffer()
 
   # Get relief dem (form_mapper)
-  relief <- get_previous(folder, step = "relief", where = "form") %>%
+  relief <- get_previous(folder, step = "length", where = "form") %>%
     dplyr::select(-tidyselect::any_of(c("seqno_buffer", "drec_buffer"))) %>%
     add_buffer()
 

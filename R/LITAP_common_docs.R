@@ -12,6 +12,8 @@
 #' @param log Logical. Create log file recording progress?
 #' @param verbose Logical. Output extra progress messages.
 #' @param quiet Logical. Suppress all messages.
+#' @param debug Logical. If TRUE, output files contain intermediate columns
+#'   useful for debugging (e.g., 'buffer', 'seqno_buffer', etc.) Default FALSE.
 #'
 #' @keywords internal
 #' @name args

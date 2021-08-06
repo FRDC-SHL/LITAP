@@ -12,34 +12,60 @@ save_basic <- function(data, name, locs, out_format, where) {
 }
 
 save_output <- function(data, stats = NULL, name, locs, out_format, where,
-                         add_db = NULL) {
+                        add_db = NULL, dynamic_cols = FALSE, debug) {
+
   # Remove lists to create flat files
   lsts <- names(data)[sapply(data, is.list)]
   data <- dplyr::select(data, -dplyr::all_of(lsts))
 
-  if(!is.null(add_db)) {
-    data <- dplyr::left_join(data, add_db, by = "seqno")
-  }
+  if(!is.null(add_db)) data <- dplyr::left_join(data, add_db, by = "seqno")
 
-  if(!is.null(stats)) {
+  if(!is.null(stats)) {  # Save stats
+
     stats <- remove_buffer(data, stats)
-    save_shed(locs[[where]], stats, paste0("stats_", name, ".", out_format))
-  } else {
+
+    f <- file_name(locs[[where]], name, "stats", out_format)
+    save_shed(f, stats)
+
+  } else { # Save dem files
+
     data <- remove_buffer(data)
-    save_shed(locs[[where]], data, paste0("dem_", name, ".", out_format))
+    cols <- cols_order[[where]]
+
+    if(!debug) data <- dplyr::select(data, -dplyr::contains("buffer"))
+
+    if(dynamic_cols) data <- dplyr::select(data, dplyr::any_of(cols),
+                                           dplyr::everything())
+
+    if(!dynamic_cols) data <- dplyr::select(data, dplyr::any_of(cols))
+
+    f <- file_name(locs[[where]], name, "dem", out_format)
+    save_shed(f, data)
   }
 }
 
-save_shed <- function(file_out, obj, name, clean = FALSE){
+remove_output <- function(locs, out_format, where) {
+  locs[[where]] %>%
+    file.path(glue::glue("{debug_files[[where]]}.{out_format}")) %>%
+    unlink()
+}
+
+file_name <- function(loc, name, type = "dem", out_format) {
+ file.path(loc, glue::glue("{type}_{name}.{out_format}"))
+}
+
+
+
+save_shed <- function(file_name, obj, clean = FALSE){
   if(clean) {
     obj <- remove_buffer(obj)
     obj <- obj[, lapply(obj, class) != "list"] # remove lists
   }
 
-  if(stringr::str_detect(name, ".rds$")) readr::write_rds(obj, file.path(file_out, name))
-  if(stringr::str_detect(name, ".csv$")) readr::write_csv(obj, file.path(file_out, name))
-  if(stringr::str_detect(name, ".dbf$")) {
-    foreign::write.dbf(as.data.frame(obj), file.path(file_out, name))
+  if(stringr::str_detect(file_name, ".rds$")) readr::write_rds(obj, file_name)
+  if(stringr::str_detect(file_name, ".csv$")) readr::write_csv(obj, file_name)
+  if(stringr::str_detect(file_name, ".dbf$")) {
+    foreign::write.dbf(as.data.frame(obj), file_name)
   }
 }
 

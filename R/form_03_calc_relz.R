@@ -14,14 +14,18 @@ calc_relz <- function(db, idb, str_val, ridge_val, pond = NULL,
     calc_pit3(pond = pond, verbose = verbose)
 
   if(verbose) message("  Calculating ridges") # Inverse
-  ridges <- calc_stream3(idb, str_val = ridge_val, verbose = verbose) %>%
+  ridges <- idb %>%
+    dplyr::mutate(shedno = inverted_shed) %>%
+    calc_stream3(str_val = ridge_val, verbose = verbose) %>%
     dplyr::rename(cr_row = str_row, cr_col = str_col, cr_elev = str_elev,
                   z2cr = z2st, n2cr = n2st) %>%
     dplyr::mutate(cr_elev = max(db$elev, na.rm = TRUE) - cr_elev) #Convert back to orig elev
 
   if(verbose) message("  Calculating ridges to pits")
 
-  ridge2pits <- calc_pit3(idb, verbose = verbose) %>%
+  ridge2pits <- idb %>%
+    dplyr::mutate(shedno = inverted_shed) %>%
+    calc_pit3(verbose = verbose) %>%
     dplyr::rename(peak_seqno = pit_seqno, peak_row = pit_row, peak_col = pit_col,
                   peak_elev = pit_elev, z2peak = z2pit, n2peak = n2pit) %>%
     dplyr::mutate(peak_elev = max(db$elev, na.rm = TRUE) - peak_elev)

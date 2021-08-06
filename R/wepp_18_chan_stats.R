@@ -29,15 +29,17 @@ chan_stats <- function(db, segs, grid) {
 
   chan2 <- dplyr::filter(chan, .data$len_cells > 1) %>%
     tidyr::nest(data = c(start_seqno, end_seqno, delta_n, len_cells)) %>%
-    dplyr::select(chan_no, gen_slope, data) %>%
+    dplyr::select("chan_no", "gen_slope", "data") %>%
     dplyr::mutate(data = purrr::map(data, ~get_slope(db, .))) %>%
     tidyr::unnest(data) %>%
-    dplyr::select(chan_no, num_points, mean_slope, gen_slope, aspect = circ_aspect,
-                  profile = prof_string)
+    dplyr::select("chan_no", "num_points", "mean_slope", "gen_slope",
+                  "aspect" = "circ_aspect",
+                  "profile" = "prof_string")
 
   dplyr::bind_rows(chan1, chan2) %>%
     dplyr::mutate(chan_len = dplyr::if_else(num_points == 2, grid,
-                                            .data$num_points * grid))
+                                            .data$num_points * grid)) %>%
+    dplyr::select("chan_no", "chan_len", dplyr::everything())
 }
 
 up_cells <- function(chan, db) {

@@ -40,7 +40,7 @@
 form_mapper <- function(folder, grid, str_val = 10000, ridge_val = 10000,
                         resume = NULL, end = NULL,
                         log = TRUE, clean = FALSE,
-                        verbose = FALSE, quiet = FALSE) {
+                        verbose = FALSE, quiet = FALSE, debug = FALSE) {
 
   # Messaging
   if(quiet) verbose <- FALSE
@@ -101,7 +101,7 @@ form_mapper <- function(folder, grid, str_val = 10000, ridge_val = 10000,
     db_form <- calc_form(db, grid, verbose = verbose)
 
     save_output(data = db_form, name = "form", locs = out_locs,
-                out_format = out_format, where = "form")
+                out_format = out_format, where = "form", debug = debug)
     log_time(sub_start, log_file)
 
     resume <- "weti"
@@ -136,7 +136,7 @@ form_mapper <- function(folder, grid, str_val = 10000, ridge_val = 10000,
                     lnqarea2 = round(lnqarea2, 3))
 
     save_output(data = db_form, name = "weti", locs = out_locs,
-                out_format = out_format, where = "form")
+                out_format = out_format, where = "form", debug = debug)
     rm(db_form, db_weti)
     log_time(sub_start, log_file)
 
@@ -157,7 +157,7 @@ form_mapper <- function(folder, grid, str_val = 10000, ridge_val = 10000,
                          pond = pond, verbose = verbose)
 
     save_output(data = db_relz, name = "relief", locs = out_locs,
-                out_format = out_format, where = "form")
+                out_format = out_format, where = "form", debug = debug)
 
     log_time(sub_start, log_file)
 
@@ -182,7 +182,8 @@ form_mapper <- function(folder, grid, str_val = 10000, ridge_val = 10000,
     db_length <- calc_length(db, db_relz, grid = grid, verbose = verbose)
 
     save_output(data = db_length, name = "length", locs = out_locs,
-                out_format = out_format, where = "form")
+                out_format = out_format, where = "form",
+                add_db = dplyr::select(db, "seqno", "x", "y"), debug = debug)
     rm(db_length, db_relz)
     log_time(sub_start, log_file)
 
@@ -191,6 +192,10 @@ form_mapper <- function(folder, grid, str_val = 10000, ridge_val = 10000,
     run_time(start, log_file, quiet)
     return()
   }
+
+  # Clean up
+  if(!debug) remove_output(locs = out_locs, out_format = out_format,
+                           where = "form")
 
   # Save final time
   run_time(start, log_file, quiet)

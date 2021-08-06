@@ -35,7 +35,7 @@ wepp_mapper <- function(folder, grid,
                         clean = FALSE,
                         resume = NULL, end = NULL,
                         log = TRUE,
-                        verbose = FALSE, quiet = FALSE) {
+                        verbose = FALSE, quiet = FALSE, debug = FALSE) {
 
   # Setup -------------------------------------------------------------------
 
@@ -101,7 +101,7 @@ wepp_mapper <- function(folder, grid,
 
     db_marked <- mark_chan(db, upslope_threshold = upslope_threshold)
     save_output(data = db_marked, name = "marked", locs = out_locs,
-                out_format = out_format, where = "wepp")
+                out_format = out_format, where = "wepp", debug = debug)
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
@@ -125,7 +125,7 @@ wepp_mapper <- function(folder, grid,
 
     db_cut <- cut_chan(db_marked, upslope_threshold)
     save_output(data = db_cut, name = "cut", locs = out_locs,
-                out_format = out_format, where = "wepp")
+                out_format = out_format, where = "wepp", debug = debug)
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
@@ -151,7 +151,7 @@ wepp_mapper <- function(folder, grid,
 
     db_merged <- merge_chan(db_cut)
     save_output(data = db_merged, name = "merged", locs = out_locs,
-                out_format = out_format, where = "wepp")
+                out_format = out_format, where = "wepp", debug = debug)
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
@@ -176,7 +176,7 @@ wepp_mapper <- function(folder, grid,
     db_ups <- dplyr::mutate(db_merged, shedno = fill_shed) %>%
       calc_upslopes()
     save_output(data = db_ups, name = "ups", locs = out_locs,
-                out_format = out_format, where = "wepp")
+                out_format = out_format, where = "wepp", debug = debug)
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
@@ -199,7 +199,7 @@ wepp_mapper <- function(folder, grid,
 
     db_remarked <- remark_chan(db_ups, upslope_threshold = upslope_threshold)
     save_output(data = db_remarked, name = "remarked", locs = out_locs,
-                out_format = out_format, where = "wepp")
+                out_format = out_format, where = "wepp", debug = debug)
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
@@ -222,7 +222,7 @@ wepp_mapper <- function(folder, grid,
 
     db_pits <- mark_pits(db_remarked, fill)
     save_output(data = db_pits, name = "pits", locs = out_locs,
-                out_format = out_format, where = "wepp")
+                out_format = out_format, where = "wepp", debug = debug)
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
@@ -245,7 +245,7 @@ wepp_mapper <- function(folder, grid,
 
     db_split <- split_segments(db_pits, grid, chan_length)
     save_output(data = db_split, name = "split", locs = out_locs,
-                out_format = out_format, where = "wepp")
+                out_format = out_format, where = "wepp", debug = debug)
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
@@ -269,7 +269,7 @@ wepp_mapper <- function(folder, grid,
 
     db_flow <- flow_to_channels(db_split)
     save_output(data = db_flow, name = "flow", locs = out_locs,
-                out_format = out_format, where = "wepp")
+                out_format = out_format, where = "wepp", debug = debug)
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
@@ -294,9 +294,9 @@ wepp_mapper <- function(folder, grid,
     segs <- db_segs$segs
     db_segs <- db_segs$db
     save_output(data = db_segs, stats = segs, name = "first_segs", locs = out_locs,
-                out_format = out_format, where = "wepp")
+                out_format = out_format, where = "wepp", debug = debug)
     save_output(data = db_segs, name = "first_segs", locs = out_locs,
-                out_format = out_format, where = "wepp")
+                out_format = out_format, where = "wepp", debug = debug)
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
@@ -325,9 +325,9 @@ wepp_mapper <- function(folder, grid,
     db_ordered <- db_ordered$db
     save_output(data = db_ordered, stats = segs_ordered, name = "ordered",
                 locs = out_locs,
-                out_format = out_format, where = "wepp")
+                out_format = out_format, where = "wepp", debug = debug)
     save_output(data = db_ordered, name = "ordered", locs = out_locs,
-                out_format = out_format, where = "wepp")
+                out_format = out_format, where = "wepp", debug = debug)
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
@@ -357,9 +357,9 @@ wepp_mapper <- function(folder, grid,
     db_ddir <- db_ddir$db
 
     save_output(data = db_ddir, stats = segs_ddir, name = "ddir2", locs = out_locs,
-                out_format = out_format, where = "wepp")
+                out_format = out_format, where = "wepp", debug = debug)
     save_output(data = db_ddir, name = "ddir2", locs = out_locs,
-                out_format = out_format, where = "wepp")
+                out_format = out_format, where = "wepp", debug = debug)
 
     log_time(sub_start, log_file)
     resume <- ""
@@ -387,7 +387,7 @@ wepp_mapper <- function(folder, grid,
     segs_upsegs <- find_upsegs(segs_ddir)
 
     save_output(data = db_ddir, stats = segs_upsegs, name = "upsegs", locs = out_locs,
-                out_format = out_format, where = "wepp")
+                out_format = out_format, where = "wepp", debug = debug)
 
     log_time(sub_start, log_file)
     resume <- ""
@@ -413,7 +413,7 @@ wepp_mapper <- function(folder, grid,
     db_hillsheds <- hill_sheds(db_ddir)
 
     save_output(data = db_hillsheds, name = "hillsheds", locs = out_locs,
-                out_format = out_format, where = "wepp")
+                out_format = out_format, where = "wepp", debug = debug)
 
     log_time(sub_start, log_file)
     resume <- ""
@@ -443,9 +443,9 @@ wepp_mapper <- function(folder, grid,
     db_renum <- db_renum$db
 
     save_output(data = db_renum, stats = segs_renum, name = "renum", locs = out_locs,
-                out_format = out_format, where = "wepp")
+                out_format = out_format, where = "wepp", debug = debug)
     save_output(data = db_renum, name = "renum", locs = out_locs,
-                out_format = out_format, where = "wepp")
+                out_format = out_format, where = "wepp", debug = debug)
 
     log_time(sub_start, log_file)
     resume <- ""
@@ -479,8 +479,9 @@ wepp_mapper <- function(folder, grid,
 
     save_basic(data = struct, name = "struct", locs = out_locs,
                out_format = out_format, where = "wepp")
-    save_output(data = db_renum, stats = segs_struct, name = "segs",
-                locs = out_locs, out_format = out_format, where = "wepp")
+    save_basic(data = remove_buffer(db_renum, segs_struct),
+               name = "segs", locs = out_locs,
+               out_format = out_format, where = "wepp")
 
     log_time(sub_start, log_file)
     resume <- ""
@@ -507,7 +508,7 @@ wepp_mapper <- function(folder, grid,
     db_wepp_form <- wepp_form(db_renum, grid)
 
     save_output(data = db_wepp_form, name = "wepp_form", locs = out_locs,
-                out_format = out_format, where = "wepp")
+                out_format = out_format, where = "wepp", debug = debug)
 
     log_time(sub_start, log_file)
     resume <- ""
@@ -532,8 +533,8 @@ wepp_mapper <- function(folder, grid,
 
     db_wepp_len <- wepp_len(db_wepp_form, grid)
 
-    save_output(data = db_wepp_len, name = "wepp_len", locs = out_locs,
-                out_format = out_format, where = "wepp")
+    save_output(data = db_wepp_len, name = "wepp", locs = out_locs,
+                out_format = out_format, where = "wepp", debug = debug)
 
     log_time(sub_start, log_file)
     resume <- ""
@@ -551,7 +552,7 @@ wepp_mapper <- function(folder, grid,
     log_start(task, sub_start, log_file)
 
     if(!exists("db_wepp_len") | !exists("segs_struct")) {
-      db_wepp_len <- get_previous(folder, step = "wepp_len", where = "wepp") %>%
+      db_wepp_len <- get_previous(folder, step = "wepp", where = "wepp") %>%
         add_buffer()
       segs_struct <- get_previous(folder, step = "stats_segs", where = "wepp",
                                   type = "stats") %>%
@@ -601,6 +602,10 @@ wepp_mapper <- function(folder, grid,
     run_time(start, log_file, quiet)
     return()
   }
+
+  # Clean up
+  if(!debug) remove_output(locs = out_locs, out_format = out_format,
+                           where = "wepp")
 
   # Save final time
   run_time(start, log_file, quiet)
