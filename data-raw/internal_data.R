@@ -67,7 +67,7 @@ test_dem <- load_file("../Runs - FlowMapR/Steffi_LandMapR_tests/11_Ab02PV/FlowMa
 # Column orders -------------------------------------------------------------
 cols_order <- list(
   "flow" = c("seqno", "x", "y", "row", "col", "elev", "ddir", "drec",
-             "upslope",
+             "upslope", "upslope_m",
              "vol2fl", "mm2fl", "parea",
              "initial_shed", "local_shed", "pond_shed", "fill_shed", "inverted_shed",
              "sgre", "sgr", "sgcn", "sgc", "scr", "scc",

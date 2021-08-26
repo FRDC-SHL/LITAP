@@ -293,6 +293,9 @@ flow_mapper <- function(file, nrow, ncol, grid = NULL, missing_value = -9999,
       stats_fill <- tibble::tibble()
     }
 
+    # Calculate upslope in m2
+    db_fill <- dplyr::mutate(db_fill, upslope_m = upslope * grid^2)
+
     # Calculate slope gradients and curvatures
     db_fill <- slope_gc(db_fill, grid = 1)
 
@@ -346,6 +349,9 @@ flow_mapper <- function(file, nrow, ncol, grid = NULL, missing_value = -9999,
     log_start(task, sub_start, log_file)
 
     db_idir <- calc_ddir2(db_invert, verbose = verbose)
+
+    # Calculate upslope in m2
+    db_idir <- dplyr::mutate(db_idir, upslope_m = upslope * grid^2)
 
     save_output(data = db_idir, name = "idir", locs = out_locs,
                 out_format = out_format, where = "flow", debug = debug)
