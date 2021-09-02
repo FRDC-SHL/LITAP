@@ -55,7 +55,7 @@ merge_flow_form <- function(folder, out_format = NULL) {
 
   name <- paste0("dem_flow_form_merged.", ext)
   if(ext == "rds") readr::write_rds(combo, file.path(folder, name))
-  if(ext == "csv") readr::write_csv(combo, file.path(folder, name))
+  if(ext == "csv") readr::write_csv(combo, file.path(folder, name), progress = FALSE)
   combo
 }
 

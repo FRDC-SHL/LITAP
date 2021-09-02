@@ -1,8 +1,9 @@
 
 
 test_that("merge_flow_form() works as expected", {
-  dir <- system.file("extdata", "testELEV", package = "LITAP")
-  expect_silent(t <- merge_flow_form(folder = dir)) %>%
+  file.copy(system.file("extdata", "testELEV", package = "LITAP"), to = ".",
+            recursive = TRUE)
+  expect_silent(t <- merge_flow_form(folder = "testELEV")) %>%
     expect_s3_class("data.frame")
 
   expect_true(all(
@@ -14,4 +15,12 @@ test_that("merge_flow_form() works as expected", {
   expect_gt(ncol(t), 50)
 
   expect_false(any(stringr::str_detect(names(t), "\\.x|\\.y")))
+  expect_true(file.exists("testELEV/dem_flow_form_merged.rds"))
+
+  # Check csv
+  expect_silent(t <- merge_flow_form(folder = "testELEV", out_format = "csv")) %>%
+    expect_s3_class("data.frame")
+  expect_true(file.exists("testELEV/dem_flow_form_merged.csv"))
+
+  unlink("./testELEV")
 })
