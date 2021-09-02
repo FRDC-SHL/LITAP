@@ -6,8 +6,9 @@
 \usage{
 flow_mapper(
   file,
-  nrow = NULL,
-  ncol = NULL,
+  nrow,
+  ncol,
+  grid = NULL,
   missing_value = -9999,
   max_area = 10,
   max_depth = 0.5,
@@ -35,6 +36,8 @@ coordinates.}
 \item{ncol}{Numeric. Number of columns in dem file (required for dbf files
 with a single column, but can be automatically assessed from files with x
 and y coordinates.}
+
+\item{grid}{Numeric. Grid size in m of the input DEM file}
 
 \item{missing_value}{Numeric/Character. Symbols which define missing data}
 
@@ -92,20 +95,20 @@ the following:
 \item \code{pond} (Calculating Pond Shed Statistics - Second Pit Removal)
 \item \code{fill} (Calculating Fill Shed Statistics - Third Pit Removal)
 \item \code{slope} (Slope Gradient and Curvature values)
-\item \code{inverted} (Calculating Directions on Inverted DEM)
+\item \code{idirections} (Calculating Directions on Inverted DEM)
 \item \code{iwatersheds} (Calculating Inverted Watersheds)
-\item \code{ilocal} (Initial Inverted Pit Removal)
+\item \code{inverted} (Inverted Pit Removal)
 \item \code{report} (Create the final report)
 }
 }
 \examples{
 # Basic Run
 flow_mapper(file = system.file("extdata", "testELEV.dbf", package = "LITAP"),
-           out_folder = "./testELEV/", nrow = 90, ncol = 90)
+           out_folder = "./testELEV/", nrow = 90, ncol = 90, grid = 1)
 
 # Specify parameters for initial pit removal
 flow_mapper(file = system.file("extdata", "testELEV.dbf", package = "LITAP"),
-            out_folder = "./testELEV/", nrow = 90, ncol = 90,
+            out_folder = "./testELEV/", nrow = 90, ncol = 90, grid = 1,
             max_area = 5, max_depth = 2)
 
 # Clean up (remove created folder and output)

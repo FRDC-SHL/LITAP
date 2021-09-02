@@ -6,7 +6,6 @@
 \usage{
 form_mapper(
   folder,
-  grid,
   str_val = 10000,
   ridge_val = 10000,
   resume = NULL,
@@ -19,8 +18,6 @@ form_mapper(
 }
 \arguments{
 \item{folder}{Character. Location of \code{\link[=flow_mapper]{flow_mapper()}} output}
-
-\item{grid}{Numeric. Grid size for the original dem}
 
 \item{str_val}{Numeric. Definition of a stream (number of upslope cells)}
 
@@ -64,10 +61,10 @@ cells vs. (2) area based on actual grid cell area values.
 
 # First need to run flow_mapper()
 flow_mapper(file = system.file("extdata", "testELEV.dbf", package = "LITAP"),
-           out_folder = "./testELEV/", nrow = 90, ncol = 90)
+           out_folder = "./testELEV/", nrow = 90, ncol = 90, grid = 5)
 
 # Now can run form_mapper()
-form_mapper(folder = "./testELEV/", grid = 5)
+form_mapper(folder = "./testELEV/")
 
 # Clean up (remove all output)
 unlink("./testELEV/", recursive = TRUE)

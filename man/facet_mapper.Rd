@@ -85,10 +85,10 @@ I. Methodology. Canadian Journal of Soil Science 91(2), 251-266.
 
 # First need to run flow_mapper()
 flow_mapper(file = system.file("extdata", "testELEV.dbf", package = "LITAP"),
-           out_folder = "./testELEV/", nrow = 90, ncol = 90)
+           out_folder = "./testELEV/", nrow = 90, ncol = 90, grid = 5)
 
 # And form_mapper()
-form_mapper(folder = "./testELEV/", grid = 5)
+form_mapper(folder = "./testELEV/")
 
 # Now can run facet_mapper() - Derive A Rules
 crule <- system.file("extdata", "crule.dbf", package = "LITAP")

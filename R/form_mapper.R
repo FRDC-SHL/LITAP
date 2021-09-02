@@ -6,7 +6,6 @@
 #' Environmental Solutions.
 #'
 #' @param folder Character. Location of [flow_mapper()] output
-#' @param grid Numeric. Grid size for the original dem
 #' @param str_val Numeric. Definition of a stream (number of upslope cells)
 #' @param ridge_val Numeric. Definition of a ridge (number of downslope cells)
 #'
@@ -27,10 +26,10 @@
 #'
 #' # First need to run flow_mapper()
 #' flow_mapper(file = system.file("extdata", "testELEV.dbf", package = "LITAP"),
-#'            out_folder = "./testELEV/", nrow = 90, ncol = 90)
+#'            out_folder = "./testELEV/", nrow = 90, ncol = 90, grid = 5)
 #'
 #' # Now can run form_mapper()
-#' form_mapper(folder = "./testELEV/", grid = 5)
+#' form_mapper(folder = "./testELEV/")
 #'
 #' # Clean up (remove all output)
 #' unlink("./testELEV/", recursive = TRUE)
@@ -62,6 +61,9 @@ form_mapper <- function(folder, grid, str_val = 10000, ridge_val = 10000,
     dplyr::select("seqno", "x", "y", "row", "col", "elev", "drec", "upslope",
                   "fill_shed", "local_shed") %>%
     add_buffer()
+
+  grid <- calc_grid(db)
+  check_grid(grid)
 
   # Get backup inverted dem
   idb <- get_previous(folder, step = "inverted", where = "flow")

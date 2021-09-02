@@ -52,11 +52,11 @@
 #' @examples
 #' # Basic Run
 #' flow_mapper(file = system.file("extdata", "testELEV.dbf", package = "LITAP"),
-#'            out_folder = "./testELEV/", nrow = 90, ncol = 90)
+#'            out_folder = "./testELEV/", nrow = 90, ncol = 90, grid = 1)
 #'
 #' # Specify parameters for initial pit removal
 #' flow_mapper(file = system.file("extdata", "testELEV.dbf", package = "LITAP"),
-#'             out_folder = "./testELEV/", nrow = 90, ncol = 90,
+#'             out_folder = "./testELEV/", nrow = 90, ncol = 90, grid = 1,
 #'             max_area = 5, max_depth = 2)
 #'
 #' # Clean up (remove created folder and output)
@@ -103,7 +103,11 @@ flow_mapper <- function(file, nrow, ncol, grid = NULL, missing_value = -9999,
                         missing_value = missing_value,
                         clim = clim, rlim = rlim, verbose = verbose)
 
-  if(is.null(grid)) grid <- calc_grid(db_start)
+  if(is.null(grid)) {
+    grid <- calc_grid(db_start)
+    message("No grid supplied, calculating from x values: ", grid, "m")
+    check_grid(grid)
+  }
 
   ncol_orig <- ncol
   nrow_orig <- nrow

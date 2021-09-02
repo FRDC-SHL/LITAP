@@ -6,21 +6,18 @@
 \usage{
 wepp_mapper(
   folder,
-  grid,
   chan_length = 200,
   upslope_threshold = 300,
   clean = FALSE,
   resume = NULL,
-  end = NULL,
   log = TRUE,
   verbose = FALSE,
-  quiet = FALSE
+  quiet = FALSE,
+  debug = FALSE
 )
 }
 \arguments{
 \item{folder}{Character. Location of \code{\link[=flow_mapper]{flow_mapper()}} output}
-
-\item{grid}{Numeric. Grid size for the original dem}
 
 \item{chan_length}{Numeric. Channel length maximum length. Used to split
 channels into segments}
@@ -56,10 +53,10 @@ LandMapper Environmental Solutions.
 \dontrun{
 # First need to run flow_mapper()
 flow_mapper(file = system.file("extdata", "testELEV.dbf", package = "LITAP"),
-           out_folder = "./testELEV/", nrow = 90, ncol = 90)
+           out_folder = "./testELEV/", nrow = 90, ncol = 90, grid = 5)
 
 # Now can run wepp_mapper()
-wepp_mapper(folder = "./testELEV/", grid = 5)
+wepp_mapper(folder = "./testELEV/")
 }
 
 }

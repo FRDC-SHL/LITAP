@@ -7,7 +7,6 @@
 #' LandMapper Environmental Solutions.
 #'
 #' @param folder Character. Location of [flow_mapper()] output
-#' @param grid Numeric. Grid size for the original dem
 #' @param chan_length Numeric. Channel length maximum length. Used to split
 #'   channels into segments
 #' @param upslope_threshold Numeric. Threshold of upslope cells to define
@@ -21,15 +20,15 @@
 #' \dontrun{
 #' # First need to run flow_mapper()
 #' flow_mapper(file = system.file("extdata", "testELEV.dbf", package = "LITAP"),
-#'            out_folder = "./testELEV/", nrow = 90, ncol = 90)
+#'            out_folder = "./testELEV/", nrow = 90, ncol = 90, grid = 5)
 #'
 #' # Now can run wepp_mapper()
-#' wepp_mapper(folder = "./testELEV/", grid = 5)
+#' wepp_mapper(folder = "./testELEV/")
 #' }
 #'
 #' @export
 
-wepp_mapper <- function(folder, grid,
+wepp_mapper <- function(folder,
                         chan_length = 200,
                         upslope_threshold = 300,
                         clean = FALSE,
@@ -60,6 +59,9 @@ wepp_mapper <- function(folder, grid,
   db <- dplyr::select(db, "seqno", "x", "y", "row", "col", "elev", "drec",
                       "ddir", "upslope", "fill_shed") %>%
     add_buffer()
+
+  grid <- calc_grid(db)
+  check_grid(grid)
 
   # Get fill file
   fill <- get_previous(folder, step = "fill", where = "flow", type = "stat") %>%
