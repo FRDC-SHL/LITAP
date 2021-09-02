@@ -40,8 +40,11 @@ test_that("neighbour_channels identifies neighbouring channel cells", {
                            3.5, 2.5, 3.0, 4.0, 4.6)) %>%
     add_buffer() %>%
     calc_ddir2(verbose = TRUE) %>%
+    expect_message("Fixing flat plateaus") %>%
+    expect_message("Fixing flat plateaus") %>%
     dplyr::mutate(shedno = 1) %>%
-    calc_upslopes()
+    calc_upslopes() %>%
+    expect_silent()
 
 #flow_plot(db, dir = TRUE, type = "elev")
 
@@ -64,8 +67,11 @@ test_that("mark_chan does channel cells", {
                            3.5, 2.5, 3.0, 4.0, 4.6, 3.0, 3.0, 3.0, 4.0, 4.5)) %>%
     add_buffer() %>%
     calc_ddir2(verbose = TRUE) %>%
+    expect_message("Fixing flat plateaus") %>%
+    expect_message("Fixing flat plateaus") %>%
     dplyr::mutate(shedno = 1) %>%
-    calc_upslopes()
+    calc_upslopes() %>%
+    expect_silent()
 
   expect_silent(m <- mark_chan(db, upslope_threshold = 2))
   expect_true(all(m$chan_no %in% 0:9))

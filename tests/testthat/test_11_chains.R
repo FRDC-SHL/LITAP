@@ -7,13 +7,13 @@ test_that("output formats chains - csv", {
   expect_silent(flow_mapper(file = system.file("extdata", "testELEV.dbf",
                                                package = "LITAP"),
                             out_folder = "./testELEV/", nrow = 90, ncol = 90,
+                            grid = 5,
                             quiet = TRUE, clean = TRUE, out_format = ext))
   expect_true(all(stringr::str_detect(list.files("./testELEV/flow"),
                                       paste0(".", !!ext, "$"))))
 
   # form
-  expect_silent(form_mapper(folder = "./testELEV/", grid = 5, quiet = TRUE,
-                            clean = TRUE))
+  expect_silent(form_mapper(folder = "./testELEV/", quiet = TRUE, clean = TRUE))
   expect_true(all(stringr::str_detect(list.files("./testELEV/form"),
                                       paste0(".", !!ext, "$"))))
 

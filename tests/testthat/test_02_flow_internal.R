@@ -1,5 +1,6 @@
-suppressMessages(f <- load_file(system.file("extdata", "testELEV.dbf", package = "LITAP"),
-                                nrow = 90, ncol = 90))
+suppressMessages(f <- load_file(system.file("extdata", "testELEV.dbf",
+                                            package = "LITAP"),
+                                nrow = 90, ncol = 90, grid = 1))
 
 
 test_that("Sub-functions", {
@@ -18,7 +19,8 @@ test_that("Sub-functions", {
     expect_snapshot_value(style = "json2")
 
   #Initial Pit Removal
-  expect_silent(d_local <- first_pitr1(d, max_area = 10, max_depth = 5, verbose = FALSE)) %>%
+  expect_silent(d_local <- first_pitr1(d, max_area = 10, max_depth = 5,
+                                       verbose = FALSE)) %>%
     sub_dem(s) %>%
     expect_snapshot_value(style = "json2")
 
@@ -27,10 +29,11 @@ test_that("Sub-functions", {
   expect_snapshot_value(sub_dem(d_pond$db, s), style = "json2")
   expect_snapshot_value(sub_dem(d_pond$stats, s), style = "json2")
 
-  d_local <- dplyr::left_join(d_local,
-                              dplyr::select(d_pond$db, local_shed, pond_shed) %>%
-                                dplyr::distinct(),
-                              by = "local_shed")
+  d_local <- dplyr::left_join(
+    d_local,
+    dplyr::select(d_pond$db, local_shed, pond_shed) %>%
+      dplyr::distinct(),
+    by = "local_shed")
 
   # Fill Pit Removal
   expect_silent(d_fill <- third_pitr1(d_local, verbose = FALSE))

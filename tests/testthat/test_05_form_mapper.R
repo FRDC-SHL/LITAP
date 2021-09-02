@@ -1,22 +1,21 @@
-test_that("Quiet is quiet and that runs resume and end as they should", {
+test_that("Quiet is quiet", {
+  form_mapper(folder = dir,
+              verbose = TRUE, quiet = TRUE,
+              log = FALSE) %>%
+  expect_silent()
+})
+
+test_that("Runs resume as they should", {
 
   resume_options <- c("form", "weti", "relief", "length")
 
   for(i in resume_options){
-    suppressMessages(
-      expect_warning(expect_message(
-        form_mapper(folder = dir,
-                    grid = 5,
-                    verbose = TRUE,
-                    resume = !!i, end = !!i,
-                    log = FALSE)), NA))
-
-    expect_warning(expect_silent(
-      form_mapper(folder = dir,
-                  grid = 5,
-                  verbose = TRUE, quiet = TRUE,
-                  resume = !!i, end = !!i,
-                  log = FALSE)), NA)
+    form_mapper(folder = dir,
+                verbose = TRUE,
+                resume = i, debug = TRUE,
+                log = FALSE) %>%
+      expect_message() %>%
+      suppressMessages()
   }
 
 })
