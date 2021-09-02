@@ -18,11 +18,11 @@ flow_mapper(
   clim = NULL,
   rlim = NULL,
   resume = NULL,
-  end = NULL,
   log = TRUE,
   report = TRUE,
   verbose = FALSE,
-  quiet = FALSE
+  quiet = FALSE,
+  debug = FALSE
 )
 }
 \arguments{
@@ -62,11 +62,7 @@ runs in this folder?}
 
 \item{rlim}{Numeric vector. Row limits if specifying a subset of the dem}
 
-\item{resume}{Character. From which stage should the run be resumed? (see
-Details below)}
-
-\item{end}{Character. If ending a run after a particular step, which step
-(see Details below)}
+\item{resume}{Character. From which stage should the run be resumed? (see}
 
 \item{log}{Logical. Create log file recording progress?}
 
@@ -75,6 +71,9 @@ Details below)}
 \item{verbose}{Logical. Output extra progress messages.}
 
 \item{quiet}{Logical. Suppress all messages.}
+
+\item{debug}{Logical. If TRUE, output files contain intermediate columns
+useful for debugging (e.g., 'buffer', 'seqno_buffer', etc.) Default FALSE.}
 }
 \description{
 Run an elevation file through all functions to calculate watershed flow and
@@ -85,7 +84,7 @@ Environmental Solutions.
 For information regarding loading other file types see
 \code{\link{load_file}}.
 
-For resuming or ending a run, \code{resume} or \code{end} must be one of
+For resuming a run, \code{resume} must be one of
 the following:
 
 \enumerate{

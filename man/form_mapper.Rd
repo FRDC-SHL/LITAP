@@ -9,11 +9,11 @@ form_mapper(
   str_val = 10000,
   ridge_val = 10000,
   resume = NULL,
-  end = NULL,
   log = TRUE,
   clean = FALSE,
   verbose = FALSE,
-  quiet = FALSE
+  quiet = FALSE,
+  debug = FALSE
 )
 }
 \arguments{
@@ -23,11 +23,7 @@ form_mapper(
 
 \item{ridge_val}{Numeric. Definition of a ridge (number of downslope cells)}
 
-\item{resume}{Character. From which stage should the run be resumed? (see
-Details below)}
-
-\item{end}{Character. If ending a run after a particular step, which step
-(see Details below)}
+\item{resume}{Character. From which stage should the run be resumed? (see}
 
 \item{log}{Logical. Create log file recording progress?}
 
@@ -37,6 +33,9 @@ folder?}
 \item{verbose}{Logical. Output extra progress messages.}
 
 \item{quiet}{Logical. Suppress all messages.}
+
+\item{debug}{Logical. If TRUE, output files contain intermediate columns
+useful for debugging (e.g., 'buffer', 'seqno_buffer', etc.) Default FALSE.}
 }
 \description{
 This function takes backup data frame output from \code{\link[=flow_mapper]{flow_mapper()}} and
@@ -45,8 +44,7 @@ other metrics).  Based on FormMapR by R. A. (Bob) MacMillan, LandMapper
 Environmental Solutions.
 }
 \details{
-For resuming or ending a run, \code{resume} or \code{end} must be
-one of the following:
+For resuming a run, \code{resume} must be one of the following:
 \enumerate{
 \item \code{weti} (Calculating Wetness Indices)
 \item \code{relief} (Calculating Relief Derivitives)

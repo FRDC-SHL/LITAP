@@ -13,10 +13,10 @@ facet_mapper(
   zone = NULL,
   clean = FALSE,
   resume = NULL,
-  end = NULL,
   log = TRUE,
   verbose = FALSE,
-  quiet = FALSE
+  quiet = FALSE,
+  debug = FALSE
 )
 }
 \arguments{
@@ -42,17 +42,16 @@ Excel (.xlsx, .xls), or text (.txt, .csv, .dat)}
 \item{clean}{Logical. Remove all output files from previous runs in this
 folder?}
 
-\item{resume}{Character. From which stage should the run be resumed? (see
-Details below)}
-
-\item{end}{Character. If ending a run after a particular step, which step
-(see Details below)}
+\item{resume}{Character. From which stage should the run be resumed? (see}
 
 \item{log}{Logical. Create log file recording progress?}
 
 \item{verbose}{Logical. Output extra progress messages.}
 
 \item{quiet}{Logical. Suppress all messages.}
+
+\item{debug}{Logical. If TRUE, output files contain intermediate columns
+useful for debugging (e.g., 'buffer', 'seqno_buffer', etc.) Default FALSE.}
 }
 \description{
 This function takes backup data frame output from \code{\link[=flow_mapper]{flow_mapper()}} and
@@ -67,7 +66,7 @@ provided.
 
 Procedure \code{lsm} refers to... Procedure \code{bc_pem} refers to...
 
-For resuming or ending a run, \code{resume} or \code{end} must be
+For resuming  a run, \code{resume} must be
 one of the following:
 \itemize{
 \item attributes
