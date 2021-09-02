@@ -17,6 +17,11 @@ save_output <- function(data, stats = NULL, name, locs, out_format, where,
   if(!is.null(stats)) {  # Save stats
 
     stats <- remove_buffer(data, stats)
+    cols <- cols_order_stats[[where]]
+
+    if(dynamic_cols) stats <- dplyr::select(stats, dplyr::any_of(cols),
+                                           dplyr::everything())
+    if(!dynamic_cols) stats <- dplyr::select(stats, dplyr::any_of(cols))
 
     f <- file_name(locs[[where]], name, "stats", out_format)
     save_shed(f, stats)
