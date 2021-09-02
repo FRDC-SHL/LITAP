@@ -2,25 +2,31 @@
 #'
 #' `flow_mapper()` and `form_mapper()` each provide output information per cell
 #' of a dem file. This function takes the fill dem from `flow_mapper()` as well
-#' as the form, length, and weti dem files from `form_mapper()` and merges them
-#' together into a complete dem file with all information.
+#' as the length and weti dem files from `form_mapper()` and merges them
+#' together into a complete dem file with all information. This file is saved
+#' to the project folder.
 #'
 #' @param folder Character. Folder with previous LITAP runs (i.e. where output
 #'   of `flow_mapper()` etc. are)
-#' @param format Character. Output format (rds or csv) that files are saved as.
+#' @param out_format Character. Output format (rds or csv) that merged file
+#'   should be saved as (if different from the rest; by default uses the format
+#'   of the other LITAP output files)
 #'
 #' @examples
 #'
 #' # First need to run flow_mapper()
 #' flow_mapper(file = system.file("extdata", "testELEV.dbf", package = "LITAP"),
-#'            out_folder = "./testELEV/", nrow = 90, ncol = 90)
+#'             grid = 5, nrow = 90, ncol = 90, out_folder = "./testELEV/")
 #'
 #' # Then run form_mapper()
-#' form_mapper(folder = "./testELEV/", grid = 5)
+#' form_mapper(folder = "./testELEV/")
 #'
 #'
 #' # Now merge together
 #' merge_flow_form(folder = "./testELEV")
+#'
+#' # If you prefer this file as CSV
+#' merge_flow_form(folder = "./testELEV", out_format = "csv")
 #'
 #' # Clean up (remove all output)
 #' unlink("./testELEV/", recursive = TRUE)
@@ -28,29 +34,28 @@
 #'
 #' @export
 
-merge_flow_form <- function(folder, format = "rds") {
+merge_flow_form <- function(folder, out_format = NULL) {
 
-  if(format == "rds") {
-    flow <- readRDS(file.path(folder, "flow", "dem_fill.rds"))
-    form <- readRDS(file.path(folder, "form", "dem_form.rds"))
-    length <- readRDS(file.path(folder, "form", "dem_length.rds"))
-    weti <- readRDS(file.path(folder, "form", "dem_weti.rds"))
-  } else if (format == "csv") {
-    flow <- readr::read_csv(file.path(folder, "flow", "dem_fill.csv"))
-    form <- readr::read_csv(file.path(folder, "form", "dem_form.csv"))
-    length <- readr::read_csv(file.path(folder, "form", "dem_length.csv"))
-    weti <- readr::read_csv(file.path(folder, "form", "dem_weti.csv"))
+  # Get current out format
+  ext <- get_format(folder, where = "flow")
+  if(!is.null(out_format)) {
+    check_out_format(out_format)
+    ext <- out_format
   }
 
-  dplyr::left_join(flow, form,
-                   by = c("seqno_buffer", "row", "col", "buffer", "seqno")) %>%
-    dplyr::left_join(length,
-                     by = c("seqno_buffer", "elev", "row", "col", "buffer",
-                            "seqno", "fill_shed")) %>%
+  flow <- get_previous(folder, step = "fill", where = "flow")
+  length <- get_previous(folder, step = "length", where = "form")
+  weti <- get_previous(folder, step = "weti", where = "form")
+
+  combo <- dplyr::left_join(flow, length,
+                            by = c("seqno", "x", "y", "row", "col", "elev")) %>%
     dplyr::left_join(weti,
-                     by = c("seqno_buffer", "drec_buffer", "upslope",
-                            "elev", "row", "col", "buffer", "seqno", "drec",
-                            "local_shed", "fill_shed",
-                            "slope_pct", "slope_deg", "aspect", "prof", "plan"))
+                     by = c("seqno", "x", "y", "row", "col",
+                            "elev", "drec", "upslope"))
+
+  name <- paste0("dem_flow_form_merged.", ext)
+  if(ext == "rds") readr::write_rds(combo, file.path(folder, name))
+  if(ext == "csv") readr::write_csv(combo, file.path(folder, name))
+  combo
 }
 
