@@ -68,11 +68,14 @@ pit_stat1 <- function(db, w = NULL, verbose) {
 
     pp <- pp %>%
       dplyr::left_join(dplyr::select(db, seqno, col, row), by = c("seqno")) %>%
-      dplyr::left_join(dplyr::select(db, seqno, col, row), by = c("seqno_n" = "seqno"), suffix = c("", "_out"))
+      dplyr::left_join(dplyr::select(db, seqno, col, row), by = c("seqno_n" = "seqno"),
+                       suffix = c("", "_out"))
 
     pp <- pp %>%
-      dplyr::select(shedno, in_seqno = seqno, in_row = row, in_col = col, in_elev = elev,
-                    out_seqno = seqno_n, out_row = row_out, out_col = col_out, out_elev = elev_n, drains_to = shedno_n,
+      dplyr::select(shedno, in_seqno = seqno, in_row = row, in_col = col,
+                    in_elev = elev,
+                    out_seqno = seqno_n, out_row = row_out, out_col = col_out,
+                    out_elev = elev_n, drains_to = shedno_n,
                     pour_elev)
 
     # Add other calculations

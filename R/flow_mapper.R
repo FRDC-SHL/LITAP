@@ -412,10 +412,12 @@ flow_mapper <- function(file, nrow, ncol, grid = NULL, missing_value = -9999,
     if(report == TRUE){
       announce(task, quiet)
 
-      files <- normalizePath(list.files(path = paste0(out_folder, "/flow"), full.names = TRUE))
+      files <- normalizePath(list.files(path = paste0(out_folder, "/flow"),
+                                        full.names = TRUE))
       report_final(file = file, report_loc = out_folder, out_files = files,
                    run = f, nrow = nrow, ncol = ncol,
-                   max_area = max_area, max_depth = max_depth, rlim = rlim, clim = clim)
+                   max_area = max_area, max_depth = max_depth,
+                   rlim = rlim, clim = clim)
     } else skip_task(task, log_file, quiet)
   }
 
