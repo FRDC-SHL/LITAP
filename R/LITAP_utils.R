@@ -49,8 +49,8 @@ skip_task <- function(task, log_file, quiet) {
 }
 
 check_out_format <- function(out_format){
-  if(!out_format %in% c("csv", "rds", "dbf")) {
-    stop("'out_format' must be one of 'csv', 'rds', or 'dbf'", call. = FALSE)
+  if(!out_format %in% c("csv", "rds")) {
+    stop("'out_format' must be one of 'csv' or 'rds'", call. = FALSE)
   }
 }
 

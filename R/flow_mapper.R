@@ -20,9 +20,9 @@
 #' @param out_folder Character. Folder in which to store output files. Defaults
 #'   to folder in the same location and with the same name as the dem file
 #' @param out_format Character. What format should the data be output as? "rds"
-#'   for R data format (default), "csv" for Comma-separated values, or "dbf" for
-#'   dbf database files. This format is used for all subsequent functions (i.e.
-#'   `form_mapper()`, `facet_mapper()` and `wepp_mapper()`.
+#'   for R data format (default), "csv" for Comma-separated values. This format
+#'   is used for all subsequent functions (i.e. `form_mapper()`,
+#'   `facet_mapper()` and `wepp_mapper()`.
 #' @param clean Logical. Remove all backup files and output files from previous
 #'   runs in this folder?
 #' @param clim Numeric vector. Column limits if specifying a subset of the dem
@@ -33,7 +33,7 @@
 #' @details For information regarding loading other file types see
 #'   \code{\link{load_file}}.
 #'
-#'   For resuming or ending a run, \code{resume} or \code{end} must be one of
+#'   For resuming a run, \code{resume} must be one of
 #'   the following:
 #'
 #'   \enumerate{

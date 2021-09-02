@@ -3,12 +3,6 @@ save_basic <- function(data, name, locs, out_format, where) {
   name <- paste0(name, ".", out_format)
   if(stringr::str_detect(name, ".rds$")) readr::write_rds(data, file.path(file_out, name))
   if(stringr::str_detect(name, ".csv$")) readr::write_csv(data, file.path(file_out, name))
-  if(stringr::str_detect(name, ".dbf$")) {
-    if("profile" %in% names(data)) {
-      data <- dplyr::mutate(data, profile = as.character(profile))
-    }
-      foreign::write.dbf(as.data.frame(data), file.path(file_out, name))
-  }
 }
 
 save_output <- function(data, stats = NULL, name, locs, out_format, where,
@@ -64,9 +58,6 @@ save_shed <- function(file_name, obj, clean = FALSE){
 
   if(stringr::str_detect(file_name, ".rds$")) readr::write_rds(obj, file_name)
   if(stringr::str_detect(file_name, ".csv$")) readr::write_csv(obj, file_name)
-  if(stringr::str_detect(file_name, ".dbf$")) {
-    foreign::write.dbf(as.data.frame(obj), file_name)
-  }
 }
 
 read_shed <- function(file_out, name){
@@ -205,7 +196,6 @@ get_previous <- function(folder, step, where, type = "dem") {
 
   if(ext == "rds") r <- readr::read_rds(f)
   if(ext == "csv") r <- readr::read_csv(f, col_types = readr::cols())
-  if(ext == "dbf") r <- foreign::read.dbf(f)
 
   dplyr::select(r, -dplyr::contains("_buffer"))
 }
