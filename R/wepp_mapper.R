@@ -32,7 +32,7 @@ wepp_mapper <- function(folder,
                         chan_length = 200,
                         upslope_threshold = 300,
                         clean = FALSE,
-                        resume = NULL, end = NULL,
+                        resume = NULL,
                         log = TRUE,
                         verbose = FALSE, quiet = FALSE, debug = FALSE) {
 
@@ -40,7 +40,6 @@ wepp_mapper <- function(folder,
 
   # Get resume options
   if(is.null(resume)) resume <- ""
-  if(is.null(end)) end <- ""
   resume_options <- c("", "mark_chan", "cut_chan", "merge_chan", "new_ups",
                       "remark_chan", "mark_pits", "split_segments", "flow2_chan",
                       "calc_segs", "order_segs", "redo_ddir",
@@ -48,7 +47,7 @@ wepp_mapper <- function(folder,
                       "wepp_form", "wepp_len", "hill_stats", "chan_stats",
                       "new_ups_final")
 
-  check_resume(resume, end, resume_options)
+  check_resume(resume, resume_options)
 
   # Get out format
   out_format <- get_format(folder, where = "flow")
@@ -107,11 +106,6 @@ wepp_mapper <- function(folder,
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
-  if(end == "mark_chan") {
-    run_time(start, log_file, quiet)
-    return()
-  }
-
 
   # Cut Channels ------------------------------------------------------------
   task <- "Cut channels fix elevation"
@@ -131,12 +125,6 @@ wepp_mapper <- function(folder,
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
-  if(end == "cut_chan") {
-    run_time(start, log_file, quiet)
-    return()
-  }
-
-
 
   # Merge Channels -----------------------------------------------------------
 
@@ -157,11 +145,6 @@ wepp_mapper <- function(folder,
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
-  if(end == "merge_chan") {
-    run_time(start, log_file, quiet)
-    return()
-  }
-
 
   # Recalculate Upslopes ----------------------------------------------------
   task <- "Re-calculate upslopes"
@@ -182,10 +165,6 @@ wepp_mapper <- function(folder,
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
-  if(end == "new_ups") {
-    run_time(start, log_file, quiet)
-    return()
-  }
 
   # Re-mark Upslopes ----------------------------------------------------
   task <- "Re-mark Channels"
@@ -205,10 +184,6 @@ wepp_mapper <- function(folder,
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
-  if(end == "remark_chan") {
-    run_time(start, log_file, quiet)
-    return()
-  }
 
   # Mark Pits ----------------------------------------------------
   task <- "Mark Pits"
@@ -228,10 +203,6 @@ wepp_mapper <- function(folder,
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
-  if(end == "mark_pits") {
-    run_time(start, log_file, quiet)
-    return()
-  }
 
   # Split Segments ----------------------------------------------------
   task <- "Split Segments"
@@ -251,11 +222,6 @@ wepp_mapper <- function(folder,
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
-  if(end == "split_segments") {
-    run_time(start, log_file, quiet)
-    return()
-  }
-
 
   # Flow to channels ----------------------------------------------------
   task <- "Flow to channels"
@@ -275,10 +241,6 @@ wepp_mapper <- function(folder,
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
-  if(end == "flow2_chan") {
-    run_time(start, log_file, quiet)
-    return()
-  }
 
   # Calculate Segments ----------------------------------------------------
   task <- "Calculate segments"
@@ -302,10 +264,6 @@ wepp_mapper <- function(folder,
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
-  if(end == "calc_segs") {
-    run_time(start, log_file, quiet)
-    return()
-  }
 
   # Order Segments ----------------------------------------------------
   task <- "Order segments"
@@ -333,10 +291,6 @@ wepp_mapper <- function(folder,
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
-  if(end == "order_segs") {
-    run_time(start, log_file, quiet)
-    return()
-  }
 
 
   # Redo ddir ----------------------------------------------------
@@ -366,10 +320,6 @@ wepp_mapper <- function(folder,
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
-  if(end == "redo_ddir") {
-    run_time(start, log_file, quiet)
-    return()
-  }
 
   # Find upsegs ----------------------------------------------------
   task <- "Find upslope segments"
@@ -394,11 +344,6 @@ wepp_mapper <- function(folder,
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
-  if(end == "find_upsegs") {
-    run_time(start, log_file, quiet)
-    return()
-  }
-
 
   # Hillslope segs ----------------------------------------------------
   task <- "Compute and label hillslope segments"
@@ -420,11 +365,6 @@ wepp_mapper <- function(folder,
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
-  if(end == "hill_sheds") {
-    run_time(start, log_file, quiet)
-    return()
-  }
-
 
   # Renumber segments ----------------------------------------------------
   task <- "Renumber segments"
@@ -452,11 +392,6 @@ wepp_mapper <- function(folder,
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
-  if(end == "renum_segs") {
-    run_time(start, log_file, quiet)
-    return()
-  }
-
 
   # Build WEPP structure file ----------------------------------------------------
   task <- "Build WEPP structure file"
@@ -488,12 +423,6 @@ wepp_mapper <- function(folder,
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
-  if(end == "build_stru") {
-    run_time(start, log_file, quiet)
-    return()
-  }
-  wepp_form
-
 
   # Compute aspect and slope for WEPP -----------------------------------------
   task <- "Compute aspect and slope for WEPP"
@@ -515,11 +444,6 @@ wepp_mapper <- function(folder,
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
-  if(end == "wepp_form") {
-    run_time(start, log_file, quiet)
-    return()
-  }
-
 
   # Measures of channel length ------------------------------------------------
   task <- "Calcualte 3 measures of channel length"
@@ -541,10 +465,6 @@ wepp_mapper <- function(folder,
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
-  if(end == "wepp_len") {
-    run_time(start, log_file, quiet)
-    return()
-  }
 
   # Hill Stats (profiles) -------------------------------------------------------------------
   task <- "Calculate hill profiles"
@@ -571,11 +491,6 @@ wepp_mapper <- function(folder,
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
-  if(end == "hill_stats") {
-    run_time(start, log_file, quiet)
-    return()
-  }
-
 
   # Chan Stats -------------------------------------------------------------------
   task <- "Calculate channel stats"
@@ -600,10 +515,6 @@ wepp_mapper <- function(folder,
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
-  if(end == "chan_stats") {
-    run_time(start, log_file, quiet)
-    return()
-  }
 
   # Clean up
   if(!debug) remove_output(locs = out_locs, out_format = out_format,

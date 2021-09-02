@@ -54,9 +54,9 @@ check_out_format <- function(out_format){
   }
 }
 
-check_resume <- function(resume, end, resume_options) {
-  if(!resume %in% resume_options | !end %in% resume_options) {
-    stop("resume/end must be one of 'NULL' (no resume), '",
+check_resume <- function(resume, resume_options) {
+  if(!resume %in% resume_options) {
+    stop("resume must be one of 'NULL' (no resume), '",
          paste0(resume_options[-1], collapse = "', '"), "'", call. = FALSE)
   }
 }

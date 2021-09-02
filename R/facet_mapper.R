@@ -28,7 +28,7 @@
 #'
 #'   Procedure `lsm` refers to... Procedure `bc_pem` refers to...
 #'
-#'   For resuming or ending a run, \code{resume} or \code{end} must be
+#'   For resuming  a run, \code{resume} must be
 #'   one of the following:
 #'
 #'   - attributes
@@ -69,7 +69,7 @@ facet_mapper <- function(folder, arule = NULL, crule, n_remove = 9,
                          procedure = "lsm",
                          zone = NULL,
                          clean = FALSE,
-                         resume = NULL, end = NULL,
+                         resume = NULL,
                          log = TRUE,
                          verbose = FALSE, quiet = FALSE, debug = FALSE) {
 
@@ -78,9 +78,8 @@ facet_mapper <- function(folder, arule = NULL, crule, n_remove = 9,
 
   # Get resume options
   if(is.null(resume)) resume <- ""
-  if(is.null(end)) end <- ""
   resume_options <- c("", "attributes", "classes")
-  check_resume(resume, end, resume_options)
+  check_resume(resume, resume_options)
 
   # Get procedure
   if(!procedure %in% c("lsm", "bc_pem")) {
@@ -207,10 +206,6 @@ facet_mapper <- function(folder, arule = NULL, crule, n_remove = 9,
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
-  if(end == "attributes") {
-    run_time(start, log_file, quiet)
-    return()
-  }
 
   # Facets - classes ------------------------------------------------
   task <- "calculating classes"

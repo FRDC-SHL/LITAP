@@ -11,8 +11,7 @@
 #'
 #' @inheritParams args
 #'
-#' @details For resuming or ending a run, \code{resume} or \code{end} must be
-#'   one of the following:
+#' @details For resuming a run, \code{resume} must be one of the following:
 #'
 #'   1. `weti` (Calculating Wetness Indices)
 #'   2. `relief` (Calculating Relief Derivitives)
@@ -36,8 +35,8 @@
 #'
 #' @export
 
-form_mapper <- function(folder, grid, str_val = 10000, ridge_val = 10000,
-                        resume = NULL, end = NULL,
+form_mapper <- function(folder, str_val = 10000, ridge_val = 10000,
+                        resume = NULL,
                         log = TRUE, clean = FALSE,
                         verbose = FALSE, quiet = FALSE, debug = FALSE) {
 
@@ -46,10 +45,8 @@ form_mapper <- function(folder, grid, str_val = 10000, ridge_val = 10000,
 
   # Get resume options
   if(is.null(resume)) resume <- ""
-  if(is.null(end)) end <- ""
   resume_options <- c("", "form", "weti", "relief", "length")
-  check_resume(resume, end, resume_options)
-  check_grid(grid)
+  check_resume(resume, resume_options)
 
   announce("setup", quiet)
 
@@ -108,10 +105,6 @@ form_mapper <- function(folder, grid, str_val = 10000, ridge_val = 10000,
 
     resume <- "weti"
   } else skip_task(task, log_file, quiet)
-  if(end == "form") {
-    run_time(start, log_file, quiet)
-    return()
-  }
 
   # Wetness indices -------------------------------------------------------
   task <- "calculating wetness indices"
@@ -144,10 +137,6 @@ form_mapper <- function(folder, grid, str_val = 10000, ridge_val = 10000,
 
     resume <- "relief"
   } else skip_task(task, log_file, quiet)
-  if(end == "weti") {
-    run_time(start, log_file, quiet)
-    return()
-  }
 
   # Relief ------------------------------------------------------------------
   task <- "calculating relief derivitives"
@@ -165,10 +154,6 @@ form_mapper <- function(folder, grid, str_val = 10000, ridge_val = 10000,
 
     resume <- "length"
   } else skip_task(task, log_file, quiet)
-  if(end == "relief") {
-    run_time(start, log_file, quiet)
-    return()
-  }
 
   # Length ------------------------------------------------------------------
   task <- "calculating slope length"
@@ -190,10 +175,6 @@ form_mapper <- function(folder, grid, str_val = 10000, ridge_val = 10000,
     log_time(sub_start, log_file)
 
   } else skip_task(task, log_file, quiet)
-  if(end == "length") {
-    run_time(start, log_file, quiet)
-    return()
-  }
 
   # Clean up
   if(!debug) remove_output(locs = out_locs, out_format = out_format,

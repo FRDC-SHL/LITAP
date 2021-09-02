@@ -67,18 +67,18 @@ flow_mapper <- function(file, nrow, ncol, grid = NULL, missing_value = -9999,
                         max_area = 10, max_depth = 0.5,
                         out_folder = NULL, out_format = "rds", clean = FALSE,
                         clim = NULL, rlim = NULL,
-                        resume = NULL, end = NULL, log = TRUE, report = TRUE,
+                        resume = NULL, log = TRUE, report = TRUE,
                         verbose = FALSE, quiet = FALSE, debug = FALSE) {
 
   check_out_format(out_format)
 
   if(is.null(resume)) resume <- ""
-  if(is.null(end)) end <- ""
+
   resume_options <- c("", "directions", "watersheds",
                       "local", "pond", "fill", "slope",
                       "idirections", "iwatersheds",
                       "inverted", "report")
-  check_resume(resume, end, resume_options)
+  check_resume(resume, resume_options)
 
   if(quiet) verbose <- FALSE
 
@@ -154,10 +154,6 @@ flow_mapper <- function(file, nrow, ncol, grid = NULL, missing_value = -9999,
     resume <- "watersheds"
 
   } else  skip_task(task, log_file, quiet)
-  if(end == "directions") {
-    run_time(start, log_file, quiet)
-    return()
-  }
 
 
   # Calculate watersheds -------------------------------------------------------
@@ -193,10 +189,6 @@ flow_mapper <- function(file, nrow, ncol, grid = NULL, missing_value = -9999,
     resume <- "local"
 
   } else skip_task(task, log_file, quiet)
-  if(end == "watersheds") {
-    run_time(start, log_file, quiet)
-    return()
-  }
 
   # Remove initial pits --------------------------------------------------------
   task <- "removing initial pits"
@@ -227,10 +219,6 @@ flow_mapper <- function(file, nrow, ncol, grid = NULL, missing_value = -9999,
 
     resume <- "pond"
   } else skip_task(task, log_file, quiet)
-  if(end == "local") {
-    run_time(start, log_file, quiet)
-    return()
-  }
 
   # Calc pond Sheds ---------------------------------------------------------
   task <- "calculating pond (global) watersheds"
@@ -262,10 +250,6 @@ flow_mapper <- function(file, nrow, ncol, grid = NULL, missing_value = -9999,
     log_time(sub_start, log_file)
     resume <- "fill"
   } else skip_task(task, log_file, quiet)
-  if(end == "pond") {
-    run_time(start, log_file, quiet)
-    return()
-  }
 
   # Calc fill sheds ---------------------------------------------------------
   task <- "calculating fill patterns"
@@ -275,9 +259,13 @@ flow_mapper <- function(file, nrow, ncol, grid = NULL, missing_value = -9999,
     log_start(task, sub_start, log_file)
 
     if(!exists("db_initial") || !exists("db_local") || !exists("db_pond")) {
-      db_initial <- get_previous(folder, step = "initial", where = "flow")
-      db_local <- get_previous(folder, step = "local", where = "flow")
-      db_pond <- get_previous(folder, step = "pond", where = "flow")
+      db_initial <- get_previous(folder, step = "initial", where = "flow") %>%
+        add_buffer()
+      db_local <- get_previous(folder, step = "local", where = "flow") %>%
+        add_buffer() %>%
+        dplyr::mutate(shedno = .data$local_shed)
+      db_pond <- get_previous(folder, step = "pond", where = "flow") %>%
+        add_buffer()
     }
 
     if(length(unique(db_local$shedno[!is.na(db_local$shedno)])) > 1){
@@ -324,10 +312,6 @@ flow_mapper <- function(file, nrow, ncol, grid = NULL, missing_value = -9999,
 
     resume <- "idirections"
   } else skip_task(task, log_file, quiet)
-  if(end == "fill") {
-    run_time(start, log_file, quiet)
-    return()
-  }
 
 
   # Inverted DEM --------------------------------------------------------------
@@ -364,10 +348,6 @@ flow_mapper <- function(file, nrow, ncol, grid = NULL, missing_value = -9999,
 
     resume <- "iwatersheds"
   } else skip_task(task, log_file, quiet)
-  if(end == "idirections") {
-    run_time(start, log_file, quiet)
-    return()
-  }
 
   # Inverted Watersheds --------------------------------------------------------
   task <- "calculating inverted watersheds"
@@ -388,10 +368,6 @@ flow_mapper <- function(file, nrow, ncol, grid = NULL, missing_value = -9999,
     log_time(sub_start, log_file)
     resume <- "inverted"
   } else skip_task(task, log_file, quiet)
-  if(end == "iwatersheds") {
-    run_time(start, log_file, quiet)
-    return()
-  }
 
 
   # Invert Remove Initial Pits -----------------------------------------------
