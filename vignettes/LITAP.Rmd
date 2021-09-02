@@ -63,23 +63,25 @@ flow_mapper(file = "testELEV.dbf", nrow = 90, ncol = 90, grid = 5,
 
 ## Output folders
 
-A LITAP run saves all output from `flow_mapper()` into two folders: `backup` and `flow`.  
+A LITAP run saves all output from `flow_mapper()` into folder `flow`.  
 
-- `backup` folder contains .rds files (R data files) used to resume a run from an intermediate point. These are also used by `form_mapper()`. These shouldn't be used by the user.
-- `flow` folder contains .csv, .dbf, or .rds files of the output (depending on the output format specified), similar to that produced by the LandMapR program but designed for ease of use in R.
+- `flow` folder contains .csv or .rds files of the output (depending on the output format specified), similar to that produced by the LandMapR program but designed for ease of use in R.
 
-You can specify where these output folders/files should be saved with `out_folder`. Otherwise the folders will be created in the folder of the original Elev.dbf file, which may not be desirable. Note that folder locations are relative to working directory of the R session.
+You can specify where these output folders/files should be saved with `out_folder`. Otherwise the folders will be created in the folder of the original Elev.dbf file, which may not be desirable.
 
 ```{r}
 flow_mapper(file = "testELEV.dbf", nrow = 90, ncol = 90, grid = 5, 
-            out_folder = "./Output/")
+            out_folder = "./LITAP runs/")
 ```
+
+Ideally, it's best to create an RStudio project, put the original Elev.dbf file in this project and work from there. Note that folder locations are relative to working directory of the R session.
+
 
 To clean up any old files before conducting a new run, use `clean = TRUE`. __Careful, this will remove all backup files from previous runs making it impossible to resume a run!__
 
 ```{r}
 flow_mapper(file = "testELEV.dbf", nrow = 90, ncol = 90, grid = 5,
-            out_folder = "./Output/", clean = TRUE)
+            out_folder = "./LITAP runs/", clean = TRUE)
 ```
 
 ## Different input file types
@@ -123,10 +125,13 @@ Each run of LITAP goes through numerous steps. If there's a problem, a run can b
 
 For example, to resume with calculating pond statistics and continue to the end of the run:
 
-```{r}
+```{r, eval = FALSE}
 flow_mapper(file = "testELEV.dbf", nrow = 90, ncol = 90, grid = 5,
             resume = "pond")
 ```
+
+Note that if a run finishes, you won't be able to resume that run from a previous step, as intermediate files are removed.
+If you want this ability, use the argument `debug = TRUE`.
 
 ## Steps
 
@@ -159,7 +164,7 @@ Remove pits which are smaller than the maximum area and depth (and which are not
 ```{r, include = FALSE}
 unlink("./testELEV.dbf")
 unlink("./testELEV/", recursive = TRUE)
-unlink("./Output/", recursive = TRUE)
+unlink("./LITAP runs/", recursive = TRUE)
 ```
 
 
