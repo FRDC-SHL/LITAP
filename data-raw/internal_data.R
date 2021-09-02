@@ -65,6 +65,13 @@ test_dem <- load_file("../Runs - FlowMapR/Steffi_LandMapR_tests/11_Ab02PV/FlowMa
 
 
 # Column orders -------------------------------------------------------------
+cols_order_stats <- list(
+  "flow" = c("shedno", "edge_pit", "final", "end_pit", "shed_area",
+             "pit_row", "pit_col", "pit_seqno", "pit_elev", "pour_elev", "pre_vol",
+             "pit_vol", "varatio", "pit_area", "drains_to", "next_pit",
+             "become", "remove", "in_row", "in_col", "in_seqno", "in_elev",
+             "out_row", "out_col", "out_seqno", "out_elev"))
+
 cols_order <- list(
   "flow" = c("seqno", "x", "y", "row", "col", "elev", "ddir", "drec",
              "upslope", "upslope_m",
@@ -72,7 +79,7 @@ cols_order <- list(
              "initial_shed", "local_shed", "pond_shed", "fill_shed", "inverted_shed",
              "sgre", "sgr", "sgcn", "sgc", "scr", "scc",
              "hill_r_dir", "hill_c_dir", "hill_r_n", "hill_r_cell",
-             "hill_c_n", "hill_c_cell"),
+             "hill_c_n", "hill_c_cell", "edge_map", "ridge"),
 
   "form" = c("seqno", "x", "y", "row", "col", "elev", "ddir", "drec",
              "upslope",
@@ -86,7 +93,10 @@ cols_order <- list(
              "pctz2st", "pctz2pit", "pctz2top", "pmin2max",
 
              "l2pit", "l2peak", "lpit2peak", "ppit2peakl",
-             "l2str", "l2div", "lstr2div", "pstr2divl"),
+             "l2str", "l2div", "lstr2div", "pstr2divl",
+
+             "pit_row", "pit_col", "peak_row", "peak_col",
+             "str_row", "str_col", "cr_row", "cr_col"),
 
   "facet" = c("seqno", "x", "y", "row", "col", "elev", "zone",
               "convex_d", "concave_d", "planar_d",
@@ -129,7 +139,7 @@ debug_files <- list(
 
 
 usethis::use_data(fix_names, match_names, arule_weti, arule_relief,
-                  cols_order, debug_files,
+                  cols_order, cols_order_stats, debug_files,
                   internal = TRUE, overwrite = TRUE)
 usethis::use_data(test_dem, internal = FALSE, overwrite = TRUE)
 

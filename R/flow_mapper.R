@@ -230,7 +230,8 @@ flow_mapper <- function(file, nrow, ncol, grid = NULL, missing_value = -9999,
 
     if(!exists("db_local")) {
       db_local <- get_previous(folder, step = "local", where = "flow") %>%
-        add_buffer()
+        add_buffer() %>%
+        dplyr::mutate(shedno = .data$local_shed)
     }
 
     if(length(unique(db_local$shedno[!is.na(db_local$shedno)])) > 1){
@@ -327,7 +328,7 @@ flow_mapper <- function(file, nrow, ncol, grid = NULL, missing_value = -9999,
 
     db_invert <- db_local %>%
       dplyr::select("elev", "seqno", "x", "y", "row", "col", "buffer",
-                    "elev_orig", "edge_map") %>%
+                    "edge_map") %>%
       invert()
 
     # Inverted Directions --------------------------------------------------------
@@ -337,9 +338,6 @@ flow_mapper <- function(file, nrow, ncol, grid = NULL, missing_value = -9999,
     log_start(task, sub_start, log_file)
 
     db_idir <- calc_ddir2(db_invert, verbose = verbose)
-
-    # Calculate upslope in m2
-    db_idir <- dplyr::mutate(db_idir, upslope_m = upslope * grid^2)
 
     save_output(data = db_idir, name = "idir", locs = out_locs,
                 out_format = out_format, where = "flow", debug = debug)
@@ -358,10 +356,15 @@ flow_mapper <- function(file, nrow, ncol, grid = NULL, missing_value = -9999,
     log_start(task, sub_start, log_file)
 
     if(!exists("db_idir")) {
-      db_idir <- get_previous(folder, step = "idir", where = "flow")
+      db_idir <- get_previous(folder, step = "idir", where = "flow") %>%
+        add_buffer()
     }
 
     db_iinitial <- calc_shed4(db_idir, verbose = verbose)
+
+    # Calculate upslope in m2
+    db_iinitial <- dplyr::mutate(db_iinitial, upslope_m = upslope * grid^2)
+
     save_output(data = db_iinitial, name = "iinitial", locs = out_locs,
                 out_format = out_format, where = "flow", debug = debug)
 
@@ -379,7 +382,8 @@ flow_mapper <- function(file, nrow, ncol, grid = NULL, missing_value = -9999,
     log_start(task, sub_start, log_file)
 
     if(!exists("db_iinitial")) {
-      db_iinitial <- get_previous(folder, step = "iinitial", where = "flow")
+      db_iinitial <- get_previous(folder, step = "iinitial", where = "flow") %>%
+        add_buffer()
     }
 
     db_inverted <- first_pitr1(db_iinitial, max_area = max_area,
