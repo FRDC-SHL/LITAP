@@ -22,5 +22,5 @@ test_that("merge_flow_form() works as expected", {
     expect_s3_class("data.frame")
   expect_true(file.exists("testELEV/dem_flow_form_merged.csv"))
 
-  unlink("./testELEV")
+  unlink("testELEV", recursive = TRUE)
 })
