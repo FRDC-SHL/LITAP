@@ -1,22 +1,26 @@
 arule_derive <- function(weti, relief, n_remove) {
 
   perc <- weti %>%
-    dplyr::left_join(dplyr::select(relief, "seqno", "pctz2st", "pctz2pit", "z2pit"),
+    dplyr::left_join(dplyr::select(relief,
+                                   "seqno", "pctz2st", "pctz2pit", "z2pit"),
                      by = "seqno") %>%
-    dplyr::filter(.data$row > (n_remove + 1), .data$row < (max(.data$row) - n_remove -1),
-                  .data$col > (n_remove + 1), .data$col < (max(.data$col) - n_remove -1)) %>%
+    dplyr::filter(.data$row > (n_remove + 1),
+                  .data$row < (max(.data$row) - n_remove -1),
+                  .data$col > (n_remove + 1),
+                  .data$col < (max(.data$col) - n_remove -1)) %>%
     dplyr::select("prof", "plan", "slope" = "slope_pct", "qweti",
                   "pctz2st", "pctz2pit", "z2pit") %>%
-    dplyr::summarize(n = dplyr::n(),
-                     dplyr::across(
-                       .fns = list(p90 = ~stats::quantile(., 0.90, na.rm = TRUE),
-                                   p75 = ~stats::quantile(., 0.75, na.rm = TRUE),
-                                   p70 = ~stats::quantile(., 0.70, na.rm = TRUE),
-                                   p65 = ~stats::quantile(., 0.65, na.rm = TRUE),
-                                   p50 = ~stats::quantile(., 0.50, na.rm = TRUE),
-                                   p35 = ~stats::quantile(., 0.35, na.rm = TRUE),
-                                   p25 = ~stats::quantile(., 0.25, na.rm = TRUE),
-                                   p10 = ~stats::quantile(., 0.10, na.rm = TRUE))))
+    dplyr::summarize(
+      n = dplyr::n(),
+      dplyr::across(
+        .fns = list(p90 = ~stats::quantile(., 0.90, na.rm = TRUE),
+                    p75 = ~stats::quantile(., 0.75, na.rm = TRUE),
+                    p70 = ~stats::quantile(., 0.70, na.rm = TRUE),
+                    p65 = ~stats::quantile(., 0.65, na.rm = TRUE),
+                    p50 = ~stats::quantile(., 0.50, na.rm = TRUE),
+                    p35 = ~stats::quantile(., 0.35, na.rm = TRUE),
+                    p25 = ~stats::quantile(., 0.25, na.rm = TRUE),
+                    p10 = ~stats::quantile(., 0.10, na.rm = TRUE))))
 
   arule_template() %>%
     dplyr::mutate(b = c(big_or_min(perc$prof_p90, 0.1),
@@ -78,23 +82,24 @@ b_calcs <- function(calc, b, d, b_low, b_hi, btype) {
 
 
 arule_template <- function() {
-  dplyr::tribble(~sortorder, ~file_in,   ~attr_in,   ~class_out,   ~model_no, ~calc,
-                 1,          "formfile", "PROF",     "CONVEX_D",   4,         "bd1",
-                 2,          "formfile", "PROF",     "CONCAVE_D",  5,         "bd2",
-                 3,          "formfile", "PROF",     "PLANAR_D",   1,         "lhd",
-                 4,          "formfile", "PLAN",     "CONVEX_A",   4,         "bd1",
-                 5,          "formfile", "PLAN",     "CONCAVE_A",  5,         "bd2",
-                 6,          "formfile", "PLAN",     "PLANAR_A",   1,         "lhd",
-                 7,          "formfile", "QWETI",    "HIGH_WI",    4,         "bd1",
-                 8,          "formfile", "QWETI",    "LOW_WI",     5,         "bd2",
-                 9,          "formfile", "SLOPE",    "NEAR_LEVEL", 5,         "bd2",
-                 10,         "formfile", "SLOPE",    "REL_STEEP",  4,         "bd1",
-                 11,         "relzfile", "PCTZ2ST",  "NEAR_DIV",   4,         "bd1",
-                 12,         "relzfile", "PCTZ2ST",  "NEAR_HALF",  1,         "lhd",
-                 13,         "relzfile", "PCTZ2ST",  "NEAR_CHAN",  5,         "bd2",
-                 14,         "relzfile", "PCTZ2PIT", "NEAR_PEAK",  4,         "bd1",
-                 15,         "relzfile", "PCTZ2PIT", "NEAR_MID",   1,         "lhd",
-                 16,         "relzfile", "PCTZ2PIT", "NEAR_PIT",   5,         "bd2",
-                 17,         "relzfile", "Z2PIT",    "HI_ABOVE",   4,         "bd1")
+  dplyr::tribble(
+    ~sortorder, ~file_in,   ~attr_in,   ~class_out,   ~model_no, ~calc,
+    1,          "formfile", "PROF",     "CONVEX_D",   4,         "bd1",
+    2,          "formfile", "PROF",     "CONCAVE_D",  5,         "bd2",
+    3,          "formfile", "PROF",     "PLANAR_D",   1,         "lhd",
+    4,          "formfile", "PLAN",     "CONVEX_A",   4,         "bd1",
+    5,          "formfile", "PLAN",     "CONCAVE_A",  5,         "bd2",
+    6,          "formfile", "PLAN",     "PLANAR_A",   1,         "lhd",
+    7,          "formfile", "QWETI",    "HIGH_WI",    4,         "bd1",
+    8,          "formfile", "QWETI",    "LOW_WI",     5,         "bd2",
+    9,          "formfile", "SLOPE",    "NEAR_LEVEL", 5,         "bd2",
+    10,         "formfile", "SLOPE",    "REL_STEEP",  4,         "bd1",
+    11,         "relzfile", "PCTZ2ST",  "NEAR_DIV",   4,         "bd1",
+    12,         "relzfile", "PCTZ2ST",  "NEAR_HALF",  1,         "lhd",
+    13,         "relzfile", "PCTZ2ST",  "NEAR_CHAN",  5,         "bd2",
+    14,         "relzfile", "PCTZ2PIT", "NEAR_PEAK",  4,         "bd1",
+    15,         "relzfile", "PCTZ2PIT", "NEAR_MID",   1,         "lhd",
+    16,         "relzfile", "PCTZ2PIT", "NEAR_PIT",   5,         "bd2",
+    17,         "relzfile", "Z2PIT",    "HI_ABOVE",   4,         "bd1")
 
 }
