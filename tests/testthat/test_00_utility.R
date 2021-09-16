@@ -1,3 +1,4 @@
+# get_dir() ------------------------------------------------------------------
 test_that("get_dir returns correct direction", {
   expect_equal(get_dir(row = 1, col = 2, row_f = 2, col_f = 1), 1)
   expect_equal(get_dir(row = 1, col = 1, row_f = 2, col_f = 1), 2)
@@ -67,6 +68,8 @@ test_that("get_dir returns correct direction given ddir_opts", {
   expect_equal(get_dir(row = 2, col = 1, row_f = 1, col_f = 2, c(4, 2)), 4)
 })
 
+
+# slope_gc() -----------------------------------------------------------------
 test_that("slope_gc works as expected", {
   grid <- 5
   expect_silent(s <- slope_gc(test_dem, grid = grid))
@@ -122,6 +125,7 @@ test_that("slope_gc works as expected", {
   expect_true(all(s$hill_c_cell[s$col == 122][59:68] == 1:10))
 })
 
+# calc_grid() ----------------------------------------------------------------
 test_that("calc_grid() correctly assesses grid dimension", {
   expand.grid(x = 1:100, y = 1:100) %>%
     calc_grid() %>%

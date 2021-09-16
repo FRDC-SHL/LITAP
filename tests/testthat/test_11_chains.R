@@ -1,5 +1,5 @@
 test_that("output formats chains - csv", {
-  unlink("./testELEV/")
+  unlink("./testELEV/", recursive = TRUE)
 
   ext <- "csv"
 
@@ -29,6 +29,6 @@ test_that("output formats chains - csv", {
   expect_true(all(stringr::str_detect(list.files("./testELEV/wepp"),
                                       paste0(".", !!ext, "$"))))
 
-  unlink("./testELEV/")
+  unlink("./testELEV/", recursive = TRUE)
 
 })

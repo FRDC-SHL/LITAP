@@ -38,7 +38,7 @@ test_that("columns ordered as expected", {
   s <- readRDS("./test_functions/flow/dem_fill.rds")
 
   expect_named(s, c("seqno", "x", "y", "row", "col", "elev", "ddir", "drec",
-                    "upslope", "upslope_m",
+                    "upslope", "upslope_m", "uced",
                     "vol2fl", "mm2fl", "parea",
                     "initial_shed", "local_shed", "pond_shed", "fill_shed",
                     "sgre", "sgr", "sgcn", "sgc", "scr", "scc",

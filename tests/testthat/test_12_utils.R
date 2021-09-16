@@ -1,6 +1,7 @@
 
-
+# merge_flow_form() -----------------------------------------------------------
 test_that("merge_flow_form() works as expected", {
+  unlink("testElev", recursive = TRUE)
   file.copy(system.file("extdata", "testELEV", package = "LITAP"), to = ".",
             recursive = TRUE)
   expect_silent(t <- merge_flow_form(folder = "testELEV")) %>%
