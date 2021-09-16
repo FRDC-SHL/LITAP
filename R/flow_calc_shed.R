@@ -58,7 +58,7 @@ calc_shed4 <- function(db, verbose) {
     dplyr::arrange(.data$seqno)
 }
 
-calc_upslopes <- function(db, type = c("upslope", "elev_diff")) {
+calc_upslopes <- function(db, type = c("upslope", "uced")) {
   # Create sub-watershed seqno's for quicker referencing
   db <- db %>%
     dplyr::arrange(seqno) %>%
@@ -73,18 +73,19 @@ calc_upslopes <- function(db, type = c("upslope", "elev_diff")) {
     dplyr::arrange(dplyr::desc(elev), seqno) %>%
     tidyr::nest(db_w = c(-shedno)) %>%
     dplyr::mutate(db_w = purrr::map2(db_w, shedno,
-                                     ~get_upslope3(.x, .y[1], type = type))) %>%
+                                     ~get_upslope3(.x, .y[1],
+                                                   type = !!type))) %>%
     tidyr::unnest(db_w) %>%
     dplyr::arrange(seqno)
 }
 
-get_upslope3 <- function(db, w, type = c("upslope", "elev_diff")){
+get_upslope3 <- function(db, w, type = c("upslope", "uced")){
   o <- db$seqno_shed
   db <- dplyr::arrange(db, seqno_shed)
   flow <- get_all_flow(db)
 
   if("upslope" %in% type) db$upslope <- 0
-  if("elev_diff" %in% type) db$elev_diff <- 0
+  if("uced" %in% type) db$uced <- 0
 
 
   if(!is.na(w)) {
@@ -94,12 +95,17 @@ get_upslope3 <- function(db, w, type = c("upslope", "elev_diff")){
         if("upslope" %in% type && db[cell, "upslope"] == 0) {
           db$upslope[track] <- upslope_values(track, db)
         }
-        if("elev_diff" %in% type && db[cell, "elev_diff"] == 0) {
-          db$elev_diff[track] <- elev_diff_values(track, db)
+        if("uced" %in% type && db[cell, "uced"] == 0) {
+          db$uced[track] <- uced_values(track, db)
         }
       }
     }
   }
+
+  if("uced" %in% type) {
+    db <- dplyr::mutate(db, uced = (.data$uced * .data$upslope) + 1)
+  }
+
   db
 }
 
@@ -110,14 +116,14 @@ upslope_values <- function(track, db){
   db$upslope[track] + new
 }
 
-elev_diff_values <- function(track, db) {
+uced_values <- function(track, db) {
   new <- dplyr::lag(db$elev[track]) - db$elev[track]
   new <- new[-1]
   new <- cumsum(new)
-  current <- db$elev_diff[track]
+  current <- db$uced[track]
   current <- current[-length(current)]
   new[current != 0] <- dplyr::last(new[current == 0])
-  db$elev_diff[track] + c(0, new)
+  db$uced[track] + c(0, new)
 }
 
 # For each cell, calculate the flow track

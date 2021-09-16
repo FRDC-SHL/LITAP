@@ -74,7 +74,7 @@ cols_order_stats <- list(
 
 cols_order <- list(
   "flow" = c("seqno", "x", "y", "row", "col", "elev", "ddir", "drec",
-             "upslope", "upslope_m",
+             "upslope", "upslope_m", "uced",
              "vol2fl", "mm2fl", "parea",
              "initial_shed", "local_shed", "pond_shed", "fill_shed", "inverted_shed",
              "sgre", "sgr", "sgcn", "sgc", "scr", "scc",

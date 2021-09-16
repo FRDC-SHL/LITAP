@@ -68,15 +68,15 @@ first_pitr1 <- function(db, max_area, max_depth, verbose) {
 
   if(verbose) message("\n")
 
-  # Update elev_diff
-  if(verbose) message("    Calculating elevation differences")
-  db <- calc_upslopes(db, type = "elev_diff")
+  # Update uced
+  if(verbose) message("    Calculating upslope cumulative elevation drop")
+  db <- calc_upslopes(db, type = "uced")
 
   # Save as local_shed numbers
   dplyr::mutate(db,
                 local_shed = shedno,
                 local_ddir = ddir,
-                local_elev_diff = elev_diff)
+                local_uced = uced)
 }
 
 second_pitr1 <- function(db, verbose) {
@@ -324,9 +324,9 @@ third_pitr1 <- function(db, verbose) {
 
   if(verbose) message("\n")
 
-  # Update elev_diff
+  # Update uced
   if(verbose) message("    Calculating new elevation differences")
-  db <- calc_upslopes(db, type = "elev_diff")
+  db <- calc_upslopes(db, type = "uced")
 
   list("db" = db, "stats" = fill)
 }
