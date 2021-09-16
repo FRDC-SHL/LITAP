@@ -53,6 +53,7 @@ calc_shed4 <- function(db, verbose) {
     nb_values(max_cols = max(db$col), col = "initial_shed") %>%
     dplyr::filter(buffer == FALSE) %>%
     dplyr::group_by(seqno) %>%
+    # Ridges are cells that meet another watershed
     dplyr::summarize(ridge = length(unique(initial_shed_n[!is.na(initial_shed_n)])) > 1) %>%
     dplyr::right_join(db, by = "seqno") %>%
     dplyr::arrange(.data$seqno)

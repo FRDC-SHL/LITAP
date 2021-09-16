@@ -41,13 +41,13 @@
 #'  **Hill slopes**
 #'
 #'  - hill_r_n: Number of hillslopes in that row. It goes from 1 to whatever it
-#'  ends. Hillslope no changes when it goes from downslope to upslope or from
-#'  upslope to downslope (SGRE changes sign)
+#'  ends. Hillslope number changes when it goes from downslope to upslope or
+#'  from upslope to downslope (SGRE changes sign)
 #'  - hill_r_dir: Direction the slope is facing, east facing as 2 and west
 #'  facing as 4, all cells with the same hillslope no. have same hillslope
 #'  direction
-#'  - hill_r_cell: Order no of the cell in the hillslope, starts from 1 to how
-#'  many cells there are in a given hillslope
+#'  - hill_r_cell: Order number of the cell in the hillslope, starts from 1 to
+#'  how many cells there are in a given hillslope
 #'
 #'  - hill_c_n: Same as for row, changes when SGCN changes sign
 #'  - hill_c_dir: Same as for row, north facing as 1 and south facing as 3
