@@ -1,13 +1,12 @@
-arule_derive <- function(weti, relief, n_remove) {
-
-  perc <- weti %>%
+arule_percentiles <- function(weti, relief, edge_row, edge_col) {
+  weti %>%
     dplyr::left_join(dplyr::select(relief,
                                    "seqno", "pctz2st", "pctz2pit", "z2pit"),
                      by = "seqno") %>%
-    dplyr::filter(.data$row > (n_remove + 1),
-                  .data$row < (max(.data$row) - n_remove -1),
-                  .data$col > (n_remove + 1),
-                  .data$col < (max(.data$col) - n_remove -1)) %>%
+    dplyr::filter(.data$row > (!!edge_row + 1),
+                  .data$row < (max(.data$row) - (!!edge_row + 1)),
+                  .data$col > (!!edge_col + 1),
+                  .data$col < (max(.data$col) - (!!edge_col + 1))) %>%
     dplyr::select("prof", "plan", "slope" = "slope_pct", "qweti",
                   "pctz2st", "pctz2pit", "z2pit") %>%
     dplyr::summarize(
@@ -21,6 +20,9 @@ arule_derive <- function(weti, relief, n_remove) {
                     p35 = ~stats::quantile(., 0.35, na.rm = TRUE),
                     p25 = ~stats::quantile(., 0.25, na.rm = TRUE),
                     p10 = ~stats::quantile(., 0.10, na.rm = TRUE))))
+}
+
+arule_derive <- function(perc) {
 
   arule_template() %>%
     dplyr::mutate(b = c(big_or_min(perc$prof_p90, 0.1),
@@ -102,4 +104,17 @@ arule_template <- function() {
     16,         "relzfile", "PCTZ2PIT", "NEAR_PIT",   5,         "bd2",
     17,         "relzfile", "Z2PIT",    "HI_ABOVE",   4,         "bd1")
 
+}
+
+percentiles_format <- function(perc) {
+  perc %>%
+    dplyr::select(-"n") %>%
+    tidyr::pivot_longer(cols = dplyr::everything(),
+                        names_to = "percentile", values_to = "value") %>%
+    tidyr::separate(percentile, into = c("parameter", "percentile"),
+                    sep = "_", remove = TRUE) %>%
+    tidyr::pivot_wider(names_from = "percentile", values_from = "value") %>%
+    dplyr::arrange(factor(
+      .data$parameter, levels = c("n", unique(tolower(arule_template()$attr_in))))) %>%
+    dplyr::select("parameter", paste0("p", c(10, 25, 50, 65, 70, 75, 90)))
 }

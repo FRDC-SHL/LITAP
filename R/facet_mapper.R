@@ -8,11 +8,13 @@
 #' @param arule Character. Location of ARULE file. If NULL, A Rules are derived
 #'   from the dem file (see Details).
 #' @param crule Character. Location of CRULE file
-#' @param n_remove Numeric. Number of cells (rows/columns) to remove around the
-#'   edge of the dem before deriving the A Rules.
-#' @param procedure Character. Which LSM procedure to use. One of `lsm`
-#'   (Original LandMapR program) or `bc_pem` (newer BC-PEM Direct-to-Site-SEries
-#'   DSS program).
+#' @param edge_row Numeric. Number of rows to remove around the edge of the dem
+#'   before deriving the A Rules. Defaults to 0.
+#' @param edge_col Numeric. Number of cols to remove around the edge of the dem
+#'   before deriving the A Rules. Defaults to 0.
+#' @param procedure Character. Which procedure to use. One of `lsm`
+#'   (Original LandMapR program) or `bc_pem` (newer BC-PEM Direct-to-Site-Series
+#'   program).
 #' @param zone file. If `procedure = "bc_pem"`, zones must either be defined for
 #'   each seqno in the weti dem file, OR must be provided as an index file here.
 #'   With a `zone` defined for each `seqno`. `zone` file can be either dem (.dem),
@@ -24,9 +26,13 @@
 #'   Based on the technique described in Li et al. 2011, if no `arule` file is
 #'   provided, the ARULE cutoffs are calculated from the `form_mapper()` dem
 #'   files. These A Rules are saved as `afile_derived.csv` in the `folder`
-#'   provided.
+#'   provided. The topographic derivative percentiles are stored to
+#'   `topographic_derivatives.csv`, also in the `folder`.
 #'
-#'   Procedure `lsm` refers to... Procedure `bc_pem` refers to...
+#'   Procedure `lsm` refers to the landform segmentation model (LSM) offered in
+#'   the original LandMapR. Procedure `bc_pem` refers to calculating variables
+#'   required for the British Columbia Predictive Ecosystem Mapping
+#'   Direct-to-Site-Series program (BC-PEM DSS).
 #'
 #'   For resuming  a run, \code{resume} must be
 #'   one of the following:
@@ -50,11 +56,17 @@
 #' # And form_mapper()
 #' form_mapper(folder = "./testELEV/")
 #'
-#' # Now can run facet_mapper() - Derive A Rules
+#'
 #' crule <- system.file("extdata", "crule.dbf", package = "LITAP")
+#'
+#' # Run facet_mapper() - Derive A Rules
 #' facet_mapper(folder = "./testELEV/", arule = NULL, crule = crule)
 #'
-#' # Now can run facet_mapper() - supply A Rules
+#' # Derive A Rules, omitting rows and cols from the calculation
+#' facet_mapper(folder = "./testELEV/", arule = NULL, crule = crule,
+#'              edge_row = 3, edge_col = 1)
+#'
+#' # Run facet_mapper() - supply A Rules
 #' arule <- system.file("extdata", "arule.dbf", package = "LITAP")
 #' crule <- system.file("extdata", "crule.dbf", package = "LITAP")
 #' facet_mapper(folder = "./testELEV/", arule = arule, crule = crule)
@@ -65,7 +77,7 @@
 #'
 #' @export
 
-facet_mapper <- function(folder, arule = NULL, crule, n_remove = 9,
+facet_mapper <- function(folder, arule = NULL, crule, edge_row = 0, edge_col = 0,
                          procedure = "lsm",
                          zone = NULL,
                          clean = FALSE,
@@ -121,7 +133,9 @@ facet_mapper <- function(folder, arule = NULL, crule, n_remove = 9,
   }
 
   if(is.null(arule)) {
-    arule <- arule_derive(weti, relief, n_remove = n_remove)
+    perc <- arule_percentiles(weti, relief, edge_row = edge_row,
+                              edge_col = edge_col)
+    arule <- arule_derive(perc)
   } else {
     afile <- arule
     arule <- load_extra(arule, type = "arule")
@@ -166,21 +180,26 @@ facet_mapper <- function(folder, arule = NULL, crule, n_remove = 9,
     crule <- dplyr::mutate(crule, zone = 0)
   }
 
+  # Save afile if derived
+  if(!exists("afile")) {
+    afile <- file.path(folder, "afile_derived.csv")
+    percfile <- file.path(folder, "topographic_derivatives.csv")
+    utils::write.csv(arule, afile, row.names = FALSE)
+    utils::write.csv(percentiles_format(perc), percfile, row.names = FALSE)
+  }
+
   # Setup Log
   log_file <- log_setup(folder, which = "facet", log)
 
   start <- Sys.time()
 
   # File details to log
-  if(!exists("afile")) {
-    afile <- file.path(folder, "afile_derived.csv")
-    utils::write.csv(arule, afile, row.names = FALSE)
-  }
   log_write("Run options:\n", log = log_file)
   log_write("  Input folder = ", normalizePath(folder), "\n",
             "  arule file =  ", normalizePath(afile), "\n",
             "  crule file = ", normalizePath(cfile), "\n",
-            "  n_remove = ", n_remove, "\n",
+            "  edge_row = ", edge_row, "\n",
+            "  edge_col = ", edge_col, "\n",
             "  Procedure = ", procedure, "\n",
             log = log_file)
 
