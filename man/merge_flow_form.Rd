@@ -4,32 +4,38 @@
 \alias{merge_flow_form}
 \title{Combine flow and form output dems}
 \usage{
-merge_flow_form(folder, format = "rds")
+merge_flow_form(folder, out_format = NULL)
 }
 \arguments{
 \item{folder}{Character. Folder with previous LITAP runs (i.e. where output
 of \code{flow_mapper()} etc. are)}
 
-\item{format}{Character. Output format (rds or csv) that files are saved as.}
+\item{out_format}{Character. Output format (rds or csv) that merged file
+should be saved as (if different from the rest; by default uses the format
+of the other LITAP output files)}
 }
 \description{
 \code{flow_mapper()} and \code{form_mapper()} each provide output information per cell
 of a dem file. This function takes the fill dem from \code{flow_mapper()} as well
-as the form, length, and weti dem files from \code{form_mapper()} and merges them
-together into a complete dem file with all information.
+as the length and weti dem files from \code{form_mapper()} and merges them
+together into a complete dem file with all information. This file is saved
+to the project folder.
 }
 \examples{
 
 # First need to run flow_mapper()
 flow_mapper(file = system.file("extdata", "testELEV.dbf", package = "LITAP"),
-           out_folder = "./testELEV/", nrow = 90, ncol = 90)
+            grid = 5, nrow = 90, ncol = 90, out_folder = "./testELEV/")
 
 # Then run form_mapper()
-form_mapper(folder = "./testELEV/", grid = 5)
+form_mapper(folder = "./testELEV/")
 
 
 # Now merge together
 merge_flow_form(folder = "./testELEV")
+
+# If you prefer this file as CSV
+merge_flow_form(folder = "./testELEV", out_format = "csv")
 
 # Clean up (remove all output)
 unlink("./testELEV/", recursive = TRUE)
