@@ -60,6 +60,7 @@ flow_plot <- function(db, type = "relief", dir = FALSE, seqno = FALSE, highlight
     if(shed_type == "local" & "local_shed" %in% names(db)) db$shedno <- db$local_shed
     if(shed_type == "pond" & "pond_shed" %in% names(db)) db$shedno <- db$pond_shed
     if(shed_type == "fill" & "fill_shed" %in% names(db)) db$shedno <- db$fill_shed
+    if(shed_type == "inverted" & "inverted_shed" %in% names(db)) db$shedno <- db$inverted_shed
   }
 
 
@@ -98,12 +99,12 @@ flow_plot <- function(db, type = "relief", dir = FALSE, seqno = FALSE, highlight
 
     g <- g +
       ggplot2::geom_raster(ggplot2::aes(fill = factor(shedno))) +
-      ggplot2::scale_fill_discrete(name = "Watershed", guide = FALSE) +
+      ggplot2::scale_fill_discrete(name = "Watershed", guide = "none") +
       ggplot2::geom_text(data = labs, ggplot2::aes(label = shedno))
 
   } else if(type == "relief") {
     g <- g + ggplot2::geom_raster(ggplot2::aes(alpha = relief)) +
-      ggplot2::scale_alpha_continuous(range = c(1, 0), guide = FALSE)
+      ggplot2::scale_alpha_continuous(range = c(1, 0), guide = "none")
   } else if(type == "elevation") {
     g <- g + ggplot2::geom_raster(ggplot2::aes(alpha = elev)) +
       ggplot2::scale_alpha_continuous(range = c(0, 1))
