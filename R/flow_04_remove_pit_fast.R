@@ -79,6 +79,8 @@ first_pitr1 <- function(db, max_area, max_depth, verbose) {
                 local_uced = uced)
 }
 
+
+# Includes second vol2fl/mm2fl/parea calculations
 second_pitr1 <- function(db, verbose) {
 
   # Working with local_shed
@@ -176,13 +178,13 @@ second_pitr1 <- function(db, verbose) {
         dplyr::mutate(shedno = new_shed)
 
       # Only replace cells with new overflows (i.e. elev must be in vol)
-      db_new <- dplyr::filter(db, shedno == new_shed, elev %in% vol$elev,
+      db_new <- dplyr::filter(db, .data$shedno == !!new_shed, .data$elev %in% vol$elev,
                               parea == 0) %>%  # Only replace ones with no info
         dplyr::select(-vol2fl, -mm2fl, -parea) %>%
         dplyr::left_join(vol, by = c("shedno", "elev")) %>%
         dplyr::arrange(seqno)
 
-      db_new[!is.na(db_new$parea), c("mm2fl", "vol2fl", "parea")] <- 0
+      db_new[is.na(db_new$parea), c("mm2fl", "vol2fl", "parea")] <- 0
 
       db[db_new$seqno, c("vol2fl", "parea")] <- db_new[, c("vol2fl", "parea")]
 

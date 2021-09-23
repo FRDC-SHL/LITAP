@@ -387,7 +387,7 @@ flow_mapper <- function(file, nrow, ncol, grid = NULL, missing_value = -9999,
     }
 
     db_inverted <- first_pitr1(db_iinitial, max_area = max_area,
-                             max_depth = max_depth, verbose = verbose)
+                               max_depth = max_depth, verbose = verbose)
 
     if(length(unique(db_inverted$shedno[!is.na(db_inverted$shedno)])) > 1) {
       stats_ipit <- pit_stat1(db_inverted, verbose = verbose) %>%
