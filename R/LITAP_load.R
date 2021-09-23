@@ -370,3 +370,10 @@ format_rule <- function(rule, type, quiet) {
 seqno_to_buffer <- function(seqno, seqno_buffer) {
   seqno_buffer[seqno]
 }
+
+seqno_as_buffer <- function(seqno, db) {
+  dplyr::mutate(db, seqno2 = seqno) %>%
+    add_buffer() %>%
+    dplyr::filter(.data$seqno2 == !!seqno) %>%
+    dplyr::pull(.data$seqno)
+}
