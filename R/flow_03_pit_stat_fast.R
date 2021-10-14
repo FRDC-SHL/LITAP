@@ -155,7 +155,8 @@ calc_vol2fl <- function(db, i_stats, verbose) {
 
   if(nrow(vol) > 0 & nrow(i_stats) > 0) {
     vol <- vol %>%
-      dplyr::right_join(dplyr::select(i_stats, shedno, pour_elev, shed_area), #add stats
+      # Add stats
+      dplyr::right_join(dplyr::select(i_stats, shedno, pour_elev, shed_area),
                        by = "shedno") %>%
       tidyr::nest(data = c(-shedno)) %>%
       dplyr::mutate(vol = purrr::map(data, vol2fl, verbose = verbose)) %>%

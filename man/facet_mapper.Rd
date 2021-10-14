@@ -86,7 +86,7 @@ Sheng Li, David A. Lobb, Brian G. McConkey, R. A. MacMillan, Alan Moulin,
 and Walter R. Fraser. 2011. Extracting topographic characteristics of landforms
 typical of Canadian agricultural landscapes for agri-environmental modeling.
 I. Methodology. Canadian Journal of Soil Science 91(2), 251-266.
-\url{https://doi.org/10.1139/CJSS10080}
+\doi{10.4141/CJSS10080}.
 }
 \examples{
 
