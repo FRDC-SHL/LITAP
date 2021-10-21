@@ -1,4 +1,16 @@
 arule_percentiles <- function(weti, relief, edge_row, edge_col) {
+
+  # Calculate buffers at 5% if not provided
+  if(is.null(edge_row)) {
+    edge_row <- round(length(unique(weti$row[!weti$buffer])) * 0.05)
+  }
+  if(is.null(edge_col)) {
+    edge_col <- round(length(unique(weti$col[!weti$buffer])) * 0.05)
+  }
+
+  message("Using buffer of ", edge_row, " rows ('edge_row') ",
+          "and ", edge_col, " cols ('edge_col') per side")
+
   weti %>%
     dplyr::left_join(dplyr::select(relief,
                                    "seqno", "pctz2st", "pctz2pit", "z2pit"),
@@ -7,20 +19,35 @@ arule_percentiles <- function(weti, relief, edge_row, edge_col) {
                   .data$row < (max(.data$row) - (!!edge_row + 1)),
                   .data$col > (!!edge_col + 1),
                   .data$col < (max(.data$col) - (!!edge_col + 1))) %>%
-    dplyr::select("prof", "plan", "slope" = "slope_pct", "qweti",
+    dplyr::select("elev", "prof", "plan", "slope" = "slope_pct", "qweti",
                   "pctz2st", "pctz2pit", "z2pit") %>%
     dplyr::summarize(
-      n = dplyr::n(),
+      n = sum(!is.na(.data$elev)),
       dplyr::across(
-        .fns = list(p90 = ~stats::quantile(., 0.90, na.rm = TRUE),
+        .cols = -"elev",
+        .fns = list(p99 = ~stats::quantile(., 0.99, na.rm = TRUE),
+                    p95 = ~stats::quantile(., 0.95, na.rm = TRUE),
+                    p90 = ~stats::quantile(., 0.90, na.rm = TRUE),
+                    p85 = ~stats::quantile(., 0.85, na.rm = TRUE),
+                    p80 = ~stats::quantile(., 0.80, na.rm = TRUE),
                     p75 = ~stats::quantile(., 0.75, na.rm = TRUE),
                     p70 = ~stats::quantile(., 0.70, na.rm = TRUE),
                     p65 = ~stats::quantile(., 0.65, na.rm = TRUE),
+                    p60 = ~stats::quantile(., 0.60, na.rm = TRUE),
+                    p55 = ~stats::quantile(., 0.55, na.rm = TRUE),
                     p50 = ~stats::quantile(., 0.50, na.rm = TRUE),
+                    p45 = ~stats::quantile(., 0.45, na.rm = TRUE),
+                    p40 = ~stats::quantile(., 0.40, na.rm = TRUE),
                     p35 = ~stats::quantile(., 0.35, na.rm = TRUE),
+                    p30 = ~stats::quantile(., 0.30, na.rm = TRUE),
                     p25 = ~stats::quantile(., 0.25, na.rm = TRUE),
-                    p10 = ~stats::quantile(., 0.10, na.rm = TRUE))))
+                    p20 = ~stats::quantile(., 0.20, na.rm = TRUE),
+                    p15 = ~stats::quantile(., 0.15, na.rm = TRUE),
+                    p10 = ~stats::quantile(., 0.10, na.rm = TRUE),
+                    p05 = ~stats::quantile(., 0.05, na.rm = TRUE),
+                    p01 = ~stats::quantile(., 0.01, na.rm = TRUE))))
 }
+
 
 arule_derive <- function(perc) {
 
@@ -115,6 +142,9 @@ percentiles_format <- function(perc) {
                     sep = "_", remove = TRUE) %>%
     tidyr::pivot_wider(names_from = "percentile", values_from = "value") %>%
     dplyr::arrange(factor(
-      .data$parameter, levels = c("n", unique(tolower(arule_template()$attr_in))))) %>%
-    dplyr::select("parameter", paste0("p", c(10, 25, 50, 65, 70, 75, 90)))
+      .data$parameter,
+      levels = c("n", unique(tolower(arule_template()$attr_in))))) %>%
+    dplyr::select("parameter",
+                  paste0("p", stringr::str_pad(c(1, seq(5, 95, 5), 99),
+                                               2, pad = "0")))
 }

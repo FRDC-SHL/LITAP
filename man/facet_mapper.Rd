@@ -8,8 +8,8 @@ facet_mapper(
   folder,
   arule = NULL,
   crule,
-  edge_row = 0,
-  edge_col = 0,
+  edge_row = NULL,
+  edge_col = NULL,
   procedure = "lsm",
   zone = NULL,
   clean = FALSE,
@@ -29,10 +29,12 @@ from the dem file (see Details).}
 \item{crule}{Character. Location of CRULE file}
 
 \item{edge_row}{Numeric. Number of rows to remove around the edge of the dem
-before deriving the A Rules. Defaults to 0.}
+before deriving the A Rules. Default (NULL) results in removing 5\% of the
+rows per side (total of 10\%).}
 
 \item{edge_col}{Numeric. Number of cols to remove around the edge of the dem
-before deriving the A Rules. Defaults to 0.}
+before deriving the A Rules. Default (NULL) results in removing 5\% of the
+cols per side (total of 10\%).}
 
 \item{procedure}{Character. Which procedure to use. One of \code{lsm}
 (Original LandMapR program) or \code{bc_pem} (newer BC-PEM Direct-to-Site-Series

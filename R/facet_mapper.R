@@ -9,9 +9,11 @@
 #'   from the dem file (see Details).
 #' @param crule Character. Location of CRULE file
 #' @param edge_row Numeric. Number of rows to remove around the edge of the dem
-#'   before deriving the A Rules. Defaults to 0.
+#'   before deriving the A Rules. Default (NULL) results in removing 5% of the
+#'   rows per side (total of 10%).
 #' @param edge_col Numeric. Number of cols to remove around the edge of the dem
-#'   before deriving the A Rules. Defaults to 0.
+#'   before deriving the A Rules. Default (NULL) results in removing 5% of the
+#'   cols per side (total of 10%).
 #' @param procedure Character. Which procedure to use. One of `lsm`
 #'   (Original LandMapR program) or `bc_pem` (newer BC-PEM Direct-to-Site-Series
 #'   program).
@@ -45,7 +47,7 @@
 #'  and Walter R. Fraser. 2011. Extracting topographic characteristics of landforms
 #'  typical of Canadian agricultural landscapes for agri-environmental modeling.
 #'  I. Methodology. Canadian Journal of Soil Science 91(2), 251-266.
-#'  <https://doi.org/10.1139/CJSS10080>
+#'  \doi{10.4141/CJSS10080}.
 #'
 #' @examples
 #'
@@ -77,7 +79,8 @@
 #'
 #' @export
 
-facet_mapper <- function(folder, arule = NULL, crule, edge_row = 0, edge_col = 0,
+facet_mapper <- function(folder, arule = NULL, crule,
+                         edge_row = NULL, edge_col = NULL,
                          procedure = "lsm",
                          zone = NULL,
                          clean = FALSE,
