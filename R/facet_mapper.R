@@ -137,7 +137,7 @@ facet_mapper <- function(folder, arule = NULL, crule,
 
   if(is.null(arule)) {
     perc <- arule_percentiles(weti, relief, edge_row = edge_row,
-                              edge_col = edge_col)
+                              edge_col = edge_col, quiet = quiet)
     arule <- arule_derive(perc)
   } else {
     afile <- arule
