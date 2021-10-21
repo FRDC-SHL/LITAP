@@ -11,30 +11,8 @@
 #' @param out_format Character. Output format (rds or csv) that merged file
 #'   should be saved as (if different from the rest; by default uses the format
 #'   of the other LITAP output files)
-#'
-#' @examples
-#'
-#' # First need to run flow_mapper()
-#' flow_mapper(file = system.file("extdata", "testELEV.dbf", package = "LITAP"),
-#'             grid = 5, nrow = 90, ncol = 90, out_folder = "./testELEV/")
-#'
-#' # Then run form_mapper()
-#' form_mapper(folder = "./testELEV/")
-#'
-#'
-#' # Now merge together
-#' merge_flow_form(folder = "./testELEV")
-#'
-#' # If you prefer this file as CSV
-#' merge_flow_form(folder = "./testELEV", out_format = "csv")
-#'
-#' # Clean up (remove all output)
-#' unlink("./testELEV/", recursive = TRUE)
-#'
-#'
-#' @export
 
-merge_flow_form <- function(folder, out_format = NULL) {
+merge_all <- function(folder, out_format = NULL) {
 
   # Get current out format
   ext <- get_format(folder, where = "flow")

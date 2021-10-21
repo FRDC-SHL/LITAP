@@ -181,6 +181,11 @@ form_mapper <- function(folder, str_val = 10000, ridge_val = 10000,
   if(!debug) remove_output(locs = out_locs, out_format = out_format,
                            where = "form")
 
+  # Create all points file
+  task <- "Merging flow and form data for `all_points` file"
+  announce(task, quiet)
+  merge_all(folder)
+
   # Save final time
   run_time(start, log_file, quiet)
 }
