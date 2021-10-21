@@ -63,9 +63,8 @@ test_that("Sub-functions", {
 })
 
 
-# elev_diff -----------------------------------------------------------------
+# uced -----------------------------------------------------------------
 test_that("uced calculated correctly", {
-  skip("Need to confirm calculation")
   db_test <- tibble::tibble(seqno = 1:9,
                             col = rep(1:3, 3),
                             row = sort(rep(1:3, 3)),
@@ -80,7 +79,7 @@ test_that("uced calculated correctly", {
 
   expect_equal(db_test$uced, c(0, 0, 0,
                                0, 5, 0,
-                               0, 12, 0))
+                               0, 15, 0))
 
   expect_equal(db_test$upslope, c(1, 1, 1,
                                   1, 4, 1,
@@ -100,17 +99,17 @@ test_that("uced calculated correctly", {
     first_pitr1(max_area = 0, max_depth = 0, verbose = FALSE) %>%
     remove_buffer()
 
-  flow_plot(db_test, type = "elev", dir = TRUE) +
-    geom_text(aes(label = elev, color = "Elevation")) +
-    geom_text(aes(label = uced, colour = "UCED"), nudge_x = 0.25) +
-    labs(title = "Uplsope Cumulative Elevation Drop") +
-    scale_colour_manual(values = c("black", "blue"))
+  # flow_plot(db_test, type = "elev", dir = TRUE) +
+  #   geom_text(aes(label = elev, color = "Elevation")) +
+  #   geom_text(aes(label = uced, colour = "UCED"), nudge_x = 0.25) +
+  #   labs(title = "Uplsope Cumulative Elevation Drop") +
+  #   scale_colour_manual(values = c("black", "blue"))
 
 
-  expect_equal(db_test$elev_diff, c(0, 0, 0, 0,
-                                    0, 3, 0, 5,
-                                    0, 6, 0, 29,
-                                    24, 0, 0, 0))
+  expect_equal(db_test$uced, c(0, 0, 0, 0,
+                               0, 3, 0, 5,
+                               0, 8, 0, 41,
+                               50, 0, 0, 0))
 
   expect_equal(db_test$upslope, c(1, 1, 1, 1,
                                   1, 3, 1, 3,

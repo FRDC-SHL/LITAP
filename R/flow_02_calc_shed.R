@@ -84,17 +84,17 @@ get_upslope3 <- function(db, w, type = c("upslope", "uced")){
   flow <- get_all_flow(db)
 
   if("upslope" %in% type) db$upslope <- 0
-  if("uced" %in% type) db$uced <- 0
+  if("uced" %in% type) db$uced <- NA_real_
 
 
   if(!is.na(w)) {
     for(cell in o){
-      if(any(db[cell, type] == 0)){
+      if(any(is.na(db[cell, type]) | db[cell, type] == 0)){
         track <- na_omit(flow[cell, ])
         if("upslope" %in% type && db[cell, "upslope"] == 0) {
           db$upslope[track] <- upslope_values(track, db)
         }
-        if("uced" %in% type && db[cell, "uced"] == 0) {
+        if("uced" %in% type && is.na(db[cell, "uced"])) {
           db$uced[track] <- uced_values(track, db)
         }
       }
@@ -102,7 +102,7 @@ get_upslope3 <- function(db, w, type = c("upslope", "uced")){
   }
 
   if("uced" %in% type) {
-    db <- dplyr::mutate(db, uced = (.data$uced * .data$upslope) + 1)
+    db <- dplyr::mutate(db, uced = (.data$uced))
   }
 
   db
@@ -116,13 +116,17 @@ upslope_values <- function(track, db){
 }
 
 uced_values <- function(track, db) {
-  new <- dplyr::lag(db$elev[track]) - db$elev[track]
-  new <- new[-1]
-  new <- cumsum(new)
+
+  elev <- db$elev[track]
   current <- db$uced[track]
-  current <- current[-length(current)]
-  new[current != 0] <- dplyr::last(new[current == 0])
-  db$uced[track] + c(0, new)
+  new <- rep(0, length(track))
+
+  ii <- 2:length(track)
+  jj <- which(is.na(current))
+  for(i in ii) new[i] <- new[i] + sum(elev[jj[jj < i]] - elev[i])
+
+  current[is.na(current)] <- 0
+  current + new
 }
 
 # For each cell, calculate the flow track
