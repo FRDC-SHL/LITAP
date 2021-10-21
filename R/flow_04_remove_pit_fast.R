@@ -76,7 +76,8 @@ first_pitr1 <- function(db, max_area, max_depth, verbose) {
   dplyr::mutate(db,
                 local_shed = shedno,
                 local_ddir = ddir,
-                local_uced = uced)
+                local_uced = uced) %>%
+    dplyr::select(-"shedno")
 }
 
 
@@ -101,7 +102,8 @@ second_pitr1 <- function(db, verbose) {
   while(!done){
 
     #w_rm <- find_lowest(w, w_stats, final_pits = pond$shedno[pond$final])
-    w_rm <- find_lowest(w, w_stats, final_pits = final_pits, removed = removed, verbose = verbose)
+    w_rm <- find_lowest(w, w_stats, final_pits = final_pits,
+                        removed = removed, verbose = verbose)
 
     w_focal <- dplyr::filter(w_stats, shedno == w_rm$shedno)
     w_drain <- dplyr::filter(w_stats, shedno == w_rm$drains_to)
@@ -109,7 +111,8 @@ second_pitr1 <- function(db, verbose) {
     if(!(w_focal$edge_pit & w_drain$edge_pit)) {
 
       new_shed <- max(db$shedno, na.rm = TRUE) + 1
-      if(verbose) message("  Combining sheds ", w_focal$shedno, " and ", w_drain$shedno, " into new shed ", new_shed)
+      if(verbose) message("  Combining sheds ", w_focal$shedno, " and ",
+                          w_drain$shedno, " into new shed ", new_shed)
 
       removed <- c(removed, w_rm$shedno, w_rm$drains_to)
 
@@ -140,13 +143,15 @@ second_pitr1 <- function(db, verbose) {
       if(any(!is.na(w_stats$drains_to))){
 
         w_stats <- w_stats %>%
-          dplyr::mutate(drains_to = dplyr::if_else(drains_to %in% c(w_focal$shedno, w_drain$shedno),
-                                                   new_shed, .data$drains_to),
-                        next_pit = dplyr::if_else(removed == FALSE &
-                                                    final == FALSE &
-                                                    (.data$next_pit %in% c(w_focal$shedno, w_drain$shedno)),
-                                                  new_shed,
-                                                  .data$next_pit))
+          dplyr::mutate(
+            drains_to = dplyr::if_else(
+              drains_to %in% c(w_focal$shedno, w_drain$shedno),
+              new_shed, .data$drains_to),
+            next_pit = dplyr::if_else(
+              removed == FALSE & final == FALSE &
+                (.data$next_pit %in% c(w_focal$shedno, w_drain$shedno)),
+              new_shed,
+              .data$next_pit))
       }
 
       w_stats <- w_stats %>%
@@ -189,7 +194,8 @@ second_pitr1 <- function(db, verbose) {
       db[db_new$seqno, c("vol2fl", "parea")] <- db_new[, c("vol2fl", "parea")]
 
     } else {
-      if(verbose) message("  Watersheds ", w_focal$shedno, " and ", w_drain$shedno, " are FINAL sheds")
+      if(verbose) message("  Watersheds ", w_focal$shedno, " and ",
+                          w_drain$shedno, " are FINAL sheds")
       final_pits <- unique(c(final_pits, w_rm$shedno, w_rm$drains_to))
 
       w_stats$final[w_stats$shedno %in% c(w_focal$shedno, w_drain$shedno)] <- TRUE
@@ -209,7 +215,8 @@ second_pitr1 <- function(db, verbose) {
   pond$final[pond$shedno %in% final_pits] <- TRUE
 
   # Save as pond_shed numbers
-  db <- dplyr::mutate(db, pond_shed = shedno)
+  db <- dplyr::mutate(db, pond_shed = shedno) %>%
+    dplyr::select(-"shedno")
 
   if(verbose) message("\n")
 
@@ -322,13 +329,13 @@ third_pitr1 <- function(db, verbose) {
                   drains_to = drains_to_orig) %>%
     dplyr::select(-drains_to_orig)
 
-  db <- dplyr::mutate(db, fill_shed = shedno)
-
   if(verbose) message("\n")
 
   # Update uced
   if(verbose) message("    Calculating new elevation differences")
   db <- calc_upslopes(db, type = "uced")
+
+  db <- dplyr::rename(db, "fill_shed" = "shedno")
 
   list("db" = db, "stats" = fill)
 }

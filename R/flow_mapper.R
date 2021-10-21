@@ -169,7 +169,8 @@ flow_mapper <- function(file, nrow, ncol, grid = NULL, missing_value = -9999,
     }
 
     db_initial <- calc_shed4(db_dir, verbose = verbose)
-    stats_initial <- pit_stat1(db_initial, verbose = verbose) %>%
+    stats_initial <- pit_stat1(db_initial, shed = "initial_shed",
+                               verbose = verbose) %>%
       out_stat()
 
     # Calc stats for first vol2fl
@@ -207,7 +208,7 @@ flow_mapper <- function(file, nrow, ncol, grid = NULL, missing_value = -9999,
                             max_depth = max_depth, verbose = verbose)
 
     # Stats
-    stats_local <- pit_stat1(db_local, verbose = verbose) %>%
+    stats_local <- pit_stat1(db_local, shed = "local_shed", verbose = verbose) %>%
       out_stat()
 
     save_output(data = db_local, stats = stats_local, name = "local", locs = out_locs,
@@ -230,11 +231,10 @@ flow_mapper <- function(file, nrow, ncol, grid = NULL, missing_value = -9999,
 
     if(!exists("db_local")) {
       db_local <- get_previous(folder, step = "local", where = "flow") %>%
-        add_buffer() %>%
-        dplyr::mutate(shedno = .data$local_shed)
+        add_buffer()
     }
 
-    if(length(unique(db_local$shedno[!is.na(db_local$shedno)])) > 1){
+    if(length(unique(db_local$local_shed[!is.na(db_local$local_shed)])) > 1){
       db_pond <- second_pitr1(db_local, verbose = verbose) #also 2nd vol2fl and parea
       stats_pond <- db_pond$stats
       db_pond <- db_pond$db
@@ -263,13 +263,12 @@ flow_mapper <- function(file, nrow, ncol, grid = NULL, missing_value = -9999,
       db_initial <- get_previous(folder, step = "initial", where = "flow") %>%
         add_buffer()
       db_local <- get_previous(folder, step = "local", where = "flow") %>%
-        add_buffer() %>%
-        dplyr::mutate(shedno = .data$local_shed)
+        add_buffer()
       db_pond <- get_previous(folder, step = "pond", where = "flow") %>%
         add_buffer()
     }
 
-    if(length(unique(db_local$shedno[!is.na(db_local$shedno)])) > 1){
+    if(length(unique(db_local$local_shed[!is.na(db_local$local_shed)])) > 1){
 
       # Add pond sheds details to local sheds
       db_local[, c("pond_shed", "vol2fl", "mm2fl", "parea")] <-
@@ -361,9 +360,16 @@ flow_mapper <- function(file, nrow, ncol, grid = NULL, missing_value = -9999,
     }
 
     db_iinitial <- calc_shed4(db_idir, verbose = verbose)
+    stats_iinitial <- pit_stat1(db_iinitial, shed = "initial_shed",
+                                verbose = verbose) %>%
+      out_stat()
+
+    # Do not calculate vol2fl/mm2fl/parea as they are not calculated in the original
+    # In the original, they are leftover from the first calculation (identical)
 
     # Calculate upslope in m2
     db_iinitial <- dplyr::mutate(db_iinitial, upslope_m = upslope * grid^2)
+
 
     save_output(data = db_iinitial, name = "iinitial", locs = out_locs,
                 out_format = out_format, where = "flow", debug = debug)
@@ -389,13 +395,15 @@ flow_mapper <- function(file, nrow, ncol, grid = NULL, missing_value = -9999,
     db_inverted <- first_pitr1(db_iinitial, max_area = max_area,
                                max_depth = max_depth, verbose = verbose)
 
-    if(length(unique(db_inverted$shedno[!is.na(db_inverted$shedno)])) > 1) {
-      stats_ipit <- pit_stat1(db_inverted, verbose = verbose) %>%
+    if(length(na.omit(unique(db_inverted$local_shed))) > 1) {
+      stats_ipit <- pit_stat1(db_inverted, shed = "local_shed", verbose = verbose) %>%
         out_stat() %>%
         dplyr::mutate(edge_pit = FALSE)
     } else stats_ipit <- tibble::tibble()
 
-    db_inverted <- dplyr::rename(db_inverted, "inverted_shed" = "shedno")
+    db_inverted <- dplyr::rename(db_inverted,
+                                 "inv_initial_shed" = "initial_shed",
+                                 "inv_local_shed" = "local_shed")
 
     save_output(data = db_inverted, stats = stats_ipit, name = "inverted", locs = out_locs,
                 out_format = out_format, where = "flow", debug = debug)

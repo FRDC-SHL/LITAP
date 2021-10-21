@@ -12,8 +12,8 @@
 #' @param shed Logical. Show watersheds?
 #' @param pits Logical. Show watershed pits (lowest point)
 #' @param shed_type Character. Which type of watershed, must be included as a
-#'   column in the data frame. Can be one of 'initial', 'local', 'pond', or
-#'   'fill'.
+#'   column in the data frame. Can be one of 'initial', 'local', 'fill',
+#'   'inv_initial', or 'inv_local'/'inverted'.
 #' @param upslope_threshold Numeric. If dir = TRUE, only show flow directions
 #'   for cells with >= this many cells which drain to it.
 #' @param cells Vector. Which cells to show
@@ -25,7 +25,7 @@
 #'
 #' @export
 flow_plot <- function(db, type = "relief", dir = FALSE, seqno = FALSE, highlight = FALSE,
-                      shed = FALSE, shed_type = "shedno", pits = FALSE,
+                      shed = FALSE, shed_type = "local", pits = FALSE,
                       upslope_threshold = NULL,
                       cells = NULL, clim = NULL, rlim = NULL,
                       stats = NULL, missing = NA) {
@@ -58,9 +58,10 @@ flow_plot <- function(db, type = "relief", dir = FALSE, seqno = FALSE, highlight
   if(shed == TRUE){
     if(shed_type == "initial" & "initial_shed" %in% names(db)) db$shedno <- db$initial_shed
     if(shed_type == "local" & "local_shed" %in% names(db)) db$shedno <- db$local_shed
-    if(shed_type == "pond" & "pond_shed" %in% names(db)) db$shedno <- db$pond_shed
+    #if(shed_type == "pond" & "pond_shed" %in% names(db)) db$shedno <- db$pond_shed
     if(shed_type == "fill" & "fill_shed" %in% names(db)) db$shedno <- db$fill_shed
-    if(shed_type == "inverted" & "inverted_shed" %in% names(db)) db$shedno <- db$inverted_shed
+    if(shed_type == "inv_initial" & "inv_initial_shed" %in% names(db)) db$shedno <- db$inv_initial_shed
+    if(shed_type %in% c("inv_local", "inverted") & "inv_local_shed" %in% names(db)) db$shedno <- db$inv_local_shed
   }
 
 

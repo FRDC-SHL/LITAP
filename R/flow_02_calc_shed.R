@@ -14,8 +14,9 @@ calc_shed4 <- function(db, verbose) {
   npits <- sum(db$ddir == 5, na.rm = TRUE)
 
   db <- db %>%
-    dplyr::mutate(shedno = NA,
-                  shedno = replace(shedno, ddir == 5 & !is.na(ddir), 1:npits)) %>%
+    dplyr::mutate(
+      shedno = NA_integer_,
+      shedno = replace(shedno, ddir == 5 & !is.na(ddir), 1:!!npits)) %>%
     dplyr::select(seqno, elev, drec, shedno)
 
   # Assign each cell to a watershed by climbing UP
@@ -40,23 +41,20 @@ calc_shed4 <- function(db, verbose) {
   if(verbose) message("  Getting upslope flow and cumulative elevation differences")
   db <- calc_upslopes(db, type = "upslope")
 
-  # Save initial values
-  db <- dplyr::mutate(db,
-                      initial_shed = shedno)
-
   # Merge with original data
   db <- dplyr::left_join(db, db_orig, by = c("seqno", "elev", "drec"))
 
   # Calculate ridge lines
   db %>%
-    dplyr::select(seqno, initial_shed, buffer) %>%
-    nb_values(max_cols = max(db$col), col = "initial_shed") %>%
+    dplyr::select(seqno, shedno, buffer) %>%
+    nb_values(max_cols = max(db$col), col = "shedno") %>%
     dplyr::filter(buffer == FALSE) %>%
     dplyr::group_by(seqno) %>%
     # Ridges are cells that meet another watershed
-    dplyr::summarize(ridge = length(unique(initial_shed_n[!is.na(initial_shed_n)])) > 1) %>%
+    dplyr::summarize(ridge = length(unique(shedno_n[!is.na(shedno_n)])) > 1) %>%
     dplyr::right_join(db, by = "seqno") %>%
-    dplyr::arrange(.data$seqno)
+    dplyr::arrange(.data$seqno) %>%
+    dplyr::rename("initial_shed" = "shedno")
 }
 
 calc_upslopes <- function(db, type = c("upslope", "uced")) {

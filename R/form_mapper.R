@@ -66,7 +66,7 @@ form_mapper <- function(folder, str_val = 10000, ridge_val = 10000,
   idb <- get_previous(folder, step = "inverted", where = "flow")
   if("ldir" %in% names(idb)) idb <- dplyr::rename(idb, "ddir" = "ldir")
   idb <- dplyr::select(idb, "seqno", "x", "y", "row", "col", "elev", "drec", "ddir",
-                       "upslope", "inverted_shed") %>%
+                       "upslope", "inv_local_shed") %>%
     add_buffer()
 
   # Get pond stats
@@ -166,6 +166,7 @@ form_mapper <- function(folder, str_val = 10000, ridge_val = 10000,
       db_relz <- get_previous(folder, step = "relief", where = "form") %>%
         add_buffer()
     }
+
     db_length <- calc_length(db, db_relz, grid = grid, verbose = verbose)
 
     save_output(data = db_length, name = "length", locs = out_locs,

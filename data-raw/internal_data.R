@@ -76,7 +76,8 @@ cols_order <- list(
   "flow" = c("seqno", "x", "y", "row", "col", "elev", "ddir", "drec",
              "upslope", "upslope_m", "uced",
              "vol2fl", "mm2fl", "parea",
-             "initial_shed", "local_shed", "pond_shed", "fill_shed", "inverted_shed",
+             "initial_shed", "local_shed", "fill_shed", #pond_shed
+             "inv_initial_shed", "inv_local_shed",
              "sgre", "sgr", "sgcn", "sgc", "scr", "scc",
              "hill_r_dir", "hill_c_dir", "hill_r_n", "hill_r_cell",
              "hill_c_n", "hill_c_cell", "edge_map", "ridge"),
@@ -87,16 +88,19 @@ cols_order <- list(
              "slope_pct", "slope_deg", "aspect", "new_asp", "prof", "plan",
              "qarea1", "qarea2", "qweti1", "qweti2", "lnqarea1", "lnqarea2",
 
-             "z2st", "n2st", "z2pit", "n2pit", "z2cr", "n2cr",
-             "z2peak", "n2peak", "z2top", "n2top",
-             "zcr2st", "zpit2peak", "ztop2pit",
-             "pctz2st", "pctz2pit", "pctz2top", "pmin2max",
+             "st_row", "st_col", "st_elev", "z2st", "n2st",
+             "cr_row", "cr_col", "cr_elev", "z2cr", "n2cr",
+             "pit_row", "pit_col", "pit_elev", "z2pit", "n2pit",
+             "peak_row", "peak_col", "peak_elev", "z2peak", "n2peak",
+
+             "z2top", "zpit2peak", "zcr2st", "zcr2pit",
+             "ztop2pit", "ncr2st", "pmin2max",
+             "pctz2st", "pctz2pit", "pctz2top",
+             "pctn2st",
 
              "l2pit", "l2peak", "lpit2peak", "ppit2peakl",
-             "l2str", "l2div", "lstr2div", "pstr2divl",
-
-             "pit_row", "pit_col", "peak_row", "peak_col",
-             "str_row", "str_col", "cr_row", "cr_col"),
+             "l2str", "l2div", "lstr2div", "pstr2divl"
+             ),
 
   "facet" = c("seqno", "x", "y", "row", "col", "elev", "zone",
               "convex_d", "concave_d", "planar_d",

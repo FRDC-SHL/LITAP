@@ -1,5 +1,7 @@
 
-pit_stat1 <- function(db, w = NULL, verbose) {
+pit_stat1 <- function(db, w = NULL, shed = "shedno", verbose) {
+
+  db$shedno <- db[[shed]]
 
   if(length(unique(db$shedno[!is.na(db$shedno)])) > 1){ # If more than one watershed
 
@@ -127,7 +129,8 @@ pit_stat1 <- function(db, w = NULL, verbose) {
 
 
   if("pond_shed" %in% names(db)) {
-    stats <- dplyr::left_join(stats, dplyr::select(db, shedno, pond_shed) %>%
+    stats <- dplyr::left_join(stats,
+                              dplyr::select(db, "shedno", "pond_shed") %>%
                                 dplyr::distinct(), by = "shedno")
   }
 
@@ -135,10 +138,11 @@ pit_stat1 <- function(db, w = NULL, verbose) {
 }
 
 out_stat <- function(pit_stat) {
+  p <- dplyr::select(pit_stat, "shedno", "edge_pit", "pit_elev",
+                     "pit_seqno", "pour_elev")
   pit_stat %>%
     dplyr::select(-dplyr::ends_with("_out")) %>%
-    dplyr::left_join(dplyr::select(pit_stat, shedno, edge_pit, pit_elev, pit_seqno, pour_elev),
-                     by = c("drains_to" = "shedno"), suffix = c("", "_out"))
+    dplyr::left_join(p, by = c("drains_to" = "shedno"), suffix = c("", "_out"))
 }
 
 

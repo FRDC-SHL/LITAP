@@ -43,17 +43,29 @@ merge_flow_form <- function(folder, out_format = NULL) {
     ext <- out_format
   }
 
-  flow <- get_previous(folder, step = "fill", where = "flow")
+  flow <- get_previous(folder, step = "fill", where = "flow") %>%
+    dplyr::select(-"ridge")
+
+  flow_stats <- get_previous(folder, step = "fill", where = "flow", type = "stats")
+
+  inv <- get_previous(folder, step = "inverted", where = "flow") %>%
+    dplyr::select("seqno", "ddir", "drec", "upslope", "upslope_m",
+                  "inv_initial_shed", "inv_local_shed", "edge_map") %>%
+    dplyr::rename_with(.cols = -c("seqno", dplyr::contains("inv_")),
+                       ~paste0("inv_", .))
+
   length <- get_previous(folder, step = "length", where = "form")
+
   weti <- get_previous(folder, step = "weti", where = "form")
 
-  combo <- dplyr::left_join(flow, length,
-                            by = c("seqno", "x", "y", "row", "col", "elev")) %>%
+  combo <- dplyr::left_join(flow, inv, by = "seqno") %>%
+    dplyr::left_join(length,
+                     by = c("seqno", "x", "y", "row", "col", "elev")) %>%
     dplyr::left_join(weti,
                      by = c("seqno", "x", "y", "row", "col",
                             "elev", "drec", "upslope"))
 
-  name <- paste0("dem_flow_form_merged.", ext)
+  name <- paste0("all_points.", ext)
   if(ext == "rds") readr::write_rds(combo, file.path(folder, name))
   if(ext == "csv") readr::write_csv(combo, file.path(folder, name), progress = FALSE)
   combo
