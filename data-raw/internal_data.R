@@ -76,7 +76,7 @@ cols_order <- list(
   "flow" = c("seqno", "x", "y", "row", "col", "elev", "ddir", "drec",
              "upslope", "upslope_m", "uced",
              "vol2fl", "mm2fl", "parea",
-             "initial_shed", "local_shed", "fill_shed", #pond_shed
+             "initial_shed", "local_shed", "pond_shed", "fill_shed",
              "inv_initial_shed", "inv_local_shed",
              "sgre", "sgr", "sgcn", "sgc", "scr", "scc",
              "hill_r_dir", "hill_c_dir", "hill_r_n", "hill_r_cell",

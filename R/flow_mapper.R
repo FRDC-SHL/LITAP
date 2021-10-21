@@ -208,10 +208,12 @@ flow_mapper <- function(file, nrow, ncol, grid = NULL, missing_value = -9999,
                             max_depth = max_depth, verbose = verbose)
 
     # Stats
-    stats_local <- pit_stat1(db_local, shed = "local_shed", verbose = verbose) %>%
+    stats_local <- pit_stat1(db_local, shed = "local_shed",
+                             verbose = verbose) %>%
       out_stat()
 
-    save_output(data = db_local, stats = stats_local, name = "local", locs = out_locs,
+    save_output(data = db_local, stats = stats_local, name = "local",
+                locs = out_locs,
                 out_format = out_format, where = "flow", debug = debug)
     save_output(data = db_local, name = "local", locs = out_locs,
                 out_format = out_format, where = "flow", debug = debug)
@@ -243,7 +245,8 @@ flow_mapper <- function(file, nrow, ncol, grid = NULL, missing_value = -9999,
       db_pond <- dplyr::mutate(db_local, pond_shed = local_shed)
       stats_pond <- tibble::tibble()
     }
-    save_output(data = db_pond, stats = stats_pond, name = "pond", locs = out_locs,
+    save_output(data = db_pond, stats = stats_pond, name = "pond",
+                locs = out_locs,
                 out_format = out_format, where = "flow", debug = debug)
     save_output(data = db_pond, name = "pond", locs = out_locs,
                 out_format = out_format, where = "flow", debug = debug)
@@ -405,7 +408,8 @@ flow_mapper <- function(file, nrow, ncol, grid = NULL, missing_value = -9999,
                                  "inv_initial_shed" = "initial_shed",
                                  "inv_local_shed" = "local_shed")
 
-    save_output(data = db_inverted, stats = stats_ipit, name = "inverted", locs = out_locs,
+    save_output(data = db_inverted, stats = stats_ipit, name = "inverted",
+                locs = out_locs,
                 out_format = out_format, where = "flow", debug = debug)
     save_output(data = db_inverted, name = "inverted", locs = out_locs,
                 out_format = out_format, where = "flow", debug = debug)
