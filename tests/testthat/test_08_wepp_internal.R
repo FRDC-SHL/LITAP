@@ -41,7 +41,9 @@ test_that("neighbour_channels identifies neighbouring channel cells", {
     add_buffer() %>%
     calc_ddir2(verbose = TRUE) %>%
     expect_message("Fixing flat plateaus") %>%
-    expect_message("Fixing flat plateaus") %>%
+    expect_message("Fixing flat plateaus")
+
+  db <- db %>%
     dplyr::mutate(shedno = 1) %>%
     calc_upslopes(type = "upslope") %>%
     expect_silent()
@@ -68,7 +70,9 @@ test_that("mark_chan does channel cells", {
     add_buffer() %>%
     calc_ddir2(verbose = TRUE) %>%
     expect_message("Fixing flat plateaus") %>%
-    expect_message("Fixing flat plateaus") %>%
+    expect_message("Fixing flat plateaus")
+
+  db <- db %>%
     dplyr::mutate(shedno = 1) %>%
     calc_upslopes(type = "upslope") %>%
     expect_silent()

@@ -1,10 +1,11 @@
 
-# merge_flow_form() -----------------------------------------------------------
+# merge_all() -----------------------------------------------------------
 test_that("merge_all() works as expected", {
   unlink("testElev", recursive = TRUE)
-  file.copy(system.file("extdata", "testELEV", package = "LITAP"), to = ".",
-            recursive = TRUE)
 
+  skip_if(dir.exists("testElev"))
+  file.copy(system.file("extdata", "testELEV", package = "LITAP"), to = ".",
+            recursive = TRUE, overwrite = TRUE)
 
   t <- merge_all(folder = "testELEV") %>%
     expect_silent() %>%
