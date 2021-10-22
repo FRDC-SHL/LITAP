@@ -3,6 +3,9 @@ suppressMessages(f <- load_file(system.file("extdata", "testELEV.dbf",
                                 nrow = 90, ncol = 90, grid = 1))
 
 
+# Subfunctions ------------------------------------------------------------
+
+
 test_that("Sub-functions", {
 
   set.seed(777)
@@ -63,7 +66,7 @@ test_that("Sub-functions", {
 })
 
 
-# uced -----------------------------------------------------------------
+# UCED -----------------------------------------------------------------
 test_that("uced calculated correctly", {
   db_test <- tibble::tibble(seqno = 1:9,
                             col = rep(1:3, 3),
@@ -115,4 +118,50 @@ test_that("uced calculated correctly", {
                                   1, 3, 1, 3,
                                   1, 5, 1, 8,
                                   8, 1, 1, 1))
+
+
+
+  db_test <- tibble::tibble(seqno = 1:36,
+                            col = rep(1:6, 6),
+                            row = sort(rep(1:6, 6)),
+                            elev = c(99, 98, 99, 98,  111, 107,
+                                     98, 97, 98, 96,  110, 109,
+                                     97, 96, 97, 90,  109, 110,
+                                     90, 95, 92, 91,   93,  95,
+                                     89, 90, 94, 99,   94,  95,
+                                     99, 99, 97, 101, 103,  101)) %>%
+    add_buffer() %>%
+    calc_ddir2(verbose = FALSE) %>%
+    calc_shed4(verbose = FALSE) %>%
+    first_pitr1(max_area = 0, max_depth = 0, verbose = FALSE) %>%
+    remove_buffer()
+
+  flow_plot(db_test, type = "elev", dir = TRUE, pits = TRUE) +
+    ggplot2::geom_text(ggplot2::aes(label = elev, colour = "Elevation"),
+                       nudge_x = -0.25, nudge_y = 0.25) +
+    ggplot2::geom_text(ggplot2::aes(label = uced, colour = "UCED"),
+                       nudge_x = 0.25, nudge_y = 0.25) +
+    ggplot2::labs(title = "Uplsope Cumulative Elevation Drop") +
+    ggplot2::scale_colour_manual(values = c("black", "blue"))
+
+
+  expect_equal(db_test$uced, c(0, 0, 0, 13, 0, 2,
+                               0, 3, 0, 20, 0, 0,
+                               0, 8, 0, 169, 0, 0,
+                               45, 0, 0, 23, 29, 15,
+                               107, 38, 7, 0, 9, 6,
+                               0, 0, 0, 0, 0, 0))
+
+  expect_equal(db_test$upslope, c(1, 1, 1, 2, 1, 2,
+                                  1, 3, 1, 4, 1, 1,
+                                  1, 5, 1, 18, 1, 1,
+                                  7, 1, 1, 4, 5, 2,
+                                  16, 7, 2, 1, 2, 2,
+                                  1, 1, 1, 1, 1, 1))
+
+
+
+
+
+
 })
