@@ -11,18 +11,21 @@ arule_percentiles <- function(weti, relief, edge_row, edge_col, quiet) {
   if(!quiet) message("Using buffer of ", edge_row, " rows ('edge_row') ",
                      "and ", edge_col, " cols ('edge_col') per side")
 
-  weti %>%
+    weti %>%
     dplyr::left_join(dplyr::select(relief,
-                                   "seqno", "pctz2st", "pctz2pit", "z2pit"),
+                                   "seqno", "pctz2st", "pctz2pit", "z2pit",
+                                   "z2st", "zpit2peak", "zcr2st", "lpit2peak",
+                                   "lstr2div"),
                      by = "seqno") %>%
     dplyr::filter(.data$row > (!!edge_row + 1),
                   .data$row < (max(.data$row) - (!!edge_row + 1)),
                   .data$col > (!!edge_col + 1),
                   .data$col < (max(.data$col) - (!!edge_col + 1))) %>%
-    dplyr::select("elev", "prof", "plan", "slope" = "slope_pct", "qweti",
-                  "pctz2st", "pctz2pit", "z2pit") %>%
+    dplyr::select("elev", "prof", "plan", "slope" = "slope_pct", "aspect",
+                  "qarea", "qweti", "z2st", "z2pit", "zpit2peak", "zcr2st",
+                  "pctz2st", "pctz2pit", "lpit2peak", "lstr2div") %>%
     dplyr::summarize(
-      n = sum(!is.na(.data$elev)),
+      #n = sum(!is.na(.data$elev)),
       dplyr::across(
         .cols = -"elev",
         .fns = list(p99 = ~stats::quantile(., 0.99, na.rm = TRUE),
@@ -45,7 +48,12 @@ arule_percentiles <- function(weti, relief, edge_row, edge_col, quiet) {
                     p15 = ~stats::quantile(., 0.15, na.rm = TRUE),
                     p10 = ~stats::quantile(., 0.10, na.rm = TRUE),
                     p05 = ~stats::quantile(., 0.05, na.rm = TRUE),
-                    p01 = ~stats::quantile(., 0.01, na.rm = TRUE))))
+                    p01 = ~stats::quantile(., 0.01, na.rm = TRUE),
+                    avg = ~mean(., na.rm = TRUE),
+                    sd  = ~sd(., na.rm = TRUE),
+                    min = ~min(., na.rm = TRUE),
+                    max = ~max(., na.rm = TRUE),
+                    n   = ~sum(!is.na(.)))))
 }
 
 
@@ -135,16 +143,19 @@ arule_template <- function() {
 
 percentiles_format <- function(perc) {
   perc %>%
-    dplyr::select(-"n") %>%
     tidyr::pivot_longer(cols = dplyr::everything(),
-                        names_to = "percentile", values_to = "value") %>%
-    tidyr::separate(percentile, into = c("parameter", "percentile"),
+                        names_to = "name", values_to = "value") %>%
+    tidyr::separate(name, into = c("parameter", "name"),
                     sep = "_", remove = TRUE) %>%
-    tidyr::pivot_wider(names_from = "percentile", values_from = "value") %>%
-    dplyr::arrange(factor(
-      .data$parameter,
-      levels = c("n", unique(tolower(arule_template()$attr_in))))) %>%
-    dplyr::select("parameter",
-                  paste0("p", stringr::str_pad(c(1, seq(5, 95, 5), 99),
-                                               2, pad = "0")))
+    tidyr::pivot_wider(names_from = "parameter", values_from = "value") %>%
+    dplyr::mutate(
+      name = stringr::str_replace(.data$name, "^p[0]*([0-9]{1,2})", "\\1%"),
+      name = factor(.data$name, levels = c("n", "avg", "sd", "min", "1%",
+                                           paste0(seq(5,95,5), "%"),
+                                           "99%", "max"))) %>%
+    dplyr::arrange(.data$name) %>%
+    dplyr::select("name", "slope", "aspect", "prof", "plan",
+                  "qarea1" = "qarea", "qweti1" = "qweti",
+                  "z2st", "z2pit", "zpit2peak", "zcr2st", 'pctz2st', "pctz2pit",
+                  "lpit2peak", "lstr2div")
 }

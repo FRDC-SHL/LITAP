@@ -185,10 +185,10 @@ facet_mapper <- function(folder, arule = NULL, crule,
 
   # Save afile if derived
   if(!exists("afile")) {
-    afile <- file.path(folder, "afile_derived.csv")
-    percfile <- file.path(folder, "topographic_derivatives.csv")
-    utils::write.csv(arule, afile, row.names = FALSE)
-    utils::write.csv(percentiles_format(perc), percfile, row.names = FALSE)
+    d <- list(`Site Summary` = percentiles_format(perc),
+              `ARULE` = arule)
+    writexl::write_xlsx(d, path = file.path(folder,
+                                            "topographic_derivatives.xlsx"))
   }
 
   # Setup Log
@@ -196,10 +196,14 @@ facet_mapper <- function(folder, arule = NULL, crule,
 
   start <- Sys.time()
 
+  if(exists("afile")) {
+    a <- normalizePath(afile)
+  } else a <- "derived (see topographic_derivatives.xlsx)"
+
   # File details to log
   log_write("Run options:\n", log = log_file)
   log_write("  Input folder = ", normalizePath(folder), "\n",
-            "  arule file =  ", normalizePath(afile), "\n",
+            "  arule file =  ", a, "\n",
             "  crule file = ", normalizePath(cfile), "\n",
             "  edge_row = ", edge_row, "\n",
             "  edge_col = ", edge_col, "\n",
