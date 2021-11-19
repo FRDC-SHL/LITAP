@@ -157,6 +157,13 @@ second_pitr1 <- function(db, verbose) {
       w_stats <- w_stats %>%
         out_stat()
 
+      pre_vol <- dplyr::case_when(
+        w_focal$pour_elev == w_drain$pour_elev ~ w_focal$pit_vol + w_drain$pit_vol,
+        w_focal$pour_elev < w_drain$pour_elev ~ w_focal$pit_vol,
+        w_focal$pour_elev > w_drain$pour_elev ~ w_drain$pit_vol)
+
+      w_stats$pre_vol[w_stats$shedno == new_shed] <- pre_vol
+
       # Keep track of pond statistics (ie. keep track of all watersheds)
       # pond <- dplyr::bind_rows(w_focal, w_drain) %>%
       #   dplyr::mutate(removed = TRUE,
