@@ -14,8 +14,8 @@ pit_stat1 <- function(db, w = NULL, shed = "shedno", verbose) {
 
     # Take only ridge cells
     db_pits <- db %>%
-      dplyr::filter(shedno %in% w, ridge == TRUE) %>%
-      dplyr::select(seqno, shedno, elev, upslope)
+      dplyr::filter(.data$shedno %in% !!w, .data$ridge == TRUE) %>%
+      dplyr::select("seqno", "shedno", "elev", "upslope")
 
     # # Calculate neighbouring sheds to split up files
     # shed_groups <- pp %>%
@@ -47,38 +47,39 @@ pit_stat1 <- function(db, w = NULL, shed = "shedno", verbose) {
     db_pits <- db_pits %>%
       nb_values(db, max_cols = max(db$col), col = c("elev", "shedno", "seqno"), db_sub = .)
 
-    pp <- dplyr::filter(db_pits, shedno != shedno_n)
+    pp <- dplyr::filter(db_pits, .data$shedno != .data$shedno_n)
 
     if(length(unique(pp$shedno)) != length(unique(db_pits$shedno[!is.na(db_pits$shedno)]))) {
       pp <- db_pits %>%
-        dplyr::filter(!(shedno %in% pp$shedno), shedno != shedno_n) %>%
+        dplyr::filter(!(.data$shedno %in% pp$shedno), .data$shedno != .data$shedno_n) %>%
         dplyr::bind_rows(pp)
     }
 
-    pp <- dplyr::mutate(pp, pour_elev = purrr::map2_dbl(elev, elev_n, max))
-    pp <- dplyr::group_by(pp, seqno)
-    pp <- dplyr::mutate(pp, min_elev_n = min(elev_n, na.rm = TRUE))
+    pp <- dplyr::mutate(pp, pour_elev = purrr::map2_dbl(.data$elev, .data$elev_n, max))
+    pp <- dplyr::group_by(pp, .data$seqno)
+    pp <- dplyr::mutate(pp, min_elev_n = min(.data$elev_n, na.rm = TRUE))
     pp <- dplyr::ungroup(pp)
-    pp <- dplyr::filter(pp, elev_n == min_elev_n)
+    pp <- dplyr::filter(pp, .data$elev_n == .data$min_elev_n)
 
-    pp <- dplyr::group_by(pp, shedno)
-    pp <- dplyr::filter(pp, pour_elev == min(pour_elev, na.rm = TRUE))  # Must be lowest pour point
+    pp <- dplyr::group_by(pp, .data$shedno)
+    pp <- dplyr::filter(pp, .data$pour_elev == min(.data$pour_elev, na.rm = TRUE))  # Must be lowest pour point
     #pp <- dplyr::filter(pp, upslope == max(upslope, na.rm = TRUE))     # Must be with maximum upslope contributions
     #pp <- dplyr::filter(pp, elev_n == min(elev_n, na.rm = TRUE))        # Must have lowest pour TO elevation
-    pp <- dplyr::arrange(pp, shedno, seqno)                            # Sort by ascending seqno
+    pp <- dplyr::arrange(pp, .data$shedno, .data$seqno)                            # Sort by ascending seqno
     pp <- dplyr::slice(pp, 1)                                               # Take first one
 
     pp <- pp %>%
-      dplyr::left_join(dplyr::select(db, seqno, col, row), by = c("seqno")) %>%
-      dplyr::left_join(dplyr::select(db, seqno, col, row), by = c("seqno_n" = "seqno"),
+      dplyr::left_join(dplyr::select(db, "seqno", "col", "row"), by = c("seqno")) %>%
+      dplyr::left_join(dplyr::select(db, "seqno", "col", "row"), by = c("seqno_n" = "seqno"),
                        suffix = c("", "_out"))
 
     pp <- pp %>%
-      dplyr::select(shedno, in_seqno = seqno, in_row = row, in_col = col,
-                    in_elev = elev,
-                    out_seqno = seqno_n, out_row = row_out, out_col = col_out,
-                    out_elev = elev_n, drains_to = shedno_n,
-                    pour_elev)
+      dplyr::select("shedno", "in_seqno" = "seqno", "in_row" = "row", "in_col" = "col",
+                    "in_elev" = "elev",
+                    "out_seqno" = "seqno_n", "out_row" = "row_out", "out_col" = "col_out",
+                    "out_elev" = "elev_n",
+                    "drains_to" = "shedno_n",
+                    "pour_elev")
 
     # Add other calculations
     stats <- db %>%

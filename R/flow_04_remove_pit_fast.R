@@ -126,6 +126,9 @@ second_pitr1 <- function(db, verbose) {
       shed_update <- w_stats$shedno %in% c(w_focal$shedno, w_drain$shedno)
       w_stats$removed[shed_update] <- TRUE
       w_stats$final[shed_update] <- w_rm$at_final
+
+
+      # drains_to set as out_shed in original pit_stat1
       w_stats$next_pit[shed_update] <- w_stats$drains_to[shed_update]
       w_stats$becomes[shed_update] <- new_shed
 
