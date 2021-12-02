@@ -24,5 +24,7 @@ devtools::build_readme()
 pkgdown::build_site(lazy = TRUE)
 pkgdown::build_reference_index()
 pkgdown::build_reference()
+pkgdown::build_home()
+pkgdown::build_article("variables")
 
 

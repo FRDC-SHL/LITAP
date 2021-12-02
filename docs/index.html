@@ -35,7 +35,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">LITAP</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0.9000</span>
       </span>
     </div>
 
@@ -120,19 +120,19 @@
 <p>Load the package:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/FRDC-SHL/LITAP">LITAP</a></span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="do">## LITAP v0.5.0</span></span>
+<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="do">## LITAP v0.5.0.9000</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="do">## LITAP is still in development; Help us by submitting bugs/feature requests: </span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="do">## http://github.com/FRDC-SHL/LITAP/issues</span></span></code></pre></div>
 <p>First, specify the dem file and the number of rows and columns:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/flow_mapper.html">flow_mapper</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"testELEV.dbf"</span>, nrow <span class="op">=</span> <span class="fl">90</span>, ncol <span class="op">=</span> <span class="fl">90</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="reference/flow_mapper.html">flow_mapper</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"testELEV.dbf"</span>, nrow <span class="op">=</span> <span class="fl">90</span>, ncol <span class="op">=</span> <span class="fl">90</span>, grid <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></code></pre></div>
 <p>Can also specify pit removal parameters:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/flow_mapper.html">flow_mapper</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"testELEV.dbf"</span>, nrow <span class="op">=</span> <span class="fl">90</span>, ncol <span class="op">=</span> <span class="fl">90</span>, 
+<code class="sourceCode R"><span class="fu"><a href="reference/flow_mapper.html">flow_mapper</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"testELEV.dbf"</span>, nrow <span class="op">=</span> <span class="fl">90</span>, ncol <span class="op">=</span> <span class="fl">90</span>, grid <span class="op">=</span> <span class="fl">5</span>, 
              max_area <span class="op">=</span> <span class="fl">5</span>, max_depth <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span></code></pre></div>
 <p>As well as the location of output files:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/flow_mapper.html">flow_mapper</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"testELEV.dbf"</span>, nrow <span class="op">=</span> <span class="fl">90</span>, ncol <span class="op">=</span> <span class="fl">90</span>, out_folder <span class="op">=</span> <span class="st">"./Output/"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="reference/flow_mapper.html">flow_mapper</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"testELEV.dbf"</span>, nrow <span class="op">=</span> <span class="fl">90</span>, ncol <span class="op">=</span> <span class="fl">90</span>, grid <span class="op">=</span> <span class="fl">5</span>, out_folder <span class="op">=</span> <span class="st">"./Output/"</span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb8"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="do">## CALCULATING DIRECTIONS</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="do">## CALCULATING WATERSHEDS</span></span>
@@ -149,7 +149,7 @@
 <span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="do">## CALCULATING INVERTED WATERSHEDS</span></span>
 <span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="do">## REMOVING INVERTED INITIAL PITS</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="do">## REMOVING INVERTED PITS</span></span>
 <span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="do">## CREATING REPORT</span></span>
 <span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a></span>
@@ -161,7 +161,7 @@
 </h2>
 <p><code><a href="reference/form_mapper.html">form_mapper()</a></code> uses output from <code><a href="reference/flow_mapper.html">flow_mapper()</a></code> and requires a grid size.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/form_mapper.html">form_mapper</a></span><span class="op">(</span>folder <span class="op">=</span> <span class="st">"./Output/"</span>, grid <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="reference/form_mapper.html">form_mapper</a></span><span class="op">(</span>folder <span class="op">=</span> <span class="st">"./Output/"</span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb10"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="do">## SETUP</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="do">## CALCULATING FORM</span></span>
@@ -175,7 +175,7 @@
 <span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="do">## Run took: 0.1 min</span></span></code></pre></div>
 <p>Optionally, users can also define channels and ridges according to the number of up-/down-slope cells that flow through the cell in question.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/form_mapper.html">form_mapper</a></span><span class="op">(</span>folder <span class="op">=</span> <span class="st">"./Output/"</span>, str_val <span class="op">=</span> <span class="fl">10000</span>, ridge_val <span class="op">=</span> <span class="fl">10000</span>, grid <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="reference/form_mapper.html">form_mapper</a></span><span class="op">(</span>folder <span class="op">=</span> <span class="st">"./Output/"</span>, str_val <span class="op">=</span> <span class="fl">10000</span>, ridge_val <span class="op">=</span> <span class="fl">10000</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="basic-usage-facet_mapper" class="section level2">
 <h2 class="hasAnchor">
@@ -205,12 +205,12 @@
 <h2 class="hasAnchor">
 <a href="#basic-usage-wepp_mapper" class="anchor"></a>Basic Usage: <code>wepp_mapper()</code>
 </h2>
-<p><code><a href="reference/wepp_mapper.html">wepp_mapper()</a></code> uses output from <code><a href="reference/flow_mapper.html">flow_mapper()</a></code> and requires a grid size.</p>
+<p><code><a href="reference/wepp_mapper.html">wepp_mapper()</a></code> uses output from <code><a href="reference/flow_mapper.html">flow_mapper()</a></code></p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/wepp_mapper.html">wepp_mapper</a></span><span class="op">(</span>folder <span class="op">=</span> <span class="st">"./Output/"</span>, grid <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="reference/wepp_mapper.html">wepp_mapper</a></span><span class="op">(</span>folder <span class="op">=</span> <span class="st">"./Output/"</span><span class="op">)</span></code></pre></div>
 <p>Optionally, users can also define the maximum length of channel cells (after which they will be split into separate segments), as well as the upslope threshold to define channel cells</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/wepp_mapper.html">wepp_mapper</a></span><span class="op">(</span>folder <span class="op">=</span> <span class="st">"./Output/"</span>, chan_length <span class="op">=</span> <span class="fl">500</span>, upslope_threshold <span class="op">=</span> <span class="fl">500</span>, grid <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="reference/wepp_mapper.html">wepp_mapper</a></span><span class="op">(</span>folder <span class="op">=</span> <span class="st">"./Output/"</span>, chan_length <span class="op">=</span> <span class="fl">500</span>, upslope_threshold <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="multiple-file-types" class="section level2">
 <h2 class="hasAnchor">
@@ -224,7 +224,7 @@
 <div id="output" class="section level2">
 <h2 class="hasAnchor">
 <a href="#output" class="anchor"></a>Output</h2>
-<p>Output files can be .csv, .dbf, or .rds (R data files) in the output folders “flow”, “form”, “facet” and “wepp”. Backup files (for <code><a href="reference/form_mapper.html">form_mapper()</a></code>) are stored in the “Backup” folder. Additionally, an html report summarizing the <code><a href="reference/flow_mapper.html">flow_mapper()</a></code> run is included in the output folder (<code>testELEV_final_report.html</code>).</p>
+<p>Output files can be .csv or .rds (R data files) in the output folders “flow”, “form”, “facet” and “wepp”. Additionally, an html report summarizing the <code><a href="reference/flow_mapper.html">flow_mapper()</a></code> run is included in the output folder (<code>testELEV_final_report.html</code>).</p>
 <p>See the <a href="http://FRDC-SHL.github.io/LITAP/">LITAP website</a> for more details and examples</p>
 </div>
 </div>

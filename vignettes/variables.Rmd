@@ -26,6 +26,8 @@ library(gt)
 library(glue)
 library(stringr)
 
+knitr::opts_chunk$set(echo = FALSE)
+
 litap_style <- function(gt) {
   gt %>%
     cols_label("param" = "LITAP Parameters",
@@ -71,7 +73,7 @@ These variables are common to many files in LITAP and so for the sake of brevity
 These variables correspond to dem files, meaning there is a value for each cell 
 in the dem file. 
 
-```{r, message = FALSE, echo = FALSE}
+```{r, message = FALSE}
 p <- tribble(
   ~param, ~desc, ~landmapr,
   "seqno",      "Cell number identifing a particular cell in the DEM", "SeqNo",
@@ -105,7 +107,7 @@ Variables in `flow/dem_fill` (corresponds to FlowMapR's `XXXdem.dbf`).
 
 This list only includes variables not already described above in the [Generic DEMs](#generic-dem).
 
-```{r, echo = FALSE}
+```{r}
 
 f <- readRDS(system.file("extdata", "testELEV", "flow", "dem_fill.rds", package = "LITAP"))
 #names(f)[!names(f) %in% c(all$param)]
@@ -194,7 +196,7 @@ These files have all the same variables but differ in their order (e.g., pond vs
 and their values depending on whether the shed was inverted or not. 
 
 
-```{r, message = FALSE, echo = FALSE}
+```{r, message = FALSE}
 f <- readRDS(system.file("extdata", "testELEV", "flow", "stats_pond.rds", package = "LITAP"))
 f <- readRDS(system.file("extdata", "testELEV", "flow", "stats_fill.rds", package = "LITAP"))
 #names(f)[!names(f) %in% c(all$param)]
@@ -241,7 +243,7 @@ p %>%
 
 
 
-```{r, echo = FALSE}
+```{r}
 
 p_flow <- pull(all, param) %>%
   unique() 
@@ -268,7 +270,7 @@ if(!all(p_flow %in% p1_flow) | !all(p1_flow %in% p_flow)) {
 ### `form/dem_form`
 Variables in `form/dem_form` (corresponds to FlowMapR's XXXform.dbf)
 
-```{r, echo = FALSE}
+```{r}
 all <- gen[1:9,]
 
 f <- readRDS(system.file("extdata", "testELEV", "form", "dem_form.rds", package = "LITAP"))
@@ -330,7 +332,7 @@ Note that variables prefaced by `st`, `n2`, `cr`, `pit`, and `peak` were only
 calculated in the original FormMapR when option c (compute full set of all 
 possible derivatives) was selected.
 
-```{r, echo = FALSE}
+```{r}
 
 f <- readRDS(system.file("extdata", "testELEV", "form", "dem_length.rds", package = "LITAP"))
 #names(f)[!names(f) %in% c(all$param)]
@@ -435,7 +437,7 @@ p %>%
 ```
 
 
-```{r, echo = FALSE}
+```{r}
 
 p_form <- pull(all, param) %>%
   unique() 
@@ -469,7 +471,7 @@ Variables in `form/dem_fuza` (corresponds to a combination of FlowMapR's `XXXfuz
 
 WORK IN PROGRESS!
 
-```{r, echo = FALSE, eval = FALSE}
+```{r, eval = FALSE}
 
 f <- readRDS(system.file("extdata", "testELEV", "facet", "dem_fuza.rds", package = "LITAP"))
 #names(f)[!names(f) %in% c(all$param)]

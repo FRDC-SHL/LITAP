@@ -6,7 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Common arguments for flow_mapper() and form_mapper() — args • LITAP</title>
+<title>Common arguments for flow_mapper(), form_mapper(), facet_mapper(), a
+nd wepp_mapper() — args • LITAP</title>
 
 
 <!-- jquery -->
@@ -39,8 +40,10 @@
 
 
 
-<meta property="og:title" content="Common arguments for flow_mapper() and form_mapper() — args" />
-<meta property="og:description" content="Common arguments for flow_mapper() and form_mapper()" />
+<meta property="og:title" content="Common arguments for flow_mapper(), form_mapper(), facet_mapper(), a
+nd wepp_mapper() — args" />
+<meta property="og:description" content="Common arguments for flow_mapper(), form_mapper(), facet_mapper(), a
+nd wepp_mapper()" />
 
 
 
@@ -72,7 +75,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">LITAP</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0.9000</span>
       </span>
     </div>
 
@@ -114,13 +117,15 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Common arguments for <code><a href='flow_mapper.html'>flow_mapper()</a></code> and <code><a href='form_mapper.html'>form_mapper()</a></code></h1>
+    <h1>Common arguments for <code><a href='flow_mapper.html'>flow_mapper()</a></code>, <code><a href='form_mapper.html'>form_mapper()</a></code>, <code><a href='facet_mapper.html'>facet_mapper()</a></code>, a
+nd <code><a href='wepp_mapper.html'>wepp_mapper()</a></code></h1>
     <small class="dont-index">Source: <a href='https://github.com/FRDC-SHL/LITAP/blob/master/R/LITAP_common_docs.R'><code>R/LITAP_common_docs.R</code></a></small>
     <div class="hidden name"><code>args.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Common arguments for <code><a href='flow_mapper.html'>flow_mapper()</a></code> and <code><a href='form_mapper.html'>form_mapper()</a></code></p>
+    <p>Common arguments for <code><a href='flow_mapper.html'>flow_mapper()</a></code>, <code><a href='form_mapper.html'>form_mapper()</a></code>, <code><a href='facet_mapper.html'>facet_mapper()</a></code>, a
+nd <code><a href='wepp_mapper.html'>wepp_mapper()</a></code></p>
     </div>
 
 
@@ -128,14 +133,12 @@
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>resume</th>
-      <td><p>Character. From which stage should the run be resumed? (see
-Details below)</p></td>
+      <th>grid</th>
+      <td><p>Numeric. Grid size in m of the input DEM file</p></td>
     </tr>
     <tr>
-      <th>end</th>
-      <td><p>Character. If ending a run after a particular step, which step
-(see Details below)</p></td>
+      <th>resume</th>
+      <td><p>Character. From which stage should the run be resumed? (see</p></td>
     </tr>
     <tr>
       <th>clean</th>
@@ -157,6 +160,11 @@ folder?</p></td>
     <tr>
       <th>quiet</th>
       <td><p>Logical. Suppress all messages.</p></td>
+    </tr>
+    <tr>
+      <th>debug</th>
+      <td><p>Logical. If TRUE, output files contain intermediate columns
+useful for debugging (e.g., 'buffer', 'seqno_buffer', etc.) Default FALSE.</p></td>
     </tr>
     </table>
 
