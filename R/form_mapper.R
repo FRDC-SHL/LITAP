@@ -130,7 +130,7 @@ form_mapper <- function(folder, str_val = 10000, ridge_val = 10000,
                     lnqarea1 = round(lnqarea1, 3),
                     lnqarea2 = round(lnqarea2, 3))
 
-    save_output(data = db_form, name = "weti", locs = out_locs,
+    save_output(data = db_form, name = "form", locs = out_locs,
                 out_format = out_format, where = "form", debug = debug)
     rm(db_form, db_weti)
     log_time(sub_start, log_file)

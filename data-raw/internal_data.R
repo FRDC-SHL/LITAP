@@ -132,7 +132,7 @@ debug_files <- list(
   "flow" = c("dem_dir", "dem_initial", "dem_local", "dem_pond",
              "dem_idir", "dem_iinitial",
              "stats_initial", "stats_local"),
-  "form" = c("dem_form", "dem_relief"),
+  "form" = c("dem_relief"),
   "facet" = c(),
   "wepp" = c("dem_wepp_form", "stats_renum", "dem_renum", "dem_hillsheds",
              "stats_upsegs", "stats_ddir2", "dem_ddir2", "stats_ordered",
