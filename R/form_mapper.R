@@ -99,6 +99,7 @@ form_mapper <- function(folder, str_val = 10000, ridge_val = 10000,
 
     db_form <- calc_form(db, grid, verbose = verbose)
 
+
     save_output(data = db_form, name = "form", locs = out_locs,
                 out_format = out_format, where = "form", debug = debug)
     log_time(sub_start, log_file)
@@ -115,6 +116,8 @@ form_mapper <- function(folder, str_val = 10000, ridge_val = 10000,
 
     if(!exists("db_form")) {
       db_form <- get_previous(folder, step = "form", where = "form") %>%
+        dplyr::select(dplyr::any_of(c("seqno", "row", "col", "slope_pct",
+                                      "slope_deg", "aspect", "prof", "plan"))) %>%
         add_buffer()
     }
 
