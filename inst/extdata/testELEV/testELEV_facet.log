@@ -1,18 +1,18 @@
 Run options:
 
   Input folder = /home/steffi/Projects/Business/LandmapR/LITAP/inst/extdata/testELEV
-  arule file =  /home/steffi/R/x86_64-pc-linux-gnu-library/4.1/LITAP/extdata/arule.dbf
-  crule file = /home/steffi/R/x86_64-pc-linux-gnu-library/4.1/LITAP/extdata/crule.dbf
+  arule file =  /home/steffi/Projects/Business/LandmapR/LITAP/inst/extdata/arule.dbf
+  crule file = /home/steffi/Projects/Business/LandmapR/LITAP/inst/extdata/crule.dbf
   edge_row = 
   edge_col = 
   Procedure = lsm
 
 
-Run started: 2021-12-02 10:57:06
+Run started: 2021-12-16 16:52:07
 
-Started calculating fuzzy attributes at: 2021-12-02 10:57:06
+Started calculating fuzzy attributes at: 2021-12-16 16:52:07
   Total time: 0
-Started calculating classes at: 2021-12-02 10:57:06
+Started calculating classes at: 2021-12-16 16:52:07
   Total time: 0
 
-Total run time: 0 min
+Total run time: 0.01 min

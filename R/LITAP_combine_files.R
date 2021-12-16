@@ -31,10 +31,11 @@ merge_all <- function(folder, out_format = NULL) {
                   "inv_initial_shed", "inv_local_shed", "edge_map") %>%
     dplyr::rename_with(.cols = -c("seqno", dplyr::contains("inv_")),
                        ~paste0("inv_", .))
+  inv_stats <- get_previous(folder, step = "inverted", where = "flow", type = "stats")
 
   length <- get_previous(folder, step = "length", where = "form")
 
-  weti <- get_previous(folder, step = "weti", where = "form")
+  weti <- get_previous(folder, step = "form", where = "form")
 
   combo <- dplyr::left_join(flow, inv, by = "seqno") %>%
     dplyr::left_join(length,

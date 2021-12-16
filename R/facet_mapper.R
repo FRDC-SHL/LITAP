@@ -18,9 +18,9 @@
 #'   (Original LandMapR program) or `bc_pem` (newer BC-PEM Direct-to-Site-Series
 #'   program).
 #' @param zone file. If `procedure = "bc_pem"`, zones must either be defined for
-#'   each seqno in the weti dem file, OR must be provided as an index file here.
-#'   With a `zone` defined for each `seqno`. `zone` file can be either dem (.dem),
-#'   Excel (.xlsx, .xls), or text (.txt, .csv, .dat)
+#'   each seqno in the form dem file, OR must be provided as an index file
+#'   here. With a `zone` defined for each `seqno`. `zone` file can be either dem
+#'   (.dem), Excel (.xlsx, .xls), or text (.txt, .csv, .dat)
 #'
 #' @inheritParams args
 #'
@@ -112,7 +112,7 @@ facet_mapper <- function(folder, arule = NULL, crule,
     add_buffer()
 
   # Get form dem (form_mapper)
-  weti <- get_previous(folder, step = "weti", where = "form") %>%
+  weti <- get_previous(folder, step = "form", where = "form") %>%
     dplyr::select(-tidyselect::any_of(c("seqno_buffer", "drec_buffer"))) %>%
     dplyr::rename("qweti" = "qweti1", "qarea" = "qarea1",
                   "lnqarea" = "lnqarea1") %>%

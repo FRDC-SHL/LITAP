@@ -69,7 +69,7 @@ cols_order_stats <- list(
   "flow" = c("shedno", "edge_pit", "final", "end_pit", "shed_area",
              "pit_row", "pit_col", "pit_seqno", "pit_elev", "pour_elev", "pre_vol",
              "pit_vol", "varatio", "pit_area", "drains_to", "next_pit",
-             "become", "remove", "in_row", "in_col", "in_seqno", "in_elev",
+             "becomes", "in_row", "in_col", "in_seqno", "in_elev",
              "out_row", "out_col", "out_seqno", "out_elev"))
 
 cols_order <- list(
