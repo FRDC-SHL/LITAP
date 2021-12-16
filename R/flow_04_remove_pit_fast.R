@@ -36,7 +36,7 @@ first_pitr1 <- function(db, max_area, max_depth, verbose) {
         sheds <- c(w_rm$shedno, w_rm$drains_to)
         if(verbose) message("    Combining watersheds ", paste0(sheds, collapse = " and "))
 
-        db <- remove_pit1(w_rm, w_stats, db, update_elev = TRUE)
+        db <- remove_pit1(w_rm, db, update_elev = TRUE)
 
         # Update shed statistics but only for the two sheds involved
         w_stats <- w_stats %>%
@@ -117,7 +117,7 @@ second_pitr1 <- function(db, verbose) {
       removed <- c(removed, w_rm$shedno, w_rm$drains_to)
 
       # Remove shed
-      db <- remove_pit1(w_rm, w_stats, db) %>%
+      db <- remove_pit1(w_rm, db) %>%
         dplyr::mutate(shedno = replace(shedno,
                                        shedno %in% c(w_rm$shedno, w_rm$drains_to),
                                        new_shed))
@@ -126,7 +126,6 @@ second_pitr1 <- function(db, verbose) {
       shed_update <- w_stats$shedno %in% c(w_focal$shedno, w_drain$shedno)
       w_stats$removed[shed_update] <- TRUE
       w_stats$final[shed_update] <- w_rm$at_final
-
 
       # drains_to set as out_shed in original pit_stat1
       w_stats$next_pit[shed_update] <- w_stats$drains_to[shed_update]
@@ -178,11 +177,11 @@ second_pitr1 <- function(db, verbose) {
       sheds_update <- pond$shedno %in% c(w_focal$shedno, w_drain$shedno)
       pond$removed[sheds_update] <- TRUE
       pond$final[sheds_update] <- w_rm$at_final
-      pond$next_pit[sheds_update] <- pond$drains_to[sheds_update]
+
       pond$becomes[sheds_update] <- new_shed
 
       pond$next_pit[pond$removed == FALSE & pond$final == FALSE &
-                     (pond$next_pit == w_focal$shedno | pond$next_pit == w_drain$shedno)] <- new_shed
+                     (pond$next_pit %in% c(w_focal$shedno, w_drain$shedno))] <- new_shed
 
       # Calc second vol2mm etc.
       vol <- db %>%
@@ -262,10 +261,10 @@ third_pitr1 <- function(db, verbose) {
       if(verbose) message("  Combining sheds ", w_focal$shedno, " and ",
                           w_drain$shedno, " to new shed ", new_shed)
 
-      db <- remove_pit1(w_focal, w_stats, db) %>%
-        dplyr::mutate(shedno = replace(shedno,
-                                       shedno %in% c(w_focal$shedno, w_drain$shedno),
-                                       new_shed))
+      db <- remove_pit1(w_focal, db) %>%
+        dplyr::mutate(
+          shedno = dplyr::if_else(shedno %in% c(w_focal$shedno, w_drain$shedno),
+                                  new_shed, shedno))
 
       # Update shed statistics but only for the two sheds involved
       w_new <- pit_stat1(db, w = new_shed, verbose = verbose) %>%
@@ -350,7 +349,7 @@ third_pitr1 <- function(db, verbose) {
   list("db" = db, "stats" = fill)
 }
 
-remove_pit1 <- function(w_rm, w_stats, db, update_elev = FALSE, verbose) {
+remove_pit1 <- function(w_rm, db, update_elev = FALSE, verbose) {
 
   w_rm <- w_rm %>%
     dplyr::mutate(direction = ifelse(pit_elev >= pit_elev_out, "out", "in"))
