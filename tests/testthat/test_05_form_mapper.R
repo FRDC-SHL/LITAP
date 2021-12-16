@@ -1,6 +1,6 @@
 test_that("Quiet is quiet", {
   form_mapper(folder = dir,
-              verbose = TRUE, quiet = TRUE,
+              verbose = TRUE, quiet = TRUE, debug = TRUE,
               log = FALSE) %>%
   expect_silent()
 })

@@ -1,5 +1,3 @@
-na_omit <- function(x) return(x[!is.na(x)])
-
 #' Pipe operator
 #'
 #' See \code{magrittr::\link[magrittr]{\%>\%}} for details.
@@ -8,9 +6,13 @@ na_omit <- function(x) return(x[!is.na(x)])
 #' @rdname pipe
 #' @keywords internal
 #' @export
-#' @importFrom magrittr %>%
+#' @importFrom magrittr %>% %T>%
 #' @usage lhs \%>\% rhs
 NULL
+
+
+na_omit <- function(x) return(x[!is.na(x)])
+
 
 max_na <- function(x) {
   if(sum(!is.na(x)) > 0) y <- max(x, na.rm = TRUE) else y <- as.numeric(NA)

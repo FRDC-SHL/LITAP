@@ -377,3 +377,11 @@ seqno_as_buffer <- function(seqno, db) {
     dplyr::filter(.data$seqno2 == !!seqno) %>%
     dplyr::pull(.data$seqno)
 }
+
+seqno_from_buffer <- function(seqno_buffer, db) {
+  dplyr::mutate(db, seqno2 = seqno) %>%
+    add_buffer() %>%
+    dplyr::filter(.data$seqno == !!seqno_buffer) %>%
+    dplyr::pull(.data$seqno2)
+}
+

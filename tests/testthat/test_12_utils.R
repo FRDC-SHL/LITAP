@@ -14,7 +14,7 @@ test_that("merge_all() works as expected", {
       c("seqno", "x", "y", "row", "col", "elev",
         "ddir", "drec", "upslope", "upslope_m", "uced",
         "vol2fl", "mm2fl", "parea",
-        "initial_shed", "local_shed", "fill_shed",
+        "initial_shed", "local_shed", "pond_shed", "fill_shed",
         "sgre", "sgr", "sgcn", "sgc", "scr", "scc", "hill_r_dir", "hill_c_dir",
         "hill_r_n", "hill_r_cell", "hill_c_n", "hill_c_cell", "edge_map",
         "inv_ddir", "inv_drec", "inv_upslope", "inv_upslope_m",
