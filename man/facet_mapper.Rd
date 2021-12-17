@@ -41,9 +41,9 @@ cols per side (total of 10\%).}
 program).}
 
 \item{zone}{file. If \code{procedure = "bc_pem"}, zones must either be defined for
-each seqno in the weti dem file, OR must be provided as an index file here.
-With a \code{zone} defined for each \code{seqno}. \code{zone} file can be either dem (.dem),
-Excel (.xlsx, .xls), or text (.txt, .csv, .dat)}
+each seqno in the form dem file, OR must be provided as an index file
+here. With a \code{zone} defined for each \code{seqno}. \code{zone} file can be either dem
+(.dem), Excel (.xlsx, .xls), or text (.txt, .csv, .dat)}
 
 \item{clean}{Logical. Remove all output files from previous runs in this
 folder?}
