@@ -67,7 +67,7 @@ Load the package:
 library(LITAP)
 ```
 
-    ## LITAP v0.5.0.9000
+    ## LITAP v0.6.0
     ## LITAP is still in development; Help us by submitting bugs/feature requests: 
     ## http://github.com/FRDC-SHL/LITAP/issues
 
@@ -110,7 +110,7 @@ flow_mapper(file = "testELEV.dbf", nrow = 90, ncol = 90, grid = 5, out_folder = 
 
     ## CREATING REPORT
 
-    ## Run took: 0.18 min
+    ## Run took: 0.25 min
 
 ## Basic Usage: `form_mapper()`
 
@@ -130,6 +130,8 @@ form_mapper(folder = "./Output/")
     ## CALCULATING RELIEF DERIVITIVES
 
     ## CALCULATING SLOPE LENGTH
+
+    ## MERGING FLOW AND FORM DATA FOR `ALL_POINTS` FILE
 
     ## Run took: 0.1 min
 
@@ -161,7 +163,7 @@ facet_mapper(folder = "./Output/", crule = "crule.dbf", arule = "arule.dbf")
 
     ## CALCULATING CLASSES
 
-    ## Run took: 0 min
+    ## Run took: 0.01 min
 
 If an ARULE file is not provided, LITAP will derive the rules based on
 the input files (as in Li et al. 2011, Canadian Journal of Soil Science
