@@ -1,3 +1,19 @@
+# LITAP 0.6.0
+- Import x/y coords or create them if they don't exist
+- flow_mapper() now requires grid or infers from x/y value of input files
+   - form_mapper() and wepp_mapper() now use grid inferred from x/y value of 
+     flow_mapper() output files
+- flow_mapper() now has upslope_m (upslope cells * grid^2)
+- flow_mapper() calculates UCED
+- facet_mapper() calculates buffer edges
+- Simplify output with 'debug' argument (if false, removes intermediate files)
+- Simplify output columns by removing intermediate ones
+- Remove option to 'end' a run prematurely (required due to simplified output)
+- Remove dbf output option because it truncates column names
+- Fix flow_mapper() inconsistencies
+- Add extra data output "topographical_derivatives" in facet_mapper
+- Initial work on all_points data output
+
 # LITAP 0.5.0
 - Load files forces to numeric (fixes problems where some imports in character)
 - Corrected `slope_gc()` directions (fixes #10)

@@ -1,0 +1,532 @@
+---
+title: "Understanding output variables"
+author: "Steffi LaZerte"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Understanding output variables}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+<style>
+.figure {
+  max-width: 100%;
+  margin: auto;
+}
+.table {
+  width: auto;
+  margin: auto;
+}
+</style>
+
+```{r, include = FALSE}
+library(dplyr)
+library(gt)
+library(glue)
+library(stringr)
+
+knitr::opts_chunk$set(echo = FALSE)
+
+litap_style <- function(gt) {
+  gt %>%
+    cols_label("param" = "LITAP Parameters",
+               "desc" = "Description",
+               "landmapr" = "LandMapR Name") %>%
+    cols_move_to_end("desc") %>%
+    text_transform(locations = cells_body(columns = "param"),
+                   fn = function(x) paste0("<code>", x, "</code>")) %>%
+    tab_style(location = cells_column_labels(), style = cell_text(weight = "bold")) %>%
+    cols_align(align = "left", columns = "desc") %>%
+    fmt_missing(columns = "landmapr", missing_text = "--") %>%
+    opt_footnote_marks(marks = "standard")
+}
+
+check_missing <- function(f, all, type) {
+  if(length(names(f)[!names(f) %in% all$param]) > 0) {
+    stop(type, " - Missing parameters: ", 
+         paste0(names(f)[!names(f) %in% all$param], collapse = "; "), 
+         call. = FALSE)
+  }
+}
+
+all <- tibble()
+
+```
+
+
+
+Functions in LITAP output a lot of variables, many of which are based on the original LandMapR<sup>*</sup> program, but including new ones as well. This resource is meant to explain what the various parameters mean, which files they can be found in, and whether they were included in the original LandMapR program (and under what name).
+
+<sup>*</sup> Interpretations of LandMapR variables are derived from the LandMapR
+C++ User Manual, October 2003
+
+<!-- LandmapR/Original EXTRA/Documentation/Users_Manual/LandMapR_C++_User_Manual.pdf -->
+
+## Generic variables
+
+These variables are common to many files in LITAP and so for the sake of brevity, will be defined here.
+
+
+### Generic DEM file variables {#generic-dem}
+
+These variables correspond to dem files, meaning there is a value for each cell 
+in the dem file. 
+
+```{r, message = FALSE}
+p <- tribble(
+  ~param, ~desc, ~landmapr,
+  "seqno",      "Cell number identifing a particular cell in the DEM", "SeqNo",
+  "x",          "The horizontal (longitudinal) measure of position in the units of the original dem (or metres, if not supplied)", "--",
+  "y",          "The vertical (latitudinal) measure of position in the units of the original dem (or metres, if not supplied)", "--",
+  "row",        "Row number",  "Row",
+  "col",        "Column number", "Col",
+  "elev",       "Elevation in metres", "Elev",
+  "ddir",       "Direction of water flow (1 = SW, 2 = S, 3 = SE, 4 = W, 5 = No flow, 6 = E, 7 = NW, 8 = N, 9 = NE)", "Ddir",
+  "drec",       "The cell number (`seqno`) of the cell this focal cell flows into", "Drec",
+  "upslope",    "The number of cells which flow into and/or through the focal cell", "UpSlope",
+  "upslope_m",  "The total area of cells which flow into and/or through the focal cell in metres", "--",   "uced",          "Upslope cumulative elevation drop (UCED)", "--",
+  "edge_map",      "Whether or not the focal cell is on the edge of the map", "--",
+  "ridge",          "Whether or not the focal cell touches the cell belonging to a different local watershed", "--"
+  )
+
+gen <- p
+all <- bind_rows(all, p)
+
+p %>%
+  gt() %>%
+  litap_style() %>%
+  fmt_markdown(column = "desc")
+```
+
+
+## `flow_mapper()` variables
+
+### `flow/dem_fill`
+Variables in `flow/dem_fill` (corresponds to FlowMapR's `XXXdem.dbf`).
+
+This list only includes variables not already described above in the [Generic DEMs](#generic-dem).
+
+```{r}
+
+f <- readRDS(system.file("extdata", "testELEV", "flow", "dem_fill.rds", package = "LITAP"))
+#names(f)[!names(f) %in% c(all$param)]
+
+p <- tribble(
+  ~param, ~desc, ~landmapr,
+  "vol2fl",        "Volume (m\u00B3) to first flood. How much water would be present in the depression at the point when the focal cell would be first inundated.", "Vol2Fl",
+  "mm2fl",         "mm to first flood. The amount of rainfall (in mm) required to fall and contribute to flow in order to reach the volume `vol2fl`", "Mm2Fl",
+  "parea",         "The surface area (in cell units) of the pond at the point at which the focal cell is first inundated.", "PArea",
+  "initial_shed",  "The watershed number identifying intial watersheds defined prior to omitting small or shallow depressions.", NA_character_,
+  "local_shed",    "The watershed number identifying local watersheds after small or shallow depressions have been removed. Represents a local, closed depression", "ShedNo (`XXXdem.dbf`)",
+  "pond_shed",     "The watershed number identifying pond watersheds for sequential pit filling and the calculation of pond statistics. (Same cells as `fill_shed` but numbers may be different, reflecting a different order of filling)", NA_character_,
+  "fill_shed",     "The watershed number identifying fill watersheds which are global catchments including surface flow to the edge of the DEM. Used in calculating of fill statistics (Same cells as `pond_shed` but numbers may be different, reflecting a different order of filling)", "ShedNow (`XXXdem.dbf`)",
+  "sgre",          "Slope gradient of rows in a easterly direction (+ = downslope towards east; - =  upslope towards west", NA_character_,
+  "sgr",           "Overall slope gradient of rows (absolute `sgre`)",  NA_character_,
+  "sgcn",          "Slope gradient of columns in a northerly direction (+ = downslope towards north; - = upslope towards south", NA_character_,
+  "sgc",           "Overall slope gradient of columns (absolute `sgcn`)", NA_character_,
+  "scr",           "Row slope curvature", NA_character_,
+  "scc",           "Column slope curvature",  NA_character_,
+  "hill_r_dir",    "Direction the row slope is facing (2 = east facing, 4 = west facing", NA_character_,
+  "hill_c_dir",    "Direction the col slope is facing (1 = north facing, 3 = south facing", NA_character_,
+  "hill_r_n",      "Number of hillslopes in the focal row. Hillslope number increments when the slope changes from down to up and vice versa.", NA_character_,
+  "hill_r_cell",   "Order number of a cell within a row hillslope", NA_character_,
+  "hill_c_n",      "Number of hillslopes in the focal column. Hillslope number increments when the slope changes from down to up and vice versa.", NA_character_,
+  "hill_c_cell",   "Order number of a cell within a column hillslope", NA_character_
+  )
+
+all <- bind_rows(all, p)
+
+check_missing(f, all, "dem_fill")
+
+p %>%
+  gt() %>%
+  litap_style() %>%
+  fmt_markdown(columns = "desc")
+```
+
+
+
+### `flow/dem_inverted`
+Variables in `flow/dem_inverted` (corresponds to FlowMapR's `XXXidem.dbf`)
+
+This list only includes variables not already described above in the [Generic DEMs](#generic-dem).
+
+```{r}
+f <- readRDS(system.file("extdata", "testELEV", "flow", "dem_inverted.rds", package = "LITAP"))
+#names(f)[!names(f) %in% c(all$param)]
+
+p <- tribble(
+  ~param, ~desc, ~landmapr,
+  "inv_initial_shed", "The watershed number identifying intial watersheds defined prior to omitting small or shallow depressions, calculated after inverting the DEM", "ShedNo",
+  "inv_local_shed", "The inverted watershed number identifying local watersheds calculated after inverting the DEM.", "Shednow"
+)
+
+all <- bind_rows(all, p)
+
+check_missing(f, all, "dem_inverted")
+
+p %>%
+  gt() %>%
+  litap_style()
+```
+
+
+### `flow/stats_XXX` {#generic-stats}
+
+**Generic stats file variables**
+
+These variables correspond to `flow/stats` files, which are non-dem summary files
+for flow mapper and include:
+
+```{r}
+tibble(param = c("stats_pit", "stats_pond", "stats_fill", "stats_inverted"),
+       landmapr = c("XXXpit", "XXXpond", "XXXfill", "XXXipit"),
+       desc = c("Information on final pits", 
+                "Information on pond pits, including all ways in which 
+  local pits can over-spill and connect.",
+  "Information on fill pits, including mostly likely sequence in which local pits would connect. This has similar information to `stats_pond` but the *order* is different (and important)",
+  "Same as `stats_pit` except that it is calculated for the inverted dem, so these represent peaks, rather than pits.")) %>%
+  gt() %>%
+  litap_style() %>%
+  fmt_markdown(columns = "desc")
+```
+
+These files have all the same variables but differ in their order (e.g., pond vs. fill) 
+and their values depending on whether the shed was inverted or not. 
+
+
+```{r, message = FALSE}
+f <- readRDS(system.file("extdata", "testELEV", "flow", "stats_pond.rds", package = "LITAP"))
+f <- readRDS(system.file("extdata", "testELEV", "flow", "stats_fill.rds", package = "LITAP"))
+#names(f)[!names(f) %in% c(all$param)]
+
+p <- tribble(
+  ~param, ~desc, ~landmapr,
+  "shedno",   "The watershed number identifying pond watersheds for sequential pit filling.", "ShedNo",
+  "edge_pit", "Whether or not the focal watershed touched the edge of the DEM", "Edge",
+  "final",    "Whether or not this pit is a 'final' pit which spills over beyond the edge of the dem", "Final",
+  "end_pit",  "The final pit this watershed will eventually contribute to", "EndPit",
+  "shed_area","Total number of cells in the focal watershed cachment", "ShedArea",
+  "pit_row",  "Row number of the pit centre", "PitRow", 
+  "pit_col",  "Column number of the pit centre", "PitCol",
+  "pit_seqno","Cell number of the pit centre", "PitRec",
+  "pit_elev", "Cell elevation of the pit centre", "PitElev",
+  "pour_elev","Elevation of the pour point (lowest cell that can overspill into an adjacent watersched/cachment). Elevation recorded is the higher of the cell in the current watershed (`in_elev`) and the adjacent cell in a neighbouring watershed (`out_elev`)",   "PourElev", 
+  "pre_vol",  "Total volume (in m * cells\u00B2; you can multiply by grid*2 to get m\u00B3) of the pit pouring into this one (always zero for local pits)",  "PreVol",
+  "pit_vol",  "Total volume (in cm * cells\u00B2; you can multiply by grid*2 to get m\u00B3) of the pit including all pits combined into this one", "PitVol",
+  "varatio",  "Proxy for the amount of rainfall in mm required to fill a pit completely; Calculated as a volume to area ratio", "Varitio",
+  "pit_area", "Number of cells in a pit (you can multiply by grid*2 to get area in m\u00B2)", "PitArea",
+  "drains_to","Adjacent watershed that this one is most likely to overspill into",  "DrainsTo",
+  "next_pit", "Alternative adjacent watershed that this one would drain to if `drains_to` is already full", "NextPit",
+  "becomes",  "New watershed number when this watershed is combined with another", "Becomes",
+  "in_row",   "Row number of the cell in the current watershed at the pour point", "InRow",
+  "in_col",   "Column number of the cell in the current watershed at the pour point", "InCol",
+  "in_seqno", "Cell number of the cell in the current watershed at the pour point", "InRec",
+  "in_elev",  "Elevation of the cell in the current watershed at the pour point", "InElev",
+  "out_row",  "Row number of the cell in the adjacent watershed at the pour point", "OutRow",
+  "out_col",  "Column number of the cell in the adjacent watershed at the pour point", "OutCol",
+  "out_seqno","Cell number of the cell in the adjacent watershed at the pour point", "OutRec",
+  "out_elev", "Elevation of the cell in the adjacent watershed at the pour point", "OutElev"
+  )
+
+all <- bind_rows(all, p)
+
+check_missing(f, all, "stats_fill")
+
+p %>%
+  gt() %>%
+  litap_style() %>%
+  fmt_markdown(columns = "desc")
+```
+
+
+
+
+```{r}
+
+p_flow <- pull(all, param) %>%
+  unique() 
+
+p1_flow <- c(LITAP:::cols_order$flow,
+             LITAP:::cols_order_stats$flow)
+
+if(!all(p_flow %in% p1_flow) | !all(p1_flow %in% p_flow)) {
+  
+  message("Extra var in tables")
+  p_flow[!p_flow %in% p1_flow]
+  
+  # Missing in lists
+  message("Missing var in lists of vars")
+  p1_flow[!p1_flow %in% p_flow]
+  
+  stop("Not all parameters explained", call. = FALSE)
+}
+
+```
+
+## `form_mapper()` variables
+
+### `form/dem_form`
+Variables in `form/dem_form` (corresponds to FlowMapR's XXXform.dbf)
+
+```{r}
+all <- gen[1:9,]
+
+f <- readRDS(system.file("extdata", "testELEV", "form", "dem_form.rds", package = "LITAP"))
+#names(f)[!names(f) %in% c(all$param)]
+
+p <- tribble(
+  ~param,      ~desc, ~landmapr,
+  "slope_pct", "Slope gradient (%)",            "Slope",
+  "slope_deg", "Slope gradient (\u00B0)",      NA_character_,
+  "aspect",    "Aspect",                        "Aspect",
+  "new_asp",   glue("New Aspect: Aspect rotated 45\u00B0 counter-clockwise. ",
+                    "Results in true NE having an aspect of 90\u00B0 as ",
+                    "opposed to 45\u00B0."),   "New_asp <small>(FormMapR option 'b' or 'c')</small>",
+  "prof",      "Profile",                       "Prof",
+  "plan",      "Plan curvature",                "Plan",
+  "qarea1",    "Diffuse upslope area (units = cells)", "Qarea <small>(FormMapR option 'a')</small>",
+  "qarea2",    "Diffuse upslope area (units = m\u00B2)", "Qarea <small>(FormMapR option 'b' or 'c')</small>",
+  "qweti1",    "Wetness Index (derived from qarea measured in cells)", "Qweti <small>(FormMapR option 'a')</small>",
+  "qweti2",    "Wetness Index (derived from qarea measured in m\u00B2)", "Qweti <small>(FormMapR option 'b' or 'c')</small>",
+  "lnqarea1",  "Natural log of diffuse upslope area (derived from qarea measured in cells)", NA_character_,
+  "lnqarea2",  "Natural log of diffuse upslope area (derived from qarea measured in m\u00B2)", "Lnqarea <small>(FormMapR option 'b' or 'c')</small>"
+  )
+
+all <- bind_rows(all, p)
+
+check_missing(f, all, "dem_form")
+
+p %>%
+  gt() %>%
+  litap_style() %>%
+  tab_footnote(footnote = "Calculated using equations by Eyton (1991)",
+               locations = cells_body(columns = "desc", 
+                                      param %in% c("slope_pct", "slope_deg", 
+                                                   "aspect", "new_asp", "prof",
+                                                   "plan"))) %>%
+  tab_footnote(footnote = "Calculated using the multiple descent flow accumulation algorithm by Quinn et al. (1991)",
+               locations = cells_body(columns = "desc", 
+                                      param %in% c("qarea1", "qarea2", 
+                                                   "qweti1", "qweti2"))) %>%
+  fmt_markdown(columns = "landmapr")
+```
+
+
+
+
+### `form/dem_length`
+Variables in `form/dem_length` (corresponds to a combination of FlowMapR's `XXXlen.dbf` and `XXXrelz.dbf` files).
+
+This list only includes variables not already described above in the [Generic DEMs](#generic-dem).
+
+These variables reflect information on the relative position of the focal cell 
+(`seqno`) and the **first** of each feature type the focal cell's flow path would 
+cross. 
+
+The features explored are streams/channels (`st`), crests/divides (`cr`), 
+pits (`pit`) and peaks (`peak`). 
+
+Note that variables prefaced by `st`, `n2`, `cr`, `pit`, and `peak` were only
+calculated in the original FormMapR when option c (compute full set of all 
+possible derivatives) was selected.
+
+```{r}
+
+f <- readRDS(system.file("extdata", "testELEV", "form", "dem_length.rds", package = "LITAP"))
+#names(f)[!names(f) %in% c(all$param)]
+
+p <- tribble(
+  ~param,       ~landmapr,    ~desc,
+  "st_row",     "St_row",     "Row of the first connected stream/channel",
+  "st_col",     "St_col",     "Column of the first connected stream/channel",
+  "st_elev",    "St_elev",    "Elevation of the first connected stream/channel",
+  "z2st",       "Z2st",       "Vertical elevation difference from stream/channel",
+  "n2st",       "N2st",       "Number of flow cells to stream/channel",
+  "cr_row",     "Cr_row",     "Row of the first connected crest/divide",
+  "cr_col",     "Cr_col",     "Column of the first connected crest/divide",
+  "cr_elev",    "Cr_elev",    "Elevation of the first connected crest/divide",
+  "z2cr",       "Z2cr",       "Vertical elevation difference from crest/divide",
+  "n2cr",       "N2cr",       "Number of flow cells to crest/divide",
+  "pit_row",    "Pit_row",    "Row of the first connected pit",
+  "pit_col",    "Pit_col",    "Column of the first connected pit",
+  "pit_elev",   "Pit_elev",   "Elevation of the first connected pit",
+  "z2pit",      "Z2pit",      "Vertical elevation difference from pit",
+  "n2pit",      NA_character_,"Number of flow cells to pit",
+  "peak_row",   "Pk_row",     "Row of the first connected peak",
+  "peak_col",   "Pk_col",     "Column of the first connected peak",
+  "peak_elev",  "Pk_elev",    "Elevation of the first connected peak",
+  "z2peak",     "Z2peak",     "Vertical elevation difference from peak",
+  "n2peak",     "N2peak",     "Number of flow cells to peak",
+  "z2top",      "Z2top",      "Vertical elevation difference from highest cell in watershed",
+  "zpit2peak",  "Zpit2peak",  "Total elevation change from pit to peak for this flow path",
+  "zcr2st",     "Zcr2st",     glue("Total elevation change from crest/divide ",
+                                   "to channel/stream for this flow path"),
+  "zcr2pit",    "Zcr2pit",    glue("Total elevation change from crest/divide ",
+                                   "to pit for this flow path"),
+  "ztop2pit",   "Ztop2pit",   glue("Total elevation change between the highest ",
+                                   "cell and the pit cell in the watershed"),
+  "ncr2st",     "Ncr2st",     glue("Number of flow cells between crest/divide ",
+                                   "and channel/stream for this flow path"),
+  "pmin2max",   "Pmin2max",   glue("Estimated % vertical distance above the ",
+                                   "lowest cell in the DEM relative to total ",
+                                   "elevation difference between the lowest ",
+                                   "and highest cells in the entire DEM."),
+  "pctz2st",    "Pctz2st",    glue("Estimated % vertical distance above ",
+                                   "stream/channel relative to total elevation ",
+                                   "difference between crest/divide and ",
+                                   "stream/channel (`zcr2st`) for this flow path."),
+  "pctz2pit",   "Pctz2pit",   glue("Estimated % vertical distance above pit ",
+                                   "relative to total elevation difference ",
+                                   "between pit and peak (`zpit2peak`) for ",
+                                   "this flow path."),
+  "pctz2top",   "Pctz2top",   glue("Estimated % vertical distance above ",
+                                   "lowest cell in the watershed relative to ",
+                                   "total elevation difference between ",
+                                   "lowest and highest cells in the watershed."),
+  "pctn2st",    "Pctn2st",    glue("% flow cells above stream/channel relative ",
+                                   "to total number of flow cells between ",
+                                   "crest/divide and stream/channel for ",
+                                   "this flow path"),
+  "l2pit",      "L2pit",      "Horizontal, straight-line distance to pit (m)",
+  "l2peak",     "L2peak",     "Horizontal, straight-line distance to peak (m)",
+  "lpit2peak",  "Lpit2peak",  glue("Horizontal, straight-line distance from ",
+                                   "pit to peak (m)"),
+  "ppit2peakl", "Ppit2peakl", glue("Relative slope position (%) as distance to ",
+                                   "pit (`l2pit`) by total distance between ",
+                                   "pit and peak (`lpit2peak`)."),
+  "l2str",      "L2str",      glue("Horizontal, straight-line distance to ",
+                                   "stream/channel (m)"),
+  "l2div",      "L2div",      glue("Horizontal, straight-line distance to ",
+                                   "crest/divide (m)"),
+  "lstr2div",   "Lstr2div",   glue("Horizontal, straight-line distance from ",
+                                   "stream/channel to crest/divide (m)"),
+  "pstr2divl",  "Pstr2divl",  glue("Relative slope position (%) as distance to ",
+                                  "stream/channel (`l2str`) by total distance ",
+                                  "between stream/channel and crest/divide ",
+                                  "(`lstr2div`)")
+  )
+
+all <- bind_rows(all, p)
+
+check_missing(f, all, "dem_form")
+
+base_vars <- c("z2st", "z2cr", "z2pit", "z2peak", "z2top", "zcr2st", "zpit2peak",
+               "ztop2pit", "pctz2st", "pctz2pit", "pctz2top", "pmin2max")
+len_vars <- p$param[str_detect(p$param, "^l|pstr2divl|ppit2peakl")]
+rel_full_vars <- p$param[!p$param %in% c(base_vars, len_vars, "n2pit")]
+
+p %>%
+  gt() %>%
+  litap_style() %>%
+  tab_footnote(footnote = "From XXXrelz.dbf", 
+               location = cells_body(columns = "landmapr", 
+                                     rows = param %in% base_vars)) %>%
+  tab_footnote(footnote = glue("From XXXrelz.dbf when selecting option c ",
+                               "(compute all possible terrain derivatives)"),
+               location = cells_body(columns = "landmapr", 
+                                     rows = param %in% rel_full_vars)) %>%
+  tab_footnote(footnote = glue("From XXXlen.dbf, created when selecting ",
+                               "option c (compute all possible terrain ",
+                               "derivatives)"), 
+               location = cells_body(columns = "landmapr", 
+                                     rows = param %in% len_vars)) %>%
+  fmt_markdown(column = "desc")
+                                    
+```
+
+
+```{r}
+
+p_form <- pull(all, param) %>%
+  unique() 
+
+p1_form <- c(LITAP:::cols_order$form,
+             LITAP:::cols_order_stats$form)
+  
+
+if(!all(p_form %in% p1_form) | !all(p1_form %in% p_form)) {
+  
+  message("Extra var in tables:",
+          glue_collapse(p_form[!p_form %in% p1_form], 
+                        sep = ", ", last = ", and "))
+  
+  # Missing in lists
+  message("Missing var in lists of vars:",
+          glue_collapse(p1_form[!p1_form %in% p_form], 
+                        sep = ", ", last = ", and "))
+          
+  
+  stop("Not all parameters explained", call. = FALSE)
+}
+
+```
+
+
+## `facet_mapper()` variables
+
+### `facet/dem_fuza`
+Variables in `form/dem_fuza` (corresponds to a combination of FlowMapR's `XXXfuza.dbf`).
+
+WORK IN PROGRESS!
+
+```{r, eval = FALSE}
+
+f <- readRDS(system.file("extdata", "testELEV", "facet", "dem_fuza.rds", package = "LITAP"))
+#names(f)[!names(f) %in% c(all$param)]
+
+
+### THINK ABOUT THIS A BIT MORE
+
+p <- tribble(
+  ~param,       ~landmapr,    ~desc,
+  "zone",       "ZONE",       
+  "convex_d",   "CONVEX_D",  "Likelihood of being convex in downslope direction",
+  "concave_d",  "CONCAVE_D",
+  "planar_d",   "PLANAR_D",
+  "convex_a",   "CONVEX_A",
+  "concave_a"   "CONCAVE_A",
+  "planar_a",   "PLANAR_A",
+  "high_wi",    "HIGH_WI",
+  "low_wi",     "LOW_WI",
+  "near_level", "NEAR_LEVEL", "",
+  "rel_steep",  "REL_STEEP",
+  "near_div",   "NEAR_DIV",
+  "near_half",  "NEAR_HALF",
+  "near_chan",  "NEAR_CHAN",
+  "near_peak",  "NEAR_PEAK",
+  "near_mid",   "NEAR_MID", 
+  "near_pit",   "NEAR_PIT", 
+  "hi_above",   "HI_ABOVE",
+  "planar_2x"   "PLANAR_2X",
+  )
+
+all <- bind_rows(all, p)
+
+check_missing(f, all, "dem_form")
+
+p %>%
+  gt() %>%
+  litap_style() %>%
+  tab_footnote(footnote = "From XXXrelz.dbf", 
+               location = cells_body(columns = "landmapr", 
+                                     rows = param %in% base_vars)) %>%
+  tab_footnote(footnote = glue("From XXXrelz.dbf when selecting option c ",
+                               "(compute all possible terrain derivatives)"),
+               location = cells_body(columns = "landmapr", 
+                                     rows = param %in% rel_full_vars)) %>%
+  tab_footnote(footnote = glue("From XXXlen.dbf, created when selecting ",
+                               "option c (compute all possible terrain ",
+                               "derivatives)"), 
+               location = cells_body(columns = "landmapr", 
+                                     rows = param %in% len_vars)) %>%
+  fmt_markdown(column = "desc")
+                                    
+```
+
+## References
+
+Eyton, J. R. 1991. Rate-of-change maps. Cartography and Geographic Information Systems. 18: 87-103
+
+Quinn, P., K. Beven, P. Chevallier and O. Planchon. 1991. The prediction of hillslope flow paths for distributed hydrological modelling using digital terrain models. Hydrological Processes. 5: 59-79

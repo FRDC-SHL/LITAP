@@ -75,7 +75,7 @@ trouble-shooting." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">LITAP</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0.9000</span>
       </span>
     </div>
 
@@ -83,7 +83,7 @@ trouble-shooting." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa-home"></span>
+    <span class="fa fa-home"></span>
      
   </a>
 </li>
@@ -100,7 +100,7 @@ trouble-shooting." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/steffilazerte/LITAP">
-    <span class="fas fa-github fa-lg"></span>
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -136,6 +136,7 @@ trouble-shooting.</p>
   missing_value <span class='op'>=</span> <span class='op'>-</span><span class='fl'>9999</span>,
   rlim <span class='op'>=</span> <span class='cn'>NULL</span>,
   clim <span class='op'>=</span> <span class='cn'>NULL</span>,
+  grid <span class='op'>=</span> <span class='cn'>NULL</span>,
   edge <span class='op'>=</span> <span class='cn'>TRUE</span>,
   verbose <span class='op'>=</span> <span class='cn'>TRUE</span>
 <span class='op'>)</span></pre>
@@ -174,6 +175,10 @@ rows to extract</p></td>
       <th>clim</th>
       <td><p>Vector. Two numbers specifying the start and end of a subset of
 columns to extract</p></td>
+    </tr>
+    <tr>
+      <th>grid</th>
+      <td><p>Numeric. Grid size in m of the input DEM file</p></td>
     </tr>
     <tr>
       <th>edge</th>

@@ -20,7 +20,8 @@
 #' @param clim Vector. Two numbers specifying the start and end of a subset of
 #'   columns to extract
 #' @param edge Logical. Whether to add an edge (buffer) around the data.
-#' @param verbose Logical. Output extra progress messages.
+#'
+#' @inheritParams args
 #'
 #' @return Returns a data frame containing elevation data in a format suitable
 #'   for analysis
@@ -65,7 +66,8 @@
 #'
 #' @export
 load_file <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
-                      rlim = NULL, clim = NULL, edge = TRUE, verbose = TRUE) {
+                      rlim = NULL, clim = NULL, grid = NULL, edge = TRUE,
+                      verbose = TRUE) {
 
   if(!file.exists(file)) stop("Cannot locate ", file,
                               " relative to working directory, ", getwd(),
@@ -90,17 +92,17 @@ load_file <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
     db <- dplyr::arrange(db, dplyr::desc(y), x)
     nrow <- length(unique(db$y))
     ncol <- length(unique(db$x))
-    db <- dplyr::select(db, -"x", -"y")
     if(verbose) message("  Detected ", nrow, " rows and ", ncol, " columns")
   } else if(!is.null(nrow) && !is.null(ncol)) {
     if(verbose) message("  Using supplied ", nrow, " rows and ", ncol, " columns")
   } else {
-    stop("dbf files with only one column require nrow and ncol arguments.",
+    stop("dbf files with only one column require 'nrow' and 'ncol' arguments.",
          call. = FALSE)
   }
 
-  db_format(db, nrow, ncol, missing_value, verbose) %>%
-    db_prep(clim, rlim, edge, verbose)
+  db_format(db, nrow = nrow, ncol = ncol, grid = grid,
+            missing_value = missing_value, verbose = verbose) %>%
+    db_prep(clim = clim, rlim = rlim, edge = edge, verbose = verbose)
 }
 
 
@@ -185,7 +187,7 @@ load_raster <- function(file) {
   db
 }
 
-db_format <- function(db, nrow, ncol, missing_value = -9999, verbose) {
+db_format <- function(db, nrow, ncol, grid, missing_value = -9999, verbose) {
   if(verbose) message("  Formating grid")
   # Check if valid rows/cols
   if(nrow * ncol != length(db$elev)){
@@ -193,13 +195,25 @@ db_format <- function(db, nrow, ncol, missing_value = -9999, verbose) {
   }
 
   # Arrange as grid
-  db %>%
+  db <- db %>%
     dplyr::mutate(seqno = 1:length(elev),
                   row = sort(rep(1:nrow, length(elev)/nrow)),
                   col = rep(1:ncol, length(elev)/ncol),
                   missing = elev == missing_value,
                   elev = replace(elev, missing, NA_real_)) %>%
     dplyr::mutate(dplyr::across(-"missing", as.numeric))
+
+  if(any(!c("x", "y") %in% names(db))) {
+    if(is.null(grid)) stop("No grid dimensions in data, require 'grid' argument",
+                           call. = FALSE)
+    if(verbose) message("  No x/y in file, creating x/y from cols/rows/grid")
+
+    db <- dplyr::mutate(db,
+                        x = col * grid,
+                        y = rev(row) * grid)
+  }
+
+  db
 }
 
 db_prep <- function(db, clim, rlim, edge, verbose) {
@@ -356,3 +370,18 @@ format_rule <- function(rule, type, quiet) {
 seqno_to_buffer <- function(seqno, seqno_buffer) {
   seqno_buffer[seqno]
 }
+
+seqno_as_buffer <- function(seqno, db) {
+  dplyr::mutate(db, seqno2 = seqno) %>%
+    add_buffer() %>%
+    dplyr::filter(.data$seqno2 == !!seqno) %>%
+    dplyr::pull(.data$seqno)
+}
+
+seqno_from_buffer <- function(seqno_buffer, db) {
+  dplyr::mutate(db, seqno2 = seqno) %>%
+    add_buffer() %>%
+    dplyr::filter(.data$seqno == !!seqno_buffer) %>%
+    dplyr::pull(.data$seqno2)
+}
+

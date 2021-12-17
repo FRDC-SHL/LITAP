@@ -1,4 +1,5 @@
-report_final <- function(file, report_loc = NULL, out_files, run, max_area, max_depth, nrow, ncol, rlim, clim) {
+report_final <- function(file, report_loc = NULL, out_files, run, max_area,
+                         max_depth, nrow, ncol, rlim, clim) {
   if(is.null(report_loc)) report_loc <- getwd()
   rmarkdown::render(system.file("reports", "final_report.Rmd", package = "LITAP"),
                     params = list(file = file,

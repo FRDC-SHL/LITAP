@@ -14,14 +14,18 @@ calc_relz <- function(db, idb, str_val, ridge_val, pond = NULL,
     calc_pit3(pond = pond, verbose = verbose)
 
   if(verbose) message("  Calculating ridges") # Inverse
-  ridges <- calc_stream3(idb, str_val = ridge_val, verbose = verbose) %>%
-    dplyr::rename(cr_row = str_row, cr_col = str_col, cr_elev = str_elev,
+  ridges <- idb %>%
+    dplyr::mutate(shedno = inv_local_shed) %>%
+    calc_stream3(str_val = ridge_val, verbose = verbose) %>%
+    dplyr::rename(cr_row = st_row, cr_col = st_col, cr_elev = st_elev,
                   z2cr = z2st, n2cr = n2st) %>%
     dplyr::mutate(cr_elev = max(db$elev, na.rm = TRUE) - cr_elev) #Convert back to orig elev
 
   if(verbose) message("  Calculating ridges to pits")
 
-  ridge2pits <- calc_pit3(idb, verbose = verbose) %>%
+  ridge2pits <- idb %>%
+    dplyr::mutate(shedno = inv_local_shed) %>%
+    calc_pit3(verbose = verbose) %>%
     dplyr::rename(peak_seqno = pit_seqno, peak_row = pit_row, peak_col = pit_col,
                   peak_elev = pit_elev, z2peak = z2pit, n2peak = n2pit) %>%
     dplyr::mutate(peak_elev = max(db$elev, na.rm = TRUE) - peak_elev)
@@ -49,13 +53,13 @@ calc_stream_sub <- function(db_shed, db, relz, str_val, verbose) {
 calc_stream <- function(db, str_val, verbose) {
   num_dn <- 0
 
-  str_row <- 0
-  str_col <- 0
-  str_elev <- 0
+  st_row <- 0
+  st_col <- 0
+  st_elev <- 0
 
   relz <- data.frame(seqno = db$seqno,
-                     str_row = as.numeric(NA), str_col = as.numeric(NA),
-                     str_elev = as.numeric(NA),
+                     st_row = as.numeric(NA), st_col = as.numeric(NA),
+                     st_elev = as.numeric(NA),
                      z2st = as.numeric(0), n2st = as.numeric(NA))
 
   db_temp <- dplyr::select(db, seqno, row, col, elev, upslope, shedno) %>%
@@ -90,9 +94,9 @@ calc_stream <- function(db, str_val, verbose) {
     # OR have a channel (and/or visited)
     if((is.na(visited) && is.na(channel)) || !is.na(channel)){
 
-      relz$str_row[track] <- db_temp$row[end]
-      relz$str_col[track] <- db_temp$col[end]
-      relz$str_elev[track] <- db_temp$elev[end]
+      relz$st_row[track] <- db_temp$row[end]
+      relz$st_col[track] <- db_temp$col[end]
+      relz$st_elev[track] <- db_temp$elev[end]
 
       relz$z2st[track] <- db_temp$elev[track] - db_temp$elev[end]
       relz$n2st[track] <- seq(num_dn-1, by = -1, along.with = track)
@@ -100,11 +104,11 @@ calc_stream <- function(db, str_val, verbose) {
     # If we go to the first cell already visited (i.e. cell is NOT channel cell)
     } else {
 
-      relz$str_row[track] <- relz$str_row[end]
-      relz$str_col[track] <- relz$str_col[end]
-      relz$str_elev[track] <- relz$str_elev[end]
+      relz$st_row[track] <- relz$st_row[end]
+      relz$st_col[track] <- relz$st_col[end]
+      relz$st_elev[track] <- relz$st_elev[end]
 
-      relz$z2st[track] <- db_temp$elev[track] - relz$str_elev[end]
+      relz$z2st[track] <- db_temp$elev[track] - relz$st_elev[end]
       relz$n2st[track] <- seq(num_dn + relz$n2st[end] - 1, by = -1, along.with = track)
     }
   }
@@ -117,9 +121,9 @@ calc_stream <- function(db, str_val, verbose) {
 calc_stream2 <- function(db, str_val, verbose) {
 
   num_dn <- 0
-  str_row <- rep(as.numeric(NA), nrow(db))
-  str_col <- rep(as.numeric(NA), nrow(db))
-  str_elev <- rep(as.numeric(NA), nrow(db))
+  st_row <- rep(as.numeric(NA), nrow(db))
+  st_col <- rep(as.numeric(NA), nrow(db))
+  st_elev <- rep(as.numeric(NA), nrow(db))
   z2st <- rep(0, nrow(db))
   n2st <- rep(as.numeric(NA), nrow(db))
 
@@ -160,9 +164,9 @@ calc_stream2 <- function(db, str_val, verbose) {
     # OR have a channel (and/or visited)
     if((is.na(visited) && is.na(channel)) || !is.na(channel)){
 
-      str_row[track] <- db_row[end]
-      str_col[track] <- db_col[end]
-      str_elev[track] <- db_elev[end]
+      st_row[track] <- db_row[end]
+      st_col[track] <- db_col[end]
+      st_elev[track] <- db_elev[end]
 
       z2st[track] <- db_elev[track] - db_elev[end]
       n2st[track] <- seq(num_dn-1, by = -1, along.with = track)
@@ -170,18 +174,18 @@ calc_stream2 <- function(db, str_val, verbose) {
       # If we go to the first cell already visited (i.e. cell is NOT channel cell)
     } else {
 
-      str_row[track] <- str_row[end]
-      str_col[track] <- str_col[end]
-      str_elev[track] <- str_elev[end]
+      st_row[track] <- st_row[end]
+      st_col[track] <- st_col[end]
+      st_elev[track] <- st_elev[end]
 
-      z2st[track] <- db_temp$elev[track] - str_elev[end]
+      z2st[track] <- db_temp$elev[track] - st_elev[end]
       n2st[track] <- seq(num_dn + n2st[end] - 1, by = -1, along.with = track)
     }
   }
 
   z2st[z2st < 0] <- 0
 
-  data.frame(seqno = db_temp$seqno, str_row, str_col, str_elev, z2st, n2st)
+  data.frame(seqno = db_temp$seqno, st_row, st_col, st_elev, z2st, n2st)
 }
 
 
@@ -189,9 +193,9 @@ calc_stream2 <- function(db, str_val, verbose) {
 
 calc_stream3 <- function(db, str_val, verbose) {
 
-  str_row <- rep(as.numeric(NA), nrow(db))
-  str_col <- rep(as.numeric(NA), nrow(db))
-  str_elev <- rep(as.numeric(NA), nrow(db))
+  st_row <- rep(as.numeric(NA), nrow(db))
+  st_col <- rep(as.numeric(NA), nrow(db))
+  st_elev <- rep(as.numeric(NA), nrow(db))
   z2st <- rep(0, nrow(db))
   n2st <- rep(as.numeric(NA), nrow(db))
 
@@ -246,9 +250,9 @@ calc_stream3 <- function(db, str_val, verbose) {
       # OR have a channel (and/or visited)
       if((is.na(visited) && is.na(channel)) || !is.na(channel)){
 
-        str_row[track] <- db_row[end]
-        str_col[track] <- db_col[end]
-        str_elev[track] <- db_elev[end]
+        st_row[track] <- db_row[end]
+        st_col[track] <- db_col[end]
+        st_elev[track] <- db_elev[end]
 
         z2st[track] <- db_elev[track] - db_elev[end]
         n2st[track] <- seq(num_dn-1, by = -1, along.with = track)
@@ -256,11 +260,11 @@ calc_stream3 <- function(db, str_val, verbose) {
         # If we go to the first cell already visited (i.e. cell is NOT channel cell)
       } else {
 
-        str_row[track] <- str_row[end]
-        str_col[track] <- str_col[end]
-        str_elev[track] <- str_elev[end]
+        st_row[track] <- st_row[end]
+        st_col[track] <- st_col[end]
+        st_elev[track] <- st_elev[end]
 
-        z2st[track] <- db_elev[track] - str_elev[end]
+        z2st[track] <- db_elev[track] - st_elev[end]
         n2st[track] <- seq(num_dn + n2st[end] - 1, by = -1, along.with = track)
       }
     }
@@ -268,15 +272,15 @@ calc_stream3 <- function(db, str_val, verbose) {
 
   z2st[z2st < 0] <- 0
 
-  data.frame(seqno = db_temp$seqno, str_row, str_col, str_elev, z2st, n2st)
+  data.frame(seqno = db_temp$seqno, st_row, st_col, st_elev, z2st, n2st)
 }
 
 
 calc_stream4 <- function(db, str_val, verbose) {
 
-  str_row <- rep(as.numeric(NA), nrow(db))
-  str_col <- rep(as.numeric(NA), nrow(db))
-  str_elev <- rep(as.numeric(NA), nrow(db))
+  st_row <- rep(as.numeric(NA), nrow(db))
+  st_col <- rep(as.numeric(NA), nrow(db))
+  st_elev <- rep(as.numeric(NA), nrow(db))
   z2st <- rep(as.numeric(NA), nrow(db))
   n2st <- rep(as.numeric(NA), nrow(db))
 
@@ -312,9 +316,9 @@ calc_stream4 <- function(db, str_val, verbose) {
     # OR have a channel (and/or visited)
     if(!v && !c || c){
 
-      str_row[track] <- db_row[end]
-      str_col[track] <- db_col[end]
-      str_elev[track] <- db_elev[end]
+      st_row[track] <- db_row[end]
+      st_col[track] <- db_col[end]
+      st_elev[track] <- db_elev[end]
 
       z2st[track] <- db_elev[track] - db_elev[end]
       n2st[track] <- seq(num_dn-1, by = -1, along.with = track)
@@ -322,18 +326,18 @@ calc_stream4 <- function(db, str_val, verbose) {
       # If we go to the first cell already visited (i.e. cell is NOT channel cell)
     } else {
 
-      str_row[track] <- str_row[end]
-      str_col[track] <- str_col[end]
-      str_elev[track] <- str_elev[end]
+      st_row[track] <- st_row[end]
+      st_col[track] <- st_col[end]
+      st_elev[track] <- st_elev[end]
 
-      z2st[track] <- db_temp$elev[track] - str_elev[end]
+      z2st[track] <- db_temp$elev[track] - st_elev[end]
       n2st[track] <- seq(num_dn + n2st[end] - 1, by = -1, along.with = track)
     }
   }
 
   z2st[z2st < 0] <- 0
 
-  data.frame(seqno = db_temp$seqno, str_row, str_col, str_elev, z2st, n2st)
+  data.frame(seqno = db_temp$seqno, st_row, st_col, st_elev, z2st, n2st)
 }
 
 

@@ -13,7 +13,7 @@ calc_length <- function(db, relz, grid, verbose){
       l2peak = sqrt((peak_col - col)^2 + (peak_row - row)^2) * grid,
       l2peak = sqrt(l2peak^2 + (z2peak * grid)^2),
 
-      l2str = sqrt((str_col - col)^2 + (str_row - row)^2) * grid,
+      l2str = sqrt((st_col - col)^2 + (st_row - row)^2) * grid,
       l2str = sqrt(l2str^2 + (z2st * grid)^2),
 
       l2div = sqrt((cr_col - col)^2 + (cr_row - row)^2) * grid,

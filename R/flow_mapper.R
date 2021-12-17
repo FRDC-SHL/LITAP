@@ -20,9 +20,9 @@
 #' @param out_folder Character. Folder in which to store output files. Defaults
 #'   to folder in the same location and with the same name as the dem file
 #' @param out_format Character. What format should the data be output as? "rds"
-#'   for R data format (default), "csv" for Comma-separated values, or "dbf" for
-#'   dbf database files. This format is used for all subsequent functions (i.e.
-#'   `form_mapper()`, `facet_mapper()` and `wepp_mapper()`.
+#'   for R data format (default), "csv" for Comma-separated values. This format
+#'   is used for all subsequent functions (i.e. `form_mapper()`,
+#'   `facet_mapper()` and `wepp_mapper()`.
 #' @param clean Logical. Remove all backup files and output files from previous
 #'   runs in this folder?
 #' @param clim Numeric vector. Column limits if specifying a subset of the dem
@@ -33,7 +33,7 @@
 #' @details For information regarding loading other file types see
 #'   \code{\link{load_file}}.
 #'
-#'   For resuming or ending a run, \code{resume} or \code{end} must be one of
+#'   For resuming a run, \code{resume} must be one of
 #'   the following:
 #'
 #'   \enumerate{
@@ -43,42 +43,42 @@
 #'     \item \code{pond} (Calculating Pond Shed Statistics - Second Pit Removal)
 #'     \item \code{fill} (Calculating Fill Shed Statistics - Third Pit Removal)
 #'     \item \code{slope} (Slope Gradient and Curvature values)
-#'     \item \code{inverted} (Calculating Directions on Inverted DEM)
+#'     \item \code{idirections} (Calculating Directions on Inverted DEM)
 #'     \item \code{iwatersheds} (Calculating Inverted Watersheds)
-#'     \item \code{ilocal} (Initial Inverted Pit Removal)
+#'     \item \code{inverted} (Inverted Pit Removal)
 #'     \item \code{report} (Create the final report)
 #'   }
 #'
 #' @examples
 #' # Basic Run
 #' flow_mapper(file = system.file("extdata", "testELEV.dbf", package = "LITAP"),
-#'            out_folder = "./testELEV/", nrow = 90, ncol = 90)
+#'            out_folder = "./testELEV/", nrow = 90, ncol = 90, grid = 1)
 #'
 #' # Specify parameters for initial pit removal
 #' flow_mapper(file = system.file("extdata", "testELEV.dbf", package = "LITAP"),
-#'             out_folder = "./testELEV/", nrow = 90, ncol = 90,
+#'             out_folder = "./testELEV/", nrow = 90, ncol = 90, grid = 1,
 #'             max_area = 5, max_depth = 2)
 #'
 #' # Clean up (remove created folder and output)
 #' unlink("./testELEV/", recursive = TRUE)
 #'
 #' @export
-flow_mapper <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
+flow_mapper <- function(file, nrow, ncol, grid = NULL, missing_value = -9999,
                         max_area = 10, max_depth = 0.5,
                         out_folder = NULL, out_format = "rds", clean = FALSE,
                         clim = NULL, rlim = NULL,
-                        resume = NULL, end = NULL, log = TRUE, report = TRUE,
-                        verbose = FALSE, quiet = FALSE) {
+                        resume = NULL, log = TRUE, report = TRUE,
+                        verbose = FALSE, quiet = FALSE, debug = FALSE) {
 
   check_out_format(out_format)
 
   if(is.null(resume)) resume <- ""
-  if(is.null(end)) end <- ""
+
   resume_options <- c("", "directions", "watersheds",
                       "local", "pond", "fill", "slope",
-                      "inverted", "iwatersheds",
-                      "ilocal", "report")
-  check_resume(resume, end, resume_options)
+                      "idirections", "iwatersheds",
+                      "inverted", "report")
+  check_resume(resume, resume_options)
 
   if(quiet) verbose <- FALSE
 
@@ -99,9 +99,15 @@ flow_mapper <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
 
   start <- Sys.time()
 
-  db_start <- load_file(file, nrow = nrow, ncol = ncol,
+  db_start <- load_file(file, nrow = nrow, ncol = ncol, grid = grid,
                         missing_value = missing_value,
                         clim = clim, rlim = rlim, verbose = verbose)
+
+  if(is.null(grid)) {
+    grid <- calc_grid(db_start)
+    message("No grid supplied, calculating from x values: ", grid, "m")
+    check_grid(grid)
+  }
 
   ncol_orig <- ncol
   nrow_orig <- nrow
@@ -112,6 +118,7 @@ flow_mapper <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
   log_write("Run options:", log = log_file)
   log_write("  Dimensions: nrows = ", nrow_orig,
             "; ncols = ", ncol_orig,
+            "; grid = ", grid,
             "; max_area = ", max_area,
             "; max_depth = ", max_depth,
             log = log_file)
@@ -141,15 +148,12 @@ flow_mapper <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
     db_dir <- calc_ddir2(db_start, verbose = verbose)
 
     save_output(data = db_dir, name = "dir", locs = out_locs,
-                out_format = out_format, where = "flow")
+                out_format = out_format, where = "flow", debug = debug)
     log_time(sub_start, log_file)
 
     resume <- "watersheds"
+
   } else  skip_task(task, log_file, quiet)
-  if(end == "directions") {
-    run_time(start, log_file, quiet)
-    return()
-  }
 
 
   # Calculate watersheds -------------------------------------------------------
@@ -165,7 +169,8 @@ flow_mapper <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
     }
 
     db_initial <- calc_shed4(db_dir, verbose = verbose)
-    stats_initial <- pit_stat1(db_initial, verbose = verbose) %>%
+    stats_initial <- pit_stat1(db_initial, shed = "initial_shed",
+                               verbose = verbose) %>%
       out_stat()
 
     # Calc stats for first vol2fl
@@ -176,19 +181,15 @@ flow_mapper <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
     # Save
     save_output(data = db_initial, stats = stats_initial,
                 name = "initial", locs = out_locs,
-                out_format = out_format, where = "flow")
+                out_format = out_format, where = "flow", debug = debug)
     save_output(data = db_initial,
                 name = "initial", locs = out_locs,
-                out_format = out_format, where = "flow")
+                out_format = out_format, where = "flow", debug = debug)
 
     log_time(sub_start, log_file)
     resume <- "local"
 
   } else skip_task(task, log_file, quiet)
-  if(end == "watersheds") {
-    run_time(start, log_file, quiet)
-    return()
-  }
 
   # Remove initial pits --------------------------------------------------------
   task <- "removing initial pits"
@@ -207,22 +208,20 @@ flow_mapper <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
                             max_depth = max_depth, verbose = verbose)
 
     # Stats
-    stats_local <- pit_stat1(db_local, verbose = verbose) %>%
+    stats_local <- pit_stat1(db_local, shed = "local_shed",
+                             verbose = verbose) %>%
       out_stat()
 
-    save_output(data = db_local, stats = stats_local, name = "local", locs = out_locs,
-                out_format = out_format, where = "flow")
+    save_output(data = db_local, stats = stats_local, name = "local",
+                locs = out_locs,
+                out_format = out_format, where = "flow", debug = debug)
     save_output(data = db_local, name = "local", locs = out_locs,
-                out_format = out_format, where = "flow")
+                out_format = out_format, where = "flow", debug = debug)
 
     log_time(sub_start, log = log_file)
 
     resume <- "pond"
   } else skip_task(task, log_file, quiet)
-  if(end == "local") {
-    run_time(start, log_file, quiet)
-    return()
-  }
 
   # Calc pond Sheds ---------------------------------------------------------
   task <- "calculating pond (global) watersheds"
@@ -237,7 +236,7 @@ flow_mapper <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
         add_buffer()
     }
 
-    if(length(unique(db_local$shedno[!is.na(db_local$shedno)])) > 1){
+    if(length(unique(db_local$local_shed[!is.na(db_local$local_shed)])) > 1){
       db_pond <- second_pitr1(db_local, verbose = verbose) #also 2nd vol2fl and parea
       stats_pond <- db_pond$stats
       db_pond <- db_pond$db
@@ -246,18 +245,15 @@ flow_mapper <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
       db_pond <- dplyr::mutate(db_local, pond_shed = local_shed)
       stats_pond <- tibble::tibble()
     }
-    save_output(data = db_pond, stats = stats_pond, name = "pond", locs = out_locs,
-                out_format = out_format, where = "flow")
+    save_output(data = db_pond, stats = stats_pond, name = "pond",
+                locs = out_locs,
+                out_format = out_format, where = "flow", debug = debug)
     save_output(data = db_pond, name = "pond", locs = out_locs,
-                out_format = out_format, where = "flow")
+                out_format = out_format, where = "flow", debug = debug)
 
     log_time(sub_start, log_file)
     resume <- "fill"
   } else skip_task(task, log_file, quiet)
-  if(end == "pond") {
-    run_time(start, log_file, quiet)
-    return()
-  }
 
   # Calc fill sheds ---------------------------------------------------------
   task <- "calculating fill patterns"
@@ -267,12 +263,15 @@ flow_mapper <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
     log_start(task, sub_start, log_file)
 
     if(!exists("db_initial") || !exists("db_local") || !exists("db_pond")) {
-      db_initial <- get_previous(folder, step = "initial", where = "flow")
-      db_local <- get_previous(folder, step = "local", where = "flow")
-      db_pond <- get_previous(folder, step = "pond", where = "flow")
+      db_initial <- get_previous(folder, step = "initial", where = "flow") %>%
+        add_buffer()
+      db_local <- get_previous(folder, step = "local", where = "flow") %>%
+        add_buffer()
+      db_pond <- get_previous(folder, step = "pond", where = "flow") %>%
+        add_buffer()
     }
 
-    if(length(unique(db_local$shedno[!is.na(db_local$shedno)])) > 1){
+    if(length(unique(db_local$local_shed[!is.na(db_local$local_shed)])) > 1){
 
       # Add pond sheds details to local sheds
       db_local[, c("pond_shed", "vol2fl", "mm2fl", "parea")] <-
@@ -289,13 +288,16 @@ flow_mapper <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
       stats_fill <- tibble::tibble()
     }
 
+    # Calculate upslope in m2
+    db_fill <- dplyr::mutate(db_fill, upslope_m = upslope * grid^2)
+
     # Calculate slope gradients and curvatures
     db_fill <- slope_gc(db_fill, grid = 1)
 
     save_output(data = db_fill, stats = stats_fill, name = "fill", locs = out_locs,
-                out_format = out_format, where = "flow")
+                out_format = out_format, where = "flow", debug = debug)
     save_output(data = db_fill, name = "fill", locs = out_locs,
-                out_format = out_format, where = "flow")
+                out_format = out_format, where = "flow", debug = debug)
 
     log_time(sub_start, log_file)
 
@@ -307,23 +309,19 @@ flow_mapper <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
         dplyr::arrange(shedno)
 
       save_output(data = db_fill, stats = stats_pit, name = "pit", locs = out_locs,
-                  out_format = out_format, where = "flow")
+                  out_format = out_format, where = "flow", debug = debug)
 
     } else if(!quiet) message("  Only a single watershed: No pit outputs")
 
-    resume <- "inverted"
+    resume <- "idirections"
   } else skip_task(task, log_file, quiet)
-  if(end == "fill") {
-    run_time(start, log_file, quiet)
-    return()
-  }
 
 
   # Inverted DEM --------------------------------------------------------------
   task <- "inverting dem"
   announce(task, quiet)
   task <- "calculating inverted directions"
-  if(resume == "inverted") {
+  if(resume == "idirections") {
 
     if(!exists("db_local")) {
       db_local <- get_previous(folder, step = "local", where = "flow") %>%
@@ -331,7 +329,8 @@ flow_mapper <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
     }
 
     db_invert <- db_local %>%
-      dplyr::select(elev, seqno, row, col, missing, buffer, elev_orig, edge_map) %>%
+      dplyr::select("elev", "seqno", "x", "y", "row", "col", "buffer",
+                    "edge_map") %>%
       invert()
 
     # Inverted Directions --------------------------------------------------------
@@ -343,16 +342,12 @@ flow_mapper <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
     db_idir <- calc_ddir2(db_invert, verbose = verbose)
 
     save_output(data = db_idir, name = "idir", locs = out_locs,
-                out_format = out_format, where = "flow")
+                out_format = out_format, where = "flow", debug = debug)
 
     log_time(sub_start, log_file)
 
     resume <- "iwatersheds"
   } else skip_task(task, log_file, quiet)
-  if(end == "idirections") {
-    run_time(start, log_file, quiet)
-    return()
-  }
 
   # Inverted Watersheds --------------------------------------------------------
   task <- "calculating inverted watersheds"
@@ -363,47 +358,61 @@ flow_mapper <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
     log_start(task, sub_start, log_file)
 
     if(!exists("db_idir")) {
-      db_idir <- get_previous(folder, step = "idir", where = "flow")
+      db_idir <- get_previous(folder, step = "idir", where = "flow") %>%
+        add_buffer()
     }
 
     db_iinitial <- calc_shed4(db_idir, verbose = verbose)
+    stats_iinitial <- pit_stat1(db_iinitial, shed = "initial_shed",
+                                verbose = verbose) %>%
+      out_stat()
+
+    # Do not calculate vol2fl/mm2fl/parea as they are not calculated in the original
+    # In the original, they are leftover from the first calculation (identical)
+
+    # Calculate upslope in m2
+    db_iinitial <- dplyr::mutate(db_iinitial, upslope_m = upslope * grid^2)
+
+
     save_output(data = db_iinitial, name = "iinitial", locs = out_locs,
-                out_format = out_format, where = "flow")
+                out_format = out_format, where = "flow", debug = debug)
 
     log_time(sub_start, log_file)
-    resume <- "ilocal"
+    resume <- "inverted"
   } else skip_task(task, log_file, quiet)
-  if(end == "iwatersheds") {
-    run_time(start, log_file, quiet)
-    return()
-  }
 
 
   # Invert Remove Initial Pits -----------------------------------------------
-  task <- "removing inverted initial pits"
+  task <- "removing inverted pits"
 
-  if(resume == "ilocal") {
+  if(resume == "inverted") {
     announce(task, quiet)
     sub_start <- Sys.time()
     log_start(task, sub_start, log_file)
 
     if(!exists("db_iinitial")) {
-      db_iinitial <- get_previous(folder, step = "iinitial", where = "flow")
+      db_iinitial <- get_previous(folder, step = "iinitial", where = "flow") %>%
+        add_buffer()
     }
 
-    db_ilocal <- first_pitr1(db_iinitial, max_area = max_area,
-                             max_depth = max_depth, verbose = verbose)
+    db_inverted <- first_pitr1(db_iinitial, max_area = max_area,
+                               max_depth = max_depth, verbose = verbose)
 
-    if(length(unique(db_ilocal$shedno[!is.na(db_ilocal$shedno)])) > 1) {
-      stats_ipit <- pit_stat1(db_ilocal, verbose = verbose) %>%
+    if(length(na.omit(unique(db_inverted$local_shed))) > 1) {
+      stats_ipit <- pit_stat1(db_inverted, shed = "local_shed", verbose = verbose) %>%
         out_stat() %>%
         dplyr::mutate(edge_pit = FALSE)
     } else stats_ipit <- tibble::tibble()
 
-    save_output(data = db_ilocal, stats = stats_ipit, name = "ilocal", locs = out_locs,
-                out_format = out_format, where = "flow")
-    save_output(data = db_ilocal, name = "ilocal", locs = out_locs,
-                out_format = out_format, where = "flow")
+    db_inverted <- dplyr::rename(db_inverted,
+                                 "inv_initial_shed" = "initial_shed",
+                                 "inv_local_shed" = "local_shed")
+
+    save_output(data = db_inverted, stats = stats_ipit, name = "inverted",
+                locs = out_locs,
+                out_format = out_format, where = "flow", debug = debug)
+    save_output(data = db_inverted, name = "inverted", locs = out_locs,
+                out_format = out_format, where = "flow", debug = debug)
 
     log_time(sub_start, log_file)
     resume <- "report"
@@ -415,12 +424,19 @@ flow_mapper <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
     if(report == TRUE){
       announce(task, quiet)
 
-      files <- normalizePath(list.files(path = paste0(out_folder, "/flow"), full.names = TRUE))
+      files <- normalizePath(list.files(path = paste0(out_folder, "/flow"),
+                                        full.names = TRUE))
       report_final(file = file, report_loc = out_folder, out_files = files,
                    run = f, nrow = nrow, ncol = ncol,
-                   max_area = max_area, max_depth = max_depth, rlim = rlim, clim = clim)
+                   max_area = max_area, max_depth = max_depth,
+                   rlim = rlim, clim = clim)
     } else skip_task(task, log_file, quiet)
   }
+
+
+  # Clean up
+  if(!debug) remove_output(locs = out_locs, out_format = out_format,
+                           where = "flow")
 
   # Save final time
   run_time(start, log_file, quiet)

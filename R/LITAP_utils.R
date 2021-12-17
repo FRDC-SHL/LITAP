@@ -1,5 +1,3 @@
-na_omit <- function(x) return(x[!is.na(x)])
-
 #' Pipe operator
 #'
 #' See \code{magrittr::\link[magrittr]{\%>\%}} for details.
@@ -8,9 +6,13 @@ na_omit <- function(x) return(x[!is.na(x)])
 #' @rdname pipe
 #' @keywords internal
 #' @export
-#' @importFrom magrittr %>%
+#' @importFrom magrittr %>% %T>%
 #' @usage lhs \%>\% rhs
 NULL
+
+
+na_omit <- function(x) return(x[!is.na(x)])
+
 
 max_na <- function(x) {
   if(sum(!is.na(x)) > 0) y <- max(x, na.rm = TRUE) else y <- as.numeric(NA)
@@ -49,14 +51,14 @@ skip_task <- function(task, log_file, quiet) {
 }
 
 check_out_format <- function(out_format){
-  if(!out_format %in% c("csv", "rds", "dbf")) {
-    stop("'out_format' must be one of 'csv', 'rds', or 'dbf'", call. = FALSE)
+  if(!out_format %in% c("csv", "rds")) {
+    stop("'out_format' must be one of 'csv' or 'rds'", call. = FALSE)
   }
 }
 
-check_resume <- function(resume, end, resume_options) {
-  if(!resume %in% resume_options | !end %in% resume_options) {
-    stop("resume/end must be one of 'NULL' (no resume), '",
+check_resume <- function(resume, resume_options) {
+  if(!resume %in% resume_options) {
+    stop("resume must be one of 'NULL' (no resume), '",
          paste0(resume_options[-1], collapse = "', '"), "'", call. = FALSE)
   }
 }
@@ -65,6 +67,11 @@ check_grid <- function(grid) {
   if(missing(grid) || !is.numeric(grid) || grid < 0){
     stop("'grid' must be a number greater than 0", call. = FALSE)
   }
+}
+
+calc_grid <- function(db) {
+  x <- sort(unique(db$x))
+  median(x - dplyr::lag(x), na.rm = TRUE)
 }
 
 run_time <- function(start, log_file, quiet) {

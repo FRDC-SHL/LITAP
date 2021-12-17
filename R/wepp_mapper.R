@@ -7,7 +7,6 @@
 #' LandMapper Environmental Solutions.
 #'
 #' @param folder Character. Location of [flow_mapper()] output
-#' @param grid Numeric. Grid size for the original dem
 #' @param chan_length Numeric. Channel length maximum length. Used to split
 #'   channels into segments
 #' @param upslope_threshold Numeric. Threshold of upslope cells to define
@@ -21,27 +20,26 @@
 #' \dontrun{
 #' # First need to run flow_mapper()
 #' flow_mapper(file = system.file("extdata", "testELEV.dbf", package = "LITAP"),
-#'            out_folder = "./testELEV/", nrow = 90, ncol = 90)
+#'            out_folder = "./testELEV/", nrow = 90, ncol = 90, grid = 5)
 #'
 #' # Now can run wepp_mapper()
-#' wepp_mapper(folder = "./testELEV/", grid = 5)
+#' wepp_mapper(folder = "./testELEV/")
 #' }
 #'
 #' @export
 
-wepp_mapper <- function(folder, grid,
+wepp_mapper <- function(folder,
                         chan_length = 200,
                         upslope_threshold = 300,
                         clean = FALSE,
-                        resume = NULL, end = NULL,
+                        resume = NULL,
                         log = TRUE,
-                        verbose = FALSE, quiet = FALSE) {
+                        verbose = FALSE, quiet = FALSE, debug = FALSE) {
 
   # Setup -------------------------------------------------------------------
 
   # Get resume options
   if(is.null(resume)) resume <- ""
-  if(is.null(end)) end <- ""
   resume_options <- c("", "mark_chan", "cut_chan", "merge_chan", "new_ups",
                       "remark_chan", "mark_pits", "split_segments", "flow2_chan",
                       "calc_segs", "order_segs", "redo_ddir",
@@ -49,7 +47,7 @@ wepp_mapper <- function(folder, grid,
                       "wepp_form", "wepp_len", "hill_stats", "chan_stats",
                       "new_ups_final")
 
-  check_resume(resume, end, resume_options)
+  check_resume(resume, resume_options)
 
   # Get out format
   out_format <- get_format(folder, where = "flow")
@@ -57,8 +55,12 @@ wepp_mapper <- function(folder, grid,
   # Get backup fill dem
   db <- get_previous(folder, step = "fill", where = "flow")
   if("ldir" %in% names(db)) db <- dplyr::rename(db, "ddir" = "ldir")
-  db <- dplyr::select(db, seqno, row, col, elev, drec, ddir, upslope, fill_shed) %>%
+  db <- dplyr::select(db, "seqno", "x", "y", "row", "col", "elev", "drec",
+                      "ddir", "upslope", "fill_shed") %>%
     add_buffer()
+
+  grid <- calc_grid(db)
+  check_grid(grid)
 
   # Get fill file
   fill <- get_previous(folder, step = "fill", where = "flow", type = "stat") %>%
@@ -100,15 +102,10 @@ wepp_mapper <- function(folder, grid,
 
     db_marked <- mark_chan(db, upslope_threshold = upslope_threshold)
     save_output(data = db_marked, name = "marked", locs = out_locs,
-                out_format = out_format, where = "wepp")
+                out_format = out_format, where = "wepp", debug = debug)
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
-  if(end == "mark_chan") {
-    run_time(start, log_file, quiet)
-    return()
-  }
-
 
   # Cut Channels ------------------------------------------------------------
   task <- "Cut channels fix elevation"
@@ -124,16 +121,10 @@ wepp_mapper <- function(folder, grid,
 
     db_cut <- cut_chan(db_marked, upslope_threshold)
     save_output(data = db_cut, name = "cut", locs = out_locs,
-                out_format = out_format, where = "wepp")
+                out_format = out_format, where = "wepp", debug = debug)
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
-  if(end == "cut_chan") {
-    run_time(start, log_file, quiet)
-    return()
-  }
-
-
 
   # Merge Channels -----------------------------------------------------------
 
@@ -150,15 +141,10 @@ wepp_mapper <- function(folder, grid,
 
     db_merged <- merge_chan(db_cut)
     save_output(data = db_merged, name = "merged", locs = out_locs,
-                out_format = out_format, where = "wepp")
+                out_format = out_format, where = "wepp", debug = debug)
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
-  if(end == "merge_chan") {
-    run_time(start, log_file, quiet)
-    return()
-  }
-
 
   # Recalculate Upslopes ----------------------------------------------------
   task <- "Re-calculate upslopes"
@@ -175,14 +161,10 @@ wepp_mapper <- function(folder, grid,
     db_ups <- dplyr::mutate(db_merged, shedno = fill_shed) %>%
       calc_upslopes()
     save_output(data = db_ups, name = "ups", locs = out_locs,
-                out_format = out_format, where = "wepp")
+                out_format = out_format, where = "wepp", debug = debug)
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
-  if(end == "new_ups") {
-    run_time(start, log_file, quiet)
-    return()
-  }
 
   # Re-mark Upslopes ----------------------------------------------------
   task <- "Re-mark Channels"
@@ -198,14 +180,10 @@ wepp_mapper <- function(folder, grid,
 
     db_remarked <- remark_chan(db_ups, upslope_threshold = upslope_threshold)
     save_output(data = db_remarked, name = "remarked", locs = out_locs,
-                out_format = out_format, where = "wepp")
+                out_format = out_format, where = "wepp", debug = debug)
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
-  if(end == "remark_chan") {
-    run_time(start, log_file, quiet)
-    return()
-  }
 
   # Mark Pits ----------------------------------------------------
   task <- "Mark Pits"
@@ -221,14 +199,10 @@ wepp_mapper <- function(folder, grid,
 
     db_pits <- mark_pits(db_remarked, fill)
     save_output(data = db_pits, name = "pits", locs = out_locs,
-                out_format = out_format, where = "wepp")
+                out_format = out_format, where = "wepp", debug = debug)
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
-  if(end == "mark_pits") {
-    run_time(start, log_file, quiet)
-    return()
-  }
 
   # Split Segments ----------------------------------------------------
   task <- "Split Segments"
@@ -244,15 +218,10 @@ wepp_mapper <- function(folder, grid,
 
     db_split <- split_segments(db_pits, grid, chan_length)
     save_output(data = db_split, name = "split", locs = out_locs,
-                out_format = out_format, where = "wepp")
+                out_format = out_format, where = "wepp", debug = debug)
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
-  if(end == "split_segments") {
-    run_time(start, log_file, quiet)
-    return()
-  }
-
 
   # Flow to channels ----------------------------------------------------
   task <- "Flow to channels"
@@ -268,14 +237,10 @@ wepp_mapper <- function(folder, grid,
 
     db_flow <- flow_to_channels(db_split)
     save_output(data = db_flow, name = "flow", locs = out_locs,
-                out_format = out_format, where = "wepp")
+                out_format = out_format, where = "wepp", debug = debug)
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
-  if(end == "flow2_chan") {
-    run_time(start, log_file, quiet)
-    return()
-  }
 
   # Calculate Segments ----------------------------------------------------
   task <- "Calculate segments"
@@ -293,16 +258,12 @@ wepp_mapper <- function(folder, grid,
     segs <- db_segs$segs
     db_segs <- db_segs$db
     save_output(data = db_segs, stats = segs, name = "first_segs", locs = out_locs,
-                out_format = out_format, where = "wepp")
+                out_format = out_format, where = "wepp", debug = debug)
     save_output(data = db_segs, name = "first_segs", locs = out_locs,
-                out_format = out_format, where = "wepp")
+                out_format = out_format, where = "wepp", debug = debug)
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
-  if(end == "calc_segs") {
-    run_time(start, log_file, quiet)
-    return()
-  }
 
   # Order Segments ----------------------------------------------------
   task <- "Order segments"
@@ -324,16 +285,12 @@ wepp_mapper <- function(folder, grid,
     db_ordered <- db_ordered$db
     save_output(data = db_ordered, stats = segs_ordered, name = "ordered",
                 locs = out_locs,
-                out_format = out_format, where = "wepp")
+                out_format = out_format, where = "wepp", debug = debug)
     save_output(data = db_ordered, name = "ordered", locs = out_locs,
-                out_format = out_format, where = "wepp")
+                out_format = out_format, where = "wepp", debug = debug)
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
-  if(end == "order_segs") {
-    run_time(start, log_file, quiet)
-    return()
-  }
 
 
   # Redo ddir ----------------------------------------------------
@@ -356,17 +313,13 @@ wepp_mapper <- function(folder, grid,
     db_ddir <- db_ddir$db
 
     save_output(data = db_ddir, stats = segs_ddir, name = "ddir2", locs = out_locs,
-                out_format = out_format, where = "wepp")
+                out_format = out_format, where = "wepp", debug = debug)
     save_output(data = db_ddir, name = "ddir2", locs = out_locs,
-                out_format = out_format, where = "wepp")
+                out_format = out_format, where = "wepp", debug = debug)
 
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
-  if(end == "redo_ddir") {
-    run_time(start, log_file, quiet)
-    return()
-  }
 
   # Find upsegs ----------------------------------------------------
   task <- "Find upslope segments"
@@ -386,16 +339,11 @@ wepp_mapper <- function(folder, grid,
     segs_upsegs <- find_upsegs(segs_ddir)
 
     save_output(data = db_ddir, stats = segs_upsegs, name = "upsegs", locs = out_locs,
-                out_format = out_format, where = "wepp")
+                out_format = out_format, where = "wepp", debug = debug)
 
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
-  if(end == "find_upsegs") {
-    run_time(start, log_file, quiet)
-    return()
-  }
-
 
   # Hillslope segs ----------------------------------------------------
   task <- "Compute and label hillslope segments"
@@ -412,16 +360,11 @@ wepp_mapper <- function(folder, grid,
     db_hillsheds <- hill_sheds(db_ddir)
 
     save_output(data = db_hillsheds, name = "hillsheds", locs = out_locs,
-                out_format = out_format, where = "wepp")
+                out_format = out_format, where = "wepp", debug = debug)
 
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
-  if(end == "hill_sheds") {
-    run_time(start, log_file, quiet)
-    return()
-  }
-
 
   # Renumber segments ----------------------------------------------------
   task <- "Renumber segments"
@@ -442,18 +385,13 @@ wepp_mapper <- function(folder, grid,
     db_renum <- db_renum$db
 
     save_output(data = db_renum, stats = segs_renum, name = "renum", locs = out_locs,
-                out_format = out_format, where = "wepp")
+                out_format = out_format, where = "wepp", debug = debug)
     save_output(data = db_renum, name = "renum", locs = out_locs,
-                out_format = out_format, where = "wepp")
+                out_format = out_format, where = "wepp", debug = debug)
 
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
-  if(end == "renum_segs") {
-    run_time(start, log_file, quiet)
-    return()
-  }
-
 
   # Build WEPP structure file ----------------------------------------------------
   task <- "Build WEPP structure file"
@@ -478,18 +416,13 @@ wepp_mapper <- function(folder, grid,
 
     save_basic(data = struct, name = "struct", locs = out_locs,
                out_format = out_format, where = "wepp")
-    save_output(data = db_renum, stats = segs_struct, name = "segs",
-                locs = out_locs, out_format = out_format, where = "wepp")
+    save_basic(data = remove_buffer(db_renum, segs_struct),
+               name = "segs", locs = out_locs,
+               out_format = out_format, where = "wepp")
 
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
-  if(end == "build_stru") {
-    run_time(start, log_file, quiet)
-    return()
-  }
-  wepp_form
-
 
   # Compute aspect and slope for WEPP -----------------------------------------
   task <- "Compute aspect and slope for WEPP"
@@ -506,16 +439,11 @@ wepp_mapper <- function(folder, grid,
     db_wepp_form <- wepp_form(db_renum, grid)
 
     save_output(data = db_wepp_form, name = "wepp_form", locs = out_locs,
-                out_format = out_format, where = "wepp")
+                out_format = out_format, where = "wepp", debug = debug)
 
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
-  if(end == "wepp_form") {
-    run_time(start, log_file, quiet)
-    return()
-  }
-
 
   # Measures of channel length ------------------------------------------------
   task <- "Calcualte 3 measures of channel length"
@@ -531,16 +459,12 @@ wepp_mapper <- function(folder, grid,
 
     db_wepp_len <- wepp_len(db_wepp_form, grid)
 
-    save_output(data = db_wepp_len, name = "wepp_len", locs = out_locs,
-                out_format = out_format, where = "wepp")
+    save_output(data = db_wepp_len, name = "wepp", locs = out_locs,
+                out_format = out_format, where = "wepp", debug = debug)
 
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
-  if(end == "wepp_len") {
-    run_time(start, log_file, quiet)
-    return()
-  }
 
   # Hill Stats (profiles) -------------------------------------------------------------------
   task <- "Calculate hill profiles"
@@ -550,7 +474,7 @@ wepp_mapper <- function(folder, grid,
     log_start(task, sub_start, log_file)
 
     if(!exists("db_wepp_len") | !exists("segs_struct")) {
-      db_wepp_len <- get_previous(folder, step = "wepp_len", where = "wepp") %>%
+      db_wepp_len <- get_previous(folder, step = "wepp", where = "wepp") %>%
         add_buffer()
       segs_struct <- get_previous(folder, step = "stats_segs", where = "wepp",
                                   type = "stats") %>%
@@ -567,11 +491,6 @@ wepp_mapper <- function(folder, grid,
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
-  if(end == "hill_stats") {
-    run_time(start, log_file, quiet)
-    return()
-  }
-
 
   # Chan Stats -------------------------------------------------------------------
   task <- "Calculate channel stats"
@@ -596,10 +515,10 @@ wepp_mapper <- function(folder, grid,
     log_time(sub_start, log_file)
     resume <- ""
   } else skip_task(task, log_file, quiet)
-  if(end == "chan_stats") {
-    run_time(start, log_file, quiet)
-    return()
-  }
+
+  # Clean up
+  if(!debug) remove_output(locs = out_locs, out_format = out_format,
+                           where = "wepp")
 
   # Save final time
   run_time(start, log_file, quiet)

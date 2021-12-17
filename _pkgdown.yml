@@ -19,6 +19,7 @@ articles:
   - title: Tutorials
     desc: Running and plotting in LITAP
     contents:
+    - 'variables'
     - '`articles/flow_plots`'
     - '`LITAP`'
   - title: Reports

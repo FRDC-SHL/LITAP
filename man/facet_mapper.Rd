@@ -8,15 +8,16 @@ facet_mapper(
   folder,
   arule = NULL,
   crule,
-  n_remove = 9,
+  edge_row = NULL,
+  edge_col = NULL,
   procedure = "lsm",
   zone = NULL,
   clean = FALSE,
   resume = NULL,
-  end = NULL,
   log = TRUE,
   verbose = FALSE,
-  quiet = FALSE
+  quiet = FALSE,
+  debug = FALSE
 )
 }
 \arguments{
@@ -27,32 +28,36 @@ from the dem file (see Details).}
 
 \item{crule}{Character. Location of CRULE file}
 
-\item{n_remove}{Numeric. Number of cells (rows/columns) to remove around the
-edge of the dem before deriving the A Rules.}
+\item{edge_row}{Numeric. Number of rows to remove around the edge of the dem
+before deriving the A Rules. Default (NULL) results in removing 5\% of the
+rows per side (total of 10\%).}
 
-\item{procedure}{Character. Which LSM procedure to use. One of \code{lsm}
-(Original LandMapR program) or \code{bc_pem} (newer BC-PEM Direct-to-Site-SEries
-DSS program).}
+\item{edge_col}{Numeric. Number of cols to remove around the edge of the dem
+before deriving the A Rules. Default (NULL) results in removing 5\% of the
+cols per side (total of 10\%).}
+
+\item{procedure}{Character. Which procedure to use. One of \code{lsm}
+(Original LandMapR program) or \code{bc_pem} (newer BC-PEM Direct-to-Site-Series
+program).}
 
 \item{zone}{file. If \code{procedure = "bc_pem"}, zones must either be defined for
-each seqno in the weti dem file, OR must be provided as an index file here.
-With a \code{zone} defined for each \code{seqno}. \code{zone} file can be either dem (.dem),
-Excel (.xlsx, .xls), or text (.txt, .csv, .dat)}
+each seqno in the form dem file, OR must be provided as an index file
+here. With a \code{zone} defined for each \code{seqno}. \code{zone} file can be either dem
+(.dem), Excel (.xlsx, .xls), or text (.txt, .csv, .dat)}
 
 \item{clean}{Logical. Remove all output files from previous runs in this
 folder?}
 
-\item{resume}{Character. From which stage should the run be resumed? (see
-Details below)}
-
-\item{end}{Character. If ending a run after a particular step, which step
-(see Details below)}
+\item{resume}{Character. From which stage should the run be resumed? (see}
 
 \item{log}{Logical. Create log file recording progress?}
 
 \item{verbose}{Logical. Output extra progress messages.}
 
 \item{quiet}{Logical. Suppress all messages.}
+
+\item{debug}{Logical. If TRUE, output files contain intermediate columns
+useful for debugging (e.g., 'buffer', 'seqno_buffer', etc.) Default FALSE.}
 }
 \description{
 This function takes backup data frame output from \code{\link[=flow_mapper]{flow_mapper()}} and
@@ -63,11 +68,15 @@ FacetMapR by R. A. (Bob) MacMillan, LandMapper Environmental Solutions.
 Based on the technique described in Li et al. 2011, if no \code{arule} file is
 provided, the ARULE cutoffs are calculated from the \code{form_mapper()} dem
 files. These A Rules are saved as \code{afile_derived.csv} in the \code{folder}
-provided.
+provided. The topographic derivative percentiles are stored to
+\code{topographic_derivatives.csv}, also in the \code{folder}.
 
-Procedure \code{lsm} refers to... Procedure \code{bc_pem} refers to...
+Procedure \code{lsm} refers to the landform segmentation model (LSM) offered in
+the original LandMapR. Procedure \code{bc_pem} refers to calculating variables
+required for the British Columbia Predictive Ecosystem Mapping
+Direct-to-Site-Series program (BC-PEM DSS).
 
-For resuming or ending a run, \code{resume} or \code{end} must be
+For resuming  a run, \code{resume} must be
 one of the following:
 \itemize{
 \item attributes
@@ -79,22 +88,28 @@ Sheng Li, David A. Lobb, Brian G. McConkey, R. A. MacMillan, Alan Moulin,
 and Walter R. Fraser. 2011. Extracting topographic characteristics of landforms
 typical of Canadian agricultural landscapes for agri-environmental modeling.
 I. Methodology. Canadian Journal of Soil Science 91(2), 251-266.
-\url{https://doi.org/10.1139/CJSS10080}
+\doi{10.4141/CJSS10080}.
 }
 \examples{
 
 # First need to run flow_mapper()
 flow_mapper(file = system.file("extdata", "testELEV.dbf", package = "LITAP"),
-           out_folder = "./testELEV/", nrow = 90, ncol = 90)
+           out_folder = "./testELEV/", nrow = 90, ncol = 90, grid = 5)
 
 # And form_mapper()
-form_mapper(folder = "./testELEV/", grid = 5)
+form_mapper(folder = "./testELEV/")
 
-# Now can run facet_mapper() - Derive A Rules
+
 crule <- system.file("extdata", "crule.dbf", package = "LITAP")
+
+# Run facet_mapper() - Derive A Rules
 facet_mapper(folder = "./testELEV/", arule = NULL, crule = crule)
 
-# Now can run facet_mapper() - supply A Rules
+# Derive A Rules, omitting rows and cols from the calculation
+facet_mapper(folder = "./testELEV/", arule = NULL, crule = crule,
+             edge_row = 3, edge_col = 1)
+
+# Run facet_mapper() - supply A Rules
 arule <- system.file("extdata", "arule.dbf", package = "LITAP")
 crule <- system.file("extdata", "crule.dbf", package = "LITAP")
 facet_mapper(folder = "./testELEV/", arule = arule, crule = crule)

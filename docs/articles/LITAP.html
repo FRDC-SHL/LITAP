@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">LITAP</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0.9000</span>
       </span>
     </div>
 
@@ -39,7 +39,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa-home"></span>
+    <span class="fa fa-home"></span>
      
   </a>
 </li>
@@ -56,7 +56,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/steffilazerte/LITAP">
-    <span class="fas fa-github fa-lg"></span>
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -70,13 +70,13 @@
 
       
 
-      </header><script src="LITAP_files/header-attrs-2.8/header-attrs.js"></script><div class="row">
+      </header><script src="LITAP_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Getting Started with mapping flow</h1>
                         <h4 class="author">Steffi LaZerte</h4>
             
-            <h4 class="date">2021-05-14</h4>
+            <h4 class="date">2021-12-02</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/FRDC-SHL/LITAP/blob/master/vignettes/LITAP.Rmd"><code>vignettes/LITAP.Rmd</code></a></small>
       <div class="hidden name"><code>LITAP.Rmd</code></div>
@@ -101,7 +101,7 @@
 <p>First load the LITAP package:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/FRDC-SHL/LITAP">LITAP</a></span><span class="op">)</span></code></pre></div>
-<pre><code>## LITAP v0.4.1.9000
+<pre><code>## LITAP v0.5.0.9000
 ## LITAP is still in development; Help us by submitting bugs/feature requests: 
 ## http://github.com/FRDC-SHL/LITAP/issues</code></pre>
 <p>Here we will use the “testELEV.dbf” included in the package. You can copy it to your working directory with:</p>
@@ -109,7 +109,7 @@
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/files.html">file.copy</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"testELEV.dbf"</span>, package <span class="op">=</span> <span class="st">"LITAP"</span><span class="op">)</span>, <span class="st">"."</span><span class="op">)</span></code></pre></div>
 <p>The only required parameters are the location of the dem file (<code>file</code>) and the number of rows and the number of columns (<code>nrow</code> and <code>ncol</code>) in the dem file.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/flow_mapper.html">flow_mapper</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"testELEV.dbf"</span>, nrow <span class="op">=</span> <span class="fl">90</span>, ncol <span class="op">=</span> <span class="fl">90</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/flow_mapper.html">flow_mapper</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"testELEV.dbf"</span>, nrow <span class="op">=</span> <span class="fl">90</span>, ncol <span class="op">=</span> <span class="fl">90</span>, grid <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></code></pre></div>
 <pre><code>## CALCULATING DIRECTIONS</code></pre>
 <pre><code>## CALCULATING WATERSHEDS</code></pre>
 <pre><code>## REMOVING INITIAL PITS</code></pre>
@@ -118,10 +118,9 @@
 <pre><code>## INVERTING DEM</code></pre>
 <pre><code>## CALCULATING INVERTED DIRECTIONS</code></pre>
 <pre><code>## CALCULATING INVERTED WATERSHEDS</code></pre>
-<pre><code>## REMOVING INVERTED INITIAL PITS</code></pre>
-<pre><code>## SAVING OUTPUT</code></pre>
+<pre><code>## REMOVING INVERTED PITS</code></pre>
 <pre><code>## CREATING REPORT</code></pre>
-<pre><code>## Run took: 0.21 min</code></pre>
+<pre><code>## Run took: 0.26 min</code></pre>
 </div>
 <div id="pit-removal-parameters" class="section level2">
 <h2 class="hasAnchor">
@@ -133,8 +132,8 @@
 <li>
 <code>max_depth</code> represents the maximum depth of a pit (difference between the elevation of the pour point and the elevation of the pit centre) of a watershed to be removed in the initial step</li>
 </ul>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/flow_mapper.html">flow_mapper</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"testELEV.dbf"</span>, nrow <span class="op">=</span> <span class="fl">90</span>, ncol <span class="op">=</span> <span class="fl">90</span>, 
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/flow_mapper.html">flow_mapper</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"testELEV.dbf"</span>, nrow <span class="op">=</span> <span class="fl">90</span>, ncol <span class="op">=</span> <span class="fl">90</span>, grid <span class="op">=</span> <span class="fl">5</span>,
             max_area <span class="op">=</span> <span class="fl">5</span>, max_depth <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span></code></pre></div>
 <pre><code>## CALCULATING DIRECTIONS</code></pre>
 <pre><code>## CALCULATING WATERSHEDS</code></pre>
@@ -144,24 +143,22 @@
 <pre><code>## INVERTING DEM</code></pre>
 <pre><code>## CALCULATING INVERTED DIRECTIONS</code></pre>
 <pre><code>## CALCULATING INVERTED WATERSHEDS</code></pre>
-<pre><code>## REMOVING INVERTED INITIAL PITS</code></pre>
-<pre><code>## SAVING OUTPUT</code></pre>
+<pre><code>## REMOVING INVERTED PITS</code></pre>
 <pre><code>## CREATING REPORT</code></pre>
-<pre><code>## Run took: 0.19 min</code></pre>
+<pre><code>## Run took: 0.22 min</code></pre>
 </div>
 <div id="output-folders" class="section level2">
 <h2 class="hasAnchor">
 <a href="#output-folders" class="anchor"></a>Output folders</h2>
-<p>A LITAP run saves all output from <code><a href="../reference/flow_mapper.html">flow_mapper()</a></code> into two folders: <code>backup</code> and <code>flow</code>.</p>
+<p>A LITAP run saves all output from <code><a href="../reference/flow_mapper.html">flow_mapper()</a></code> into folder <code>flow</code>.</p>
 <ul>
 <li>
-<code>backup</code> folder contains .rds files (R data files) used to resume a run from an intermediate point. These are also used by <code><a href="../reference/form_mapper.html">form_mapper()</a></code>. These shouldn’t be used by the user.</li>
-<li>
-<code>flow</code> folder contains .csv, .dbf, or .rds files of the output (depending on the output format specified), similar to that produced by the LandMapR program but designed for ease of use in R.</li>
+<code>flow</code> folder contains .csv or .rds files of the output (depending on the output format specified), similar to that produced by the LandMapR program but designed for ease of use in R.</li>
 </ul>
-<p>You can specify where these output folders/files should be saved with <code>out_folder</code>. Otherwise the folders will be created in the folder of the original Elev.dbf file, which may not be desirable. Note that folder locations are relative to working directory of the R session.</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/flow_mapper.html">flow_mapper</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"testELEV.dbf"</span>, nrow <span class="op">=</span> <span class="fl">90</span>, ncol <span class="op">=</span> <span class="fl">90</span>, out_folder <span class="op">=</span> <span class="st">"./Output/"</span><span class="op">)</span></code></pre></div>
+<p>You can specify where these output folders/files should be saved with <code>out_folder</code>. Otherwise the folders will be created in the folder of the original Elev.dbf file, which may not be desirable.</p>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/flow_mapper.html">flow_mapper</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"testELEV.dbf"</span>, nrow <span class="op">=</span> <span class="fl">90</span>, ncol <span class="op">=</span> <span class="fl">90</span>, grid <span class="op">=</span> <span class="fl">5</span>, 
+            out_folder <span class="op">=</span> <span class="st">"./LITAP runs/"</span><span class="op">)</span></code></pre></div>
 <pre><code>## CALCULATING DIRECTIONS</code></pre>
 <pre><code>## CALCULATING WATERSHEDS</code></pre>
 <pre><code>## REMOVING INITIAL PITS</code></pre>
@@ -170,13 +167,14 @@
 <pre><code>## INVERTING DEM</code></pre>
 <pre><code>## CALCULATING INVERTED DIRECTIONS</code></pre>
 <pre><code>## CALCULATING INVERTED WATERSHEDS</code></pre>
-<pre><code>## REMOVING INVERTED INITIAL PITS</code></pre>
-<pre><code>## SAVING OUTPUT</code></pre>
+<pre><code>## REMOVING INVERTED PITS</code></pre>
 <pre><code>## CREATING REPORT</code></pre>
-<pre><code>## Run took: 0.18 min</code></pre>
+<pre><code>## Run took: 0.22 min</code></pre>
+<p>Ideally, it’s best to create an RStudio project, put the original Elev.dbf file in this project and work from there. Note that folder locations are relative to working directory of the R session.</p>
 <p>To clean up any old files before conducting a new run, use <code>clean = TRUE</code>. <strong>Careful, this will remove all backup files from previous runs making it impossible to resume a run!</strong></p>
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/flow_mapper.html">flow_mapper</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"testELEV.dbf"</span>, nrow <span class="op">=</span> <span class="fl">90</span>, ncol <span class="op">=</span> <span class="fl">90</span>, out_folder <span class="op">=</span> <span class="st">"./Output/"</span>, clean <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/flow_mapper.html">flow_mapper</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"testELEV.dbf"</span>, nrow <span class="op">=</span> <span class="fl">90</span>, ncol <span class="op">=</span> <span class="fl">90</span>, grid <span class="op">=</span> <span class="fl">5</span>,
+            out_folder <span class="op">=</span> <span class="st">"./LITAP runs/"</span>, clean <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <pre><code>## CALCULATING DIRECTIONS</code></pre>
 <pre><code>## CALCULATING WATERSHEDS</code></pre>
 <pre><code>## REMOVING INITIAL PITS</code></pre>
@@ -185,16 +183,15 @@
 <pre><code>## INVERTING DEM</code></pre>
 <pre><code>## CALCULATING INVERTED DIRECTIONS</code></pre>
 <pre><code>## CALCULATING INVERTED WATERSHEDS</code></pre>
-<pre><code>## REMOVING INVERTED INITIAL PITS</code></pre>
-<pre><code>## SAVING OUTPUT</code></pre>
+<pre><code>## REMOVING INVERTED PITS</code></pre>
 <pre><code>## CREATING REPORT</code></pre>
-<pre><code>## Run took: 0.18 min</code></pre>
+<pre><code>## Run took: 0.21 min</code></pre>
 </div>
 <div id="different-input-file-types" class="section level2">
 <h2 class="hasAnchor">
 <a href="#different-input-file-types" class="anchor"></a>Different input file types</h2>
 <p>You can use a variety of input file types, provided they fit the format specifications defined in <code><a href="../reference/load_file.html">load_file()</a></code> (<code><a href="../reference/load_file.html">?load_file</a></code> for more details). Among others, the following file types are accepted:</p>
-<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/flow_mapper.html">flow_mapper</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"testELEV.grd"</span><span class="op">)</span> <span class="co"># Grid files</span>
 <span class="fu"><a href="../reference/flow_mapper.html">flow_mapper</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"testELEV.csv"</span><span class="op">)</span> <span class="co"># CSV files</span>
 <span class="fu"><a href="../reference/flow_mapper.html">flow_mapper</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"testELEV.asc"</span><span class="op">)</span> <span class="co"># Ascii Grid files</span>
@@ -205,8 +202,8 @@
 <h2 class="hasAnchor">
 <a href="#subset-of-input-dem" class="anchor"></a>Subset of input dem</h2>
 <p>To conduct a run on only a subset of the dem you can specify row and column limits (<code>rlim</code> and <code>clim</code> respectively):</p>
-<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/flow_mapper.html">flow_mapper</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"testELEV.dbf"</span>, nrow <span class="op">=</span> <span class="fl">90</span>, ncol <span class="op">=</span> <span class="fl">90</span>, 
+<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/flow_mapper.html">flow_mapper</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"testELEV.dbf"</span>, nrow <span class="op">=</span> <span class="fl">90</span>, ncol <span class="op">=</span> <span class="fl">90</span>, grid <span class="op">=</span> <span class="fl">5</span>,
             rlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">50</span>,<span class="fl">80</span><span class="op">)</span>, clim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">50</span>,<span class="fl">80</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## CALCULATING DIRECTIONS</code></pre>
 <pre><code>## CALCULATING WATERSHEDS</code></pre>
@@ -216,8 +213,7 @@
 <pre><code>## INVERTING DEM</code></pre>
 <pre><code>## CALCULATING INVERTED DIRECTIONS</code></pre>
 <pre><code>## CALCULATING INVERTED WATERSHEDS</code></pre>
-<pre><code>## REMOVING INVERTED INITIAL PITS</code></pre>
-<pre><code>## SAVING OUTPUT</code></pre>
+<pre><code>## REMOVING INVERTED PITS</code></pre>
 <pre><code>## CREATING REPORT</code></pre>
 <pre><code>## Run took: 0.06 min</code></pre>
 </div>
@@ -225,22 +221,24 @@
 <h2 class="hasAnchor">
 <a href="#output-messages" class="anchor"></a>Output messages</h2>
 <p>To include detailed output, use <code>verbose = TRUE</code>:</p>
-<div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/flow_mapper.html">flow_mapper</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"testELEV.dbf"</span>, nrow <span class="op">=</span> <span class="fl">90</span>, ncol <span class="op">=</span> <span class="fl">90</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/flow_mapper.html">flow_mapper</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"testELEV.dbf"</span>, nrow <span class="op">=</span> <span class="fl">90</span>, ncol <span class="op">=</span> <span class="fl">90</span>, grid <span class="op">=</span> <span class="fl">5</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <pre><code>##   Using supplied 90 rows and 90 columns</code></pre>
 <pre><code>##   Adding buffer</code></pre>
 <pre><code>##   Formating grid</code></pre>
+<pre><code>##   No x/y in file, creating x/y from cols/rows/grid</code></pre>
 <pre><code>## CALCULATING DIRECTIONS</code></pre>
 <pre><code>##      - Fixing flat plateaus round 1...</code></pre>
 <pre><code>## CALCULATING WATERSHEDS</code></pre>
-<pre><code>## REMOVING INITIAL PITS</code></pre>
-<pre><code>##     Assessing pour points     Combining watersheds 6 and 3
+<pre><code>##   Getting upslope flow and cumulative elevation differences</code></pre>
+<pre><code>##     Assessing pour points REMOVING INITIAL PITS
+##     Assessing pour points     Combining watersheds 6 and 3
 ##     Assessing pour points     Combining watersheds 1 and 4
 ##     Assessing pour points     Combining watersheds 4 and 8
 ##     Assessing pour points 
 ## 
-##     Calculating elevation differences
-## CALCULATING POND (GLOBAL) WATERSHEDS
+##     Calculating upslope cumulative elevation drop
+##     Assessing pour points CALCULATING POND (GLOBAL) WATERSHEDS
 ##     Assessing pour points   Current pit: 8
 ##     Pit 1: 8
 ##     Pit 2: 9
@@ -289,52 +287,30 @@
 ##      - Fixing flat plateaus round 3...
 ##      - Fixing flat plateaus round 4...
 ## CALCULATING INVERTED WATERSHEDS
-## REMOVING INVERTED INITIAL PITS
+##   Getting upslope flow and cumulative elevation differences
+##     Assessing pour points REMOVING INVERTED PITS
 ##     Assessing pour points     Combining watersheds 1 and 3
 ##     Assessing pour points     Combining watersheds 8 and 2
 ##     Assessing pour points     Combining watersheds 6 and 4
 ##     Assessing pour points     Combining watersheds 3 and 4
 ##     Assessing pour points 
 ## 
-##     Calculating elevation differences
-## SAVING OUTPUT
-## CREATING REPORT
-## Run took: 0.18 min</code></pre>
+##     Calculating upslope cumulative elevation drop
+##     Assessing pour points CREATING REPORT
+## Run took: 0.22 min</code></pre>
 <p>To prevent all output, use <code>quiet = TRUE</code>:</p>
-<div class="sourceCode" id="cb79"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/flow_mapper.html">flow_mapper</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"testELEV.dbf"</span>, nrow <span class="op">=</span> <span class="fl">90</span>, ncol <span class="op">=</span> <span class="fl">90</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb75"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/flow_mapper.html">flow_mapper</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"testELEV.dbf"</span>, nrow <span class="op">=</span> <span class="fl">90</span>, ncol <span class="op">=</span> <span class="fl">90</span>, grid <span class="op">=</span> <span class="fl">5</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="resuming-a-run" class="section level2">
 <h2 class="hasAnchor">
 <a href="#resuming-a-run" class="anchor"></a>Resuming a run</h2>
-<p>Each run of LITAP goes through 10 steps. A run can be halted or resumed at step by specifying the corresponding variable.</p>
-<p>For example, to resume with calculating pond statistics (step 5) and continue to the end of the run:</p>
-<div class="sourceCode" id="cb80"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/flow_mapper.html">flow_mapper</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"testELEV.dbf"</span>, nrow <span class="op">=</span> <span class="fl">90</span>, ncol <span class="op">=</span> <span class="fl">90</span>, 
+<p>Each run of LITAP goes through numerous steps. If there’s a problem, a run can be resumed at step by specifying the corresponding variable.</p>
+<p>For example, to resume with calculating pond statistics and continue to the end of the run:</p>
+<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/flow_mapper.html">flow_mapper</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"testELEV.dbf"</span>, nrow <span class="op">=</span> <span class="fl">90</span>, ncol <span class="op">=</span> <span class="fl">90</span>, grid <span class="op">=</span> <span class="fl">5</span>,
             resume <span class="op">=</span> <span class="st">"pond"</span><span class="op">)</span></code></pre></div>
-<pre><code>## SKIPPING CALCULATING DIRECTIONS</code></pre>
-<pre><code>## SKIPPING CALCULATING WATERSHEDS</code></pre>
-<pre><code>## SKIPPING REMOVING INITIAL PITS</code></pre>
-<pre><code>## CALCULATING POND (GLOBAL) WATERSHEDS</code></pre>
-<pre><code>## CALCULATING FILL PATTERNS</code></pre>
-<pre><code>## INVERTING DEM</code></pre>
-<pre><code>## CALCULATING INVERTED DIRECTIONS</code></pre>
-<pre><code>## CALCULATING INVERTED WATERSHEDS</code></pre>
-<pre><code>## REMOVING INVERTED INITIAL PITS</code></pre>
-<pre><code>## SAVING OUTPUT</code></pre>
-<pre><code>## CREATING REPORT</code></pre>
-<pre><code>## Run took: 0.13 min</code></pre>
-<p>Or to resume from pond statistics and to end just after calculating fill statistics (step 6):</p>
-<div class="sourceCode" id="cb93"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/flow_mapper.html">flow_mapper</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"testELEV.dbf"</span>, nrow <span class="op">=</span> <span class="fl">90</span>, ncol <span class="op">=</span> <span class="fl">90</span>, 
-            resume <span class="op">=</span> <span class="st">"pond"</span>, end <span class="op">=</span> <span class="st">"fill"</span><span class="op">)</span></code></pre></div>
-<pre><code>## SKIPPING CALCULATING DIRECTIONS</code></pre>
-<pre><code>## SKIPPING CALCULATING WATERSHEDS</code></pre>
-<pre><code>## SKIPPING REMOVING INITIAL PITS</code></pre>
-<pre><code>## CALCULATING POND (GLOBAL) WATERSHEDS</code></pre>
-<pre><code>## CALCULATING FILL PATTERNS</code></pre>
-<pre><code>## Run took: 0.04 min</code></pre>
-<pre><code>## NULL</code></pre>
+<p>Note that if a run finishes, you won’t be able to resume that run from a previous step, as intermediate files are removed. If you want this ability, use the argument <code>debug = TRUE</code>.</p>
 </div>
 <div id="steps" class="section level2">
 <h2 class="hasAnchor">
@@ -346,7 +322,7 @@
 <li><p><strong>Initial Pit Removal</strong> (<code>local</code>) Remove pits which are smaller than the maximum area and depth (and which are not edge pits). These pits are removed into neighbouring pits.</p></li>
 <li><p><strong>Calculating Pond Shed Statistics Second Pit Removal)</strong> (<code>pond</code>) Calculate how pits would overflow into each other</p></li>
 <li><p><strong>Calculating Fill Shed Statistics (Third Pit Removal)</strong> (<code>fill</code>)</p></li>
-<li><p><strong>Calculating Directions on Inverted DEM</strong> (<code>inverted</code>) Reverse the elevations of the original DEM file. This will make all troughs into peaks, etc. Then calculate the flow direction of each cell into a neighbouring cell. Because the DEM is inverted, this will track upslope flow</p></li>
+<li><p><strong>Calculating Directions on Inverted DEM</strong> (<code>idirections</code>) Reverse the elevations of the original DEM file. This will make all troughs into peaks, etc. Then calculate the flow direction of each cell into a neighbouring cell. Because the DEM is inverted, this will track upslope flow</p></li>
 <li><p><strong>Calculating Inverted Watersheds</strong> (<code>iwatersheds</code>) From the flow directions, combine cells into initial watersheds</p></li>
 <li><p><strong>Initial Inverted Pit Removal</strong> (<code>ilocal</code>) Remove pits which are smaller than the maximum area and depth (and which are not edge pits). These pits are removed into neighbouring pits. Calculate watershed statistics on these resulting local pits. Because the DEM is inverted, this will highlight peaks and flow down from these peaks.</p></li>
 </ol>
