@@ -107,7 +107,9 @@ cols_order <- list(
               "convex_a", "concave_a", "planar_a",
               "high_wi", "low_wi", "near_level", "rel_steep",
               "near_div", "near_half", "near_chan", "near_peak", "near_mid",
-              "near_pit", "hi_above", "planar_2x"),
+              "near_pit", "hi_above", "planar_2x",
+              "max_facet", "max_value", "max_facet_name",
+              "max_2nd_facet", "max_2nd_value", "max_2nd_facet_name"),
 
   "wepp" = c("seqno", "x", "y", "row", "col", "elev", "ddir", "drec",
              "upslope",
