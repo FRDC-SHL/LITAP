@@ -1,3 +1,6 @@
+# LITAP dev
+- fix missing `ddir` in `form_mapper()`
+
 # LITAP 0.6.0
 - Import x/y coords or create them if they don't exist
 - flow_mapper() now requires grid or infers from x/y value of input files
