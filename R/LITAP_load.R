@@ -326,6 +326,9 @@ load_extra <- function(file, type) {
     stop("'type' must be either 'arule', 'crule', or 'zone'", call. = FALSE)
   }
 
+  if(!file.exists(file)) stop(type, " file ('", file,
+                              "') doesn't exist", call. = FALSE)
+
   ext <- tolower(tools::file_ext(file))
 
   if(ext == "dbf") {
