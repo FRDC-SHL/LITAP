@@ -55,8 +55,8 @@ form_mapper <- function(folder, str_val = 10000, ridge_val = 10000,
 
     # Get fill dem
   db <- get_previous(folder, step = "fill", where = "flow") %>%
-    dplyr::select("seqno", "x", "y", "row", "col", "elev", "drec", "upslope",
-                  "fill_shed", "local_shed") %>%
+    dplyr::select("seqno", "x", "y", "row", "col", "elev", "ddir", "drec",
+                  "upslope", "fill_shed", "local_shed") %>%
     add_buffer()
 
   grid <- calc_grid(db)
