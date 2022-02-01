@@ -3,7 +3,7 @@ Type: Package
 Title: Landscape Integrated Terrain Analysis Package
 Version: 0.6.0
 Authors@R: c(
-     person("Steffi", "LaZerte", email = "sel@steffilazerte.ca", role = c("aut","cre")),
+     person("Steffi", "LaZerte", email = "steffi@steffi.ca", role = c("aut","cre")),
      person("Sheng", "Li", email = "sheng.li@canada.ca", role = "aut"),
      person("Agriculture and Agri-Food Canada", role = "fnd"))
 Description: Terrain analysis and landscape and hydrology models built on 
