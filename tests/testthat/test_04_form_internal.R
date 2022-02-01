@@ -51,25 +51,24 @@ test_that("calc_stream", {
 })
 
 test_that("Sub-functions", {
-  suppressMessages(flow_mapper(f, nrow = 11, ncol = 11,
+  suppressMessages(flow_mapper(f, nrow = 11, ncol = 11, grid = 5,
                                out_folder = dir, report = FALSE, clean = TRUE))
-  grid <- 5
 
   # DB files
   expect_silent(db <- get_previous(dir, step = "fill", where = "flow")) %>%
     expect_s3_class("data.frame")
   db <- add_buffer(db)
 
-  expect_silent(idb <- get_previous(dir, step = "ilocal", where = "flow")) %>%
+  expect_silent(idb <- get_previous(dir, step = "inverted", where = "flow")) %>%
     expect_s3_class("data.frame")
   idb <- add_buffer(idb)
 
   # Form
-  expect_silent(d <- calc_form(db, grid))
+  expect_silent(d <- calc_form(db, grid = 5))
   expect_snapshot_output(d)
 
   # Weti
-  expect_silent(d <- calc_weti(db, grid, verbose = FALSE))
+  expect_silent(d <- calc_weti(db, grid = 5, verbose = FALSE))
   expect_snapshot_output(d)
 
   # Relief

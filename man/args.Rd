@@ -2,13 +2,12 @@
 % Please edit documentation in R/LITAP_common_docs.R
 \name{args}
 \alias{args}
-\title{Common arguments for \code{\link[=flow_mapper]{flow_mapper()}} and \code{\link[=form_mapper]{form_mapper()}}}
+\title{Common arguments for \code{\link[=flow_mapper]{flow_mapper()}}, \code{\link[=form_mapper]{form_mapper()}}, \code{\link[=facet_mapper]{facet_mapper()}}, a
+nd \code{\link[=wepp_mapper]{wepp_mapper()}}}
 \arguments{
-\item{resume}{Character. From which stage should the run be resumed? (see
-Details below)}
+\item{grid}{Numeric. Grid size in m of the input DEM file}
 
-\item{end}{Character. If ending a run after a particular step, which step
-(see Details below)}
+\item{resume}{Character. From which stage should the run be resumed? (see}
 
 \item{clean}{Logical. Remove all output files from previous runs in this
 folder?}
@@ -20,8 +19,12 @@ folder?}
 \item{verbose}{Logical. Output extra progress messages.}
 
 \item{quiet}{Logical. Suppress all messages.}
+
+\item{debug}{Logical. If TRUE, output files contain intermediate columns
+useful for debugging (e.g., 'buffer', 'seqno_buffer', etc.) Default FALSE.}
 }
 \description{
-Common arguments for \code{\link[=flow_mapper]{flow_mapper()}} and \code{\link[=form_mapper]{form_mapper()}}
+Common arguments for \code{\link[=flow_mapper]{flow_mapper()}}, \code{\link[=form_mapper]{form_mapper()}}, \code{\link[=facet_mapper]{facet_mapper()}}, a
+nd \code{\link[=wepp_mapper]{wepp_mapper()}}
 }
 \keyword{internal}

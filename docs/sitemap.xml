@@ -25,7 +25,7 @@
     <loc>http://steffilazerte.github.io/LITAP_docs/reference/load_file.html</loc>
   </url>
   <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/reference/merge_flow_form.html</loc>
+    <loc>http://steffilazerte.github.io/LITAP_docs/reference/merge_all.html</loc>
   </url>
   <url>
     <loc>http://steffilazerte.github.io/LITAP_docs/reference/pipe.html</loc>
@@ -193,9 +193,9 @@
     <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/Ehsan_compare_report_form.html</loc>
   </url>
   <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/Munger Test - LITAP_compare_report_flow.html</loc>
+    <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/general.html</loc>
   </url>
   <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/general.html</loc>
+    <loc>http://steffilazerte.github.io/LITAP_docs/articles/variables.html</loc>
   </url>
 </urlset>

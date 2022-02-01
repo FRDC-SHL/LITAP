@@ -11,6 +11,7 @@ load_file(
   missing_value = -9999,
   rlim = NULL,
   clim = NULL,
+  grid = NULL,
   edge = TRUE,
   verbose = TRUE
 )
@@ -35,6 +36,8 @@ rows to extract}
 
 \item{clim}{Vector. Two numbers specifying the start and end of a subset of
 columns to extract}
+
+\item{grid}{Numeric. Grid size in m of the input DEM file}
 
 \item{edge}{Logical. Whether to add an edge (buffer) around the data.}
 

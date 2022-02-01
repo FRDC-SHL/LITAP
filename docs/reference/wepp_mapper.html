@@ -76,7 +76,7 @@ LandMapper Environmental Solutions." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">LITAP</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0.9000</span>
       </span>
     </div>
 
@@ -133,15 +133,14 @@ LandMapper Environmental Solutions.</p>
 
     <pre class="usage"><span class='fu'>wepp_mapper</span><span class='op'>(</span>
   <span class='va'>folder</span>,
-  <span class='va'>grid</span>,
   chan_length <span class='op'>=</span> <span class='fl'>200</span>,
   upslope_threshold <span class='op'>=</span> <span class='fl'>300</span>,
   clean <span class='op'>=</span> <span class='cn'>FALSE</span>,
   resume <span class='op'>=</span> <span class='cn'>NULL</span>,
-  end <span class='op'>=</span> <span class='cn'>NULL</span>,
   log <span class='op'>=</span> <span class='cn'>TRUE</span>,
   verbose <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  quiet <span class='op'>=</span> <span class='cn'>FALSE</span>
+  quiet <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  debug <span class='op'>=</span> <span class='cn'>FALSE</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -150,10 +149,6 @@ LandMapper Environmental Solutions.</p>
     <tr>
       <th>folder</th>
       <td><p>Character. Location of <code><a href='flow_mapper.html'>flow_mapper()</a></code> output</p></td>
-    </tr>
-    <tr>
-      <th>grid</th>
-      <td><p>Numeric. Grid size for the original dem</p></td>
     </tr>
     <tr>
       <th>chan_length</th>
@@ -173,13 +168,7 @@ folder?</p></td>
     </tr>
     <tr>
       <th>resume</th>
-      <td><p>Character. From which stage should the run be resumed? (see
-Details below)</p></td>
-    </tr>
-    <tr>
-      <th>end</th>
-      <td><p>Character. If ending a run after a particular step, which step
-(see Details below)</p></td>
+      <td><p>Character. From which stage should the run be resumed? (see</p></td>
     </tr>
     <tr>
       <th>log</th>
@@ -193,21 +182,26 @@ Details below)</p></td>
       <th>quiet</th>
       <td><p>Logical. Suppress all messages.</p></td>
     </tr>
+    <tr>
+      <th>debug</th>
+      <td><p>Logical. If TRUE, output files contain intermediate columns
+useful for debugging (e.g., 'buffer', 'seqno_buffer', etc.) Default FALSE.</p></td>
+    </tr>
     </table>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='co'># First need to run flow_mapper()</span>
-<span class='fu'><a href='flow_mapper.html'>flow_mapper</a></span><span class='op'>(</span>file <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata"</span>, <span class='st'>"testELEV.dbf"</span>, package <span class='op'>=</span> <span class='st'>"LITAP"</span><span class='op'>)</span>,
-           out_folder <span class='op'>=</span> <span class='st'>"./testELEV/"</span>, nrow <span class='op'>=</span> <span class='fl'>90</span>, ncol <span class='op'>=</span> <span class='fl'>90</span><span class='op'>)</span>
-
-<span class='co'># Now can run wepp_mapper()</span>
-<span class='fu'>wepp_mapper</span><span class='op'>(</span>folder <span class='op'>=</span> <span class='st'>"./testELEV/"</span>, grid <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span>
-<span class='op'>}</span>
-
-</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='co'># First need to run flow_mapper()</span></span>
+<span class='r-in'><span class='fu'><a href='flow_mapper.html'>flow_mapper</a></span><span class='op'>(</span>file <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata"</span>, <span class='st'>"testELEV.dbf"</span>, package <span class='op'>=</span> <span class='st'>"LITAP"</span><span class='op'>)</span>,</span>
+<span class='r-in'>           out_folder <span class='op'>=</span> <span class='st'>"./testELEV/"</span>, nrow <span class='op'>=</span> <span class='fl'>90</span>, ncol <span class='op'>=</span> <span class='fl'>90</span>, grid <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Now can run wepp_mapper()</span></span>
+<span class='r-in'><span class='fu'>wepp_mapper</span><span class='op'>(</span>folder <span class='op'>=</span> <span class='st'>"./testELEV/"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

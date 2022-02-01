@@ -67,27 +67,27 @@ Load the package:
 library(LITAP)
 ```
 
-    ## LITAP v0.5.0
+    ## LITAP v0.5.0.9000
     ## LITAP is still in development; Help us by submitting bugs/feature requests: 
     ## http://github.com/FRDC-SHL/LITAP/issues
 
 First, specify the dem file and the number of rows and columns:
 
 ``` r
-flow_mapper(file = "testELEV.dbf", nrow = 90, ncol = 90)
+flow_mapper(file = "testELEV.dbf", nrow = 90, ncol = 90, grid = 5)
 ```
 
 Can also specify pit removal parameters:
 
 ``` r
-flow_mapper(file = "testELEV.dbf", nrow = 90, ncol = 90, 
+flow_mapper(file = "testELEV.dbf", nrow = 90, ncol = 90, grid = 5, 
              max_area = 5, max_depth = 0.2)
 ```
 
 As well as the location of output files:
 
 ``` r
-flow_mapper(file = "testELEV.dbf", nrow = 90, ncol = 90, out_folder = "./Output/")
+flow_mapper(file = "testELEV.dbf", nrow = 90, ncol = 90, grid = 5, out_folder = "./Output/")
 ```
 
     ## CALCULATING DIRECTIONS
@@ -106,7 +106,7 @@ flow_mapper(file = "testELEV.dbf", nrow = 90, ncol = 90, out_folder = "./Output/
 
     ## CALCULATING INVERTED WATERSHEDS
 
-    ## REMOVING INVERTED INITIAL PITS
+    ## REMOVING INVERTED PITS
 
     ## CREATING REPORT
 
@@ -118,7 +118,7 @@ flow_mapper(file = "testELEV.dbf", nrow = 90, ncol = 90, out_folder = "./Output/
 size.
 
 ``` r
-form_mapper(folder = "./Output/", grid = 5)
+form_mapper(folder = "./Output/")
 ```
 
     ## SETUP
@@ -137,7 +137,7 @@ Optionally, users can also define channels and ridges according to the
 number of up-/down-slope cells that flow through the cell in question.
 
 ``` r
-form_mapper(folder = "./Output/", str_val = 10000, ridge_val = 10000, grid = 5)
+form_mapper(folder = "./Output/", str_val = 10000, ridge_val = 10000)
 ```
 
 ## Basic Usage: `facet_mapper()`
@@ -174,11 +174,10 @@ facet_mapper(folder = "./Output/", crule = "crule.dbf")
 
 ## Basic Usage: `wepp_mapper()`
 
-`wepp_mapper()` uses output from `flow_mapper()` and requires a grid
-size.
+`wepp_mapper()` uses output from `flow_mapper()`
 
 ``` r
-wepp_mapper(folder = "./Output/", grid = 5)
+wepp_mapper(folder = "./Output/")
 ```
 
 Optionally, users can also define the maximum length of channel cells
@@ -186,7 +185,7 @@ Optionally, users can also define the maximum length of channel cells
 upslope threshold to define channel cells
 
 ``` r
-wepp_mapper(folder = "./Output/", chan_length = 500, upslope_threshold = 500, grid = 5)
+wepp_mapper(folder = "./Output/", chan_length = 500, upslope_threshold = 500)
 ```
 
 ## Multiple file types
@@ -203,11 +202,10 @@ flow_mapper(file = "testELEV.flt")
 
 ## Output
 
-Output files can be .csv, .dbf, or .rds (R data files) in the output
-folders “flow”, “form”, “facet” and “wepp”. Backup files (for
-`form_mapper()`) are stored in the “Backup” folder. Additionally, an
-html report summarizing the `flow_mapper()` run is included in the
-output folder (`testELEV_final_report.html`).
+Output files can be .csv or .rds (R data files) in the output folders
+“flow”, “form”, “facet” and “wepp”. Additionally, an html report
+summarizing the `flow_mapper()` run is included in the output folder
+(`testELEV_final_report.html`).
 
 See the [LITAP website](http://FRDC-SHL.github.io/LITAP/) for more
 details and examples

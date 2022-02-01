@@ -6,14 +6,12 @@
 #' Environmental Solutions.
 #'
 #' @param folder Character. Location of [flow_mapper()] output
-#' @param grid Numeric. Grid size for the original dem
 #' @param str_val Numeric. Definition of a stream (number of upslope cells)
 #' @param ridge_val Numeric. Definition of a ridge (number of downslope cells)
 #'
 #' @inheritParams args
 #'
-#' @details For resuming or ending a run, \code{resume} or \code{end} must be
-#'   one of the following:
+#' @details For resuming a run, \code{resume} must be one of the following:
 #'
 #'   1. `weti` (Calculating Wetness Indices)
 #'   2. `relief` (Calculating Relief Derivitives)
@@ -27,48 +25,51 @@
 #'
 #' # First need to run flow_mapper()
 #' flow_mapper(file = system.file("extdata", "testELEV.dbf", package = "LITAP"),
-#'            out_folder = "./testELEV/", nrow = 90, ncol = 90)
+#'            out_folder = "./testELEV/", nrow = 90, ncol = 90, grid = 5)
 #'
 #' # Now can run form_mapper()
-#' form_mapper(folder = "./testELEV/", grid = 5)
+#' form_mapper(folder = "./testELEV/")
 #'
 #' # Clean up (remove all output)
 #' unlink("./testELEV/", recursive = TRUE)
 #'
 #' @export
 
-form_mapper <- function(folder, grid, str_val = 10000, ridge_val = 10000,
-                        resume = NULL, end = NULL,
+form_mapper <- function(folder, str_val = 10000, ridge_val = 10000,
+                        resume = NULL,
                         log = TRUE, clean = FALSE,
-                        verbose = FALSE, quiet = FALSE) {
+                        verbose = FALSE, quiet = FALSE, debug = FALSE) {
 
   # Messaging
   if(quiet) verbose <- FALSE
 
   # Get resume options
   if(is.null(resume)) resume <- ""
-  if(is.null(end)) end <- ""
   resume_options <- c("", "form", "weti", "relief", "length")
-  check_resume(resume, end, resume_options)
-  check_grid(grid)
+  check_resume(resume, resume_options)
 
   announce("setup", quiet)
 
   # Get out format
   out_format <- get_format(folder, where = "flow")
 
-  # Get backup fill dem
+    # Get fill dem
   db <- get_previous(folder, step = "fill", where = "flow") %>%
-    dplyr::select(seqno, row, col, elev, drec, upslope, fill_shed, local_shed) %>%
+    dplyr::select("seqno", "x", "y", "row", "col", "elev", "drec", "upslope",
+                  "fill_shed", "local_shed") %>%
     add_buffer()
+
+  grid <- calc_grid(db)
+  check_grid(grid)
 
   # Get backup inverted dem
-  idb <- get_previous(folder, step = "ilocal", where = "flow")
+  idb <- get_previous(folder, step = "inverted", where = "flow")
   if("ldir" %in% names(idb)) idb <- dplyr::rename(idb, "ddir" = "ldir")
-  idb <- dplyr::select(idb, seqno, row, col, elev, drec, ddir, upslope, shedno) %>%
+  idb <- dplyr::select(idb, "seqno", "x", "y", "row", "col", "elev", "drec", "ddir",
+                       "upslope", "inv_local_shed") %>%
     add_buffer()
 
-  # Get backup pond stats
+  # Get pond stats
   pond <- get_previous(folder, step = "pond", type = "stats", where = "flow") %>%
     add_buffer(db = db, stats = .)
 
@@ -98,16 +99,13 @@ form_mapper <- function(folder, grid, str_val = 10000, ridge_val = 10000,
 
     db_form <- calc_form(db, grid, verbose = verbose)
 
+
     save_output(data = db_form, name = "form", locs = out_locs,
-                out_format = out_format, where = "form")
+                out_format = out_format, where = "form", debug = debug)
     log_time(sub_start, log_file)
 
     resume <- "weti"
   } else skip_task(task, log_file, quiet)
-  if(end == "form") {
-    run_time(start, log_file, quiet)
-    return()
-  }
 
   # Wetness indices -------------------------------------------------------
   task <- "calculating wetness indices"
@@ -118,6 +116,8 @@ form_mapper <- function(folder, grid, str_val = 10000, ridge_val = 10000,
 
     if(!exists("db_form")) {
       db_form <- get_previous(folder, step = "form", where = "form") %>%
+        dplyr::select(dplyr::any_of(c("seqno", "row", "col", "slope_pct",
+                                      "slope_deg", "aspect", "prof", "plan"))) %>%
         add_buffer()
     }
 
@@ -133,17 +133,13 @@ form_mapper <- function(folder, grid, str_val = 10000, ridge_val = 10000,
                     lnqarea1 = round(lnqarea1, 3),
                     lnqarea2 = round(lnqarea2, 3))
 
-    save_output(data = db_form, name = "weti", locs = out_locs,
-                out_format = out_format, where = "form")
+    save_output(data = db_form, name = "form", locs = out_locs,
+                out_format = out_format, where = "form", debug = debug)
     rm(db_form, db_weti)
     log_time(sub_start, log_file)
 
     resume <- "relief"
   } else skip_task(task, log_file, quiet)
-  if(end == "weti") {
-    run_time(start, log_file, quiet)
-    return()
-  }
 
   # Relief ------------------------------------------------------------------
   task <- "calculating relief derivitives"
@@ -155,16 +151,12 @@ form_mapper <- function(folder, grid, str_val = 10000, ridge_val = 10000,
                          pond = pond, verbose = verbose)
 
     save_output(data = db_relz, name = "relief", locs = out_locs,
-                out_format = out_format, where = "form")
+                out_format = out_format, where = "form", debug = debug)
 
     log_time(sub_start, log_file)
 
     resume <- "length"
   } else skip_task(task, log_file, quiet)
-  if(end == "relief") {
-    run_time(start, log_file, quiet)
-    return()
-  }
 
   # Length ------------------------------------------------------------------
   task <- "calculating slope length"
@@ -177,18 +169,25 @@ form_mapper <- function(folder, grid, str_val = 10000, ridge_val = 10000,
       db_relz <- get_previous(folder, step = "relief", where = "form") %>%
         add_buffer()
     }
+
     db_length <- calc_length(db, db_relz, grid = grid, verbose = verbose)
 
     save_output(data = db_length, name = "length", locs = out_locs,
-                out_format = out_format, where = "form")
+                out_format = out_format, where = "form",
+                add_db = dplyr::select(db, "seqno", "x", "y"), debug = debug)
     rm(db_length, db_relz)
     log_time(sub_start, log_file)
 
   } else skip_task(task, log_file, quiet)
-  if(end == "length") {
-    run_time(start, log_file, quiet)
-    return()
-  }
+
+  # Clean up
+  if(!debug) remove_output(locs = out_locs, out_format = out_format,
+                           where = "form")
+
+  # Create all points file
+  task <- "Merging flow and form data for `all_points` file"
+  announce(task, quiet)
+  merge_all(folder)
 
   # Save final time
   run_time(start, log_file, quiet)

@@ -9,6 +9,8 @@ A data frame with 35154 rows and 6 variables:
 \describe{
 \item{seqno}{Cell number}
 \item{elev}{Cell elevation}
+\item{x}{Longitudinal value}
+\item{y}{Latitudinal value}
 \item{row}{Cell row}
 \item{col}{Cell column}
 \item{missing}{Missing?}

@@ -74,7 +74,7 @@ FacetMapR by R. A. (Bob) MacMillan, LandMapper Environmental Solutions." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">LITAP</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0.9000</span>
       </span>
     </div>
 
@@ -131,15 +131,16 @@ FacetMapR by R. A. (Bob) MacMillan, LandMapper Environmental Solutions.</p>
   <span class='va'>folder</span>,
   arule <span class='op'>=</span> <span class='cn'>NULL</span>,
   <span class='va'>crule</span>,
-  n_remove <span class='op'>=</span> <span class='fl'>9</span>,
+  edge_row <span class='op'>=</span> <span class='cn'>NULL</span>,
+  edge_col <span class='op'>=</span> <span class='cn'>NULL</span>,
   procedure <span class='op'>=</span> <span class='st'>"lsm"</span>,
   zone <span class='op'>=</span> <span class='cn'>NULL</span>,
   clean <span class='op'>=</span> <span class='cn'>FALSE</span>,
   resume <span class='op'>=</span> <span class='cn'>NULL</span>,
-  end <span class='op'>=</span> <span class='cn'>NULL</span>,
   log <span class='op'>=</span> <span class='cn'>TRUE</span>,
   verbose <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  quiet <span class='op'>=</span> <span class='cn'>FALSE</span>
+  quiet <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  debug <span class='op'>=</span> <span class='cn'>FALSE</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -159,15 +160,22 @@ from the dem file (see Details).</p></td>
       <td><p>Character. Location of CRULE file</p></td>
     </tr>
     <tr>
-      <th>n_remove</th>
-      <td><p>Numeric. Number of cells (rows/columns) to remove around the
-edge of the dem before deriving the A Rules.</p></td>
+      <th>edge_row</th>
+      <td><p>Numeric. Number of rows to remove around the edge of the dem
+before deriving the A Rules. Default (NULL) results in removing 5% of the
+rows per side (total of 10%).</p></td>
+    </tr>
+    <tr>
+      <th>edge_col</th>
+      <td><p>Numeric. Number of cols to remove around the edge of the dem
+before deriving the A Rules. Default (NULL) results in removing 5% of the
+cols per side (total of 10%).</p></td>
     </tr>
     <tr>
       <th>procedure</th>
-      <td><p>Character. Which LSM procedure to use. One of <code>lsm</code>
-(Original LandMapR program) or <code>bc_pem</code> (newer BC-PEM Direct-to-Site-SEries
-DSS program).</p></td>
+      <td><p>Character. Which procedure to use. One of <code>lsm</code>
+(Original LandMapR program) or <code>bc_pem</code> (newer BC-PEM Direct-to-Site-Series
+program).</p></td>
     </tr>
     <tr>
       <th>zone</th>
@@ -183,13 +191,7 @@ folder?</p></td>
     </tr>
     <tr>
       <th>resume</th>
-      <td><p>Character. From which stage should the run be resumed? (see
-Details below)</p></td>
-    </tr>
-    <tr>
-      <th>end</th>
-      <td><p>Character. If ending a run after a particular step, which step
-(see Details below)</p></td>
+      <td><p>Character. From which stage should the run be resumed? (see</p></td>
     </tr>
     <tr>
       <th>log</th>
@@ -203,6 +205,11 @@ Details below)</p></td>
       <th>quiet</th>
       <td><p>Logical. Suppress all messages.</p></td>
     </tr>
+    <tr>
+      <th>debug</th>
+      <td><p>Logical. If TRUE, output files contain intermediate columns
+useful for debugging (e.g., 'buffer', 'seqno_buffer', etc.) Default FALSE.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
@@ -210,9 +217,13 @@ Details below)</p></td>
     <p>Based on the technique described in Li et al. 2011, if no <code>arule</code> file is
 provided, the ARULE cutoffs are calculated from the <code><a href='form_mapper.html'>form_mapper()</a></code> dem
 files. These A Rules are saved as <code>afile_derived.csv</code> in the <code>folder</code>
-provided.</p>
-<p>Procedure <code>lsm</code> refers to... Procedure <code>bc_pem</code> refers to...</p>
-<p>For resuming or ending a run, <code>resume</code> or <code>end</code> must be
+provided. The topographic derivative percentiles are stored to
+<code>topographic_derivatives.csv</code>, also in the <code>folder</code>.</p>
+<p>Procedure <code>lsm</code> refers to the landform segmentation model (LSM) offered in
+the original LandMapR. Procedure <code>bc_pem</code> refers to calculating variables
+required for the British Columbia Predictive Ecosystem Mapping
+Direct-to-Site-Series program (BC-PEM DSS).</p>
+<p>For resuming  a run, <code>resume</code> must be
 one of the following:</p><ul>
 <li><p>attributes</p></li>
 <li><p>classes</p></li>
@@ -223,31 +234,59 @@ Sheng Li, David A. Lobb, Brian G. McConkey, R. A. MacMillan, Alan Moulin,
 and Walter R. Fraser. 2011. Extracting topographic characteristics of landforms
 typical of Canadian agricultural landscapes for agri-environmental modeling.
 I. Methodology. Canadian Journal of Soil Science 91(2), 251-266.
-<a href='https://doi.org/10.1139/CJSS10080'>https://doi.org/10.1139/CJSS10080</a></p>
+doi: <a href='https://doi.org/10.4141/CJSS10080'>10.4141/CJSS10080</a>
+.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='co'># First need to run flow_mapper()</span>
-<span class='fu'><a href='flow_mapper.html'>flow_mapper</a></span><span class='op'>(</span>file <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata"</span>, <span class='st'>"testELEV.dbf"</span>, package <span class='op'>=</span> <span class='st'>"LITAP"</span><span class='op'>)</span>,
-           out_folder <span class='op'>=</span> <span class='st'>"./testELEV/"</span>, nrow <span class='op'>=</span> <span class='fl'>90</span>, ncol <span class='op'>=</span> <span class='fl'>90</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>CALCULATING DIRECTIONS</span></div><div class='output co'>#&gt; <span class='message'>CALCULATING WATERSHEDS</span></div><div class='output co'>#&gt; <span class='message'>REMOVING INITIAL PITS</span></div><div class='output co'>#&gt; <span class='message'>CALCULATING POND (GLOBAL) WATERSHEDS</span></div><div class='output co'>#&gt; <span class='message'>CALCULATING FILL PATTERNS</span></div><div class='output co'>#&gt; <span class='message'>INVERTING DEM</span></div><div class='output co'>#&gt; <span class='message'>CALCULATING INVERTED DIRECTIONS</span></div><div class='output co'>#&gt; <span class='message'>CALCULATING INVERTED WATERSHEDS</span></div><div class='output co'>#&gt; <span class='message'>REMOVING INVERTED INITIAL PITS</span></div><div class='output co'>#&gt; <span class='message'>CREATING REPORT</span></div><div class='output co'>#&gt; <span class='message'>Run took: 0.18 min</span></div><div class='input'>
-<span class='co'># And form_mapper()</span>
-<span class='fu'><a href='form_mapper.html'>form_mapper</a></span><span class='op'>(</span>folder <span class='op'>=</span> <span class='st'>"./testELEV/"</span>, grid <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>SETUP</span></div><div class='output co'>#&gt; <span class='message'>CALCULATING FORM</span></div><div class='output co'>#&gt; <span class='message'>CALCULATING WETNESS INDICES</span></div><div class='output co'>#&gt; <span class='message'>CALCULATING RELIEF DERIVITIVES</span></div><div class='output co'>#&gt; <span class='message'>CALCULATING SLOPE LENGTH</span></div><div class='output co'>#&gt; <span class='message'>Run took: 0.1 min</span></div><div class='input'>
-<span class='co'># Now can run facet_mapper() - Derive A Rules</span>
-<span class='va'>crule</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata"</span>, <span class='st'>"crule.dbf"</span>, package <span class='op'>=</span> <span class='st'>"LITAP"</span><span class='op'>)</span>
-<span class='fu'>facet_mapper</span><span class='op'>(</span>folder <span class='op'>=</span> <span class='st'>"./testELEV/"</span>, arule <span class='op'>=</span> <span class='cn'>NULL</span>, crule <span class='op'>=</span> <span class='va'>crule</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Formatting arule file</span></div><div class='output co'>#&gt; <span class='message'>  - Renaming 'slope' to 'slope_pct'</span></div><div class='output co'>#&gt; <span class='message'>Formatting crule file</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>CALCULATING FUZZY ATTRIBUTES</span></div><div class='output co'>#&gt; <span class='message'>CALCULATING CLASSES</span></div><div class='output co'>#&gt; <span class='message'>Run took: 0 min</span></div><div class='input'>
-<span class='co'># Now can run facet_mapper() - supply A Rules</span>
-<span class='va'>arule</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata"</span>, <span class='st'>"arule.dbf"</span>, package <span class='op'>=</span> <span class='st'>"LITAP"</span><span class='op'>)</span>
-<span class='va'>crule</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata"</span>, <span class='st'>"crule.dbf"</span>, package <span class='op'>=</span> <span class='st'>"LITAP"</span><span class='op'>)</span>
-<span class='fu'>facet_mapper</span><span class='op'>(</span>folder <span class='op'>=</span> <span class='st'>"./testELEV/"</span>, arule <span class='op'>=</span> <span class='va'>arule</span>, crule <span class='op'>=</span> <span class='va'>crule</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Formatting arule file</span></div><div class='output co'>#&gt; <span class='message'>  - Renaming 'slope' to 'slope_pct'</span></div><div class='output co'>#&gt; <span class='message'>Formatting crule file</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>CALCULATING FUZZY ATTRIBUTES</span></div><div class='output co'>#&gt; <span class='message'>CALCULATING CLASSES</span></div><div class='output co'>#&gt; <span class='message'>Run took: 0 min</span></div><div class='input'>
-<span class='co'># Clean up (remove all output)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/unlink.html'>unlink</a></span><span class='op'>(</span><span class='st'>"./testELEV/"</span>, recursive <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-
-
-</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='co'># First need to run flow_mapper()</span></span>
+<span class='r-in'><span class='fu'><a href='flow_mapper.html'>flow_mapper</a></span><span class='op'>(</span>file <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata"</span>, <span class='st'>"testELEV.dbf"</span>, package <span class='op'>=</span> <span class='st'>"LITAP"</span><span class='op'>)</span>,</span>
+<span class='r-in'>           out_folder <span class='op'>=</span> <span class='st'>"./testELEV/"</span>, nrow <span class='op'>=</span> <span class='fl'>90</span>, ncol <span class='op'>=</span> <span class='fl'>90</span>, grid <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> CALCULATING DIRECTIONS</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> CALCULATING WATERSHEDS</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> REMOVING INITIAL PITS</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> CALCULATING POND (GLOBAL) WATERSHEDS</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> CALCULATING FILL PATTERNS</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> INVERTING DEM</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> CALCULATING INVERTED DIRECTIONS</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> CALCULATING INVERTED WATERSHEDS</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> REMOVING INVERTED PITS</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> CREATING REPORT</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Run took: 0.25 min</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># And form_mapper()</span></span>
+<span class='r-in'><span class='fu'><a href='form_mapper.html'>form_mapper</a></span><span class='op'>(</span>folder <span class='op'>=</span> <span class='st'>"./testELEV/"</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> SETUP</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> CALCULATING FORM</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> CALCULATING WETNESS INDICES</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> CALCULATING RELIEF DERIVITIVES</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> CALCULATING SLOPE LENGTH</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> MERGING FLOW AND FORM DATA FOR `ALL_POINTS` FILE</span>
+<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error:</span> There are no eligable weti for type dem files</span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>crule</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata"</span>, <span class='st'>"crule.dbf"</span>, package <span class='op'>=</span> <span class='st'>"LITAP"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Run facet_mapper() - Derive A Rules</span></span>
+<span class='r-in'><span class='fu'>facet_mapper</span><span class='op'>(</span>folder <span class='op'>=</span> <span class='st'>"./testELEV/"</span>, arule <span class='op'>=</span> <span class='cn'>NULL</span>, crule <span class='op'>=</span> <span class='va'>crule</span><span class='op'>)</span></span>
+<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error:</span> There are no eligable weti for type dem files</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Derive A Rules, omitting rows and cols from the calculation</span></span>
+<span class='r-in'><span class='fu'>facet_mapper</span><span class='op'>(</span>folder <span class='op'>=</span> <span class='st'>"./testELEV/"</span>, arule <span class='op'>=</span> <span class='cn'>NULL</span>, crule <span class='op'>=</span> <span class='va'>crule</span>,</span>
+<span class='r-in'>             edge_row <span class='op'>=</span> <span class='fl'>3</span>, edge_col <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span></span>
+<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error:</span> There are no eligable weti for type dem files</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Run facet_mapper() - supply A Rules</span></span>
+<span class='r-in'><span class='va'>arule</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata"</span>, <span class='st'>"arule.dbf"</span>, package <span class='op'>=</span> <span class='st'>"LITAP"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>crule</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata"</span>, <span class='st'>"crule.dbf"</span>, package <span class='op'>=</span> <span class='st'>"LITAP"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>facet_mapper</span><span class='op'>(</span>folder <span class='op'>=</span> <span class='st'>"./testELEV/"</span>, arule <span class='op'>=</span> <span class='va'>arule</span>, crule <span class='op'>=</span> <span class='va'>crule</span><span class='op'>)</span></span>
+<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error:</span> There are no eligable weti for type dem files</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Clean up (remove all output)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/unlink.html'>unlink</a></span><span class='op'>(</span><span class='st'>"./testELEV/"</span>, recursive <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

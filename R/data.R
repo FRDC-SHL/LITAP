@@ -7,6 +7,8 @@
 #' \describe{
 #'   \item{seqno}{Cell number}
 #'   \item{elev}{Cell elevation}
+#'   \item{x}{Longitudinal value}
+#'   \item{y}{Latitudinal value}
 #'   \item{row}{Cell row}
 #'   \item{col}{Cell column}
 #'   \item{missing}{Missing?}

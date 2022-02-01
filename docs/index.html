@@ -23,6 +23,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -35,7 +37,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">LITAP</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0</span>
       </span>
     </div>
 
@@ -59,7 +61,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/steffilazerte/LITAP">
+  <a href="https://github.com/steffilazerte/LITAP" class="external-link">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -76,14 +78,14 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="litap" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#litap" class="anchor"></a>LITAP</h1></div>
+<div class="section level1">
+<div class="page-header"><h1 id="litap">LITAP<a class="anchor" aria-label="anchor" href="#litap"></a>
+</h1></div>
 <!-- badges: start -->
 
 <p><strong>Landscape Integrated Terrain Analysis Package (LITAP)</strong></p>
 <p>LITAP is a software package aimed at providing open access code for terrain analysis and landscape and hydrology models built on terrain attributes. A major component of LITAP is founded on R. A. (Bob) MacMillan’s LandMapR suite of programs for flow topology and landform segmentation analyses with extended new parameters and methodologies developed by Drs. Sheng Li and Steffi LaZerte. Another component of LITAP focuses on the calculations and uses of directional terrain attributes developed by Dr. Sheng Li. This project is actively under development and we plan to add more features to support modelling of surficial hydrology, soil erosion, landscape zoning, hydrologic response units and buffer zone delineation.</p>
-<p>LITAP is a project funded by Agriculture and Agri-Food Canada and directed by <a href="https://profils-profiles.science.gc.ca/en/profile/sheng-li-phd">Dr. Sheng Li</a>.</p>
+<p>LITAP is a project funded by Agriculture and Agri-Food Canada and directed by <a href="https://profils-profiles.science.gc.ca/en/profile/sheng-li-phd" class="external-link">Dr. Sheng Li</a>.</p>
 <p>See articles for new features specific to LITAP (coming soon)!</p>
 <p>Currently LITAP includes major functions</p>
 <ul>
@@ -96,43 +98,43 @@
 <li>
 <code><a href="reference/wepp_mapper.html">wepp_mapper()</a></code> - based on WeppMapR</li>
 </ul>
-<p>See the companion website for more details: <a href="https://FRDC-SHL.github.io/LITAP/" class="uri">https://FRDC-SHL.github.io/LITAP/</a></p>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
+<p>See the companion website for more details: <a href="https://FRDC-SHL.github.io/LITAP/" class="external-link uri">https://FRDC-SHL.github.io/LITAP/</a></p>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
 <p>Use the <code>remotes</code> package to directly install R packages from github:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span> <span class="co"># If not already installed</span>
-<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"FRDC-SHL/LITAP"</span><span class="op">)</span> </code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span> <span class="co"># If not already installed</span>
+<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"FRDC-SHL/LITAP"</span><span class="op">)</span> </code></pre></div>
 </div>
-<div id="example-files" class="section level2">
-<h2 class="hasAnchor">
-<a href="#example-files" class="anchor"></a>Example files</h2>
-<p>LITAP comes with several example files (<code>testELEV.dbf</code>, <code>testELEV_mini.dbf</code>, <code>arule.dbf</code>, and <code>crule.dbf</code>). These are found in the “extdata” folder inside the LITAP package folder. If you are unsure where this folder is, use the function <code><a href="https://rdrr.io/r/base/system.file.html">system.file()</a></code>:</p>
+<div class="section level2">
+<h2 id="example-files">Example files<a class="anchor" aria-label="anchor" href="#example-files"></a>
+</h2>
+<p>LITAP comes with several example files (<code>testELEV.dbf</code>, <code>testELEV_mini.dbf</code>, <code>arule.dbf</code>, and <code>crule.dbf</code>). These are found in the “extdata” folder inside the LITAP package folder. If you are unsure where this folder is, use the function <code><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file()</a></code>:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"LITAP"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"LITAP"</span><span class="op">)</span></code></pre></div>
 <p>Now you can copy and paste these files to your working folder to try out the following examples.</p>
 </div>
-<div id="basic-usage-flow_mapper" class="section level2">
-<h2 class="hasAnchor">
-<a href="#basic-usage-flow_mapper" class="anchor"></a>Basic Usage: <code>flow_mapper()</code>
+<div class="section level2">
+<h2 id="basic-usage-flow_mapper">Basic Usage: <code>flow_mapper()</code>
+<a class="anchor" aria-label="anchor" href="#basic-usage-flow_mapper"></a>
 </h2>
 <p>Load the package:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/FRDC-SHL/LITAP">LITAP</a></span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="do">## LITAP v0.5.0</span></span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/FRDC-SHL/LITAP" class="external-link">LITAP</a></span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="do">## LITAP v0.5.0.9000</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="do">## LITAP is still in development; Help us by submitting bugs/feature requests: </span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="do">## http://github.com/FRDC-SHL/LITAP/issues</span></span></code></pre></div>
 <p>First, specify the dem file and the number of rows and columns:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/flow_mapper.html">flow_mapper</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"testELEV.dbf"</span>, nrow <span class="op">=</span> <span class="fl">90</span>, ncol <span class="op">=</span> <span class="fl">90</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="reference/flow_mapper.html">flow_mapper</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"testELEV.dbf"</span>, nrow <span class="op">=</span> <span class="fl">90</span>, ncol <span class="op">=</span> <span class="fl">90</span>, grid <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></code></pre></div>
 <p>Can also specify pit removal parameters:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/flow_mapper.html">flow_mapper</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"testELEV.dbf"</span>, nrow <span class="op">=</span> <span class="fl">90</span>, ncol <span class="op">=</span> <span class="fl">90</span>, 
+<code class="sourceCode R"><span class="fu"><a href="reference/flow_mapper.html">flow_mapper</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"testELEV.dbf"</span>, nrow <span class="op">=</span> <span class="fl">90</span>, ncol <span class="op">=</span> <span class="fl">90</span>, grid <span class="op">=</span> <span class="fl">5</span>, 
              max_area <span class="op">=</span> <span class="fl">5</span>, max_depth <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span></code></pre></div>
 <p>As well as the location of output files:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/flow_mapper.html">flow_mapper</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"testELEV.dbf"</span>, nrow <span class="op">=</span> <span class="fl">90</span>, ncol <span class="op">=</span> <span class="fl">90</span>, out_folder <span class="op">=</span> <span class="st">"./Output/"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="reference/flow_mapper.html">flow_mapper</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"testELEV.dbf"</span>, nrow <span class="op">=</span> <span class="fl">90</span>, ncol <span class="op">=</span> <span class="fl">90</span>, grid <span class="op">=</span> <span class="fl">5</span>, out_folder <span class="op">=</span> <span class="st">"./Output/"</span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb8"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="do">## CALCULATING DIRECTIONS</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="do">## CALCULATING WATERSHEDS</span></span>
@@ -149,19 +151,19 @@
 <span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="do">## CALCULATING INVERTED WATERSHEDS</span></span>
 <span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="do">## REMOVING INVERTED INITIAL PITS</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="do">## REMOVING INVERTED PITS</span></span>
 <span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="do">## CREATING REPORT</span></span>
 <span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a><span class="do">## Run took: 0.18 min</span></span></code></pre></div>
 </div>
-<div id="basic-usage-form_mapper" class="section level2">
-<h2 class="hasAnchor">
-<a href="#basic-usage-form_mapper" class="anchor"></a>Basic Usage: <code>form_mapper()</code>
+<div class="section level2">
+<h2 id="basic-usage-form_mapper">Basic Usage: <code>form_mapper()</code>
+<a class="anchor" aria-label="anchor" href="#basic-usage-form_mapper"></a>
 </h2>
 <p><code><a href="reference/form_mapper.html">form_mapper()</a></code> uses output from <code><a href="reference/flow_mapper.html">flow_mapper()</a></code> and requires a grid size.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/form_mapper.html">form_mapper</a></span><span class="op">(</span>folder <span class="op">=</span> <span class="st">"./Output/"</span>, grid <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="reference/form_mapper.html">form_mapper</a></span><span class="op">(</span>folder <span class="op">=</span> <span class="st">"./Output/"</span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb10"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="do">## SETUP</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="do">## CALCULATING FORM</span></span>
@@ -175,11 +177,11 @@
 <span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="do">## Run took: 0.1 min</span></span></code></pre></div>
 <p>Optionally, users can also define channels and ridges according to the number of up-/down-slope cells that flow through the cell in question.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/form_mapper.html">form_mapper</a></span><span class="op">(</span>folder <span class="op">=</span> <span class="st">"./Output/"</span>, str_val <span class="op">=</span> <span class="fl">10000</span>, ridge_val <span class="op">=</span> <span class="fl">10000</span>, grid <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="reference/form_mapper.html">form_mapper</a></span><span class="op">(</span>folder <span class="op">=</span> <span class="st">"./Output/"</span>, str_val <span class="op">=</span> <span class="fl">10000</span>, ridge_val <span class="op">=</span> <span class="fl">10000</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="basic-usage-facet_mapper" class="section level2">
-<h2 class="hasAnchor">
-<a href="#basic-usage-facet_mapper" class="anchor"></a>Basic Usage: <code>facet_mapper()</code>
+<div class="section level2">
+<h2 id="basic-usage-facet_mapper">Basic Usage: <code>facet_mapper()</code>
+<a class="anchor" aria-label="anchor" href="#basic-usage-facet_mapper"></a>
 </h2>
 <p><code><a href="reference/facet_mapper.html">facet_mapper()</a></code> uses output from <code><a href="reference/flow_mapper.html">flow_mapper()</a></code> and <code><a href="reference/form_mapper.html">form_mapper()</a></code> and requires a CRULE file and, optionally, an ARULE file.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
@@ -201,51 +203,60 @@
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="reference/facet_mapper.html">facet_mapper</a></span><span class="op">(</span>folder <span class="op">=</span> <span class="st">"./Output/"</span>, crule <span class="op">=</span> <span class="st">"crule.dbf"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="basic-usage-wepp_mapper" class="section level2">
-<h2 class="hasAnchor">
-<a href="#basic-usage-wepp_mapper" class="anchor"></a>Basic Usage: <code>wepp_mapper()</code>
+<div class="section level2">
+<h2 id="basic-usage-wepp_mapper">Basic Usage: <code>wepp_mapper()</code>
+<a class="anchor" aria-label="anchor" href="#basic-usage-wepp_mapper"></a>
 </h2>
-<p><code><a href="reference/wepp_mapper.html">wepp_mapper()</a></code> uses output from <code><a href="reference/flow_mapper.html">flow_mapper()</a></code> and requires a grid size.</p>
+<p><code><a href="reference/wepp_mapper.html">wepp_mapper()</a></code> uses output from <code><a href="reference/flow_mapper.html">flow_mapper()</a></code></p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/wepp_mapper.html">wepp_mapper</a></span><span class="op">(</span>folder <span class="op">=</span> <span class="st">"./Output/"</span>, grid <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="reference/wepp_mapper.html">wepp_mapper</a></span><span class="op">(</span>folder <span class="op">=</span> <span class="st">"./Output/"</span><span class="op">)</span></code></pre></div>
 <p>Optionally, users can also define the maximum length of channel cells (after which they will be split into separate segments), as well as the upslope threshold to define channel cells</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/wepp_mapper.html">wepp_mapper</a></span><span class="op">(</span>folder <span class="op">=</span> <span class="st">"./Output/"</span>, chan_length <span class="op">=</span> <span class="fl">500</span>, upslope_threshold <span class="op">=</span> <span class="fl">500</span>, grid <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="reference/wepp_mapper.html">wepp_mapper</a></span><span class="op">(</span>folder <span class="op">=</span> <span class="st">"./Output/"</span>, chan_length <span class="op">=</span> <span class="fl">500</span>, upslope_threshold <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="multiple-file-types" class="section level2">
-<h2 class="hasAnchor">
-<a href="#multiple-file-types" class="anchor"></a>Multiple file types</h2>
+<div class="section level2">
+<h2 id="multiple-file-types">Multiple file types<a class="anchor" aria-label="anchor" href="#multiple-file-types"></a>
+</h2>
 <p>LITAP accepts multiple file types and can automatically assess the number of rows and columns, depending on the type (see <code><a href="reference/load_file.html">?load_file</a></code> for details and requirements):</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="reference/flow_mapper.html">flow_mapper</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"testELEV.csv"</span><span class="op">)</span>
 <span class="fu"><a href="reference/flow_mapper.html">flow_mapper</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"testELEV.grd"</span><span class="op">)</span>
 <span class="fu"><a href="reference/flow_mapper.html">flow_mapper</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"testELEV.flt"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="output" class="section level2">
-<h2 class="hasAnchor">
-<a href="#output" class="anchor"></a>Output</h2>
-<p>Output files can be .csv, .dbf, or .rds (R data files) in the output folders “flow”, “form”, “facet” and “wepp”. Backup files (for <code><a href="reference/form_mapper.html">form_mapper()</a></code>) are stored in the “Backup” folder. Additionally, an html report summarizing the <code><a href="reference/flow_mapper.html">flow_mapper()</a></code> run is included in the output folder (<code>testELEV_final_report.html</code>).</p>
-<p>See the <a href="http://FRDC-SHL.github.io/LITAP/">LITAP website</a> for more details and examples</p>
+<div class="section level2">
+<h2 id="output">Output<a class="anchor" aria-label="anchor" href="#output"></a>
+</h2>
+<p>Output files can be .csv or .rds (R data files) in the output folders “flow”, “form”, “facet” and “wepp”. Additionally, an html report summarizing the <code><a href="reference/flow_mapper.html">flow_mapper()</a></code> run is included in the output folder (<code>testELEV_final_report.html</code>).</p>
+<p>See the <a href="http://FRDC-SHL.github.io/LITAP/" class="external-link">LITAP website</a> for more details and examples</p>
 </div>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Browse source code at <br><a href="https://github.com/FRDC-SHL/LITAP/">https://​github.com/​FRDC-SHL/​LITAP/​</a>
-</li>
+<li><a href="https://github.com/FRDC-SHL/LITAP/" class="external-link">Browse source code</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a></li>
+<li><a href="https://www.r-project.org/Licenses/GPL-3" class="external-link">GPL-3</a></li>
 </ul>
 </div>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing LITAP</a></li>
+</ul>
+</div>
+
 <div class="developers">
-<h2>Developers</h2>
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>Steffi LaZerte <br><small class="roles"> Author, maintainer </small>  </li>
 <li>Sheng Li <br><small class="roles"> Author </small>  </li>
@@ -253,22 +264,25 @@
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/FRDC-SHL/LITAP/actions"><img src="https://github.com/FRDC-SHL/LITAP/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://github.com/FRDC-SHL/LITAP/actions" class="external-link"><img src="https://github.com/FRDC-SHL/LITAP/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
 </ul>
 </div>
-</div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Steffi LaZerte, Sheng Li, Agriculture and Agri-Food Canada.</p>
+  <p></p>
+<p>Developed by Steffi LaZerte, Sheng Li, Agriculture and Agri-Food Canada.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
@@ -276,6 +290,8 @@
 
   
 
+
+  
 
   </body>
 </html>

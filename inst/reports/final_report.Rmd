@@ -103,9 +103,9 @@ grid.arrange(flow_plot(db = dem, type = "elevation", pits = TRUE, shed = TRUE, s
              flow_plot(db = dem, type = "elevation", pits = TRUE, shed = TRUE, shed_type = "local") + 
                labs(title = "Local Watersheds")+
                theme(plot.margin = unit(c(0, 0, 5 ,0), "mm")),
-             flow_plot(db = dem, type = "elevation", pits = TRUE, shed = TRUE, shed_type = "pond") + 
-               labs(title = "Pond Watersheds")+
-               theme(plot.margin = unit(c(5, 0, 0 ,0), "mm")),
+             # flow_plot(db = dem, type = "elevation", pits = TRUE, shed = TRUE, shed_type = "pond") + 
+             #   labs(title = "Pond Watersheds")+
+             #   theme(plot.margin = unit(c(5, 0, 0 ,0), "mm")),
              flow_plot(db = dem, type = "elevation", pits = TRUE, shed = TRUE, shed_type = "fill") + 
                labs(title = "Fill Watersheds")+
                theme(plot.margin = unit(c(5, 0, 0 ,0), "mm")),
@@ -123,10 +123,10 @@ __NOTE:__
 if(!is.null(pit)) DT::datatable(pit, rownames = FALSE) else message("No pit table")
 ```
 
-### Watershed stats - Pond Table
-```{r pond_table}
-if(!is.null(pond)) DT::datatable(pond, rownames = FALSE) else message("No pit table")
-```
+<!-- ### Watershed stats - Pond Table -->
+<!-- ```{r pond_table} -->
+<!-- if(!is.null(pond)) DT::datatable(pond, rownames = FALSE) else message("No pit table") -->
+<!-- ``` -->
 
 ### Watershed stats - Fill Table
 ```{r fill_table}

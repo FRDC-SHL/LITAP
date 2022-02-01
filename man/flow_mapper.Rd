@@ -6,8 +6,9 @@
 \usage{
 flow_mapper(
   file,
-  nrow = NULL,
-  ncol = NULL,
+  nrow,
+  ncol,
+  grid = NULL,
   missing_value = -9999,
   max_area = 10,
   max_depth = 0.5,
@@ -17,11 +18,11 @@ flow_mapper(
   clim = NULL,
   rlim = NULL,
   resume = NULL,
-  end = NULL,
   log = TRUE,
   report = TRUE,
   verbose = FALSE,
-  quiet = FALSE
+  quiet = FALSE,
+  debug = FALSE
 )
 }
 \arguments{
@@ -36,6 +37,8 @@ coordinates.}
 with a single column, but can be automatically assessed from files with x
 and y coordinates.}
 
+\item{grid}{Numeric. Grid size in m of the input DEM file}
+
 \item{missing_value}{Numeric/Character. Symbols which define missing data}
 
 \item{max_area}{Numeric. Largest area of pits to be removed during initial
@@ -48,9 +51,9 @@ pit removal}
 to folder in the same location and with the same name as the dem file}
 
 \item{out_format}{Character. What format should the data be output as? "rds"
-for R data format (default), "csv" for Comma-separated values, or "dbf" for
-dbf database files. This format is used for all subsequent functions (i.e.
-\code{form_mapper()}, \code{facet_mapper()} and \code{wepp_mapper()}.}
+for R data format (default), "csv" for Comma-separated values. This format
+is used for all subsequent functions (i.e. \code{form_mapper()},
+\code{facet_mapper()} and \code{wepp_mapper()}.}
 
 \item{clean}{Logical. Remove all backup files and output files from previous
 runs in this folder?}
@@ -59,11 +62,7 @@ runs in this folder?}
 
 \item{rlim}{Numeric vector. Row limits if specifying a subset of the dem}
 
-\item{resume}{Character. From which stage should the run be resumed? (see
-Details below)}
-
-\item{end}{Character. If ending a run after a particular step, which step
-(see Details below)}
+\item{resume}{Character. From which stage should the run be resumed? (see}
 
 \item{log}{Logical. Create log file recording progress?}
 
@@ -72,6 +71,9 @@ Details below)}
 \item{verbose}{Logical. Output extra progress messages.}
 
 \item{quiet}{Logical. Suppress all messages.}
+
+\item{debug}{Logical. If TRUE, output files contain intermediate columns
+useful for debugging (e.g., 'buffer', 'seqno_buffer', etc.) Default FALSE.}
 }
 \description{
 Run an elevation file through all functions to calculate watershed flow and
@@ -82,7 +84,7 @@ Environmental Solutions.
 For information regarding loading other file types see
 \code{\link{load_file}}.
 
-For resuming or ending a run, \code{resume} or \code{end} must be one of
+For resuming a run, \code{resume} must be one of
 the following:
 
 \enumerate{
@@ -92,20 +94,20 @@ the following:
 \item \code{pond} (Calculating Pond Shed Statistics - Second Pit Removal)
 \item \code{fill} (Calculating Fill Shed Statistics - Third Pit Removal)
 \item \code{slope} (Slope Gradient and Curvature values)
-\item \code{inverted} (Calculating Directions on Inverted DEM)
+\item \code{idirections} (Calculating Directions on Inverted DEM)
 \item \code{iwatersheds} (Calculating Inverted Watersheds)
-\item \code{ilocal} (Initial Inverted Pit Removal)
+\item \code{inverted} (Inverted Pit Removal)
 \item \code{report} (Create the final report)
 }
 }
 \examples{
 # Basic Run
 flow_mapper(file = system.file("extdata", "testELEV.dbf", package = "LITAP"),
-           out_folder = "./testELEV/", nrow = 90, ncol = 90)
+           out_folder = "./testELEV/", nrow = 90, ncol = 90, grid = 1)
 
 # Specify parameters for initial pit removal
 flow_mapper(file = system.file("extdata", "testELEV.dbf", package = "LITAP"),
-            out_folder = "./testELEV/", nrow = 90, ncol = 90,
+            out_folder = "./testELEV/", nrow = 90, ncol = 90, grid = 1,
             max_area = 5, max_depth = 2)
 
 # Clean up (remove created folder and output)
