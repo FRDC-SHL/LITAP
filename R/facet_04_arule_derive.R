@@ -1,13 +1,5 @@
 arule_percentiles <- function(weti, relief, edge_row, edge_col, quiet) {
 
-  # Calculate buffers at 5% if not provided
-  if(is.null(edge_row)) {
-    edge_row <- round(length(unique(weti$row[!weti$buffer])) * 0.05)
-  }
-  if(is.null(edge_col)) {
-    edge_col <- round(length(unique(weti$col[!weti$buffer])) * 0.05)
-  }
-
   if(!quiet) message("Using buffer of ", edge_row, " rows ('edge_row') ",
                      "and ", edge_col, " cols ('edge_col') per side")
 
