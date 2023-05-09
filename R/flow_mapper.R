@@ -68,6 +68,7 @@ flow_mapper <- function(file, nrow, ncol, grid = NULL, missing_value = -9999,
                         out_folder = NULL, out_format = "rds", clean = FALSE,
                         clim = NULL, rlim = NULL,
                         resume = NULL, log = TRUE, report = TRUE,
+                        pitr_method = "landmapr",
                         verbose = FALSE, quiet = FALSE, debug = FALSE) {
 
   check_out_format(out_format)
@@ -170,6 +171,7 @@ flow_mapper <- function(file, nrow, ncol, grid = NULL, missing_value = -9999,
 
     db_initial <- calc_shed4(db_dir, verbose = verbose)
     stats_initial <- pit_stat1(db_initial, shed = "initial_shed",
+                               method = pitr_method,
                                verbose = verbose) %>%
       out_stat()
 
@@ -205,10 +207,12 @@ flow_mapper <- function(file, nrow, ncol, grid = NULL, missing_value = -9999,
 
     # Pit removal
     db_local <- first_pitr1(db_initial, max_area = max_area,
-                            max_depth = max_depth, verbose = verbose)
+                            max_depth = max_depth, method = pitr_method,
+                            verbose = verbose)
 
     # Stats
     stats_local <- pit_stat1(db_local, shed = "local_shed",
+                             method = pitr_method,
                              verbose = verbose) %>%
       out_stat()
 
@@ -237,7 +241,7 @@ flow_mapper <- function(file, nrow, ncol, grid = NULL, missing_value = -9999,
     }
 
     if(length(unique(db_local$local_shed[!is.na(db_local$local_shed)])) > 1){
-      db_pond <- second_pitr1(db_local, verbose = verbose) #also 2nd vol2fl and parea
+      db_pond <- second_pitr1(db_local, method = pitr_method, verbose = verbose) #also 2nd vol2fl and parea
       stats_pond <- db_pond$stats
       db_pond <- db_pond$db
     } else {
@@ -277,7 +281,7 @@ flow_mapper <- function(file, nrow, ncol, grid = NULL, missing_value = -9999,
       db_local[, c("pond_shed", "vol2fl", "mm2fl", "parea")] <-
         db_pond[, c("pond_shed", "vol2fl", "mm2fl", "parea")]
 
-      db_fill <- third_pitr1(db_local, verbose = verbose) # calc 2nd mm2fl as progresses
+      db_fill <- third_pitr1(db_local, method = pitr_method, verbose = verbose) # calc 2nd mm2fl as progresses
       stats_fill <- db_fill$stats
       db_fill <- db_fill$db
     } else {
@@ -364,6 +368,7 @@ flow_mapper <- function(file, nrow, ncol, grid = NULL, missing_value = -9999,
 
     db_iinitial <- calc_shed4(db_idir, verbose = verbose)
     stats_iinitial <- pit_stat1(db_iinitial, shed = "initial_shed",
+                                method = pitr_method,
                                 verbose = verbose) %>%
       out_stat()
 
@@ -396,10 +401,12 @@ flow_mapper <- function(file, nrow, ncol, grid = NULL, missing_value = -9999,
     }
 
     db_inverted <- first_pitr1(db_iinitial, max_area = max_area,
-                               max_depth = max_depth, verbose = verbose)
+                               max_depth = max_depth, method = pitr_method,
+                               verbose = verbose)
 
     if(length(na.omit(unique(db_inverted$local_shed))) > 1) {
-      stats_ipit <- pit_stat1(db_inverted, shed = "local_shed", verbose = verbose) %>%
+      stats_ipit <- pit_stat1(db_inverted, shed = "local_shed",
+                              method = pitr_method, verbose = verbose) %>%
         out_stat() %>%
         dplyr::mutate(edge_pit = FALSE)
     } else stats_ipit <- tibble::tibble()

@@ -53,6 +53,8 @@ calc_ddir2 <- function(db, verbose) {
     dplyr::arrange(seqno)
 
   if(nrow(db_flats) > 0) {
+
+    # Assign Patches
     p_n <- 1
     for(i in 1:nrow(db_flats)) {
       cell <- db_flats$seqno[i]
@@ -73,7 +75,7 @@ calc_ddir2 <- function(db, verbose) {
       dplyr::select(-n, -ddir_n, -seqno_n) %>%
       dplyr::distinct() %>%
       dplyr::group_by(patch) %>%
-      dplyr::mutate(centre = list(c(round(median(col)), round(median(row)))),
+      dplyr::mutate(centre = list(c(ceiling(median(col)), ceiling(median(row)))),
                     cell = purrr::map2(col, row, ~c(.x, .y)),
                     dist = purrr::map2_dbl(centre, cell, ~sqrt(sum((.y - .x)^2))),
                     dist_min = min(dist, na.rm = TRUE),
@@ -121,7 +123,7 @@ calc_ddir <- function(db, verbose, n_clusters) {
   db <- add_buffer(db) %>%
     dplyr::arrange(seqno)
 
-  # For each cell cacluate the direction of flow (the buffer cells on an edge
+  # For each cell calcuate the direction of flow (the buffer cells on an edge
   # will get NA)
 
   # Get neighbour list
