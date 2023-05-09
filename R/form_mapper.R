@@ -121,7 +121,7 @@ form_mapper <- function(folder, str_val = 10000, ridge_val = 10000,
         add_buffer()
     }
 
-    db_weti <- calc_weti(db, grid, verbose = verbose)
+    db_weti <- calc_weti2(db, grid, verbose = verbose)
 
     db_form <- dplyr::full_join(db_form, db_weti,
                                 by = c("seqno", "col", "row", "buffer")) %>%
@@ -130,11 +130,12 @@ form_mapper <- function(folder, str_val = 10000, ridge_val = 10000,
                     new_asp = dplyr::if_else(aspect > -1, aspect + 45, 0),
                     new_asp = dplyr::if_else(new_asp > 360,
                                              new_asp -360, new_asp),
-                    lnqarea1 = round(lnqarea1, 3),
-                    lnqarea2 = round(lnqarea2, 3))
+                    lnqarea1 = trunc_dec(lnqarea1, 3),
+                    lnqarea2 = trunc_dec(lnqarea2, 3))
 
     save_output(data = db_form, name = "form", locs = out_locs,
                 out_format = out_format, where = "form", debug = debug)
+
     rm(db_form, db_weti)
     log_time(sub_start, log_file)
 
