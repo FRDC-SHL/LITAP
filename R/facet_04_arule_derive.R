@@ -3,16 +3,16 @@ arule_percentiles <- function(weti, relief, edge_row, edge_col, quiet) {
   if(!quiet) message("Using buffer of ", edge_row, " rows ('edge_row') ",
                      "and ", edge_col, " cols ('edge_col') per side")
 
-    weti %>%
+  weti %>%
     dplyr::left_join(dplyr::select(relief,
                                    "seqno", "pctz2st", "pctz2pit", "z2pit",
                                    "z2st", "zpit2peak", "zcr2st", "lpit2peak",
                                    "lstr2div"),
                      by = "seqno") %>%
-    dplyr::filter(.data$row > (!!edge_row + 1),
-                  .data$row < (max(.data$row) - (!!edge_row + 1)),
+    dplyr::filter(.data$row > (!!edge_row + 1), # Plus buffer row/col
+                  .data$row <= (max(.data$row) - (!!edge_row + 1)),
                   .data$col > (!!edge_col + 1),
-                  .data$col < (max(.data$col) - (!!edge_col + 1))) %>%
+                  .data$col <= (max(.data$col) - (!!edge_col + 1))) %>%
     dplyr::select("elev", "prof", "plan", "slope" = "slope_pct", "aspect",
                   "qarea", "qweti", "z2st", "z2pit", "zpit2peak", "zcr2st",
                   "pctz2st", "pctz2pit", "lpit2peak", "lstr2div") %>%
