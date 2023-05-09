@@ -81,3 +81,8 @@ run_time <- function(start, log_file, quiet) {
   log_write("\nTotal run time: ", runtime, " min", log = log_file)
 }
 
+trunc_dec <- function(x, digits) {
+ trunc(x * 10^(digits)) / 10^(digits)
+}
+
+

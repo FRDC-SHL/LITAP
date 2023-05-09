@@ -30,7 +30,7 @@ save_output <- function(data, stats = NULL, name, locs, out_format, where,
 
     data <- remove_buffer(data)
     cols <- cols_order[[where]]
-
+    #cols <- c(cols, "n_rnds")  # Only for debugging
     if(!debug) data <- dplyr::select(data, -dplyr::contains("buffer"))
 
     if(dynamic_cols) data <- dplyr::select(data, dplyr::any_of(cols),
