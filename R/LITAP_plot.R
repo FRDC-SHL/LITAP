@@ -58,7 +58,7 @@ flow_plot <- function(db, type = "relief", dir = FALSE, seqno = FALSE, highlight
   if(shed == TRUE){
     if(shed_type == "initial" & "initial_shed" %in% names(db)) db$shedno <- db$initial_shed
     if(shed_type == "local" & "local_shed" %in% names(db)) db$shedno <- db$local_shed
-    #if(shed_type == "pond" & "pond_shed" %in% names(db)) db$shedno <- db$pond_shed
+    if(shed_type == "pond" & "pond_shed" %in% names(db)) db$shedno <- db$pond_shed
     if(shed_type == "fill" & "fill_shed" %in% names(db)) db$shedno <- db$fill_shed
     if(shed_type == "inv_initial" & "inv_initial_shed" %in% names(db)) db$shedno <- db$inv_initial_shed
     if(shed_type %in% c("inv_local", "inverted") & "inv_local_shed" %in% names(db)) db$shedno <- db$inv_local_shed

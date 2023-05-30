@@ -99,8 +99,9 @@ flow_mapper(file = system.file("extdata", "testELEV.dbf", package = "LITAP"),
 # And form_mapper()
 form_mapper(folder = "./testELEV/")
 
-
+# Let's use the crule file included in the LITAP package
 crule <- system.file("extdata", "crule.dbf", package = "LITAP")
+crule
 
 # Run facet_mapper() - Derive A Rules
 facet_mapper(folder = "./testELEV/", arule = NULL, crule = crule)
@@ -114,6 +115,13 @@ arule <- system.file("extdata", "arule.dbf", package = "LITAP")
 crule <- system.file("extdata", "crule.dbf", package = "LITAP")
 facet_mapper(folder = "./testELEV/", arule = arule, crule = crule)
 
+\dontrun{
+# Now consider using your own Rule files
+facet_mapper(folder = "./testELEV/",
+             arule = "./testELEV/my_arule.dbf",
+             crule = "./testELEV/my_crule.dbf")
+
+}
 # Clean up (remove all output)
 unlink("./testELEV/", recursive = TRUE)
 

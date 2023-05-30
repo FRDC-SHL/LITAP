@@ -3,6 +3,10 @@ title: "Flow Plots"
 author: "Steffi LaZerte"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Flow Plots}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 
@@ -33,21 +37,26 @@ Flow plots are simply a way of visualizing what LITAP is doing under the hood.
 
 In the following examples, we will be using the output from complete run on the supplied "testELEV.dbf". You can find the original DEM file in the LITAP `extdata` folder by using the `system.file()` function. For more information on the `flow_mapper()` function see the [Getting Started Vignette](../LITAP.html).
 
+Let's first copy this file to your working directory with:
+
+```{r, eval = TRUE}
+file.copy(system.file("extdata", "testELEV.dbf", package = "LITAP"), ".")
+```
+
 ```{r}
 library(LITAP)
 
 # Save output to working directory
-flow_mapper(system.file("extdata", "testELEV.dbf", package = "LITAP"),
-            out_folder = "./testELEV/", nrow = 90, ncol = 90, clean = TRUE) 
+flow_mapper("testELEV.dbf", grid = 1, nrow = 90, ncol = 90, clean = TRUE) 
 ```
 
 We will load the rds file (R data files) for the final dems and stats file.
 
 ```{r}
 dem <- readRDS("./testELEV/flow/dem_fill.rds")
-inverted_dem <- readRDS("./testELEV/flow/dem_ilocal.rds")
+inverted_dem <- readRDS("./testELEV/flow/dem_inverted.rds")
 
-local_stats <- readRDS("./testELEV/flow/stats_local.rds")
+pond_stats <- readRDS("./testELEV/flow/stats_pond.rds")
 ```
 
 ## Basic maps
@@ -331,8 +340,8 @@ if(pdf) cat("\\newpage")
 ### Look at pour points
 
 ```{r}
-flow_plot(db = dem, type = "elevation", shed = TRUE, shed_type = "local", 
-          stats = local_stats)
+flow_plot(db = dem, type = "elevation", shed = TRUE, shed_type = "pond", 
+          stats = pond_stats)
 ```
 
 ```{r, echo = FALSE, results = "asis"}
@@ -342,8 +351,8 @@ if(pdf) cat("\\newpage")
 Take a closer look  
 
 ```{r}
-flow_plot(db = dem, type = "elevation", shed = TRUE, shed_type = "local",
-          rlim = c(0, 40), clim = c(110, 150), stats = local_stats)
+flow_plot(db = dem, type = "elevation", shed = TRUE, shed_type = "pond",
+          rlim = c(0, 40), clim = c(110, 150), stats = pond_stats)
 ```
 
 ```{r, echo = FALSE, results = "asis"}
@@ -352,5 +361,6 @@ if(pdf) cat("\\newpage")
 
 ```{r, include = FALSE}
 unlink("./testELEV", recursive = TRUE)
+unlink("./testELEV.dbf", recursive = TRUE)
 ```
 

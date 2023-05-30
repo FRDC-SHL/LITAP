@@ -26,6 +26,7 @@ pkgdown::build_reference_index()
 pkgdown::build_reference()
 pkgdown::build_home()
 pkgdown::build_article("variables")
+pkgdown::build_article("articles/flow_plots")
 pkgdown::build_articles_index()
 
 

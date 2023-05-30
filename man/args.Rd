@@ -7,6 +7,10 @@ nd \code{\link[=wepp_mapper]{wepp_mapper()}}}
 \arguments{
 \item{grid}{Numeric. Grid size in m of the input DEM file}
 
+\item{min_x}{Numeric. Starting x coordinate (in meters)}
+
+\item{min_y}{Numeric. Starting y coordinate (in meters)}
+
 \item{resume}{Character. From which stage should the run be resumed? (see}
 
 \item{clean}{Logical. Remove all output files from previous runs in this

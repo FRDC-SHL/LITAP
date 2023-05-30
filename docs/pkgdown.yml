@@ -1,61 +1,61 @@
 pandoc: 2.11.4
-pkgdown: 1.6.1
+pkgdown: 2.0.1
 pkgdown_sha: ~
 articles:
   LITAP: LITAP.html
-  articles/flow_plots: flow_plots.html
-  reports/01_H1_compare_report_flow: 01_H1_compare_report_flow.html
-  reports/02_H3_compare_report_facet: 02_H3_compare_report_facet.html
-  reports/02_H3_compare_report_flow: 02_H3_compare_report_flow.html
-  reports/02_H3_compare_report_form: 02_H3_compare_report_form.html
-  reports/02_H3_compare_report_wepp: 02_H3_compare_report_wepp.html
-  reports/02_H3_miss_compare_report_facet: 02_H3_miss_compare_report_facet.html
-  reports/02_H3_miss_compare_report_flow: 02_H3_miss_compare_report_flow.html
-  reports/02_H3_miss_compare_report_form: 02_H3_miss_compare_report_form.html
-  reports/02_H3_miss_compare_report_wepp: 02_H3_miss_compare_report_wepp.html
-  reports/03_R1_compare_report_flow: 03_R1_compare_report_flow.html
-  reports/04_R3_compare_report_flow: 04_R3_compare_report_flow.html
-  reports/04_R3_miss_compare_report_flow: 04_R3_miss_compare_report_flow.html
-  reports/05_I1_compare_report_flow: 05_I1_compare_report_flow.html
-  reports/06_I3_compare_report_flow: 06_I3_compare_report_flow.html
-  reports/06_I3_miss_compare_report_flow: 06_I3_miss_compare_report_flow.html
-  reports/11_Ab02PV_compare_report_facet: 11_Ab02PV_compare_report_facet.html
-  reports/11_Ab02PV_compare_report_flow: 11_Ab02PV_compare_report_flow.html
-  reports/11_Ab02PV_compare_report_form: 11_Ab02PV_compare_report_form.html
-  reports/11_Ab02PV_compare_report_wepp: 11_Ab02PV_compare_report_wepp.html
-  reports/11_Ab02PV_high_compare_report_facet: 11_Ab02PV_high_compare_report_facet.html
-  reports/11_Ab02PV_high_compare_report_flow: 11_Ab02PV_high_compare_report_flow.html
-  reports/11_Ab02PV_high_compare_report_form: 11_Ab02PV_high_compare_report_form.html
-  reports/11_Ab02PV_high_compare_report_wepp: 11_Ab02PV_high_compare_report_wepp.html
-  reports/11_Ab02PV_zero_compare_report_facet: 11_Ab02PV_zero_compare_report_facet.html
-  reports/11_Ab02PV_zero_compare_report_flow: 11_Ab02PV_zero_compare_report_flow.html
-  reports/11_Ab02PV_zero_compare_report_form: 11_Ab02PV_zero_compare_report_form.html
-  reports/12_FES4_compare_report_facet: 12_FES4_compare_report_facet.html
-  reports/12_FES4_compare_report_flow: 12_FES4_compare_report_flow.html
-  reports/12_FES4_compare_report_form: 12_FES4_compare_report_form.html
-  reports/12_FES4_high_compare_report_facet: 12_FES4_high_compare_report_facet.html
-  reports/12_FES4_high_compare_report_flow: 12_FES4_high_compare_report_flow.html
-  reports/12_FES4_high_compare_report_form: 12_FES4_high_compare_report_form.html
-  reports/12_FES4_zero_compare_report_facet: 12_FES4_zero_compare_report_facet.html
-  reports/12_FES4_zero_compare_report_flow: 12_FES4_zero_compare_report_flow.html
-  reports/12_FES4_zero_compare_report_form: 12_FES4_zero_compare_report_form.html
-  reports/13_MZTRF_compare_report_facet: 13_MZTRF_compare_report_facet.html
-  reports/13_MZTRF_compare_report_flow: 13_MZTRF_compare_report_flow.html
-  reports/13_MZTRF_compare_report_form: 13_MZTRF_compare_report_form.html
-  reports/13_MZTRF_high_compare_report_flow: 13_MZTRF_high_compare_report_flow.html
-  reports/13_MZTRF_zero_compare_report_facet: 13_MZTRF_zero_compare_report_facet.html
-  reports/13_MZTRF_zero_compare_report_flow: 13_MZTRF_zero_compare_report_flow.html
-  reports/13_MZTRF_zero_compare_report_form: 13_MZTRF_zero_compare_report_form.html
-  reports/BR3_compare_report_facet_arule: BR3_compare_report_facet_arule.html
-  reports/BR3_compare_report_facet_no_arule: BR3_compare_report_facet_no_arule.html
-  reports/BR3_compare_report_flow: BR3_compare_report_flow.html
-  reports/BR3_compare_report_form: BR3_compare_report_form.html
-  reports/Ehsan_compare_report_facet: Ehsan_compare_report_facet.html
-  reports/Ehsan_compare_report_flow: Ehsan_compare_report_flow.html
-  reports/Ehsan_compare_report_form: Ehsan_compare_report_form.html
-  reports/general: general.html
+  flow_plots: flow_plots.html
+  01_H1_compare_report_flow: reports/01_H1_compare_report_flow.html
+  02_H3_compare_report_facet: reports/02_H3_compare_report_facet.html
+  02_H3_compare_report_flow: reports/02_H3_compare_report_flow.html
+  02_H3_compare_report_form: reports/02_H3_compare_report_form.html
+  02_H3_compare_report_wepp: reports/02_H3_compare_report_wepp.html
+  02_H3_miss_compare_report_facet: reports/02_H3_miss_compare_report_facet.html
+  02_H3_miss_compare_report_flow: reports/02_H3_miss_compare_report_flow.html
+  02_H3_miss_compare_report_form: reports/02_H3_miss_compare_report_form.html
+  02_H3_miss_compare_report_wepp: reports/02_H3_miss_compare_report_wepp.html
+  03_R1_compare_report_flow: reports/03_R1_compare_report_flow.html
+  04_R3_compare_report_flow: reports/04_R3_compare_report_flow.html
+  04_R3_miss_compare_report_flow: reports/04_R3_miss_compare_report_flow.html
+  05_I1_compare_report_flow: reports/05_I1_compare_report_flow.html
+  06_I3_compare_report_flow: reports/06_I3_compare_report_flow.html
+  06_I3_miss_compare_report_flow: reports/06_I3_miss_compare_report_flow.html
+  11_Ab02PV_compare_report_facet: reports/11_Ab02PV_compare_report_facet.html
+  11_Ab02PV_compare_report_flow: reports/11_Ab02PV_compare_report_flow.html
+  11_Ab02PV_compare_report_form: reports/11_Ab02PV_compare_report_form.html
+  11_Ab02PV_compare_report_wepp: reports/11_Ab02PV_compare_report_wepp.html
+  11_Ab02PV_high_compare_report_facet: reports/11_Ab02PV_high_compare_report_facet.html
+  11_Ab02PV_high_compare_report_flow: reports/11_Ab02PV_high_compare_report_flow.html
+  11_Ab02PV_high_compare_report_form: reports/11_Ab02PV_high_compare_report_form.html
+  11_Ab02PV_high_compare_report_wepp: reports/11_Ab02PV_high_compare_report_wepp.html
+  11_Ab02PV_zero_compare_report_facet: reports/11_Ab02PV_zero_compare_report_facet.html
+  11_Ab02PV_zero_compare_report_flow: reports/11_Ab02PV_zero_compare_report_flow.html
+  11_Ab02PV_zero_compare_report_form: reports/11_Ab02PV_zero_compare_report_form.html
+  12_FES4_compare_report_facet: reports/12_FES4_compare_report_facet.html
+  12_FES4_compare_report_flow: reports/12_FES4_compare_report_flow.html
+  12_FES4_compare_report_form: reports/12_FES4_compare_report_form.html
+  12_FES4_high_compare_report_facet: reports/12_FES4_high_compare_report_facet.html
+  12_FES4_high_compare_report_flow: reports/12_FES4_high_compare_report_flow.html
+  12_FES4_high_compare_report_form: reports/12_FES4_high_compare_report_form.html
+  12_FES4_zero_compare_report_facet: reports/12_FES4_zero_compare_report_facet.html
+  12_FES4_zero_compare_report_flow: reports/12_FES4_zero_compare_report_flow.html
+  12_FES4_zero_compare_report_form: reports/12_FES4_zero_compare_report_form.html
+  13_MZTRF_compare_report_facet: reports/13_MZTRF_compare_report_facet.html
+  13_MZTRF_compare_report_flow: reports/13_MZTRF_compare_report_flow.html
+  13_MZTRF_compare_report_form: reports/13_MZTRF_compare_report_form.html
+  13_MZTRF_high_compare_report_flow: reports/13_MZTRF_high_compare_report_flow.html
+  13_MZTRF_zero_compare_report_facet: reports/13_MZTRF_zero_compare_report_facet.html
+  13_MZTRF_zero_compare_report_flow: reports/13_MZTRF_zero_compare_report_flow.html
+  13_MZTRF_zero_compare_report_form: reports/13_MZTRF_zero_compare_report_form.html
+  BR3_compare_report_facet_arule: reports/BR3_compare_report_facet_arule.html
+  BR3_compare_report_facet_no_arule: reports/BR3_compare_report_facet_no_arule.html
+  BR3_compare_report_flow: reports/BR3_compare_report_flow.html
+  BR3_compare_report_form: reports/BR3_compare_report_form.html
+  Ehsan_compare_report_facet: reports/Ehsan_compare_report_facet.html
+  Ehsan_compare_report_flow: reports/Ehsan_compare_report_flow.html
+  Ehsan_compare_report_form: reports/Ehsan_compare_report_form.html
+  general: reports/general.html
   variables: variables.html
-last_built: 2021-12-02T21:05Z
+last_built: 2022-01-20T22:47Z
 urls:
   reference: http://steffilazerte.github.io/LITAP_docs/reference
   article: http://steffilazerte.github.io/LITAP_docs/articles

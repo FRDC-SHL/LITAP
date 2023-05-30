@@ -3,7 +3,7 @@
 calc_weti <- function(db, grid, verbose) {
 
   l1 <- grid * 0.5    # orthogonal
-  l2 <- grid * 0.354  # diagonal  (hypothenus = sqrt(0.5^2 + 0.5^2) / 2)
+  l2 <- grid * 0.354  # diagonal  (hypotenuse = sqrt(0.5^2 + 0.5^2) / 2)
   l_sqr <- grid * grid  # let's use cell area
   orthogonal <- grid
   diagonal <- grid * sqrt(2)
@@ -14,6 +14,12 @@ calc_weti <- function(db, grid, verbose) {
 
   if(verbose) message("  Setting up cell flow")
 
+  # LandMapR neighbour arrangements:
+  #
+  # 1 2 3
+  # 4 F 6
+  # 7 8 9
+
   db_n <- db %>%
     dplyr::arrange(dplyr::desc(elev), upslope, seqno) %>%
     dplyr::mutate(order = 1:dplyr::n()) %>%
@@ -22,15 +28,15 @@ calc_weti <- function(db, grid, verbose) {
     nb_values(max_cols = max(db$col), col = c("elev", "seqno", "order"),
               format = "wide") %>%
     tidyr::nest(
-      n1 = c("seqno", "elev", "drec", "order", tidyselect::contains("n1")),
-      n2 = c("seqno", "elev", "drec", "order", tidyselect::contains("n2")),
-      n3 = c("seqno", "elev", "drec", "order", tidyselect::contains("n3")),
+      n1 = c("seqno", "elev", "drec", "order", tidyselect::contains("n7")),
+      n2 = c("seqno", "elev", "drec", "order", tidyselect::contains("n8")),
+      n3 = c("seqno", "elev", "drec", "order", tidyselect::contains("n9")),
       n4 = c("seqno", "elev", "drec", "order", tidyselect::contains("n4")),
       n5 = c("seqno", "elev", "drec", "order", tidyselect::contains("n5")),
       n6 = c("seqno", "elev", "drec", "order", tidyselect::contains("n6")),
-      n7 = c("seqno", "elev", "drec", "order", tidyselect::contains("n7")),
-      n8 = c("seqno", "elev", "drec", "order", tidyselect::contains("n8")),
-      n9 = c("seqno", "elev", "drec", "order", tidyselect::contains("n9"))) %>%
+      n7 = c("seqno", "elev", "drec", "order", tidyselect::contains("n1")),
+      n8 = c("seqno", "elev", "drec", "order", tidyselect::contains("n2")),
+      n9 = c("seqno", "elev", "drec", "order", tidyselect::contains("n3"))) %>%
     tidyr::pivot_longer(cols = tidyselect::everything()) %>%
     dplyr::mutate(
       n = stringr::str_remove(name, "n"),

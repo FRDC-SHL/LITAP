@@ -191,6 +191,12 @@ edge_pit <- function(a, db) {
 #'
 #' Data MUST be arranged by seqno
 #'
+#' Note that this isn't always the way the original LandMapR program defined
+#' neighbours (it depends on the specific step)
+#'
+#' 1 2 3
+#' 4 5 6
+#' 7 8 9
 #' @noRd
 #'
 nb_values <- function(db, max_cols, col = "elev", db_sub = NULL, format = "long") {

@@ -1,3 +1,10 @@
+# LITAP dev
+- fix missing `ddir` in `form_mapper()`
+- clarify rule file usage and errors in `facet_mapper()`
+- Tweaks to align form_mapper flow decisions with the original LandMapR
+- Increase speed of QWETI calculations
+- Fix number of edge rows/cols removed 
+
 # LITAP 0.6.0
 - Import x/y coords or create them if they don't exist
 - flow_mapper() now requires grid or infers from x/y value of input files

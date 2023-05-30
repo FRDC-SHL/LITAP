@@ -9,6 +9,8 @@ flow_mapper(
   nrow,
   ncol,
   grid = NULL,
+  min_x = 1,
+  min_y = 1,
   missing_value = -9999,
   max_area = 10,
   max_depth = 0.5,
@@ -20,6 +22,7 @@ flow_mapper(
   resume = NULL,
   log = TRUE,
   report = TRUE,
+  pitr_method = "landmapr",
   verbose = FALSE,
   quiet = FALSE,
   debug = FALSE
@@ -38,6 +41,10 @@ with a single column, but can be automatically assessed from files with x
 and y coordinates.}
 
 \item{grid}{Numeric. Grid size in m of the input DEM file}
+
+\item{min_x}{Numeric. Starting x coordinate (in meters)}
+
+\item{min_y}{Numeric. Starting y coordinate (in meters)}
 
 \item{missing_value}{Numeric/Character. Symbols which define missing data}
 
