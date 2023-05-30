@@ -4,6 +4,8 @@
 #' nd [wepp_mapper()]
 #'
 #' @param grid Numeric. Grid size in m of the input DEM file
+#' @param min_x Numeric. Starting x coordinate (in meters)
+#' @param min_y Numeric. Starting y coordinate (in meters)
 #' @param resume Character. From which stage should the run be resumed? (see
 #' @param clean Logical. Remove all output files from previous runs in this
 #'   folder?

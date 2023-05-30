@@ -66,8 +66,8 @@
 #'
 #' @export
 load_file <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
-                      rlim = NULL, clim = NULL, grid = NULL, edge = TRUE,
-                      verbose = TRUE) {
+                      rlim = NULL, clim = NULL, grid = NULL,
+                      min_x = 1, min_y = 1, edge = TRUE, verbose = TRUE) {
 
   if(!file.exists(file)) stop("Cannot locate ", file,
                               " relative to working directory, ", getwd(),
@@ -101,6 +101,7 @@ load_file <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
   }
 
   db_format(db, nrow = nrow, ncol = ncol, grid = grid,
+            min_x = min_x, min_y = min_y,
             missing_value = missing_value, verbose = verbose) %>%
     db_prep(clim = clim, rlim = rlim, edge = edge, verbose = verbose)
 }
@@ -187,7 +188,8 @@ load_raster <- function(file) {
   db
 }
 
-db_format <- function(db, nrow, ncol, grid, missing_value = -9999, verbose) {
+db_format <- function(db, nrow, ncol, grid, min_x, min_y,
+                      missing_value = -9999, verbose) {
   if(verbose) message("  Formating grid")
   # Check if valid rows/cols
   if(nrow * ncol != length(db$elev)){
@@ -209,8 +211,14 @@ db_format <- function(db, nrow, ncol, grid, missing_value = -9999, verbose) {
     if(verbose) message("  No x/y in file, creating x/y from cols/rows/grid")
 
     db <- dplyr::mutate(db,
-                        x = col * grid,
-                        y = rev(row) * grid)
+                        x = col * grid + min_x - 1,
+                        y = rev(row) * grid + min_y - 1)
+  } else {
+    # Check for regular grid
+    g <- (max(db$x) - min(db$x) + 1) / ncol
+    if(g != (max(db$y) - min(db$y) + 1) / nrow) {
+      stop("Inconsistent grid size. Grid must be square", call. = FALSE)
+    }
   }
 
   db

@@ -63,7 +63,8 @@
 #' unlink("./testELEV/", recursive = TRUE)
 #'
 #' @export
-flow_mapper <- function(file, nrow, ncol, grid = NULL, missing_value = -9999,
+flow_mapper <- function(file, nrow, ncol, grid = NULL, min_x = 1, min_y = 1,
+                        missing_value = -9999,
                         max_area = 10, max_depth = 0.5,
                         out_folder = NULL, out_format = "rds", clean = FALSE,
                         clim = NULL, rlim = NULL,
@@ -101,6 +102,7 @@ flow_mapper <- function(file, nrow, ncol, grid = NULL, missing_value = -9999,
   start <- Sys.time()
 
   db_start <- load_file(file, nrow = nrow, ncol = ncol, grid = grid,
+                        min_x = min_x, min_y = min_y,
                         missing_value = missing_value,
                         clim = clim, rlim = rlim, verbose = verbose)
 
