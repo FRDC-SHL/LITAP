@@ -22,6 +22,7 @@ flow_mapper(
   resume = NULL,
   log = TRUE,
   report = TRUE,
+  pitr_method = "landmapr",
   verbose = FALSE,
   quiet = FALSE,
   debug = FALSE
