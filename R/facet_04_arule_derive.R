@@ -132,22 +132,3 @@ arule_template <- function() {
     17,         "relzfile", "Z2PIT",    "HI_ABOVE",   4,         "bd1")
 
 }
-
-percentiles_format <- function(perc) {
-  perc %>%
-    tidyr::pivot_longer(cols = dplyr::everything(),
-                        names_to = "name", values_to = "value") %>%
-    tidyr::separate(name, into = c("parameter", "name"),
-                    sep = "_", remove = TRUE) %>%
-    tidyr::pivot_wider(names_from = "parameter", values_from = "value") %>%
-    dplyr::mutate(
-      name = stringr::str_replace(.data$name, "^p[0]*([0-9]{1,2})", "\\1%"),
-      name = factor(.data$name, levels = c("n", "avg", "sd", "min", "1%",
-                                           paste0(seq(5,95,5), "%"),
-                                           "99%", "max"))) %>%
-    dplyr::arrange(.data$name) %>%
-    dplyr::select("name", "slope", "aspect", "prof", "plan",
-                  "qarea1" = "qarea", "qweti1" = "qweti",
-                  "z2st", "z2pit", "zpit2peak", "zcr2st", 'pctz2st', "pctz2pit",
-                  "lpit2peak", "lstr2div")
-}

@@ -211,7 +211,13 @@ facet_mapper <- function(folder, arule = NULL, crule,
     name <- paste0("ARULE - Supplied (", basename(afile), ")")
   }
 
-  d <- list(percentiles_format(perc), arule) %>%
+  p <- percentiles_format(perc) %>%
+    dplyr::select("name", "slope", "aspect", "prof", "plan",
+                  "qarea1" = "qarea", "qweti1" = "qweti",
+                  "z2st", "z2pit", "zpit2peak", "zcr2st", 'pctz2st', "pctz2pit",
+                  "lpit2peak", "lstr2div")
+
+  d <- list(p, arule) %>%
     stats::setNames(nm = c("Site Summary", name))
   writexl::write_xlsx(d, path = file.path(folder,
                                           "topographic_derivatives.xlsx"))
