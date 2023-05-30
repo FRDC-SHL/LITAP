@@ -35,7 +35,8 @@ Imports:
     tibble (>= 2.1.3),
     tidyselect (>= 1.1.0),
     tidyr (>= 1.0.0),
-    writexl (>= 1.4.0)
+    writexl (>= 1.4.0),
+    openxlsx (>= 4.2.5.2)
 Suggests: 
     gt (>= 0.3.1),
     foreign (>= 0.8.67),
@@ -45,6 +46,6 @@ Suggests:
     rgdal,
     testthat (>= 3.0.0)
 VignetteBuilder: knitr
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
 Config/testthat/edition: 3

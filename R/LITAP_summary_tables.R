@@ -1,34 +1,97 @@
+#' Create summary watersheed tables in Excel
+#'
+#' Using output from the flow_mapper(), form_mapper() and facet_maper() runs,
+#' summarizes into various tables in Excel worksheet.
+#'
+#' @param file Character. Name of output file (.xlsx)
+#' @param min_x Numeric. Override the starting x coordinate in the original
+#'   data (in meters)
+#' @param min_y Numeric. Override the starting y coordinate in the original
+#'   data (in meters)
+#'
+#' @inheritParams args
+#'
 #' @examples
 #'
 #' summary_tables()
 #'
-summary_tables <- function(folder, testing = TRUE) {
+#'
+summary_tables <- function(folder, file = "text.xlsx", testing = TRUE,
+                           min_x = NULL, min_y = NULL) {
+
+  #TODO: Figure out edge row stuff based on different number of edge rows
+  #TODO: Q - X/Y are UTMs? I.e. meters?
+  #TODO: Q - The Zcr2st and lstr2div are calculated from slightly different cells (omitting zeros) than the rest of the topographic derivatives... okay?
+  #TODO: Q - The second half of the big percentile table in SlpCal (L3:R29) is calculated on percentiles (rather than being calcualted for cells and then taking the percentiles of this). This makes it a bit funny, as you can see that sometimes the 'max' isn't the max (i.e. compare N29 to N28 and Q29 to Q28)... Okay?
 
   # TESTING
   if(testing) {
     t <- test_files()
     pnts <- t$pnts
     facet <- t$facet
-    avg <- t$avg
+    topo <- t$topo
+    pit <- t$pit
   } else {
     pnts <- all_points(folder)
     facet <- get_previous(folder, step = "fuzc", where = "facet")
-    avg <- readxl::read_excel(file.path(folder, "topographic_derivatives.xlsx")) |>
-      dplyr::filter(name == "avg")
+    topo <- readxl::read_excel(file.path(folder, "topographic_derivatives.xlsx"))
   }
 
   log <- readr::read_lines(list.files(folder, "facet.log", full.names = TRUE))
+  date <- stringr::str_subset(log, "Run started") |>
+    stringr::str_extract("[0-9-]+ [0-9:]+")
   edge_row <- get_edge(log, "row")
   edge_col <- get_edge(log, "col")
+  edge_row_ws <- as.integer(edge_row / 3) + 1
+  edge_col_ws <- as.integer(edge_col / 3) + 1
+
   nrows <- max(pnts$row)
   ncols <- max(pnts$col)
+
+  grid <- (max(pnts$x) - min(pnts$x) + 1) / ncols
+  if(grid != (max(pnts$y) - min(pnts$y) + 1) / nrows) {
+    stop("Inconsistent grid size. Grid must be square", call. = FALSE)
+  }
+
+  if(is.null(min_x)) {
+    min_x <- min(pnts$x, na.rm = TRUE)
+    max_x <- max(pnts$x, na.rm = TRUE)
+  } else {
+    max_x <- min_x + grid * ncols - 1
+  }
+  if(is.null(min_y)) {
+    min_y <- min(pnts$y, na.rm = TRUE)
+    max_y <- max(pnts$y, na.rm = TRUE)
+  } else {
+    max_y <- min_y + grid * nrows - 1
+  }
+
+  meta <- dplyr::tibble(Run = folder,
+                        `facet_mapper() Run` = date,
+                        `Summary Table Creation` = Sys.Date(),
+                        `LITAP version` = packageVersion("LITAP"),
+                        Cols = ncols,
+                        Rows = nrows,
+                        `Points (n)` = nrow(pnts),
+                        `Cell Size` = grid,
+                        `Edge Rows` = edge_row,
+                        `Edge Cols` = edge_col,
+                        `Edge Rows (WS)` = edge_row_ws,
+                        `Edge Cols (WS)` = edge_col_ws,
+                        `Min X` = min_x,
+                        `Max X` = max_x,
+                        `Min Y` = min_y,
+                        `Max Y` = max_y,
+                        `Min Z` = min(pnts$elev, na.rm = TRUE),
+                        `Max Z` = max(pnts$elev, na.rm = TRUE))
+
 
   le <- dplyr::select(facet, "row", "col", "seqno", "max_facet") |>
     omit_edges(edge_row = edge_row, edge_col = edge_col,
                nrow = nrows, ncol = ncols)
 
   # Seg-Cal
-  avg_le <- le5_avg(pnts, le)
+  seg_cal <- le5_avg(pnts, le)
 
   # Bdr-Cal
   ix <- ix_avgs(pnts, facet, edge_row, edge_col, nrows, ncols)
@@ -36,8 +99,144 @@ summary_tables <- function(folder, testing = TRUE) {
   # PntCounts
   cnts <- pnts_count(pnts, le)
 
+  # LS factor Calculations
+  lsf <- ls_factor(pnts, edge_row, edge_col, nrows, ncols)
+
+  avg <- dplyr::filter(topo, .data$name == "avg") |>
+    dplyr::mutate(zcr2st = lsf$zcr2st[2],
+                  lstr2div = lsf$lstr2div[2]) |>
+    # TODO: Ask Li, Sheng if these are constants
+    dplyr::mutate(slope3 = 6.87521764069166,
+                  slope4 = 309.311743656845)
+
   # Average calcs
-  x <- mid_calc(ix, cnts, avg, avg_le)
+  slp_cal <- mid_calc(ix, cnts, avg, seg_cal)
+
+
+  density <- ws_density(pnts, edge_row, edge_col, nrows, ncols)
+  edge_drainage <- ws_drainage(pnts, pit, edge_row_ws, edge_col_ws, nrows, ncols)
+
+
+  x1 <- dplyr::select(
+    slp_cal, "type",
+    "L (m)" = "l_final", "Z (m)" = "z_final", "S (%)" = "s_final",
+    "P_A (%)" = "pa_final", "P_L (%)" = "pl_final", "P_Z (%)" = "pz_final",
+    "WI" = "wi") |>
+    dplyr::mutate(type = toupper(type)) |>
+    tidyr::pivot_longer(-type) |>
+    dplyr::group_by(name) |>
+    dplyr::mutate(Sum = sum(.data$value)) |>
+    tidyr::pivot_wider(names_from = "type", values_from = "value") |>
+    dplyr::relocate("Sum", .after = dplyr::last_col()) |>
+    dplyr::mutate(Avg = NA_real_)
+  x1$Sum[3:7] <- NA_real_
+  x1$Avg[3] <- x1$Sum[2] / x1$Sum[1] * 100
+  x1$Avg[7] <- avg$qweti1
+
+  x2 <- seg_cal |>
+    dplyr::select("SG (%)" = "slope_pct", "Aspect (degree)" = "aspect",
+                  "PrCurv (degree / 100m)" = "prof", "PlCurv (degree / 100m)" = "plan",
+                  "Qarea" = "qarea1", "Qweti" = "qweti1") |>
+    dplyr::mutate(type = toupper(c("cst", "ups", "mid", "low", "dep"))) |>
+    tidyr::pivot_longer(-"type") |>
+    tidyr::pivot_wider(names_from = "type", values_from = "value") |>
+    dplyr::bind_cols(
+      dplyr::select(avg, "slope", "aspect", "prof", "plan", "qarea1", "qweti1") |>
+        tidyr::pivot_longer(cols = dplyr::everything()) |>
+        dplyr::select("Avg" = "value")) |>
+    dplyr::mutate(` ` = "") |>
+    dplyr::relocate(` `, .before = "Avg")
+
+  x3 <- topo |>
+    dplyr::select("name",
+                  "SG" = "slope", "CV_pr" = "prof", "CV_pl" = "plan",
+                  "WI" = "qweti1", "Lp2p" = "lpit2peak", "Zp2p" = "zpit2peak",
+                  "Ld2c" = "lstr2div", "Zd2c" = "zcr2st") |>
+    dplyr::left_join(dplyr::select(lsf, "name", "Sd2c" = "s"), by = "name") |>
+    dplyr::mutate(Sd2c = .data$Sd2c * 100) |>
+    dplyr::filter(name %in% c("avg", "sd", "10%", "25%", "50%", "75%", "90%")) |>
+    tidyr::pivot_longer(-"name", names_to = "Parameter") |>
+    tidyr::pivot_wider(names_from = "name", values_from = "value") |>
+    dplyr::mutate(Unit = c("%", "° (100 m) -1", "° (100 m) -1", "",
+                           "m", "m", "m", "m", "%")) |>
+    dplyr::relocate("Unit", .after = "Parameter") |>
+    dplyr::rename("Average" = "avg", "SD" = "sd")
+
+  x4 <- dplyr::tibble(
+    Z_max = topo$zpit2peak[topo$name == "max"],
+    D_ws = 1000000 / .env$density / grid^2,
+    A_ws = 100 / D_ws,
+    P_osd = .env$edge_drainage / nrow(pnts) * 100,
+    RL_w = avg$lpit2peak / avg$lstr2div,
+    RZ_w = avg$zpit2peak / avg$zcr2st,
+    RZ_l = Z_max / avg$zpit2peak,
+    Fc_UP = slp_cal$tci[slp_cal$type == "ups"],
+    Fc_LOW = slp_cal$tci[slp_cal$type == "low"],
+    Fc = slp_cal$tci[slp_cal$type == "mid"]) |>
+    tidyr::pivot_longer(cols = dplyr::everything(),
+                        names_to = "Parameter",
+                        values_to = "value") |>
+    dplyr::mutate(Unit = c("m", "/ 100 ha", "ha", "%", "", "", "", "%", "%", "%")) |>
+    dplyr::relocate(Unit, .after = "Parameter")
+
+  x5 <- slp_cal |>
+    dplyr::select("type", "pl_c2s") |>
+    tidyr::pivot_wider(names_from = "type", values_from = "pl_c2s") |>
+    dplyr::bind_cols(
+      lsf |>
+        dplyr::select("name", "s_len") |>
+        dplyr::filter(.data$name %in% c("10%", "20%", "25%", "30%", "40%",
+                                        "50%", "60%", "70%", "75%", "80%", "90%")))
+  # Add in the avg values from lstr2div
+  x5 <- dplyr::slice(x5, 1) |>
+    dplyr::mutate(s_len = lsf$lstr2div[2], name = "avg") |>
+    dplyr::add_row(x5) |>
+    dplyr::mutate(
+      top = 0,
+      cst = .data$top + .data$cst * .data$s_len,
+      ups = .data$cst + .data$ups * .data$s_len,
+      mid = .data$ups + .data$mid * .data$s_len,
+      low = .data$mid + .data$low * .data$s_len,
+      dep = .data$low + .data$dep * .data$s_len) |>
+    dplyr::select(-"s_len") |>
+    dplyr::rename_with(toupper) |>
+    dplyr::rename("Stat" = "NAME") |>
+    dplyr::relocate("Stat", "Top" = "TOP") |>
+    dplyr::mutate(Stat = dplyr::case_when(.data$Stat == "avg" ~ "Avg",
+                                          .data$Stat == "50%" ~ "Median",
+                                          TRUE ~ .data$Stat))
+
+  x6 <- slp_cal |>
+    dplyr::select("type", "pz_c2s") |>
+    tidyr::pivot_wider(names_from = "type", values_from = "pz_c2s") |>
+    dplyr::bind_cols(lsf |>
+                       dplyr::select("name", "s_z") |>
+                       dplyr::filter(.data$name %in% c("10%", "20%", "25%", "30%", "40%",
+                                                       "50%", "60%", "70%", "75%", "80%", "90%")))
+
+  # Add in the avg values from zcr2st
+  x6 <- dplyr::slice(x6, 1) |>
+    dplyr::mutate(s_z = lsf$zcr2st[2], name = "avg") |>
+    dplyr::add_row(x6) |>
+    dplyr::mutate(
+      top = .data$s_z,
+      top = dplyr::if_else(name == "avg",
+                           lsf$zcr2st[lsf$name == "avg"],
+                           .data$top),
+      cst = .data$top - .data$cst * .data$s_z,
+      ups = .data$cst - .data$ups * .data$s_z,
+      mid = .data$ups - .data$mid * .data$s_z,
+      low = .data$mid - .data$low * .data$s_z,
+      dep = .data$low - .data$dep * .data$s_z) |>
+    dplyr::select(-"s_z") |>
+    dplyr::rename_with(toupper) |>
+    dplyr::rename("Stat" = "NAME") |>
+    dplyr::relocate("Stat", "Top" = "TOP") |>
+    dplyr::mutate(Stat = dplyr::case_when(.data$Stat == "avg" ~ "Avg",
+                                          .data$Stat == "50%" ~ "Median",
+                                          TRUE ~ .data$Stat))
+
+  create_excel(file, meta, x1, x2, x3, x4, x5, x6)
 
 }
 
@@ -60,16 +259,15 @@ test_files <- function(folder = "~/Dropbox/LITAP files/LandMapR_BR3Raw_20210427/
 
   suppressMessages({
 
-    #TODO: Calculate averages based on different number of edge rows
-
-    avg <- readxl::read_excel(file.path(folder, "..", "BR3_1m_20210427.xlsx"),
+    topo <- readxl::read_excel(file.path(folder, "..", avg_file),
                               sheet = "PercentileAccu", skip = 1) |>
       janitor::clean_names() |>
-      dplyr::filter(name == "Average") |>
-      dplyr::rename(slope_pct = slope) |>
-      dplyr::select(lstr2div, zcr2st) |>
-      dplyr::mutate(lstr2div = 88.8773188000762,
-                    zcr2st = 4.12803403202703) # TODO: Overwriting right now but fix as above
+      dplyr::mutate(name = tolower(name),
+                    name = dplyr::case_when(name == "stdev" ~ "sd",
+                                            name == "median" ~ "50%",
+                                            name == "average" ~ "avg",
+                                            TRUE ~ name)) |>
+      dplyr::rename(qarea1 = a_qarea, qweti1 = a_qweti)
 
     pnts <- foreign::read.dbf(paste0(d, "idem.dbf")) |>
       janitor::clean_names() |>
@@ -84,17 +282,17 @@ test_files <- function(folder = "~/Dropbox/LITAP files/LandMapR_BR3Raw_20210427/
                     elev = dplyr::na_if(elev, -9999)) |>
       dplyr::rename(inv_drec = idrec)
 
-    facet <- read_tsv(paste0(d, "fuzc.txt")) |>
+    facet <- readr::read_tsv(paste0(d, "fuzc.txt")) |>
       janitor::clean_names() |>
       dplyr::left_join(dplyr::select(pnts, seqno, row, col), by = "seqno")
 
-    form1 <- read_tsv(paste0(d, "Relz.txt")) |>
+    form1 <- readr::read_tsv(paste0(d, "Relz.txt")) |>
       janitor::clean_names() |>
       dplyr::left_join(dplyr::select(pnts, seqno, row, col), by = "seqno") |>
-      dplyr::mutate(l2pit = sqrt((row - pit_row)^2 + (col - pit_col)^2) * cellsize,
-                    l2peak = sqrt((row - pk_row)^2 + (col - pk_col)^2) * cellsize,
-                    l2str = sqrt((row - st_row)^2 + (col - st_col)^2) * cellsize,
-                    l2div = sqrt((row - cr_row)^2 + (col - cr_col)^2) * cellsize,
+      dplyr::mutate(l2pit = sqrt((row - pit_row)^2 + (col - pit_col)^2) * grid,
+                    l2peak = sqrt((row - pk_row)^2 + (col - pk_col)^2) * grid,
+                    l2str = sqrt((row - st_row)^2 + (col - st_col)^2) * grid,
+                    l2div = sqrt((row - cr_row)^2 + (col - cr_col)^2) * grid,
                     lpit2peak = l2pit + l2peak,
                     lstr2div = l2str + l2div,
                     ppit2peakl = dplyr::if_else(lpit2peak <= 0, 0, l2pit / lpit2peak * 100),
@@ -104,7 +302,7 @@ test_files <- function(folder = "~/Dropbox/LITAP files/LandMapR_BR3Raw_20210427/
       dplyr::rename(peak_row = pk_row, peak_col = pk_col, peak_elev = pk_elev) |>
       dplyr::mutate(dplyr::across(dplyr::contains('elev'), ~dplyr::na_if(.x, -9999)))
 
-    form2 <- read_tsv(paste0(d, "Form.txt")) |>
+    form2 <- readr::read_tsv(paste0(d, "Form.txt")) |>
       janitor::clean_names() |>
       dplyr::rename(slope_pct = slope, qarea1 = qarea, qweti1 = qweti)
 
@@ -112,16 +310,9 @@ test_files <- function(folder = "~/Dropbox/LITAP files/LandMapR_BR3Raw_20210427/
     pnts <- dplyr::left_join(pnts, form1, by = "seqno") |>
       dplyr::left_join(form2, by = "seqno")
 
-    # pnts <- readr::read_csv(file.path(folder, "Pnt_AllData.txt")) |>
-    #   janitor::clean_names() |>
-    #   dplyr::rename(seqno = seq_no) |>
-    #   dplyr::rename(inv_drec = i_drec, peak_row = pk_row, peak_col = pk_col, peak_elev = pk_elev,
-    #                 slope_pct = slope, qarea1 = a_qarea, qweti1 = a_qweti)
+    pit <- foreign::read.dbf(paste0(d, "pit.dbf")) |>
+      janitor::clean_names()
   })
 
-  #waldo::compare(form1$l2pit, form2$l2pit, tolerance = 0.1)
-
-
-
-  list("facet" = facet, "pnts" = pnts, "avg" = avg)
+  list("facet" = facet, "pnts" = pnts, "topo" = topo, "pit" = pit)
 }
