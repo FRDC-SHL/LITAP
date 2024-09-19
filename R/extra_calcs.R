@@ -1,3 +1,5 @@
+
+# From Sheet SlpCal, A41:U42
 ix_avgs <- function(pnts, facet, edge_row, edge_col, nrows, ncols) {
 
   tbl_le_sum <- dplyr::select(facet, "seqno", "max_facet")

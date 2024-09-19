@@ -5,12 +5,12 @@ create_excel <- function(file, meta, x1, x2, x3, x4, x5, x6) {
   openxlsx::addWorksheet(wb, "SiteSum")
 
   wb <- xl_add_meta(wb, meta, start = c(2, 1))
-  wb <- xl_add_x1(wb, x1, start = c(13, 1), name = "Slope derivatives")
-  wb <- xl_add_x2(wb, x2, start = c(25, 1), name = "Slope ???")
-  wb <- xl_add_x3(wb, x3, start = c(13, 10), name = "Percentiles")
-  wb <- xl_add_x4(wb, x4, start = c(25, 10), name = "Watershed summary")
-  wb <- xl_add_x5(wb, x5, start = c(39, 1), name = "Slope by X")
-  wb <- xl_add_x6(wb, x6, start = c(39, 10), name = "Slope by Z")
+  wb <- xl_add_x1(wb, x1, start = c(13, 1), name = "Table 2. Topographic derivatives of each slope segment on the representative hillslope")
+  wb <- xl_add_x2(wb, x2, start = c(25, 1), name = "Table 3. Area-weighted average values of selected topographic derivatives for each slope segment")
+  wb <- xl_add_x3(wb, x3, start = c(13, 10), name = "Table 4. Statistics of selected topographic derivatives (area-weighted)")
+  wb <- xl_add_x4(wb, x4, start = c(25, 10), name = "Table 5. Indexes, parameters and ratios characterizing different aspects of the landscape topography")
+  wb <- xl_add_x5(wb, x5, start = c(40, 1), name = "Table 6. Location (X) and relief (Z) of points (at the top of the slope and the end of each segment) along the modal hillslopes")
+  #wb <- xl_add_x6(wb, x6, start = c(39, 10), name = "Slope by Z")
 
   openxlsx::saveWorkbook(wb, file, overwrite = TRUE)
 }
@@ -27,7 +27,7 @@ xl_add_meta <- function(wb, meta, start = c(2, 1)) {
   add_table_name(wb, "Run Information", r = r, c = c)
   openxlsx::writeData(wb, 1, m[1:4, ], startCol = c, startRow = r+1, colNames = FALSE)
 
-  add_table_name(wb, "Metadata", r = r+6, c = c)
+  add_table_name(wb, "Table 1. Metadata for terrain analysis", r = r+6, c = c)
   openxlsx::writeData(wb, 1, meta[, 5:ncol(meta)], startCol = c, startRow = r+7)
   add_table_style(wb, r+7, r+8, c, c2)
   wb

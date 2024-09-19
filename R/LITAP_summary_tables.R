@@ -20,8 +20,6 @@ summary_tables <- function(folder) {
 
   #TODO: Figure out edge row stuff based on different number of edge rows
   #TODO: Q - X/Y are UTMs? I.e. meters?
-  #TODO: Q - The Zcr2st and lstr2div are calculated from slightly different cells (omitting zeros) than the rest of the topographic derivatives... okay?
-  #TODO: Q - The second half of the big percentile table in SlpCal (L3:R29) is calculated on percentiles (rather than being calcualted for cells and then taking the percentiles of this). This makes it a bit funny, as you can see that sometimes the 'max' isn't the max (i.e. compare N29 to N28 and Q29 to Q28)... Okay?
 
   # Checks
   check_folder(folder)
@@ -184,13 +182,16 @@ topo_summary <- function(folder, file = "topo_summary.xlsx") {
                   "Ld2c" = "lstr2div", "Zd2c" = "zcr2st") |>
     dplyr::left_join(dplyr::select(lsf, "name", "Sd2c" = "s"), by = "name") |>
     dplyr::mutate(Sd2c = .data$Sd2c * 100) |>
-    dplyr::filter(name %in% c("avg", "sd", "10%", "25%", "50%", "75%", "90%")) |>
+    dplyr::filter(name %in% c("avg", "sd",
+                              "min", "1%", "5%", "10%", "25%", "50%",
+                              "75%", "90%", "95%", "99%", "max")) |>
     tidyr::pivot_longer(-"name", names_to = "Parameter") |>
     tidyr::pivot_wider(names_from = "name", values_from = "value") |>
     dplyr::mutate(Unit = c("%", "° (100 m) -1", "° (100 m) -1", "",
                            "m", "m", "m", "m", "%")) |>
     dplyr::relocate("Unit", .after = "Parameter") |>
-    dplyr::rename("Average" = "avg", "SD" = "sd")
+    dplyr::rename("Average" = "avg", "SD" = "sd") |>
+    dplyr::rename_with(tools::toTitleCase)
 
   ## T5: Indexes, parameters and ratios characterizing different aspects of the landscape topography -----
   x4 <- dplyr::tibble(
@@ -201,13 +202,15 @@ topo_summary <- function(folder, file = "topo_summary.xlsx") {
     RL_w = avg$lpit2peak / avg$lstr2div,
     RZ_w = avg$zpit2peak / avg$zcr2st,
     RZ_l = Z_max / avg$zpit2peak,
-    Fc_UP = slp_cal$tci[slp_cal$type == "ups"],
-    Fc_LOW = slp_cal$tci[slp_cal$type == "low"],
-    Fc = slp_cal$tci[slp_cal$type == "mid"]) |>
+    Dr = sum(cnts$crest_cnt) / .env$grid / .env$nrows / .env$ncols * 10000,
+    Dc = sum(cnts$stream_cnt) / .env$grid / .env$nrows / .env$ncols * 10000,
+    TCI_UP = slp_cal$tci[slp_cal$type == "ups"],
+    TCI_LOW = slp_cal$tci[slp_cal$type == "low"],
+    TCI = slp_cal$tci[slp_cal$type == "mid"]) |>
     tidyr::pivot_longer(cols = dplyr::everything(),
                         names_to = "Parameter",
                         values_to = "value") |>
-    dplyr::mutate(Unit = c("m", "/ 100 ha", "ha", "%", "", "", "", "%", "%", "%")) |>
+    dplyr::mutate(Unit = c("m", "/ 100 ha", "ha", "%", "", "", "", "m/ha", "m/ha", "%", "%", "%")) |>
     dplyr::relocate(Unit, .after = "Parameter")
 
   ## T6: Location (X) and relief (Z) of points (at the top of the slope and the end of each segment) along the modal hillslopes ----
@@ -231,11 +234,11 @@ topo_summary <- function(folder, file = "topo_summary.xlsx") {
       low = .data$mid + .data$low * .data$s_len,
       dep = .data$low + .data$dep * .data$s_len) |>
     dplyr::select(-"s_len") |>
-    dplyr::rename_with(toupper) |>
-    dplyr::rename("Stat" = "NAME") |>
-    dplyr::relocate("Stat", "Top" = "TOP") |>
+    dplyr::rename_with(\(x) paste0(toupper(x), "_X")) |>
+    dplyr::rename("Stat" = "NAME_X") |>
+    dplyr::relocate("Stat", "Top_X" = "TOP_X") |>
     dplyr::mutate(Stat = dplyr::case_when(.data$Stat == "avg" ~ "Avg",
-                                          .data$Stat == "50%" ~ "Median",
+                                          .data$Stat == "50%" ~ "50% (Median)",
                                           TRUE ~ .data$Stat))
 
   x6 <- slp_cal |>
@@ -261,11 +264,11 @@ topo_summary <- function(folder, file = "topo_summary.xlsx") {
       low = .data$mid - .data$low * .data$s_z,
       dep = .data$low - .data$dep * .data$s_z) |>
     dplyr::select(-"s_z") |>
-    dplyr::rename_with(toupper) |>
-    dplyr::rename("Stat" = "NAME") |>
-    dplyr::relocate("Stat", "Top" = "TOP") |>
+    dplyr::rename_with(\(x) paste0(toupper(x), "_Z")) |>
+    dplyr::rename("Stat" = "NAME_Z") |>
+    dplyr::relocate("Stat", "Top_Z" = "TOP_Z") |>
     dplyr::mutate(Stat = dplyr::case_when(.data$Stat == "avg" ~ "Avg",
-                                          .data$Stat == "50%" ~ "Median",
+                                          .data$Stat == "50%" ~ "50% (Median)",
                                           TRUE ~ .data$Stat))
 
   create_excel(file, meta, x1, x2, x3, x4, x5, x6)
