@@ -355,3 +355,49 @@ test_files <- function(folder = "~/Dropbox/LITAP files/LandMapR_BR3Raw_20210427/
 
   list("facet" = facet, "pnts" = pnts, "topo" = topo, "pit" = pit)
 }
+
+
+test_files2 <- function(folder = "~/Dropbox/LITAP files/LandMapR_BR3Raw_20210427/LandMapR_Files/",
+                       id = "31M",
+                       avg_file = "BR3_1m_20210427.xlsx",
+                       grid = 1,  min_x = 2415575, min_y = 7493199) {
+
+  d <- paste0(folder, "/", id)
+
+  suppressMessages({
+
+    inv <- foreign::read.dbf(paste0(d, "idem.dbf")) |>
+      janitor::clean_names() |>
+      dplyr::rename(seqno = seq_no, upslope = up_slope,
+                    local_shed = shed_no,
+                    fill_shed = shed_now) |>
+      dplyr::mutate(x = col * grid + min_x - 1,
+                    y = rev(row) * grid + min_y - 1,
+                    elev = round(elev, 3),
+                    elev = dplyr::na_if(elev, -9999))
+
+    flow <- foreign::read.dbf(paste0(d, "dem.dbf")) |>
+      janitor::clean_names() |>
+      dplyr::rename(seqno = seq_no, upslope = up_slope,
+                    local_shed = shed_no,
+                    fill_shed = shed_now) |>
+      dplyr::mutate(x = col * grid + min_x - 1,
+                    y = rev(row) * grid + min_y -1,
+                    elev = round(elev, 3),
+                    elev = dplyr::na_if(elev, -9999))
+
+    relz <- foreign::read.dbf(paste0(d, "Relz.dbf")) |>
+      janitor::clean_names() |>
+      dplyr::rename_with(~stringr::str_replace(.x, "^pk_", "peak_"))
+
+    length <- foreign::read.dbf(paste0(d, "Len.dbf")) |>
+      janitor::clean_names() |>
+      dplyr::rename(seqno = seq_no) |>
+      dplyr::left_join(relz, by = "seqno")
+
+    weti <- foreign::read.dbf(paste0(d, "Form.dbf")) |>
+      janitor::clean_names()
+  })
+
+  list("inv" = inv, "flow" = flow, "length" = length, "weti" = weti)
+}
