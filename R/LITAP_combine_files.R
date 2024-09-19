@@ -11,8 +11,10 @@
 #' @param out_format Character. Output format (rds or csv) that merged file
 #'   should be saved as (if different from the rest; by default uses the format
 #'   of the other LITAP output files)
+#'
+#' @noRd
 
-merge_all <- function(folder, out_format = NULL) {
+old_merge <- function(folder, out_format = NULL) {
 
   # Get current out format
   ext <- get_format(folder, where = "flow")
@@ -21,21 +23,7 @@ merge_all <- function(folder, out_format = NULL) {
     ext <- out_format
   }
 
-  flow <- get_previous(folder, step = "fill", where = "flow") %>%
-    dplyr::select(-"ridge")
 
-  flow_stats <- get_previous(folder, step = "fill", where = "flow", type = "stats")
-
-  inv <- get_previous(folder, step = "inverted", where = "flow") %>%
-    dplyr::select("seqno", "ddir", "drec", "upslope", "upslope_m",
-                  "inv_initial_shed", "inv_local_shed", "edge_map") %>%
-    dplyr::rename_with(.cols = -c("seqno", dplyr::contains("inv_")),
-                       ~paste0("inv_", .))
-  inv_stats <- get_previous(folder, step = "inverted", where = "flow", type = "stats")
-
-  length <- get_previous(folder, step = "length", where = "form")
-
-  weti <- get_previous(folder, step = "form", where = "form")
 
   combo <- dplyr::left_join(flow, inv, by = "seqno") %>%
     dplyr::left_join(length,
@@ -44,9 +32,16 @@ merge_all <- function(folder, out_format = NULL) {
                      by = c("seqno", "x", "y", "row", "col",
                             "elev", "drec", "upslope"))
 
+  peak <- inv_stats %>%
+    dplyr::rename(seqno = pit_seqno, row = pit_row, col = pit_col,
+                  peak_shedno = shedno, peak_edge_pit = edge_pit) %>%
+    dplyr::left_join(dplyr::select(combo, -"pit_elev"),
+                     by = c("seqno", "row", "col")) %>%
+    dplyr::select(seqno, x, y, row, col, dplyr::everything()) %>%
+    dplyr::arrange(seqno)
+
   name <- paste0("all_points.", ext)
   if(ext == "rds") readr::write_rds(combo, file.path(folder, name))
   if(ext == "csv") readr::write_csv(combo, file.path(folder, name), progress = FALSE)
   combo
 }
-
