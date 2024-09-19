@@ -49,25 +49,55 @@ link_points <- function(x, y, by) {
   dplyr::inner_join(x, y, by = by_cols)
 }
 
-all_points <- function(folder) {
+all_points <- function(folder, grid) {
 
-  if(!dir.exists(folder)) stop("Cannot find 'folder'", call. = FALSE)
+  testing <- FALSE
+  if(testing) {
+    message("Using test data for all_points()")
+    t <- test_files2()
+    flow <- t$flow
+    inv <- t$inv
+    length <- t$length
+    weti <- t$weti
+  } else {
+    flow <- get_previous(folder, step = "fill", where = "flow")
+    fuzc <- get_previous(folder, step = "fuzc", where = "facet")
+    inv <- get_previous(folder, step = "inverted", where = "flow")
+    length <- get_previous(folder, step = "length", where = "form")
+    weti <- get_previous(folder, step = "weti", where = "form")
+  }
+  grid <- calc_grid(flow)
 
-  flow <- get_previous(folder, step = "fill", where = "flow")
-  inv <- get_previous(folder, step = "inverted", where = "flow") %>%
-    dplyr::select("seqno", "ddir", "drec", "upslope", "upslope_m",
-                  "inv_initial_shed", "inv_local_shed", "edge_map") %>%
+  flow <- dplyr::select(flow, -dplyr::any_of("missing"))
+  fuzc <- dplyr::select(fuzc, "seqno", "max_facet", "max_value", "max_facet_name")
+
+  inv <- inv %>%
+    dplyr::select(dplyr::any_of(
+      c("seqno", "ddir", "drec", "upslope", "upslope_m", "edge", "vol2fl",
+        "mm2fl", "p_area", "inv_initial_shed", "inv_local_shed", "inv_fill_shed", "edge_map"))) %>%
     dplyr::rename_with(.cols = -c("seqno", dplyr::contains("inv_")),
                        ~paste0("inv_", .))
 
-  length <- get_previous(folder, step = "length", where = "form")
-  weti <- get_previous(folder, step = "weti", where = "form")
+  common <- c("x", "y", "row", "col", "elev", "drec", "upslope")
+  length <- dplyr::select(length, -dplyr::any_of(common))
+  weti <- dplyr::select(weti, -dplyr::any_of(common))
 
-  flow %>%
+  all <- flow %>%
     dplyr::left_join(inv, by = "seqno") %>%
-    dplyr::left_join(length,
-                     by = c("seqno", "x", "y", "row", "col", "elev")) %>%
-    dplyr::left_join(weti,
-                     by = c("seqno", "x", "y", "row", "col",
-                            "elev", "drec", "upslope"))
+    dplyr::left_join(length, by = "seqno") %>%
+    dplyr::left_join(weti, by = "seqno") %>%
+    dplyr::left_join(fuzc, by = "seqno") %>%
+    dplyr::filter(!is.na(elev))
+
+  # Adjustments (cf 100_qryAllpnts_AllData_090214)
+  all %>%
+    dplyr::mutate(
+      l2pit =  sqrt((.data$row - .data$pit_row)^2 + (.data$col - .data$pit_col)^2) * .env$grid,
+      l2peak = sqrt((.data$row - .data$peak_row)^2 + (.data$col - .data$peak_col)^2) * .env$grid,
+      l2str =  sqrt((.data$row - .data$st_row)^2 + (.data$col - .data$st_col)^2) * .env$grid,
+      l2div =  sqrt((.data$row - .data$cr_row)^2 + (.data$col - .data$cr_col)^2) * .env$grid,
+      lpit2peak = .data$l2pit + .data$l2peak,
+      lstr2div = .data$l2str + .data$l2div,
+      ppit2peakl = dplyr::if_else(.data$lpit2peak <= 0, 0, .data$l2pit / .data$lpit2peak * 100),
+      pstr2divl = dplyr::if_else(.data$lstr2div <= 0, 0, .data$l2str/.data$lstr2div * 100))
 }
