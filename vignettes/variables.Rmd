@@ -159,6 +159,10 @@ Variables in `flow/dem_inverted` (corresponds to FlowMapR's `XXXidem.dbf`)
 
 This list only includes variables not already described above in the [Generic DEMs](#generic-dem).
 
+Note: We don't calculate Vol2Fl, MM2Fl or PArea because in the original LandMapR
+they weren't calculated specifically for the inverted DEM, 
+but were identical to those in the non-inverted DEM.
+
 ```{r}
 f <- readRDS(system.file("extdata", "testELEV", "flow", "dem_inverted.rds", package = "LITAP"))
 #names(f)[!names(f) %in% c(all$param)]

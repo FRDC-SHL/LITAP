@@ -1,0 +1,49 @@
+---
+title: "Known Discrepancies and Changes"
+author: "Steffi LaZerte"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Known Discrepancies}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+# rmarkdown::pdf_document
+# rmarkdown::html_vignette
+knitr::opts_chunk$set(fig.width = 15, fig.height = 10, eval = TRUE)
+```
+
+
+This is a non-exclusive list of known differences between LITAP and 
+R. A. (Bob) MacMillan's original LandMapR. 
+Some differences reflect differences in the programming techniques, 
+some reflect deleberate changes. 
+
+#### Missing variables
+
+Some variables are not included in LITAP if they are not necessary. 
+For example, the inverted DEMs originally included Vol2Fl, MM2Fl and PArea, 
+but LITAP does not include these values because they aren't calculated specifically 
+for the inverted DEM, but are identical to those in the non-inverted DEM.
+
+#### Flat areas (where all cells are the same elevation)
+
+When we have an area with flat cells, LITAP uses a different way of assigning 
+the direction of flow than the original program (in order to speed things up). 
+This results in small differences in flow directions over flat areas.
+
+
+#### Rounding error
+
+Sometimes, rounding error on very small numbers can result in quite large 
+differences especially when looking at percentages, etc.
+
+
+#### Compounding differences
+
+Adding changes in flow direction to small differences in rounding error can 
+result in larger differences when adding up measures over all cells in a watershed.
+These should be considered stochastic differences. However if things look really 
+different, contact us and let us know!
