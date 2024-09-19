@@ -271,9 +271,13 @@ topo_summary <- function(folder, file = "topo_summary.xlsx") {
                                           .data$Stat == "50%" ~ "50% (Median)",
                                           TRUE ~ .data$Stat))
 
-  create_excel(file, meta, x1, x2, x3, x4, x5, x6)
+  # Combine x5 and x6 into one table
+  x5 <- dplyr::left_join(x5, x6, by = "Stat")
 
+  create_excel(file.path(folder, file), meta, x1, x2, x3, x4, x5)
 }
+
+
 
 get_edge <- function(x, type) {
   type <- paste0("edge_", type)
