@@ -4,13 +4,7 @@
 \alias{summary_tables}
 \title{Create summary watersheed tables in Excel}
 \usage{
-summary_tables(
-  folder,
-  file = "text.xlsx",
-  testing = TRUE,
-  min_x = NULL,
-  min_y = NULL
-)
+summary_tables(folder)
 }
 \arguments{
 \item{file}{Character. Name of output file (.xlsx)}

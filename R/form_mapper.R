@@ -40,6 +40,9 @@ form_mapper <- function(folder, str_val = 10000, ridge_val = 10000,
                         log = TRUE, clean = FALSE,
                         verbose = FALSE, quiet = FALSE, debug = FALSE) {
 
+  # Checks
+  check_folder(folder)
+
   # Messaging
   if(quiet) verbose <- FALSE
 

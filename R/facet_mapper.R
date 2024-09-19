@@ -96,6 +96,9 @@ facet_mapper <- function(folder, arule = NULL, crule,
                          log = TRUE,
                          verbose = FALSE, quiet = FALSE, debug = FALSE) {
 
+  # Checks
+  check_folder(folder)
+
   # Messaging
   if(quiet) verbose <- FALSE
 

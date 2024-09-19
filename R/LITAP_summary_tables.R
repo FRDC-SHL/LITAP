@@ -16,16 +16,20 @@
 #' summary_tables()
 #'
 #'
-summary_tables <- function(folder, file = "text.xlsx", testing = TRUE,
-                           min_x = NULL, min_y = NULL) {
+summary_tables <- function(folder) {
 
   #TODO: Figure out edge row stuff based on different number of edge rows
   #TODO: Q - X/Y are UTMs? I.e. meters?
   #TODO: Q - The Zcr2st and lstr2div are calculated from slightly different cells (omitting zeros) than the rest of the topographic derivatives... okay?
   #TODO: Q - The second half of the big percentile table in SlpCal (L3:R29) is calculated on percentiles (rather than being calcualted for cells and then taking the percentiles of this). This makes it a bit funny, as you can see that sometimes the 'max' isn't the max (i.e. compare N29 to N28 and Q29 to Q28)... Okay?
 
-  # TESTING
+  # Checks
+  check_folder(folder)
+
+  # Load data
+  testing <- FALSE
   if(testing) {
+    message("Using test data for summary_tables()")
     t <- test_files()
     pnts <- t$pnts
     facet <- t$facet
@@ -36,6 +40,37 @@ summary_tables <- function(folder, file = "text.xlsx", testing = TRUE,
     facet <- get_previous(folder, step = "fuzc", where = "facet")
     topo <- readxl::read_excel(file.path(folder, "topographic_derivatives.xlsx"))
   }
+
+  # Calculate all point data frames
+
+
+
+  # Calculate topographic summary
+  if(check_facets(facet)) topo_summary(folder, file = "topo_summary.xlsx")#, min_x, min_y)
+
+}
+
+
+topo_summary <- function(folder, file = "topo_summary.xlsx") {
+
+  # Load data
+  testing <- TRUE
+  if(testing) {
+    t <- test_files()
+    pnts <- t$pnts
+    facet <- t$facet
+    topo <- t$topo
+    pit <- t$pit
+  } else {
+    # Checks
+    check_folder(folder)
+
+    pnts <- all_points(folder)
+    facet <- get_previous(folder, step = "fuzc", where = "facet")
+    topo <- readxl::read_excel(file.path(folder, "topo_derivatives.xlsx"))
+  }
+
+  check_facets(facet, fun = stop)
 
   log <- readr::read_lines(list.files(folder, "facet.log", full.names = TRUE))
   date <- stringr::str_subset(log, "Run started") |>
@@ -53,19 +88,12 @@ summary_tables <- function(folder, file = "text.xlsx", testing = TRUE,
     stop("Inconsistent grid size. Grid must be square", call. = FALSE)
   }
 
-  if(is.null(min_x)) {
-    min_x <- min(pnts$x, na.rm = TRUE)
-    max_x <- max(pnts$x, na.rm = TRUE)
-  } else {
-    max_x <- min_x + grid * ncols - 1
-  }
-  if(is.null(min_y)) {
-    min_y <- min(pnts$y, na.rm = TRUE)
-    max_y <- max(pnts$y, na.rm = TRUE)
-  } else {
-    max_y <- min_y + grid * nrows - 1
-  }
+  min_x <- min(pnts$x, na.rm = TRUE)
+  max_x <- max(pnts$x, na.rm = TRUE)
+  min_y <- min(pnts$y, na.rm = TRUE)
+  max_y <- max(pnts$y, na.rm = TRUE)
 
+  ## T1: Metadata ------------------------------
   meta <- dplyr::tibble(Run = folder,
                         `facet_mapper() Run` = date,
                         `Summary Table Creation` = Sys.Date(),
@@ -116,7 +144,7 @@ summary_tables <- function(folder, file = "text.xlsx", testing = TRUE,
   density <- ws_density(pnts, edge_row, edge_col, nrows, ncols)
   edge_drainage <- ws_drainage(pnts, pit, edge_row_ws, edge_col_ws, nrows, ncols)
 
-
+  ## T2: Topographic derivatives of each slope segment on the representative hillslope ---------
   x1 <- dplyr::select(
     slp_cal, "type",
     "L (m)" = "l_final", "Z (m)" = "z_final", "S (%)" = "s_final",
@@ -133,6 +161,7 @@ summary_tables <- function(folder, file = "text.xlsx", testing = TRUE,
   x1$Avg[3] <- x1$Sum[2] / x1$Sum[1] * 100
   x1$Avg[7] <- avg$qweti1
 
+  ## T3: Area-weighted average values of selected topographic derivatives for each slope segment ----
   x2 <- seg_cal |>
     dplyr::select("SG (%)" = "slope_pct", "Aspect (degree)" = "aspect",
                   "PrCurv (degree / 100m)" = "prof", "PlCurv (degree / 100m)" = "plan",
@@ -147,6 +176,7 @@ summary_tables <- function(folder, file = "text.xlsx", testing = TRUE,
     dplyr::mutate(` ` = "") |>
     dplyr::relocate(` `, .before = "Avg")
 
+  ## T4: Statistics of selected topographic derivatives (area-weighted) -------
   x3 <- topo |>
     dplyr::select("name",
                   "SG" = "slope", "CV_pr" = "prof", "CV_pl" = "plan",
@@ -162,6 +192,7 @@ summary_tables <- function(folder, file = "text.xlsx", testing = TRUE,
     dplyr::relocate("Unit", .after = "Parameter") |>
     dplyr::rename("Average" = "avg", "SD" = "sd")
 
+  ## T5: Indexes, parameters and ratios characterizing different aspects of the landscape topography -----
   x4 <- dplyr::tibble(
     Z_max = topo$zpit2peak[topo$name == "max"],
     D_ws = 1000000 / .env$density / grid^2,
@@ -179,6 +210,7 @@ summary_tables <- function(folder, file = "text.xlsx", testing = TRUE,
     dplyr::mutate(Unit = c("m", "/ 100 ha", "ha", "%", "", "", "", "%", "%", "%")) |>
     dplyr::relocate(Unit, .after = "Parameter")
 
+  ## T6: Location (X) and relief (Z) of points (at the top of the slope and the end of each segment) along the modal hillslopes ----
   x5 <- slp_cal |>
     dplyr::select("type", "pl_c2s") |>
     tidyr::pivot_wider(names_from = "type", values_from = "pl_c2s") |>

@@ -36,6 +36,9 @@ wepp_mapper <- function(folder,
                         log = TRUE,
                         verbose = FALSE, quiet = FALSE, debug = FALSE) {
 
+  # Checks
+  check_folder(folder)
+
   # Setup -------------------------------------------------------------------
 
   # Get resume options

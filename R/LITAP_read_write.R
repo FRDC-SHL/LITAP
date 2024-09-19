@@ -185,7 +185,7 @@ locs_create <- function(out_folder, which, clean) {
 #' @noRd
 get_previous <- function(folder, step, where, type = "dem") {
 
-  if(!dir.exists(folder)) stop("This folder doesn't exist: ", folder, call. = FALSE)
+  check_folder(folder, fun = stop)
 
   f <- list.files(file.path(folder, where), pattern = paste0("_", step),
                   recursive = TRUE, full.names = TRUE)
@@ -212,7 +212,6 @@ get_previous <- function(folder, step, where, type = "dem") {
 #'
 #' @noRd
 get_format <- function(folder, where) {
-  if(!dir.exists(folder)) stop("This folder doesn't exist: ", folder, call. = FALSE)
 
   ext <- list.files(file.path(folder, where), recursive = TRUE, full.names = TRUE) %>%
     stringr::str_extract("[a-z]{3,4}$") %>%

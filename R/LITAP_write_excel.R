@@ -43,6 +43,8 @@ xl_add_x1 <- function(wb, x, start = c(11, 1), name) {
 
   openxlsx::writeData(wb, 1, x, startCol = c, startRow = r)
   openxlsx::deleteData(wb, 1, cols = c, rows = r)
+
+  # Add rounding to the cell formats
   openxlsx::addStyle(wb, 1, d0(), rows = (r+1):(r+6), cols = (c+1):c2, gridExpand = TRUE)
   openxlsx::addStyle(wb, 1, d1(), rows = c(r+3, r+7), cols = (c+1):c2, gridExpand = TRUE)
   openxlsx::addStyle(wb, 1, d2(), rows = r+2, cols = (c+1):c2, gridExpand = TRUE)
@@ -61,6 +63,7 @@ xl_add_x2 <- function(wb, x, start = c(21, 1), name) {
   openxlsx::writeData(wb, 1, x, startCol = c, startRow = r)
   openxlsx::deleteData(wb, 1, cols = c, rows = r)
 
+  # Add rounding to the cell formats
   openxlsx::addStyle(wb, 1, d0(), rows = r+2, cols = (c+1):c2, gridExpand = TRUE)
   openxlsx::addStyle(wb, 1, d1(), rows = c(r+1, (r+3):r2), cols = (c+1):c2, gridExpand = TRUE)
   add_table_style(wb, r, r2, c, c2)
@@ -77,6 +80,7 @@ xl_add_x3 <- function(wb, x, start = c(30, 1), name) {
 
   openxlsx::writeData(wb, 1, x, startCol = c, startRow = r)
 
+  # Add rounding to the cell formats
   openxlsx::addStyle(wb, 1, d0(), rows = r+c(5, 7), cols = (c+2):c2, gridExpand = TRUE)
   openxlsx::addStyle(wb, 1, d1(), rows = r+c(4,6,8), cols = (c+2):c2, gridExpand = TRUE)
   openxlsx::addStyle(wb, 1, d2(), rows = r+c(1:3, 9), cols = (c+2):c2, gridExpand = TRUE)
@@ -130,6 +134,7 @@ xl_add_x6 <- function(wb, x, start = c(70, 1), name) {
   openxlsx::writeData(wb, 1, x, startCol = c, startRow = r)
   openxlsx::deleteData(wb, 1, cols = c, rows = r)
 
+  # Add rounding to the cell formats
   openxlsx::addStyle(wb, 1, d2(), rows = r:r2, cols = c:c2, gridExpand = TRUE)
   add_table_style(wb, r, r2, c, c2)
   wb
