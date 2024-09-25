@@ -56,7 +56,7 @@ wepp_mapper <- function(folder,
   out_format <- get_format(folder, where = "flow")
 
   # Get backup fill dem
-  db <- get_previous(folder, step = "fill", where = "flow")
+  db <- get_previous(folder, where = "flow", step = "fill")
   if("ldir" %in% names(db)) db <- dplyr::rename(db, "ddir" = "ldir")
   db <- dplyr::select(db, "seqno", "x", "y", "row", "col", "elev", "drec",
                       "ddir", "upslope", "fill_shed") %>%
@@ -66,7 +66,7 @@ wepp_mapper <- function(folder,
   check_grid(grid)
 
   # Get fill file
-  fill <- get_previous(folder, step = "fill", where = "flow", type = "stat") %>%
+  fill <- get_previous(folder, where = "flow", step = "fill", type = "stat") %>%
     dplyr::mutate_at(dplyr::vars(dplyr::matches("row|col")), ~ . + 1) %>%
     dplyr::mutate_at(dplyr::vars(dplyr::contains("seqno")),
                      ~ seqno_to_buffer(., db$seqno[!db$buffer]))
@@ -118,7 +118,7 @@ wepp_mapper <- function(folder,
     log_start(task, sub_start, log_file)
 
     if(!exists("db_marked")) {
-      db_marked <- get_previous(folder, step = "marked", where = "wepp") %>%
+      db_marked <- get_previous(folder, where = "wepp", step = "marked") %>%
         add_buffer()
     }
 
@@ -138,7 +138,7 @@ wepp_mapper <- function(folder,
     log_start(task, sub_start, log_file)
 
     if(!exists("db_cut")) {
-      db_cut <- get_previous(folder, step = "cut", where = "wepp") %>%
+      db_cut <- get_previous(folder, where = "wepp", step = "cut") %>%
         add_buffer()
     }
 
@@ -157,7 +157,7 @@ wepp_mapper <- function(folder,
     log_start(task, sub_start, log_file)
 
     if(!exists("db_merged")) {
-      db_merged <- get_previous(folder, step = "merged", where = "wepp") %>%
+      db_merged <- get_previous(folder, where = "wepp", step = "merged") %>%
         add_buffer()
     }
 
@@ -177,7 +177,7 @@ wepp_mapper <- function(folder,
     log_start(task, sub_start, log_file)
 
     if(!exists("db_ups")) {
-      db_ups <- get_previous(folder, step = "ups", where = "wepp") %>%
+      db_ups <- get_previous(folder, where = "wepp", step = "ups") %>%
         add_buffer()
     }
 
@@ -196,7 +196,7 @@ wepp_mapper <- function(folder,
     log_start(task, sub_start, log_file)
 
     if(!exists("db_remarked")) {
-      db_remarked <- get_previous(folder, step = "remarked", where = "wepp") %>%
+      db_remarked <- get_previous(folder, where = "wepp", step = "remarked") %>%
         add_buffer()
     }
 
@@ -215,7 +215,7 @@ wepp_mapper <- function(folder,
     log_start(task, sub_start, log_file)
 
     if(!exists("db_pits")) {
-      db_pits <- get_previous(folder, step = "pits", where = "wepp") %>%
+      db_pits <- get_previous(folder, where = "wepp", step = "pits") %>%
         add_buffer()
     }
 
@@ -234,7 +234,7 @@ wepp_mapper <- function(folder,
     log_start(task, sub_start, log_file)
 
     if(!exists("db_split")) {
-      db_split <- get_previous(folder, step = "split", where = "wepp") %>%
+      db_split <- get_previous(folder, where = "wepp", step = "split") %>%
         add_buffer()
     }
 
@@ -253,7 +253,7 @@ wepp_mapper <- function(folder,
     log_start(task, sub_start, log_file)
 
     if(!exists("db_flow")) {
-      db_flow <- get_previous(folder, step = "flow", where = "wepp") %>%
+      db_flow <- get_previous(folder, where = "wepp", step = "flow") %>%
         add_buffer()
     }
 
@@ -276,10 +276,10 @@ wepp_mapper <- function(folder,
     log_start(task, sub_start, log_file)
 
     if(!exists("db_segs") | !exists("segs")) {
-      db_segs <- get_previous(folder, step = "first_segs", where = "wepp") %>%
+      db_segs <- get_previous(folder, where = "wepp", step = "first_segs") %>%
         add_buffer()
 
-      segs <- get_previous(folder, step = "first_segs", where = "wepp", type = "stats") %>%
+      segs <- get_previous(folder, where = "wepp", step = "first_segs", type = "stats") %>%
         add_buffer(db = db_segs, stats = .)
     }
 
@@ -304,10 +304,10 @@ wepp_mapper <- function(folder,
     log_start(task, sub_start, log_file)
 
     if(!exists("db_ordered") | !exists("segs_ordered")) {
-      db_ordered <- get_previous(folder, step = "ordered", where = "wepp") %>%
+      db_ordered <- get_previous(folder, where = "wepp", step = "ordered") %>%
         add_buffer()
 
-      segs_ordered <- get_previous(folder, step = "ordered", where = "wepp", type = "stats") %>%
+      segs_ordered <- get_previous(folder, where = "wepp", step = "ordered", type = "stats") %>%
         add_buffer(db = db_ordered, stats = .)
     }
 
@@ -332,9 +332,9 @@ wepp_mapper <- function(folder,
     log_start(task, sub_start, log_file)
 
     if(!exists("segs_ordered")) {
-      db_ddir <- get_previous(folder, step = "ddir2", where = "wepp") %>%
+      db_ddir <- get_previous(folder, where = "wepp", step = "ddir2") %>%
         add_buffer()
-      segs_ddir <- get_previous(folder, step = "ddir2", where = "wepp",
+      segs_ddir <- get_previous(folder, where = "wepp", step = "ddir2",
                                 type = "stats") %>%
         add_buffer(db_ddir, stats = .)
     }
@@ -356,7 +356,7 @@ wepp_mapper <- function(folder,
     log_start(task, sub_start, log_file)
 
     if(!exists("db_ddir")) {
-      db_ddir <- get_previous(folder, step = "ddir2", where = "wepp") %>%
+      db_ddir <- get_previous(folder, where = "wepp", step = "ddir2") %>%
         add_buffer()
     }
 
@@ -377,9 +377,9 @@ wepp_mapper <- function(folder,
     log_start(task, sub_start, log_file)
 
     if(!exists("db_hillsheds") | !exists("segs_upsegs")) {
-      db_hillsheds <- get_previous(folder, step = "hillsheds", where = "wepp") %>%
+      db_hillsheds <- get_previous(folder, where = "wepp", step = "hillsheds") %>%
         add_buffer()
-      segs_upsegs <- get_previous(folder, step = "upsegs", where = "wepp", type = "stats") %>%
+      segs_upsegs <- get_previous(folder, where = "wepp", step = "upsegs", type = "stats") %>%
         add_buffer(db_hillsheds, stats = .)
     }
 
@@ -404,9 +404,9 @@ wepp_mapper <- function(folder,
     log_start(task, sub_start, log_file)
 
     if(!exists("db_renum") | !exists("segs_renum")) {
-      db_renum <- get_previous(folder, step = "renum", where = "wepp") %>%
+      db_renum <- get_previous(folder, where = "wepp", step = "renum") %>%
         add_buffer()
-      segs_renum <- get_previous(folder, step = "renum", where = "wepp",
+      segs_renum <- get_previous(folder, where = "wepp", step = "renum",
                                  type = "stats") %>%
         add_buffer(db_renum, stats = .)
     }
@@ -435,7 +435,7 @@ wepp_mapper <- function(folder,
     log_start(task, sub_start, log_file)
 
     if(!exists("db_renum")) {
-      db_renum <- get_previous(folder, step = "renum", where = "wepp") %>%
+      db_renum <- get_previous(folder, where = "wepp", step = "renum") %>%
         add_buffer()
     }
 
@@ -456,7 +456,7 @@ wepp_mapper <- function(folder,
     log_start(task, sub_start, log_file)
 
     if(!exists("db_wepp_form")) {
-      db_wepp_form <- get_previous(folder, step = "wepp_form", where = "wepp") %>%
+      db_wepp_form <- get_previous(folder, where = "wepp", step = "wepp_form") %>%
         add_buffer()
     }
 
@@ -477,9 +477,9 @@ wepp_mapper <- function(folder,
     log_start(task, sub_start, log_file)
 
     if(!exists("db_wepp_len") | !exists("segs_struct")) {
-      db_wepp_len <- get_previous(folder, step = "wepp", where = "wepp") %>%
+      db_wepp_len <- get_previous(folder, where = "wepp", step = "wepp") %>%
         add_buffer()
-      segs_struct <- get_previous(folder, step = "stats_segs", where = "wepp",
+      segs_struct <- get_previous(folder, where = "wepp", step = "stats_segs",
                                   type = "stats") %>%
         add_buffer(db_wepp_len, stats = .)
     }
@@ -503,9 +503,9 @@ wepp_mapper <- function(folder,
     log_start(task, sub_start, log_file)
 
     if(!exists("db_wepp_len") | !exists("segs_struct")) {
-      db_wepp_len <- get_previous(folder, step = "wepp_len", where = "wepp") %>%
+      db_wepp_len <- get_previous(folder, where = "wepp", step = "wepp_len") %>%
         add_buffer()
-      segs_struct <- get_previous(folder, step = "struct", where = "wepp",
+      segs_struct <- get_previous(folder, where = "wepp", step = "struct",
                                   type = "stats") %>%
         add_buffer(db_wepp_len, stats = .)
     }

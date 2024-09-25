@@ -6,13 +6,13 @@ test_that("calc_stream", {
 
   # DB files
 
-  expect_silent(db <- get_previous(dir, step = "fill", where = "flow") %>%
+  expect_silent(db <- get_previous(dir, where = "flow", step = "fill") %>%
                   dplyr::select(seqno, row, col, elev, drec, upslope, fill_shed, local_shed) %>%
                   add_buffer()) %>%
     expect_s3_class("data.frame")
 
   expect_silent({
-    pond <- get_previous(dir, step = "pond", type = "stats", where = "flow")
+    pond <- get_previous(dir, where = "flow", step = "pond", type = "stats")
     streams <- db %>%
       dplyr::mutate(shedno = fill_shed)
   })
@@ -42,7 +42,7 @@ test_that("calc_stream", {
 
   db2 <- get_previous(paste0("/home/steffi/Projects/Business/LandmapR/Runs - ",
                              "LITAP/Munger Test - LITAP/m35ELEV/"),
-                     step = "fill", where = "flow") %>%
+                      where = "flow", step = "fill") %>%
     dplyr::select(seqno, row, col, elev, drec, upslope, fill_shed, local_shed) %>%
     add_buffer()
   grid <- 10
@@ -55,11 +55,11 @@ test_that("Sub-functions", {
                                out_folder = dir, report = FALSE, clean = TRUE))
 
   # DB files
-  expect_silent(db <- get_previous(dir, step = "fill", where = "flow")) %>%
+  expect_silent(db <- get_previous(dir, where = "flow", step = "fill")) %>%
     expect_s3_class("data.frame")
   db <- add_buffer(db)
 
-  expect_silent(idb <- get_previous(dir, step = "inverted", where = "flow")) %>%
+  expect_silent(idb <- get_previous(dir, where = "flow", step = "inverted")) %>%
     expect_s3_class("data.frame")
   idb <- add_buffer(idb)
 

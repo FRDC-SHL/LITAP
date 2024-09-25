@@ -2,7 +2,7 @@
 test_that("trace_flow()", {
   skip("never run")
   db <- get_previous(system.file("extdata", "testELEV", package = "LITAP"),
-                     step = "fill", where = "flow") %>%
+                     where = "flow", step = "fill") %>%
     dplyr::select(seqno, row, col, elev, drec, upslope) %>%
     add_buffer()
 

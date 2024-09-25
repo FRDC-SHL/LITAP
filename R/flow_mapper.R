@@ -167,7 +167,7 @@ flow_mapper <- function(file, nrow, ncol, grid = NULL, min_x = 1, min_y = 1,
     log_start(task, sub_start, log_file)
 
     if(!exists("db_dir")) {
-      db_dir <- get_previous(folder, step = "dir", where = "flow") %>%
+      db_dir <- get_previous(folder, where = "flow", step = "dir") %>%
       add_buffer()
     }
 
@@ -203,7 +203,7 @@ flow_mapper <- function(file, nrow, ncol, grid = NULL, min_x = 1, min_y = 1,
     log_start(task, sub_start, log_file)
 
     if(!exists("db_initial")) {
-      db_initial <- get_previous(folder, step = "initial", where = "flow") %>%
+      db_initial <- get_previous(folder, where = "flow", step = "initial") %>%
         add_buffer()
     }
 
@@ -238,7 +238,7 @@ flow_mapper <- function(file, nrow, ncol, grid = NULL, min_x = 1, min_y = 1,
     log_start(task, sub_start, log_file)
 
     if(!exists("db_local")) {
-      db_local <- get_previous(folder, step = "local", where = "flow") %>%
+      db_local <- get_previous(folder, where = "flow", step = "local") %>%
         add_buffer()
     }
 
@@ -269,11 +269,11 @@ flow_mapper <- function(file, nrow, ncol, grid = NULL, min_x = 1, min_y = 1,
     log_start(task, sub_start, log_file)
 
     if(!exists("db_initial") || !exists("db_local") || !exists("db_pond")) {
-      db_initial <- get_previous(folder, step = "initial", where = "flow") %>%
+      db_initial <- get_previous(folder, where = "flow", step = "initial") %>%
         add_buffer()
-      db_local <- get_previous(folder, step = "local", where = "flow") %>%
+      db_local <- get_previous(folder, where = "flow", step = "local") %>%
         add_buffer()
-      db_pond <- get_previous(folder, step = "pond", where = "flow") %>%
+      db_pond <- get_previous(folder, where = "flow", step = "pond") %>%
         add_buffer()
     }
 
@@ -330,7 +330,7 @@ flow_mapper <- function(file, nrow, ncol, grid = NULL, min_x = 1, min_y = 1,
   if(resume == "idirections") {
 
     if(!exists("db_local")) {
-      db_local <- get_previous(folder, step = "local", where = "flow") %>%
+      db_local <- get_previous(folder, where = "flow", step = "local") %>%
         add_buffer()
     }
 
@@ -364,7 +364,7 @@ flow_mapper <- function(file, nrow, ncol, grid = NULL, min_x = 1, min_y = 1,
     log_start(task, sub_start, log_file)
 
     if(!exists("db_idir")) {
-      db_idir <- get_previous(folder, step = "idir", where = "flow") %>%
+      db_idir <- get_previous(folder, where = "flow", step = "idir") %>%
         add_buffer()
     }
 
@@ -398,7 +398,7 @@ flow_mapper <- function(file, nrow, ncol, grid = NULL, min_x = 1, min_y = 1,
     log_start(task, sub_start, log_file)
 
     if(!exists("db_iinitial")) {
-      db_iinitial <- get_previous(folder, step = "iinitial", where = "flow") %>%
+      db_iinitial <- get_previous(folder, where = "flow", step = "iinitial") %>%
         add_buffer()
     }
 

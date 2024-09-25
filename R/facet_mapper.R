@@ -117,20 +117,20 @@ facet_mapper <- function(folder, arule = NULL, crule,
   out_format <- get_format(folder, where = "flow")
 
   # Get fill dem (flow_mapper)
-  db <- get_previous(folder, step = "fill", where = "flow") %>%
+  db <- get_previous(folder, where = "flow", step = "fill") %>%
     dplyr::select("seqno", "x", "y", "row", "col", "elev", "drec", "upslope",
                   "fill_shed", "local_shed") %>%
     add_buffer()
 
   # Get form dem (form_mapper)
-  weti <- get_previous(folder, step = "form", where = "form") %>%
+  weti <- get_previous(folder, where = "form", step = "form") %>%
     dplyr::select(-tidyselect::any_of(c("seqno_buffer", "drec_buffer"))) %>%
     dplyr::rename("qweti" = "qweti1", "qarea" = "qarea1",
                   "lnqarea" = "lnqarea1") %>%
     add_buffer()
 
   # Get relief dem (form_mapper)
-  relief <- get_previous(folder, step = "length", where = "form") %>%
+  relief <- get_previous(folder, where = "form", step = "length") %>%
     dplyr::select(-tidyselect::any_of(c("seqno_buffer", "drec_buffer"))) %>%
     add_buffer()
 
@@ -275,7 +275,7 @@ facet_mapper <- function(folder, arule = NULL, crule,
     log_start(task, sub_start, log_file)
 
     if(!exists("fuzzattr")) {
-      fuzzattr <- get_previous(folder, step = "fuza", where = "facet") %>%
+      fuzzattr <- get_previous(folder, where = "facet", step = "fuza") %>%
         add_buffer()
     }
 

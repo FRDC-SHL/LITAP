@@ -57,7 +57,7 @@ form_mapper <- function(folder, str_val = 10000, ridge_val = 10000,
   out_format <- get_format(folder, where = "flow")
 
     # Get fill dem
-  db <- get_previous(folder, step = "fill", where = "flow") %>%
+  db <- get_previous(folder, where = "flow", step = "fill") %>%
     dplyr::select("seqno", "x", "y", "row", "col", "elev", "ddir", "drec",
                   "upslope", "fill_shed", "local_shed") %>%
     add_buffer()
@@ -66,14 +66,14 @@ form_mapper <- function(folder, str_val = 10000, ridge_val = 10000,
   check_grid(grid)
 
   # Get backup inverted dem
-  idb <- get_previous(folder, step = "inverted", where = "flow")
+  idb <- get_previous(folder, where = "flow", step = "inverted")
   if("ldir" %in% names(idb)) idb <- dplyr::rename(idb, "ddir" = "ldir")
   idb <- dplyr::select(idb, "seqno", "x", "y", "row", "col", "elev", "drec", "ddir",
                        "upslope", "inv_local_shed") %>%
     add_buffer()
 
   # Get pond stats
-  pond <- get_previous(folder, step = "pond", type = "stats", where = "flow") %>%
+  pond <- get_previous(folder, where = "flow", step = "pond", type = "stats") %>%
     add_buffer(db = db, stats = .)
 
   # Get out locs
@@ -118,7 +118,7 @@ form_mapper <- function(folder, str_val = 10000, ridge_val = 10000,
     log_start(task, sub_start, log_file)
 
     if(!exists("db_form")) {
-      db_form <- get_previous(folder, step = "form", where = "form") %>%
+      db_form <- get_previous(folder, where = "form", step = "form") %>%
         dplyr::select(dplyr::any_of(c("seqno", "row", "col", "slope_pct",
                                       "slope_deg", "aspect", "prof", "plan"))) %>%
         add_buffer()
@@ -170,7 +170,7 @@ form_mapper <- function(folder, str_val = 10000, ridge_val = 10000,
     log_start(task, sub_start, log_file)
 
     if(!exists("db_relz")) {
-      db_relz <- get_previous(folder, step = "relief", where = "form") %>%
+      db_relz <- get_previous(folder, where = "form", step = "relief") %>%
         add_buffer()
     }
 

@@ -23,7 +23,7 @@ test_that("fuzc_sum()", {
 
 
   fuzzattr <- get_previous("../Runs - FlowMapR/Munger Test - LITAP/m35ELEV/",
-                           step = "fuza", where = "facet") %>%
+                           where = "facet", step = "fuza") %>%
     add_buffer()
 
 
