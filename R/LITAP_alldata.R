@@ -49,44 +49,44 @@ link_points <- function(x, y, by) {
   dplyr::inner_join(x, y, by = by_cols)
 }
 
-all_points <- function(folder, grid) {
+all_points <- function(folder) {
 
-  testing <- FALSE
+  testing <- folder == "testing"
   if(testing) {
     message("Using test data for all_points()")
-    t <- test_files2()
-    flow <- t$flow
-    inv <- t$inv
-    length <- t$length
-    weti <- t$weti
+    flow <- test_points()
+    inv <- test_inv()
+    length <- test_length()
+    form <- test_form()
+    facet <- test_facet()
   } else {
-    flow <- get_previous(folder, step = "fill", where = "flow")
-    fuzc <- get_previous(folder, step = "fuzc", where = "facet")
-    inv <- get_previous(folder, step = "inverted", where = "flow")
-    length <- get_previous(folder, step = "length", where = "form")
-    weti <- get_previous(folder, step = "weti", where = "form")
+    flow <- get_previous(folder, where = "flow", step = "fill")
+    facet <- get_previous(folder, where = "facet", step = "fuzc")
+    inv <- get_previous(folder, where = "flow", step = "inverted")
+    length <- get_previous(folder, where = "form", step = "length")
+    form <- get_previous(folder, where = "form", step = "form")
   }
   grid <- calc_grid(flow)
 
   flow <- dplyr::select(flow, -dplyr::any_of("missing"))
-  fuzc <- dplyr::select(fuzc, "seqno", "max_facet", "max_value", "max_facet_name")
+  facet <- dplyr::select(facet, "seqno", "max_facet", "max_value", "max_facet_name")
 
   inv <- inv %>%
     dplyr::select(dplyr::any_of(
-      c("seqno", "ddir", "drec", "upslope", "upslope_m", "edge", "vol2fl",
-        "mm2fl", "p_area", "inv_initial_shed", "inv_local_shed", "inv_fill_shed", "edge_map"))) %>%
+      c("seqno", "ddir", "drec", "upslope", "upslope_m", "edge",
+        "inv_initial_shed", "inv_local_shed", "edge_map"))) %>%
     dplyr::rename_with(.cols = -c("seqno", dplyr::contains("inv_")),
                        ~paste0("inv_", .))
 
   common <- c("x", "y", "row", "col", "elev", "drec", "upslope")
   length <- dplyr::select(length, -dplyr::any_of(common))
-  weti <- dplyr::select(weti, -dplyr::any_of(common))
+  form <- dplyr::select(form, -dplyr::any_of(common))
 
   all <- flow %>%
     dplyr::left_join(inv, by = "seqno") %>%
     dplyr::left_join(length, by = "seqno") %>%
-    dplyr::left_join(weti, by = "seqno") %>%
-    dplyr::left_join(fuzc, by = "seqno") %>%
+    dplyr::left_join(form, by = "seqno") %>%
+    dplyr::left_join(facet, by = "seqno") %>%
     dplyr::filter(!is.na(elev))
 
   # Adjustments (cf 100_qryAllpnts_AllData_090214)

@@ -19,77 +19,92 @@
 summary_tables <- function(folder) {
 
   #TODO: Figure out edge row stuff based on different number of edge rows
-  #TODO: Q - X/Y are UTMs? I.e. meters?
+
+  # Output File paths
+  summary_file <- file.path(folder, paste0(basename(folder), "_topo_summary.xlsx"))
+  allpoints_file <- file.path(folder, paste0(basename(folder), "_all_points.xlsx"))
+  allpeak_file <- file.path(folder, paste0(basename(folder), "_all_peaks.xlsx"))
+  allpit_file <- file.path(folder, paste0(basename(folder), "_all_pits.xlsx"))
+  allcrest_file <- file.path(folder, paste0(basename(folder), "_all_crests.xlsx"))
+  allstream_file <- file.path(folder, paste0(basename(folder), "_all_streams.xlsx"))
+
+  # Testing
+  testing <- folder == "testing"
 
   # Checks
-  check_folder(folder)
+  if(!testing) check_folder(folder)
 
-  # Load data
-  testing <- FALSE
-  if(testing) {
-    message("Using test data for summary_tables()")
-    t <- test_files()
-    pnts <- t$pnts
-    facet <- t$facet
-    topo <- t$topo
-    pit <- t$pit
-  } else {
-    pnts <- all_points(folder)
-    facet <- get_previous(folder, step = "fuzc", where = "facet")
-    topo <- readxl::read_excel(file.path(folder, "topographic_derivatives.xlsx"))
+  stats_pit <- all_stats(folder, "pit")
+  stats_inverted <- all_stats(folder, "inverted")
+
+  allpoints <- all_points(folder)
+
+  allpeak <- all_peak(points = allpoints, stats = stats_inverted)
+  allpit <- all_pit(points = allpoints, stats = stats_pit)
+  allcrest <- all_crest(points = allpoints, stats = stats_inverted)
+  allstream <- all_stream(points = allpoints, stats = stats_pit)
+
+  # Calculate topographic summary - Only if have the correct facets
+  if(testing || check_facets(folder)) {
+    topo_summary(folder, allpoints, allpeak, allpit, allcrest, allstream, out_file = summary_file)
   }
 
-  # Calculate all point data frames
-
-
-
-  # Calculate topographic summary
-  if(check_facets(facet)) topo_summary(folder, file = "topo_summary.xlsx")#, min_x, min_y)
-
+  openxlsx::write.xlsx(allpeak, allpeak_file)
+  openxlsx::write.xlsx(allpit, allpit_file)
+  openxlsx::write.xlsx(allcrest, allcrest_file)
+  openxlsx::write.xlsx(allstream, allstream_file)
 }
 
 
-topo_summary <- function(folder, file = "topo_summary.xlsx") {
+topo_summary <- function(folder, allpoints, allpeak, allpit, allcrest, allstream,
+                         out_file = "topographic_summary.xlsx") {
 
   # Load data
-  testing <- TRUE
+  testing <- folder == "testing"
   if(testing) {
-    t <- test_files()
-    pnts <- t$pnts
-    facet <- t$facet
-    topo <- t$topo
-    pit <- t$pit
-  } else {
-    # Checks
-    check_folder(folder)
+    facet <- test_facet()
+    form <- test_form()
+    topo <- test_topo()
+    stats <- test_stats()
 
-    pnts <- all_points(folder)
-    facet <- get_previous(folder, step = "fuzc", where = "facet")
-    topo <- readxl::read_excel(file.path(folder, "topo_derivatives.xlsx"))
+    edge_row <- test_params()$edge_row
+    edge_col <- test_params()$edge_col
+    edge_row_ws <- test_params()$edge_row_ws
+    edge_col_ws <- test_params()$edge_col_ws
+    date <- Sys.Date()
+
+    out_file <- "testing/topographic_summary_test.xlsx"
+
+  } else {
+
+    facet <- get_previous(folder, where = "facet", step = "fuzc")
+    form <- get_previous(folder, where = "form", step = "form")
+    topo <- readxl::read_excel(file.path(folder, paste0(basename(folder), "topographic_derivatives.xlsx")))
+    stats <- get_previous(folder, where = "flow", step = "pit", type = "stats")
+
+    log <- readr::read_lines(list.files(folder, "facet.log", full.names = TRUE))
+    date <- stringr::str_subset(log, "Run started") |>
+      stringr::str_extract("[0-9-]+ [0-9:]+")
+    edge_row <- get_edge(log, "row")
+    edge_col <- get_edge(log, "col")
+    edge_row_ws <- as.integer(edge_row / 3) + 1
+    edge_col_ws <- as.integer(edge_col / 3) + 1
   }
 
-  check_facets(facet, fun = stop)
+  pnts <- allpoints
 
-  log <- readr::read_lines(list.files(folder, "facet.log", full.names = TRUE))
-  date <- stringr::str_subset(log, "Run started") |>
-    stringr::str_extract("[0-9-]+ [0-9:]+")
-  edge_row <- get_edge(log, "row")
-  edge_col <- get_edge(log, "col")
-  edge_row_ws <- as.integer(edge_row / 3) + 1
-  edge_col_ws <- as.integer(edge_col / 3) + 1
+  nrows <- max(facet$row)
+  ncols <- max(facet$col)
 
-  nrows <- max(pnts$row)
-  ncols <- max(pnts$col)
-
-  grid <- (max(pnts$x) - min(pnts$x) + 1) / ncols
-  if(grid != (max(pnts$y) - min(pnts$y) + 1) / nrows) {
+  grid <- (max(facet$x) - min(facet$x) + 1) / ncols
+  if(grid != (max(facet$y) - min(facet$y) + 1) / nrows) {
     stop("Inconsistent grid size. Grid must be square", call. = FALSE)
   }
 
-  min_x <- min(pnts$x, na.rm = TRUE)
-  max_x <- max(pnts$x, na.rm = TRUE)
-  min_y <- min(pnts$y, na.rm = TRUE)
-  max_y <- max(pnts$y, na.rm = TRUE)
+  min_x <- min(facet$x, na.rm = TRUE)
+  max_x <- max(facet$x, na.rm = TRUE)
+  min_y <- min(facet$y, na.rm = TRUE)
+  max_y <- max(facet$y, na.rm = TRUE)
 
   ## T1: Metadata ------------------------------
   meta <- dplyr::tibble(Run = folder,
@@ -116,14 +131,14 @@ topo_summary <- function(folder, file = "topo_summary.xlsx") {
     omit_edges(edge_row = edge_row, edge_col = edge_col,
                nrow = nrows, ncol = ncols)
 
-  # Seg-Cal
+  # Seg-Cal ---- SlpCal - A32:M38
   seg_cal <- le5_avg(pnts, le)
 
   # Bdr-Cal
-  ix <- ix_avgs(pnts, facet, edge_row, edge_col, nrows, ncols)
+  ix <- ix_avgs(pnts, edge_row, edge_col, nrows, ncols)
 
   # PntCounts
-  cnts <- pnts_count(pnts, le)
+  cnts <- pnts_count(allpeak, allpit, allcrest, allstream, le)
 
   # LS factor Calculations
   lsf <- ls_factor(pnts, edge_row, edge_col, nrows, ncols)
@@ -139,8 +154,8 @@ topo_summary <- function(folder, file = "topo_summary.xlsx") {
   slp_cal <- mid_calc(ix, cnts, avg, seg_cal)
 
 
-  density <- ws_density(pnts, edge_row, edge_col, nrows, ncols)
-  edge_drainage <- ws_drainage(pnts, pit, edge_row_ws, edge_col_ws, nrows, ncols)
+  density <- ws_density(pnts, allpit, edge_row, edge_col, nrows, ncols)
+  edge_drainage <- ws_drainage(pnts, stats, allpit, edge_row_ws, edge_col_ws, nrows, ncols)
 
   ## T2: Topographic derivatives of each slope segment on the representative hillslope ---------
   x1 <- dplyr::select(
@@ -274,7 +289,7 @@ topo_summary <- function(folder, file = "topo_summary.xlsx") {
   # Combine x5 and x6 into one table
   x5 <- dplyr::left_join(x5, x6, by = "Stat")
 
-  create_excel(file.path(folder, file), meta, x1, x2, x3, x4, x5)
+  create_excel(out_file, meta, x1, x2, x3, x4, x5)
 }
 
 
@@ -289,115 +304,116 @@ get_edge <- function(x, type) {
 
 
 
-test_files <- function(folder = "~/Dropbox/LITAP files/LandMapR_BR3Raw_20210427/LandMapR_Files/",
-                       id = "31M",
-                       avg_file = "BR3_1m_20210427.xlsx",
-                       grid = 1) {
-
-  d <- paste0(folder, "/", id)
-
-  suppressMessages({
-
-    topo <- readxl::read_excel(file.path(folder, "..", avg_file),
-                              sheet = "PercentileAccu", skip = 1) |>
-      janitor::clean_names() |>
-      dplyr::mutate(name = tolower(name),
-                    name = dplyr::case_when(name == "stdev" ~ "sd",
-                                            name == "median" ~ "50%",
-                                            name == "average" ~ "avg",
-                                            TRUE ~ name)) |>
-      dplyr::rename(qarea1 = a_qarea, qweti1 = a_qweti)
-
-    pnts <- foreign::read.dbf(paste0(d, "idem.dbf")) |>
-      janitor::clean_names() |>
-      dplyr::select(seqno = seq_no, row, col, idrec = drec) |>
-      dplyr::left_join(foreign::read.dbf(paste0(d, "dem.dbf")) |>
-                         janitor::clean_names() |>
-                         dplyr::select(seqno = seq_no, drec, elev),
-                       by = "seqno") |>
-      dplyr::mutate(x = col * grid,
-                    y = rev(row) * grid,
-                    elev = round(elev, 3),
-                    elev = dplyr::na_if(elev, -9999)) |>
-      dplyr::rename(inv_drec = idrec)
-
-    facet <- readr::read_tsv(paste0(d, "fuzc.txt")) |>
-      janitor::clean_names() |>
-      dplyr::left_join(dplyr::select(pnts, seqno, row, col), by = "seqno")
-
-    form1 <- readr::read_tsv(paste0(d, "Relz.txt")) |>
-      janitor::clean_names() |>
-      dplyr::left_join(dplyr::select(pnts, seqno, row, col), by = "seqno") |>
-      dplyr::mutate(l2pit = sqrt((row - pit_row)^2 + (col - pit_col)^2) * grid,
-                    l2peak = sqrt((row - pk_row)^2 + (col - pk_col)^2) * grid,
-                    l2str = sqrt((row - st_row)^2 + (col - st_col)^2) * grid,
-                    l2div = sqrt((row - cr_row)^2 + (col - cr_col)^2) * grid,
-                    lpit2peak = l2pit + l2peak,
-                    lstr2div = l2str + l2div,
-                    ppit2peakl = dplyr::if_else(lpit2peak <= 0, 0, l2pit / lpit2peak * 100),
-                    pstr2divl = dplyr::if_else(lstr2div <= 0, 0, l2str/lstr2div * 100)) |>
-      dplyr::mutate(dplyr::across(dplyr::contains('elev'), ~round(.x, 3))) |>
-      dplyr::select(-row, -col) |>
-      dplyr::rename(peak_row = pk_row, peak_col = pk_col, peak_elev = pk_elev) |>
-      dplyr::mutate(dplyr::across(dplyr::contains('elev'), ~dplyr::na_if(.x, -9999)))
-
-    form2 <- readr::read_tsv(paste0(d, "Form.txt")) |>
-      janitor::clean_names() |>
-      dplyr::rename(slope_pct = slope, qarea1 = qarea, qweti1 = qweti)
-
-
-    pnts <- dplyr::left_join(pnts, form1, by = "seqno") |>
-      dplyr::left_join(form2, by = "seqno")
-
-    pit <- foreign::read.dbf(paste0(d, "pit.dbf")) |>
-      janitor::clean_names()
-  })
-
-  list("facet" = facet, "pnts" = pnts, "topo" = topo, "pit" = pit)
+test_points <- function() {
+  test_files("dem.dbf") |>
+    foreign::read.dbf() |>
+    janitor::clean_names() |>
+    dplyr::rename(seqno = seq_no, upslope = up_slope,
+                  local_shed = shed_no, fill_shed = shed_now, parea = p_area) |>
+    dplyr::mutate(x = col * test_params()$grid + test_params()$min_x - 1,
+                  y = rev(row) * test_params()$grid + test_params()$min_y - 1,
+                  elev = round(elev, 3),
+                  elev = dplyr::na_if(elev, -9999))
 }
 
+test_inv <- function() {
 
-test_files2 <- function(folder = "~/Dropbox/LITAP files/LandMapR_BR3Raw_20210427/LandMapR_Files/",
-                       id = "31M",
-                       avg_file = "BR3_1m_20210427.xlsx",
-                       grid = 1,  min_x = 2415575, min_y = 7493199) {
+  pnts <- test_points()
 
-  d <- paste0(folder, "/", id)
+  test_files("idem.dbf") |>
+    foreign::read.dbf() |>
+    janitor::clean_names() |>
+    dplyr::rename(seqno = seq_no, upslope = up_slope,
+                  inv_initial_shed = shed_no,
+                  inv_local_shed = shed_now) |>
+    dplyr::left_join(dplyr::select(pnts, seqno, x, y), by = "seqno") |>
+    dplyr::mutate(elev = round(elev, 3),
+                  elev = dplyr::na_if(elev, -9999))
+}
 
-  suppressMessages({
+test_topo <- function() {
+  test_files("../BR3_1m_20210427.xlsx", id = NULL) |>
+    readxl::read_excel(sheet = "PercentileAccu", skip = 1, progress = FALSE) |>
+    janitor::clean_names() |>
+    dplyr::mutate(name = tolower(name),
+                  name = dplyr::case_when(name == "stdev" ~ "sd",
+                                          name == "median" ~ "50%",
+                                          name == "average" ~ "avg",
+                                          TRUE ~ name)) |>
+    dplyr::rename(qarea1 = a_qarea, qweti1 = a_qweti)
+}
 
-    inv <- foreign::read.dbf(paste0(d, "idem.dbf")) |>
-      janitor::clean_names() |>
-      dplyr::rename(seqno = seq_no, upslope = up_slope,
-                    local_shed = shed_no,
-                    fill_shed = shed_now) |>
-      dplyr::mutate(x = col * grid + min_x - 1,
-                    y = rev(row) * grid + min_y - 1,
-                    elev = round(elev, 3),
-                    elev = dplyr::na_if(elev, -9999))
+test_facet <- function() {
 
-    flow <- foreign::read.dbf(paste0(d, "dem.dbf")) |>
-      janitor::clean_names() |>
-      dplyr::rename(seqno = seq_no, upslope = up_slope,
-                    local_shed = shed_no,
-                    fill_shed = shed_now) |>
-      dplyr::mutate(x = col * grid + min_x - 1,
-                    y = rev(row) * grid + min_y -1,
-                    elev = round(elev, 3),
-                    elev = dplyr::na_if(elev, -9999))
+  pnts <- test_points()
 
-    relz <- foreign::read.dbf(paste0(d, "Relz.dbf")) |>
-      janitor::clean_names() |>
-      dplyr::rename_with(~stringr::str_replace(.x, "^pk_", "peak_"))
+  test_files("fuzc.txt") |>
+    readr::read_tsv(progress = FALSE, show_col_types = FALSE) |>
+    janitor::clean_names() |>
+    dplyr::rename(max_value = fac4) |>
+    dplyr::mutate(max_facet_name = "") |>
+    # Add rows/cols which not in original (but are in LITAP output)
+    dplyr::left_join(dplyr::select(pnts, seqno, row, col, x, y), by = "seqno")
+}
 
-    length <- foreign::read.dbf(paste0(d, "Len.dbf")) |>
-      janitor::clean_names() |>
-      dplyr::rename(seqno = seq_no) |>
-      dplyr::left_join(relz, by = "seqno")
+test_length <- function() {
+  pnts <- test_points()
 
-    weti <- foreign::read.dbf(paste0(d, "Form.dbf")) |>
-      janitor::clean_names()
-  })
+  test_files("Relz.txt") |>
+    readr::read_tsv(progress = FALSE, show_col_types = FALSE) |>
+    janitor::clean_names() |>
+    # Add rows/cols which not in original (but are in LITAP output)
+    dplyr::left_join(dplyr::select(pnts, seqno, row, col), by = "seqno") |>
+    dplyr::rename(peak_row = pk_row, peak_col = pk_col, peak_elev = pk_elev) |>
+    # Fix digits and missing
+    dplyr::mutate(dplyr::across(dplyr::contains('elev'), ~round(.x, 3))) |>
+    dplyr::mutate(dplyr::across(dplyr::contains('elev'), ~dplyr::na_if(.x, -9999)))
+}
 
-  list("inv" = inv, "flow" = flow, "length" = length, "weti" = weti)
+test_form <- function() {
+  test_files("Form.txt") |>
+    readr::read_tsv(progress = FALSE, show_col_types = FALSE) |>
+    janitor::clean_names() |>
+    dplyr::rename(slope_pct = slope, qarea1 = qarea, qweti1 = qweti) |>
+    # Fix digits and missing
+    dplyr::mutate(dplyr::across(dplyr::contains('elev'), ~round(.x, 3))) |>
+    dplyr::mutate(dplyr::across(dplyr::contains('elev'), ~dplyr::na_if(.x, -9999)))
+}
+test_stats_inv <- function() {
+  test_files("ipit.dbf") |>
+    foreign::read.dbf() |>
+    janitor::clean_names() |>
+    dplyr::rename("shedno" = "shed_no", "edge_pit" = "edge", "pit_seqno" = "pit_rec") |>
+    dplyr::mutate(
+      dplyr::across(dplyr::contains("elev"),
+                    \(x) round(x, 3) |> dplyr::na_if(-9999)))
+}
+
+test_stats <- function() {
+  test_files("pit.dbf") |>
+    foreign::read.dbf() |>
+    janitor::clean_names() |>
+    dplyr::rename("shedno" = "shed_no", "edge_pit" = edge, "pit_seqno" = "pit_rec") |>
+    dplyr::mutate(
+      dplyr::across(dplyr::contains("elev"),
+                    \(x) round(x, 3) |> dplyr::na_if(-9999)))
+}
+
+test_params <- function() {
+  list(
+    folder = "~/Dropbox/LITAP files/LandMapR_BR3Raw_20210427/LandMapR_Files/",
+    id = "31M",
+    min_x = 2415575, min_y = 7493199,
+    edge_row = 15, edge_col = 9,
+    edge_row_ws = 6, edge_col_ws = 4,
+    grid = 1)
+}
+
+test_files <- function(file, id) {
+
+  if(missing(id)) id <- test_params()$id
+  if(!is.null(id)) {
+    d <- paste0(test_params()$folder, "/", id, file)
+  } else d <- file.path(test_params()$folder, file)
+  d
 }
