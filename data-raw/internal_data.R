@@ -1,12 +1,9 @@
 fix_names <- list("elev" = c("^elevation$" = "elev",
                              "^z$" = "elev",
-                             "^northing$" = "y",
-                             "^latitude$" = "y",
-                             "^lat$" = "y",
-                             "^easting$" = "x",
-                             "^longitude$" = "x",
-                             "^lon$" = "x",
-                             "^long$" = "x",
+                             "^(north)|(northing)|(south)|(southing)$" = "y",
+                             "^(latitude)|(lat)$" = "y",
+                             "^(east)|(easting)|(west)|(westing)$" = "x",
+                             "^(longitude)|(lon)|(long)$" = "x",
                              "^gridcode$" = "zone",
                              "^code$" = "zone",
                              "^ecozone$" = "zone",
@@ -23,6 +20,7 @@ fix_names <- list("elev" = c("^elevation$" = "elev",
                              "^beczone$" = "zone",
                              "^bec$" = "zone",
                              "^dss$" = "zone"))
+# Final acceptable names, see fix_names above to rename things
 match_names <- dplyr::tribble(
   ~type, ~name, ~required,
 
