@@ -1,11 +1,8 @@
 
 # From Sheet SlpCal, A41:U42
-ix_avgs <- function(pnts, facet, edge_row, edge_col, nrows, ncols) {
+ix_avgs <- function(pnts, edge_row, edge_col, nrows, ncols) {
 
-  tbl_le_sum <- dplyr::select(facet, "seqno", "max_facet")
-
-  j <- dplyr::left_join(tbl_le_sum, pnts, by = "seqno")
-
+  j <- pnts
   # TODO: Note that this means that j1 DOESNT get filtered... should it?
   #  - I think this is because we're joining later by j drec -> j1, so we want
   #    bits in the edges... correct?
@@ -88,7 +85,7 @@ ix_avg <- function(j, j1, LE) {
 }
 
 le5_avg <- function(pnts, le) {
-  dplyr::inner_join(le, pnts, by = c("row", "col", "seqno")) |>
+  dplyr::inner_join(le, pnts, by = c("row", "col", "seqno", "max_facet")) |>
     dplyr::filter(max_facet != 0) |>
     dplyr::select("seqno", "max_facet", "z2cr", "l2div", "z2st", "l2str",
                   "slope_pct", "aspect", "prof", "plan", "qarea1", "qweti1") |>
@@ -96,18 +93,18 @@ le5_avg <- function(pnts, le) {
     dplyr::summarize(counts = dplyr::n(), dplyr::across(-"seqno", mean))
 }
 
-pnts_count <- function(pnts, le) {
-  type_count(pnts, le, "crest") |>
-    dplyr::left_join(type_count(pnts, le, "stream"), by = "max_facet") |>
-    dplyr::left_join(type_count(pnts, le, "peak"), by = "max_facet") |>
-    dplyr::left_join(type_count(pnts, le, "pit"), by = "max_facet") |>
+pnts_count <- function(allpeak, allpit, allcrest, allstream, le) {
+  type_count(allcrest, le, "crest") |>
+    dplyr::left_join(type_count(allstream, le, "stream"), by = "max_facet") |>
+    dplyr::left_join(type_count(allpeak, le, "peak"), by = "max_facet") |>
+    dplyr::left_join(type_count(allpit, le, "pit"), by = "max_facet") |>
     dplyr::mutate(
       dplyr::across(dplyr::ends_with("_cnt"), ~tidyr::replace_na(.x, 0)))
 
 }
 
-type_count <- function(pnts, le, type) {
-  all_summary(pnts, type) |>
+type_count <- function(allXXX, le, type) {
+  allXXX |>
     dplyr::select(seqno) |>
     dplyr::inner_join(le, by = "seqno")  |>
     dplyr::group_by(max_facet) |>
@@ -345,7 +342,7 @@ ls_factor <- function(pnts, edge_row, edge_col, nrows, ncols) {
 }
 
 
-ws_density <- function(pnts, edge_row, edge_col, nrows, ncols) {
+ws_density <- function(pnts, allpit, edge_row, edge_col, nrows, ncols) {
 
 
   WDqry01 <- dplyr::count(pnts, .data$pit_row, .data$pit_col, name = "pit_pnt_cnts") |>
@@ -358,7 +355,7 @@ ws_density <- function(pnts, edge_row, edge_col, nrows, ncols) {
     dplyr::filter(!(.data$pit_row == 0 & .data$pit_col == 0))
 
   # Get pit counts without pits on exact edge
-  WDqry06 <- all_pit(pnts) |>
+  WDqry06 <- allpit |>
     # WDqry05 - Remove pits on exact edges
     dplyr::select("seqno", "row", "col") |>
     dplyr::anti_join(WDqry03, by = c("row" = "pit_row", "col" = "pit_col")) |>
@@ -366,7 +363,7 @@ ws_density <- function(pnts, edge_row, edge_col, nrows, ncols) {
     dplyr::inner_join(WDqry01, by = c("col" = "pit_col", "row" = "pit_row"))
 
   # Get pit counts without pits in edge buffer
-  WDqry011 <- all_pit(pnts) |>
+  WDqry011 <- allpit |>
     omit_edges(edge_row, edge_col, nrows, ncols) |>
     dplyr::left_join(WDqry01, by = c("row" = "pit_row", "col" = "pit_col")) |>
     dplyr::select("row", "col", "pit_pnt_cnts")
@@ -407,8 +404,8 @@ ws_density <- function(pnts, edge_row, edge_col, nrows, ncols) {
 
 }
 
-ws_drainage <- function(pnts, pit, edge_row_ws, edge_col_ws, nrows, ncols) {
-  dplyr::select(all_pit(pnts), "seqno", "row", "col", "pit_row", "pit_col") |>
+ws_drainage <- function(pnts, pit, allpit, edge_row_ws, edge_col_ws, nrows, ncols) {
+  dplyr::select(allpit, "seqno", "row", "col", "pit_row", "pit_col") |>
     dplyr::left_join(pit, by = c("pit_row", "pit_col")) |>
     dplyr::select("seqno", "row", "col", "shed_area") |>
     keep_edges(edge_row = edge_row_ws, edge_col = edge_col_ws, nrows, ncols) |>
