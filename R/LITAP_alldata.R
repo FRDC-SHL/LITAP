@@ -1,46 +1,61 @@
-all_peak <- function(points) {
-  all_summary(points, type = "pit")
+all_peak <- function(folder = NULL, points = NULL, stats = NULL) {
+  all_summary(folder, points, stats, type = "peak") |>
+    dplyr::rename("pit_elev_2" = "pit_elev.x",
+                  "pit_elev" = "pit_elev.y")
 }
 
-all_stream <- function(points) {
-  all_summary(points, type = "stream")
+all_stream <- function(folder = NULL, points = NULL, stats = NULL) {
+  all_summary(folder, points, stats, type = "stream") |>
+    dplyr::select(-"pit_elev.y") |>
+    dplyr::rename("pit_elev" = "pit_elev.x")
 }
 
-all_pit <- function(points) {
-  all_summary(points, type = "pit")
+all_pit <- function(folder = NULL, points = NULL, stats = NULL) {
+  all_summary(folder, points, stats, type = "pit") |>
+    dplyr::select(-"pit_elev.y") |>
+    dplyr::rename("pit_elev" = "pit_elev.x")
 }
 
-all_crest <- function(points) {
-  all_summary(points, type = "crest")
+all_crest <- function(folder = NULL, points = NULL, stats = NULL) {
+  all_summary(folder, points, stats, type = "crest") |>
+    dplyr::select(-"pit_elev.y") |>
+    dplyr::rename("pit_elev" = "pit_elev.x")
 }
 
-all_summary <- function(source, type) {
+all_summary <- function(folder = NULL, points = NULL, stats = NULL, type) {
 
-  if(is.character(source)) {
-    all_pnts <- all_points(source)
-  } else {
-    all_pnts <- source
+  # All Points
+  if(is.null(points)) points <- all_points(folder)
+
+  # Stats file
+  if(is.null(stats)) {
+    stats <- all_stats(folder, type = dplyr::if_else(type %in% c("peak"), "inverted", "pit"))
   }
+
   t <- c("crest" = "cr", "stream" = "st", "pit" = "pit", "peak" = "peak")
 
   type_cols <- paste0(t[type], c("_row", "_col")) |>
     setNames(c("row", "col"))
 
-  seq <- all_pnts |>
+  seq <- points |>
     dplyr::select(dplyr::all_of(type_cols)) |>
     dplyr::distinct() |>
     tidyr::drop_na()
 
-  pnts <- dplyr::select(all_pnts, "seqno", "x", "y", "row", "col")
+  pnts <- dplyr::select(points, "seqno", "x", "y", "row", "col")
 
-  pnts_type <- all_pnts |>
+  pnts_type <- points |>
     dplyr::semi_join(seq, by = c("row", "col"))
 
   for(i in t[names(t) != type]) {
     pnts_type <- link_points(pnts_type, pnts, by = i)
   }
 
-  pnts_type
+  joinby <- setNames(c("pit_seqno", "pit_row", "pit_col"), nm = c("seqno", "row", "col"))
+
+  pnts_type |>
+    dplyr::left_join(stats, by = joinby) |>
+    dplyr::mutate(pnt_mark = .env$type)
 }
 
 link_points <- function(x, y, by) {
@@ -100,4 +115,21 @@ all_points <- function(folder) {
       lstr2div = .data$l2str + .data$l2div,
       ppit2peakl = dplyr::if_else(.data$lpit2peak <= 0, 0, .data$l2pit / .data$lpit2peak * 100),
       pstr2divl = dplyr::if_else(.data$lstr2div <= 0, 0, .data$l2str/.data$lstr2div * 100))
+}
+
+
+all_stats <- function(folder, type) {
+
+  testing <- folder == "testing"
+  if(testing) {
+    message("Using test (stats) data for all_points()")
+    t <- test_files3()
+    if(type == "pit") stats <- test_stats()
+    if(type == "inverted") stats <- test_stats_inv()
+  } else {
+    stats <- get_previous(folder, where = "flow", step = type, type = "stats")
+  }
+
+  stats |>
+    dplyr::rename_with(\(x) stringr::str_replace(x, "(shedno|edge)", paste0(type, "_\\1")))
 }
