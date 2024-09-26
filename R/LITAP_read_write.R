@@ -177,25 +177,16 @@ locs_create <- function(out_folder, which, clean) {
 #' Load previously created files
 #'
 #' @param folder Location of Project
-#' @param step Fill, pond, etc.
 #' @param where backup, Flow, Form, etc.
-#' @param type Some files have both "db" and "stats" extract which one?
+#' @param step Fill, pond, etc.
+#' @param type Some files have both "dem" and "stats" extract which one?
 #'
 #'
 #' @noRd
-get_previous <- function(folder, step, where, type = "dem") {
+get_previous <- function(folder, where, step, type = "dem") {
 
   check_folder(folder, fun = stop)
-
-  f <- list.files(file.path(folder, where), pattern = paste0("_", step),
-                  recursive = TRUE, full.names = TRUE)
-  f <- f[stringr::str_detect(basename(f), type)]
-
-  if(length(f) > 1) stop("There is more than one eligable ", step, " for type ",
-                         type, "\n(",
-                         paste0(f, collapse = "\n"), ")", call. = FALSE)
-  if(length(f) == 0) stop("There are no eligable ", step, " for type ", type, " files",
-                          call. = FALSE)
+  f <- list_previous(folder, step, where, type)
 
   ext <- get_format(folder, where)
 
@@ -204,6 +195,26 @@ get_previous <- function(folder, step, where, type = "dem") {
 
   dplyr::select(r, -dplyr::contains("_buffer"))
 }
+
+list_previous <- function(folder, step, where, type = "dem", check_only = FALSE) {
+  f <- list.files(file.path(folder, where), pattern = paste0("_", step),
+                  recursive = TRUE, full.names = TRUE)
+  f <- f[stringr::str_detect(basename(f), type)]
+
+  # return TRUE/FALSE with no errors
+  if(check_only) f <- length(f) == 1
+
+  # Otherwise error
+  if(length(f) > 1) stop("There is more than one eligable ", step, " for type ",
+                         type, "\n(",
+                         paste0(f, collapse = "\n"), ")", call. = FALSE)
+  if(length(f) == 0)  stop("Cannot find ", where, " ", paste0(type, "_", step), " files. ",
+                           "Did you run `", where, "_mapper()`?",
+                           call. = FALSE)
+
+  f
+}
+
 
 #' Guess format from previous files
 #'
