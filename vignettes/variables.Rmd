@@ -38,7 +38,7 @@ litap_style <- function(gt) {
                    fn = function(x) paste0("<code>", x, "</code>")) %>%
     tab_style(location = cells_column_labels(), style = cell_text(weight = "bold")) %>%
     cols_align(align = "left", columns = "desc") %>%
-    fmt_missing(columns = "landmapr", missing_text = "--") %>%
+    sub_missing(columns = "landmapr", missing_text = "--") %>%
     opt_footnote_marks(marks = "standard")
 }
 
@@ -159,7 +159,7 @@ Variables in `flow/dem_inverted` (corresponds to FlowMapR's `XXXidem.dbf`)
 
 This list only includes variables not already described above in the [Generic DEMs](#generic-dem).
 
-Note: We don't calculate Vol2Fl, MM2Fl or PArea because in the original LandMapR
+**Note**: We don't calculate Vol2Fl, MM2Fl or PArea because in the original LandMapR
 they weren't calculated specifically for the inverted DEM, 
 but were identical to those in the non-inverted DEM.
 
@@ -489,7 +489,7 @@ The following describes variables output by `facet_mapper()` to various files in
 file format chosen.
 
 ### `facet/dem_fuza`
-Variables in `form/dem_fuza` (corresponds to FlowMapR's `XXXfuza.dbf`).
+Variables in `facet/dem_fuza` (corresponds to FlowMapR's `XXXfuza.dbf`).
 
 This list only includes variables not already described above in the [Generic DEMs](#generic-dem).
 
@@ -644,6 +644,21 @@ if(!all(p_facet %in% p1_facet) | !all(p1_facet %in% p_facet)) {
 }
 
 ```
+
+### Extra Data files (`all_XXX`, etc.)
+
+There are several extra data files created at the end of `facet_mapper()`
+which are not part of the original FlowMapR runs, but are adapted from an 
+Access workflow developed by Li, Sheng. 
+
+Variables in `all_XXX.xlsx` (corresponds to Li, Sheng's `XXX_AllData.txt`).
+
+This list only includes variables not already described above in the [Generic DEMs](#generic-dem).
+
+**Note**: We don't calculate the `lk_XXX` variables in the original `XXX_ALLData.txt`
+files because they correspond to columns already included in the data. 
+For example `lk_st_row` corresponse to `st_row`, etc. For variables like `lk_st_x`
+which were not originally included, they are now represented by `st_x`.
 
 
 ## References
