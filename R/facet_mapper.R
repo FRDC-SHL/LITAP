@@ -289,8 +289,13 @@ facet_mapper <- function(folder, arule = NULL, crule,
   }
 
   # Summary tables --------------------------------------------------
-  summary_tables(folder, "summary_table.xlsx")
+  task <- "creating summary tables"
+  announce(task, quiet)
+  sub_start <- Sys.time()
+  log_start(task, sub_start, log_file)
+  summary_tables(folder)
+  log_time(sub_start, log_file)
 
-  # Save final time
+  # Save final time --------------------------------------------------
   run_time(start, log_file, quiet)
 }
