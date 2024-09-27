@@ -71,7 +71,16 @@ check_grid <- function(grid) {
 
 calc_grid <- function(db) {
   x <- sort(unique(db$x))
-  median(x - dplyr::lag(x), na.rm = TRUE)
+  gx <- median(x - dplyr::lag(x), na.rm = TRUE)
+
+  y <- sort(unique(db$y))
+  gy <- median(y - dplyr::lag(y), na.rm = TRUE)
+
+  if(gx != gy) {
+    stop("Inconsistent grid size. Grid must be square", call. = FALSE)
+  }
+
+  gx
 }
 
 run_time <- function(start, log_file, quiet) {
