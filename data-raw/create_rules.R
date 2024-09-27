@@ -127,7 +127,7 @@ foreign::write.dbf(as.data.frame(crule), "./inst/extdata/crule.dbf")
 
 # foreign::read.dbf("../Docs/C7rule.dbf") |>
 #   datapasta::tribble_paste()
-
+# Identical to ~/Dropbox/LITAP files/LandMapR_BR3Raw_20210427/LandMapR_Files/C7rule.dbf"
 tibble::tribble(
   ~F_NAME,     ~FUZATTR, ~ATTRWT, ~FACET_NO, ~F_CODE,
     "CST",   "CONVEX_D",     15L,       11L,      1L,
