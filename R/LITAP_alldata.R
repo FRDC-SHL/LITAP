@@ -123,7 +123,6 @@ all_stats <- function(folder, type) {
   testing <- folder == "testing"
   if(testing) {
     message("Using test (stats) data for all_points()")
-    t <- test_files3()
     if(type == "pit") stats <- test_stats()
     if(type == "inverted") stats <- test_stats_inv()
   } else {

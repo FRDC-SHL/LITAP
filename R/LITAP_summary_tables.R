@@ -61,36 +61,30 @@ topo_summary <- function(folder, allpoints, allpeak, allpit, allcrest, allstream
 
   # Load data
   testing <- folder == "testing"
+
   if(testing) {
+
     facet <- test_facet()
-    form <- test_form()
     topo <- test_topo()
     stats <- test_stats()
 
-    edge_row <- test_params()$edge_row
-    edge_col <- test_params()$edge_col
-    edge_row_ws <- test_params()$edge_row_ws
-    edge_col_ws <- test_params()$edge_col_ws
-    date <- Sys.Date()
-
-    out_file <- "testing/topographic_summary_test.xlsx"
+    log <- test_log()
 
   } else {
 
     facet <- get_previous(folder, where = "facet", step = "fuzc")
-    form <- get_previous(folder, where = "form", step = "form")
-    topo <- readxl::read_excel(file.path(folder, paste0(basename(folder), "topographic_derivatives.xlsx")))
+    topo <- readxl::read_excel(file.path(folder, "topographic_derivatives.xlsx"))
     stats <- get_previous(folder, where = "flow", step = "pit", type = "stats")
 
     log <- readr::read_lines(list.files(folder, "facet.log", full.names = TRUE))
-    date <- stringr::str_subset(log, "Run started") |>
-      stringr::str_extract("[0-9-]+ [0-9:]+")
-    edge_row <- get_edge(log, "row")
-    edge_col <- get_edge(log, "col")
-    edge_row_ws <- as.integer(edge_row / 3) + 1
-    edge_col_ws <- as.integer(edge_col / 3) + 1
   }
 
+  # T1: Metadata ------------------------------
+  meta <- tbl_meta(facet, log)
+  tbl_meta <- meta$tbl_meta
+  meta <- meta$meta
+
+  # Prepare data -----------------------------------
   pnts <- allpoints
 
   nrows <- max(facet$row)
@@ -293,7 +287,6 @@ topo_summary <- function(folder, allpoints, allpeak, allpit, allcrest, allstream
 }
 
 
-
 get_edge <- function(x, type) {
   type <- paste0("edge_", type)
   stringr::str_subset(x, type) |>
@@ -301,119 +294,7 @@ get_edge <- function(x, type) {
     as.numeric()
 }
 
-
-
-
-test_points <- function() {
-  test_files("dem.dbf") |>
-    foreign::read.dbf() |>
-    janitor::clean_names() |>
-    dplyr::rename(seqno = seq_no, upslope = up_slope,
-                  local_shed = shed_no, fill_shed = shed_now, parea = p_area) |>
-    dplyr::mutate(x = col * test_params()$grid + test_params()$min_x - 1,
-                  y = rev(row) * test_params()$grid + test_params()$min_y - 1,
-                  elev = round(elev, 3),
-                  elev = dplyr::na_if(elev, -9999))
-}
-
-test_inv <- function() {
-
-  pnts <- test_points()
-
-  test_files("idem.dbf") |>
-    foreign::read.dbf() |>
-    janitor::clean_names() |>
-    dplyr::rename(seqno = seq_no, upslope = up_slope,
-                  inv_initial_shed = shed_no,
-                  inv_local_shed = shed_now) |>
-    dplyr::left_join(dplyr::select(pnts, seqno, x, y), by = "seqno") |>
-    dplyr::mutate(elev = round(elev, 3),
-                  elev = dplyr::na_if(elev, -9999))
-}
-
-test_topo <- function() {
-  test_files("../BR3_1m_20210427.xlsx", id = NULL) |>
-    readxl::read_excel(sheet = "PercentileAccu", skip = 1, progress = FALSE) |>
-    janitor::clean_names() |>
-    dplyr::mutate(name = tolower(name),
-                  name = dplyr::case_when(name == "stdev" ~ "sd",
-                                          name == "median" ~ "50%",
-                                          name == "average" ~ "avg",
-                                          TRUE ~ name)) |>
-    dplyr::rename(qarea1 = a_qarea, qweti1 = a_qweti)
-}
-
-test_facet <- function() {
-
-  pnts <- test_points()
-
-  test_files("fuzc.txt") |>
-    readr::read_tsv(progress = FALSE, show_col_types = FALSE) |>
-    janitor::clean_names() |>
-    dplyr::rename(max_value = fac4) |>
-    dplyr::mutate(max_facet_name = "") |>
-    # Add rows/cols which not in original (but are in LITAP output)
-    dplyr::left_join(dplyr::select(pnts, seqno, row, col, x, y), by = "seqno")
-}
-
-test_length <- function() {
-  pnts <- test_points()
-
-  test_files("Relz.txt") |>
-    readr::read_tsv(progress = FALSE, show_col_types = FALSE) |>
-    janitor::clean_names() |>
-    # Add rows/cols which not in original (but are in LITAP output)
-    dplyr::left_join(dplyr::select(pnts, seqno, row, col), by = "seqno") |>
-    dplyr::rename(peak_row = pk_row, peak_col = pk_col, peak_elev = pk_elev) |>
-    # Fix digits and missing
-    dplyr::mutate(dplyr::across(dplyr::contains('elev'), ~round(.x, 3))) |>
-    dplyr::mutate(dplyr::across(dplyr::contains('elev'), ~dplyr::na_if(.x, -9999)))
-}
-
-test_form <- function() {
-  test_files("Form.txt") |>
-    readr::read_tsv(progress = FALSE, show_col_types = FALSE) |>
-    janitor::clean_names() |>
-    dplyr::rename(slope_pct = slope, qarea1 = qarea, qweti1 = qweti) |>
-    # Fix digits and missing
-    dplyr::mutate(dplyr::across(dplyr::contains('elev'), ~round(.x, 3))) |>
-    dplyr::mutate(dplyr::across(dplyr::contains('elev'), ~dplyr::na_if(.x, -9999)))
-}
-test_stats_inv <- function() {
-  test_files("ipit.dbf") |>
-    foreign::read.dbf() |>
-    janitor::clean_names() |>
-    dplyr::rename("shedno" = "shed_no", "edge_pit" = "edge", "pit_seqno" = "pit_rec") |>
-    dplyr::mutate(
-      dplyr::across(dplyr::contains("elev"),
-                    \(x) round(x, 3) |> dplyr::na_if(-9999)))
-}
-
-test_stats <- function() {
-  test_files("pit.dbf") |>
-    foreign::read.dbf() |>
-    janitor::clean_names() |>
-    dplyr::rename("shedno" = "shed_no", "edge_pit" = edge, "pit_seqno" = "pit_rec") |>
-    dplyr::mutate(
-      dplyr::across(dplyr::contains("elev"),
-                    \(x) round(x, 3) |> dplyr::na_if(-9999)))
-}
-
-test_params <- function() {
-  list(
-    folder = "~/Dropbox/LITAP files/LandMapR_BR3Raw_20210427/LandMapR_Files/",
-    id = "31M",
-    min_x = 2415575, min_y = 7493199,
-    edge_row = 15, edge_col = 9,
-    edge_row_ws = 6, edge_col_ws = 4,
-    grid = 1)
-}
-
-test_files <- function(file, id) {
-
-  if(missing(id)) id <- test_params()$id
-  if(!is.null(id)) {
-    d <- paste0(test_params()$folder, "/", id, file)
-  } else d <- file.path(test_params()$folder, file)
-  d
+get_detail <- function(x, type, pattern = ".+") {
+  stringr::str_subset(x, type) |>
+    stringr::str_extract(paste0("(?<=", type, ")", pattern))
 }
