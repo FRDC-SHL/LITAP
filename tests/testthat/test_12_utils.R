@@ -1,3 +1,7 @@
+test_that("calc_grid()", {
+  expect_silent(calc_grid(test_dem)) |>
+    expect_equal(1)
+})
 
 # merge_all() -----------------------------------------------------------
 # test_that("merge_all() works as expected", {
