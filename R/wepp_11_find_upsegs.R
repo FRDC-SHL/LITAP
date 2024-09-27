@@ -100,7 +100,8 @@ find_upsegs <- function(segs) {
     dplyr::rename(top_imp = "center_imp")
 
   dplyr::left_join(s, ups, by = c("sort_order" = "down_seg")) %>%
-    dplyr::mutate(dplyr::across(.fns = ~tidyr::replace_na(., 0))) %>%
+    dplyr::mutate(dplyr::across(.cols = dplyr::everything(),
+                                .fns = ~tidyr::replace_na(., 0))) %>%
     dplyr::left_join(s_keep, by = "sort_order")
 
 }
