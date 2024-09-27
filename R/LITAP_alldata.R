@@ -93,7 +93,7 @@ all_points <- function(folder) {
     dplyr::rename_with(.cols = -c("seqno", dplyr::contains("inv_")),
                        ~paste0("inv_", .))
 
-  common <- c("x", "y", "row", "col", "elev", "drec", "upslope")
+  common <- c("x", "y", "row", "col", "elev", "drec", "ddir", "upslope")
   length <- dplyr::select(length, -dplyr::any_of(common))
   form <- dplyr::select(form, -dplyr::any_of(common))
 
