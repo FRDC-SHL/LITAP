@@ -53,6 +53,7 @@ summary_tables <- function(folder) {
   openxlsx::write.xlsx(allpit, allpit_file)
   openxlsx::write.xlsx(allcrest, allcrest_file)
   openxlsx::write.xlsx(allstream, allstream_file)
+  openxlsx::write.xlsx(allpoints, allpoints_file)
 }
 
 
@@ -86,80 +87,84 @@ topo_summary <- function(folder, allpoints, allpeak, allpit, allcrest, allstream
 
   # Prepare data -----------------------------------
   pnts <- allpoints
+  pnts_no_edge <- omit_edges(pnts, meta = meta)
 
-  nrows <- max(facet$row)
-  ncols <- max(facet$col)
-
-  grid <- (max(facet$x) - min(facet$x) + 1) / ncols
-  if(grid != (max(facet$y) - min(facet$y) + 1) / nrows) {
-    stop("Inconsistent grid size. Grid must be square", call. = FALSE)
-  }
-
-  min_x <- min(facet$x, na.rm = TRUE)
-  max_x <- max(facet$x, na.rm = TRUE)
-  min_y <- min(facet$y, na.rm = TRUE)
-  max_y <- max(facet$y, na.rm = TRUE)
-
-  ## T1: Metadata ------------------------------
-  meta <- dplyr::tibble(Run = folder,
-                        `facet_mapper() Run` = date,
-                        `Summary Table Creation` = Sys.Date(),
-                        `LITAP version` = packageVersion("LITAP"),
-                        Cols = ncols,
-                        Rows = nrows,
-                        `Points (n)` = nrow(pnts),
-                        `Cell Size` = grid,
-                        `Edge Rows` = edge_row,
-                        `Edge Cols` = edge_col,
-                        `Edge Rows (WS)` = edge_row_ws,
-                        `Edge Cols (WS)` = edge_col_ws,
-                        `Min X` = min_x,
-                        `Max X` = max_x,
-                        `Min Y` = min_y,
-                        `Max Y` = max_y,
-                        `Min Z` = min(pnts$elev, na.rm = TRUE),
-                        `Max Z` = max(pnts$elev, na.rm = TRUE))
-
-
-  le <- dplyr::select(facet, "row", "col", "seqno", "max_facet") |>
-    omit_edges(edge_row = edge_row, edge_col = edge_col,
-               nrow = nrows, ncol = ncols)
-
-  # Seg-Cal ---- SlpCal - A32:M38
-  seg_cal <- le5_avg(pnts, le)
-
-  # Bdr-Cal
-  ix <- ix_avgs(pnts, edge_row, edge_col, nrows, ncols)
-
-  # PntCounts
-  cnts <- pnts_count(allpeak, allpit, allcrest, allstream, le)
-
-  # LS factor Calculations
-  lsf <- ls_factor(pnts, edge_row, edge_col, nrows, ncols)
-
-  avg <- dplyr::filter(topo, .data$name == "avg") |>
-    dplyr::mutate(zcr2st = lsf$zcr2st[2],
-                  lstr2div = lsf$lstr2div[2]) |>
-    # TODO: Ask Li, Sheng if these are constants
-    dplyr::mutate(slope3 = 6.87521764069166,
-                  slope4 = 309.311743656845)
-
-  # Average calcs
-  slp_cal <- mid_calc(ix, cnts, avg, seg_cal)
-
-
-  density <- ws_density(pnts, allpit, edge_row, edge_col, nrows, ncols)
-  edge_drainage <- ws_drainage(pnts, stats, allpit, edge_row_ws, edge_col_ws, nrows, ncols)
+  ## Sub calculations --------------------------
+  seg_cal <- le5_avg(pnts_no_edge)  # Seg-Cal ---- SlpCal - A32:M38
+  lsf <- ls_factor(pnts_no_edge)    # LS factor Calculations
+  avg <- avg_topo(topo, lsf)
+  cnts <- pnts_count(allpeak, allpit, allcrest, allstream, pnts_no_edge) # PntCounts
+  slp_cal <- mid_calc(pnts, pnts_no_edge, cnts, avg, seg_cal)            # Average calcs
+  density <- ws_density(pnts, allpit, meta)
+  edge_drainage <- ws_drainage(pnts, stats, allpit, meta)
 
   ## T2: Topographic derivatives of each slope segment on the representative hillslope ---------
+  tbl_x1 <- tbl_derivatives(slp_cal, avg)
+
+  ## T3: Area-weighted average values of selected topographic derivatives for each slope segment ----
+  tbl_x2 <- tbl_avg(seg_cal, avg)
+
+  ## T4: Statistics of selected topographic derivatives (area-weighted) -------
+  tbl_x3 <- tbl_stats(topo, lsf)
+
+  ## T5: Indexes, parameters and ratios characterizing different aspects of the landscape topography -----
+  tbl_x4 <- tbl_indices(topo, meta, avg, cnts, slp_cal, density, edge_drainage)
+
+  ## T6: Location (X) and relief (Z) of points (at the top of the slope and the end of each segment) along the modal hillslopes ----
+  tbl_x5 <- tbl_locs(slp_cal, lsf)
+
+  # Write to excel file -----------------------------------------
+  create_excel(out_file, tbl_meta, tbl_x1, tbl_x2, tbl_x3, tbl_x4, tbl_x5)
+}
+
+tbl_meta <- function(facet, log) {
+
+  meta <- dplyr::summarize(
+    facet,
+    run = get_detail(log, "Input folder = "), # Run
+    run_date = get_detail(log, "Run started: ", pattern = "[0-9-]+ [0-9:]+"),   # `facet_mapper() Run`
+    summary_date = Sys.Date(),             # `Summary Table Creation`
+    version = packageVersion("LITAP"),   # `LITAP version`
+    ncols = max(col),                      # Cols
+    nrows = max(row),                      # Rows
+    n = dplyr::n(),                        # `Points (n)`
+    n_missing = sum(!is.na(elev)),         # `Points missing (n)`
+    grid = calc_grid(facet),               # `Cell Size`
+    edge_row = get_edge(log, "row"),       # `Edge Rows`
+    edge_col = get_edge(log, "col"),       # `Edge Cols`
+    edge_row_ws = as.integer(edge_row / 3) + 1, #`Edge Rows (WS)`
+    edge_col_ws = as.integer(edge_col / 3) + 1, #`Edge Cols (WS)`
+    min_x = min(x, na.rm = TRUE),          # `Min X`
+    max_x = max(x, na.rm = TRUE),          # `Max X`
+    min_y = min(y, na.rm = TRUE),          # `Min Y`
+    max_y = max(y, na.rm = TRUE),          # `Max Y`
+    min_z = min(elev, na.rm = TRUE),       # `Min Z`
+    max_z = max(elev, na.rm = TRUE))       # `Max Z`
+
+  nms <- c(
+    "Run" = "run", "facet_mapper() Run" = "run_date",
+    "Summary Table Creation" = "summary_date", "LITAP version" = "version",
+    "Cols" = "ncols", "Rows" = "nrows",
+    "Points (n)" = "n", "Points Not Missing (n)" = "n_missing",
+    "Cell Size" = "grid", "Edge Rows" = "edge_row", "Edge Cols" = "edge_col",
+    "Edge Rows (WS)" = "edge_row_ws", "Edge Cols (WS)" = "edge_col_ws",
+    "Min X" = "min_x", "Max X" = "max_x", "Min Y" = "min_y", "Max Y" = "max_y",
+    "Min Z" = "min_z", "Max Z" = "max_z")
+
+  tbl_meta <- dplyr::rename(meta, all_of(nms))
+
+  list(meta = meta, tbl_meta = tbl_meta)
+}
+
+tbl_derivatives <- function(slp_cal, avg) {
   x1 <- dplyr::select(
     slp_cal, "type",
     "L (m)" = "l_final", "Z (m)" = "z_final", "S (%)" = "s_final",
     "P_A (%)" = "pa_final", "P_L (%)" = "pl_final", "P_Z (%)" = "pz_final",
     "WI" = "wi") |>
-    dplyr::mutate(type = toupper(type)) |>
-    tidyr::pivot_longer(-type) |>
-    dplyr::group_by(name) |>
+    dplyr::mutate(type = toupper(.data$type)) |>
+    tidyr::pivot_longer(-"type") |>
+    dplyr::group_by(.data$name) |>
     dplyr::mutate(Sum = sum(.data$value)) |>
     tidyr::pivot_wider(names_from = "type", values_from = "value") |>
     dplyr::relocate("Sum", .after = dplyr::last_col()) |>
@@ -168,8 +173,11 @@ topo_summary <- function(folder, allpoints, allpeak, allpit, allcrest, allstream
   x1$Avg[3] <- x1$Sum[2] / x1$Sum[1] * 100
   x1$Avg[7] <- avg$qweti1
 
-  ## T3: Area-weighted average values of selected topographic derivatives for each slope segment ----
-  x2 <- seg_cal |>
+  x1
+}
+
+tbl_avg <- function(seg_cal, avg) {
+  seg_cal |>
     dplyr::select("SG (%)" = "slope_pct", "Aspect (degree)" = "aspect",
                   "PrCurv (degree / 100m)" = "prof", "PlCurv (degree / 100m)" = "plan",
                   "Qarea" = "qarea1", "Qweti" = "qweti1") |>
@@ -182,9 +190,10 @@ topo_summary <- function(folder, allpoints, allpeak, allpit, allcrest, allstream
         dplyr::select("Avg" = "value")) |>
     dplyr::mutate(` ` = "") |>
     dplyr::relocate(` `, .before = "Avg")
+}
 
-  ## T4: Statistics of selected topographic derivatives (area-weighted) -------
-  x3 <- topo |>
+tbl_stats <- function(topo, lsf) {
+  topo |>
     dplyr::select("name",
                   "SG" = "slope", "CV_pr" = "prof", "CV_pl" = "plan",
                   "WI" = "qweti1", "Lp2p" = "lpit2peak", "Zp2p" = "zpit2peak",
@@ -201,18 +210,20 @@ topo_summary <- function(folder, allpoints, allpeak, allpit, allcrest, allstream
     dplyr::relocate("Unit", .after = "Parameter") |>
     dplyr::rename("Average" = "avg", "SD" = "sd") |>
     dplyr::rename_with(tools::toTitleCase)
+}
 
-  ## T5: Indexes, parameters and ratios characterizing different aspects of the landscape topography -----
-  x4 <- dplyr::tibble(
+
+tbl_indices <- function(topo, meta, avg, cnts, slp_cal, density, edge_drainage) {
+  dplyr::tibble(
     Z_max = topo$zpit2peak[topo$name == "max"],
-    D_ws = 1000000 / .env$density / grid^2,
-    A_ws = 100 / D_ws,
-    P_osd = .env$edge_drainage / nrow(pnts) * 100,
+    D_ws = 1000000 / .env$density / meta$grid^2,
+    A_ws = 100 / .data$D_ws,
+    P_osd = .env$edge_drainage / meta$n * 100,
     RL_w = avg$lpit2peak / avg$lstr2div,
     RZ_w = avg$zpit2peak / avg$zcr2st,
-    RZ_l = Z_max / avg$zpit2peak,
-    Dr = sum(cnts$crest_cnt) / .env$grid / .env$nrows / .env$ncols * 10000,
-    Dc = sum(cnts$stream_cnt) / .env$grid / .env$nrows / .env$ncols * 10000,
+    RZ_l = .data$Z_max / avg$zpit2peak,
+    Dr = sum(cnts$crest_cnt) / meta$grid / meta$nrows / meta$ncols * 10000,
+    Dc = sum(cnts$stream_cnt) / meta$grid / meta$nrows / meta$ncols * 10000,
     TCI_UP = slp_cal$tci[slp_cal$type == "ups"],
     TCI_LOW = slp_cal$tci[slp_cal$type == "low"],
     TCI = slp_cal$tci[slp_cal$type == "mid"]) |>
@@ -220,9 +231,11 @@ topo_summary <- function(folder, allpoints, allpeak, allpit, allcrest, allstream
                         names_to = "Parameter",
                         values_to = "value") |>
     dplyr::mutate(Unit = c("m", "/ 100 ha", "ha", "%", "", "", "", "m/ha", "m/ha", "%", "%", "%")) |>
-    dplyr::relocate(Unit, .after = "Parameter")
+    dplyr::relocate("Unit", .after = "Parameter")
+}
 
-  ## T6: Location (X) and relief (Z) of points (at the top of the slope and the end of each segment) along the modal hillslopes ----
+tbl_locs <- function(slp_cal, lsf) {
+
   x5 <- slp_cal |>
     dplyr::select("type", "pl_c2s") |>
     tidyr::pivot_wider(names_from = "type", values_from = "pl_c2s") |>
@@ -281,16 +294,13 @@ topo_summary <- function(folder, allpoints, allpeak, allpit, allcrest, allstream
                                           TRUE ~ .data$Stat))
 
   # Combine x5 and x6 into one table
-  x5 <- dplyr::left_join(x5, x6, by = "Stat")
-
-  create_excel(out_file, meta, x1, x2, x3, x4, x5)
+  dplyr::left_join(x5, x6, by = "Stat")
 }
 
 
 get_edge <- function(x, type) {
-  type <- paste0("edge_", type)
-  stringr::str_subset(x, type) |>
-    stringr::str_extract(paste0("(?<=", type, " = )[0-9]{1,}")) |>
+  type <- paste0("edge_", type, " = ")
+  get_detail(x, type, pattern = "[0-9]{1,}") |>
     as.numeric()
 }
 

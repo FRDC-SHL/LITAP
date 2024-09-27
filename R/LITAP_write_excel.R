@@ -19,7 +19,8 @@ create_excel <- function(file, meta, x1, x2, x3, x4, x5, x6) {
 xl_add_meta <- function(wb, meta, start = c(2, 1)) {
   r <- start[1]
   c <- start[2]
-  c2 <- 14
+
+  c2 <- ncol(meta) - 4  # End of second table columns
 
   m <- tidyr::pivot_longer(meta, cols = dplyr::everything(),
                            values_transform = as.character)

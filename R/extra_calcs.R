@@ -1,15 +1,13 @@
 
 # From Sheet SlpCal, A41:U42
-ix_avgs <- function(pnts, edge_row, edge_col, nrows, ncols) {
+ix_avgs <- function(pnts, pnts_no_edge) {
 
-  j <- pnts
-  # TODO: Note that this means that j1 DOESNT get filtered... should it?
+  # Note that this means that j1 DOESNT get filtered to omit edge points... should it?
   #  - I think this is because we're joining later by j drec -> j1, so we want
-  #    bits in the edges... correct?
-  j1 <- dplyr::mutate(j, seqno2 = .data$seqno)
+  #    bits in the edges...
+  j1 <- dplyr::mutate(pnts, seqno2 = .data$seqno)
 
-  j <- omit_edges(j, edge_row, edge_col, nrow = nrows, ncol = ncols) |>
-    dplyr::rename("seqno1" = "seqno")
+  j <- dplyr::rename(pnts_no_edge, "seqno1" = "seqno")
 
   dplyr::bind_cols(
     ix_avg(j, j1, LE = 1),
@@ -84,35 +82,42 @@ ix_avg <- function(j, j1, LE) {
   t3
 }
 
-le5_avg <- function(pnts, le) {
-  dplyr::inner_join(le, pnts, by = c("row", "col", "seqno", "max_facet")) |>
-    dplyr::filter(max_facet != 0) |>
+le5_avg <- function(pnts_no_edge) {
+  pnts_no_edge |>
+    dplyr::filter(.data$max_facet != 0) |>
     dplyr::select("seqno", "max_facet", "z2cr", "l2div", "z2st", "l2str",
                   "slope_pct", "aspect", "prof", "plan", "qarea1", "qweti1") |>
-    dplyr::group_by(max_facet) |>
+    dplyr::group_by(.data$max_facet) |>
     dplyr::summarize(counts = dplyr::n(), dplyr::across(-"seqno", mean))
 }
 
-pnts_count <- function(allpeak, allpit, allcrest, allstream, le) {
-  type_count(allcrest, le, "crest") |>
-    dplyr::left_join(type_count(allstream, le, "stream"), by = "max_facet") |>
-    dplyr::left_join(type_count(allpeak, le, "peak"), by = "max_facet") |>
-    dplyr::left_join(type_count(allpit, le, "pit"), by = "max_facet") |>
+pnts_count <- function(allpeak, allpit, allcrest, allstream, pnts_no_edge) {
+  type_count(allcrest, pnts_no_edge, "crest") |>
+    dplyr::left_join(type_count(allstream, pnts_no_edge, "stream"), by = "max_facet") |>
+    dplyr::left_join(type_count(allpeak, pnts_no_edge, "peak"), by = "max_facet") |>
+    dplyr::left_join(type_count(allpit, pnts_no_edge, "pit"), by = "max_facet") |>
     dplyr::mutate(
       dplyr::across(dplyr::ends_with("_cnt"), ~tidyr::replace_na(.x, 0)))
 
 }
 
-type_count <- function(allXXX, le, type) {
+type_count <- function(allXXX, pnts_no_edge, type) {
   allXXX |>
-    dplyr::select(seqno) |>
-    dplyr::inner_join(le, by = "seqno")  |>
+    dplyr::select("seqno", "max_facet") |>
+    dplyr::semi_join(pnts_no_edge, by = "seqno")  |> # Omit edges
     dplyr::group_by(max_facet) |>
     dplyr::summarize("{type}_cnt" := dplyr::n())
 }
 
 
-omit_edges <- function(x, edge_row, edge_col, nrow = NULL, ncol = NULL) {
+omit_edges <- function(x, edge_row = NULL, edge_col = NULL, nrow = NULL, ncol = NULL, meta = NULL) {
+
+  if(!is.null(meta)) {
+    edge_row <- meta$edge_row
+    edge_col <- meta$edge_col
+    nrow <- meta$nrows
+    ncol <- meta$ncols
+  }
 
   if(is.null(nrow)) nrow <- max(x$rows)
   if(is.null(ncol)) ncol <- max(x$cols)
@@ -135,7 +140,10 @@ keep_edges <- function(x, edge_row, edge_col, nrow = NULL, ncol = NULL) {
 }
 
 
-mid_calc <- function(ix, cnts, avg, seg_cal) {
+# SlpCal - B56:I98
+mid_calc <- function(pnts, pnts_no_edge, cnts, avg, seg_cal) {
+
+  ix <- ix_avgs(pnts, pnts_no_edge) # Bdr-Cal
 
   rel_cr_cnts1 <- (cnts$crest_cnt[1] / sum(cnts$crest_cnt[1:2]))   # H48
   rel_st_cnts5 <- (cnts$stream_cnt[5] / sum(cnts$stream_cnt[4:5])) # H52
@@ -242,10 +250,12 @@ mid_calc <- function(ix, cnts, avg, seg_cal) {
 
   k <- 2/sqrt(10 - 4 * sqrt(2))  # D100
 
+  all[all$type == "mid", c("l_f", "a_f")] <- NA_real_
+
   all <- dplyr::mutate(
     all,
     a = 2 * .data$l_f -
-      2 * .env$k *.data$ l_f -
+      2 * .env$k *.data$l_f -
       2 * .env$k^2 * .data$a_f +
       4 * .env$k * .data$a_f -
       2 * .data$a_f,
@@ -265,7 +275,6 @@ mid_calc <- function(ix, cnts, avg, seg_cal) {
                            alpha > 100 ~ 100,
                            TRUE ~ alpha * 100))
 
-  all[all$type == "mid", c("a", "b", "c")] <- NA_real_
 
   dplyr::mutate(
     all,
@@ -278,7 +287,6 @@ mid_calc <- function(ix, cnts, avg, seg_cal) {
     wi = seg_cal$qweti1)
 }
 
-# TODO: Ask Li, Sheng about order of calculations
 ls_factor_all <- function(pnts, edge_row, edge_col, nrows, ncols) {
 
   omit_edges(pnts, edge_row, edge_col, nrows, ncols) |>
@@ -310,9 +318,9 @@ ls_factor_all <- function(pnts, edge_row, edge_col, nrows, ncols) {
     percentiles_format()
 }
 
-ls_factor <- function(pnts, edge_row, edge_col, nrows, ncols) {
+ls_factor <- function(pnts_no_edge) {
 
-  omit_edges(pnts, edge_row, edge_col, nrows, ncols) |>
+  pnts_no_edge |>
     dplyr::select(elev, zcr2st, lstr2div) |>
     dplyr::mutate(
       s = zcr2st / lstr2div,
@@ -341,16 +349,23 @@ ls_factor <- function(pnts, edge_row, edge_col, nrows, ncols) {
       s_z = .data$s_len * .data$s)
 }
 
+avg_topo <- function(topo, lsf) {
+  dplyr::filter(topo, .data$name == "avg") |>
+    dplyr::mutate(zcr2st = lsf$zcr2st[2],
+                  lstr2div = lsf$lstr2div[2]) |>
+    # TODO: Ask Li, Sheng if these are constants
+    dplyr::mutate(slope3 = 6.87521764069166,
+                  slope4 = 309.311743656845)
+}
 
-ws_density <- function(pnts, allpit, edge_row, edge_col, nrows, ncols) {
-
+ws_density <- function(pnts, allpit, meta) {
 
   WDqry01 <- dplyr::count(pnts, .data$pit_row, .data$pit_col, name = "pit_pnt_cnts") |>
     dplyr::filter(!(.data$pit_row == 0 & .data$pit_col == 0))
 
   # Fetch only pits on exact edges
   WDqry03 <- pnts |>
-    dplyr::filter(row %in% c(1, .env$nrows) | col %in% c(1, .env$ncols)) |>
+    dplyr::filter(row %in% c(1, meta$nrows) | col %in% c(1, meta$ncols)) |>
     dplyr::select("pit_row", "pit_col") |>  # WDqry02
     dplyr::filter(!(.data$pit_row == 0 & .data$pit_col == 0))
 
@@ -364,7 +379,7 @@ ws_density <- function(pnts, allpit, edge_row, edge_col, nrows, ncols) {
 
   # Get pit counts without pits in edge buffer
   WDqry011 <- allpit |>
-    omit_edges(edge_row, edge_col, nrows, ncols) |>
+    omit_edges(meta = meta) |>
     dplyr::left_join(WDqry01, by = c("row" = "pit_row", "col" = "pit_col")) |>
     dplyr::select("row", "col", "pit_pnt_cnts")
 
@@ -404,11 +419,12 @@ ws_density <- function(pnts, allpit, edge_row, edge_col, nrows, ncols) {
 
 }
 
-ws_drainage <- function(pnts, pit, allpit, edge_row_ws, edge_col_ws, nrows, ncols) {
+ws_drainage <- function(pnts, pit, allpit, meta) {
   dplyr::select(allpit, "seqno", "row", "col", "pit_row", "pit_col") |>
     dplyr::left_join(pit, by = c("pit_row", "pit_col")) |>
     dplyr::select("seqno", "row", "col", "shed_area") |>
-    keep_edges(edge_row = edge_row_ws, edge_col = edge_col_ws, nrows, ncols) |>
+    keep_edges(edge_row = meta$edge_row_ws, edge_col = meta$edge_col_ws,
+               meta$nrows, meta$ncols) |>
     dplyr::pull(.data$shed_area) |>
     sum()
 }
