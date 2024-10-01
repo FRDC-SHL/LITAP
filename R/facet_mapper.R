@@ -4,7 +4,6 @@
 #' [form_mapper()] calculates fuzzy attributes (among other metrics).  Based on
 #' FacetMapR by R. A. (Bob) MacMillan, LandMapper Environmental Solutions.
 #'
-#' @param folder Character. Location of [flow_mapper()] output
 #' @param arule Character. Location of ARULE file. If NULL, A Rules are derived
 #'   from the dem file (see Details).
 #' @param crule Character. Location of CRULE file

@@ -2,7 +2,7 @@ save_basic <- function(data, name, locs, out_format, where) {
   file_out <- locs[[where]]
   name <- paste0(name, ".", out_format)
   if(stringr::str_detect(name, ".rds$")) readr::write_rds(data, file.path(file_out, name))
-  if(stringr::str_detect(name, ".csv$")) readr::write_csv(data, file.path(file_out, name))
+  if(stringr::str_detect(name, ".csv$")) readr::write_csv(data, file.path(file_out, name), progress = FALSE)
 }
 
 save_output <- function(data, stats = NULL, name, locs, out_format, where,
@@ -62,7 +62,7 @@ save_shed <- function(file_name, obj, clean = FALSE){
   }
 
   if(stringr::str_detect(file_name, ".rds$")) readr::write_rds(obj, file_name)
-  if(stringr::str_detect(file_name, ".csv$")) readr::write_csv(obj, file_name)
+  if(stringr::str_detect(file_name, ".csv$")) readr::write_csv(obj, file_name, progress = FALSE)
 }
 
 read_shed <- function(file_out, name){
@@ -183,7 +183,7 @@ locs_create <- function(out_folder, which, clean) {
 #'
 #'
 #' @noRd
-get_previous <- function(folder, where, step, type = "dem") {
+get_previous <- function(folder, where, step, type = "dem", quiet = TRUE) {
 
   check_folder(folder, fun = stop)
   f <- list_previous(folder, step, where, type)
@@ -191,7 +191,7 @@ get_previous <- function(folder, where, step, type = "dem") {
   ext <- get_format(folder, where)
 
   if(ext == "rds") r <- readr::read_rds(f)
-  if(ext == "csv") r <- readr::read_csv(f, col_types = readr::cols())
+  if(ext == "csv") r <- readr::read_csv(f, col_types = readr::cols(), progress = !quiet)
 
   dplyr::select(r, -dplyr::contains("_buffer"))
 }

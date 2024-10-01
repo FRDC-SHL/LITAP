@@ -5,7 +5,7 @@ dir <- test_path("test_functions")
 sub_dem <- function(dem, s) {
   dem %>%
     dplyr::slice(s) %>%
-    dplyr::mutate(dplyr::across(where(is.numeric), round, digits = 5))
+    dplyr::mutate(dplyr::across(dplyr::where(is.numeric), ~round(.x, digits = 5)))
 }
 
 # Prep runs for local tests

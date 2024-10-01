@@ -23,8 +23,8 @@ test_that("calc_stream", {
     system.time(s3 <- calc_stream3(streams, str_val = 1000, verbose = FALSE))
   })
 
-  expect_true(dplyr::all_equal(s1, s2))
-  expect_true(dplyr::all_equal(s2, s3))
+  expect_equal(s1, s2)
+  expect_equal(s2, s3)
 
   str2pits <- db %>%
     dplyr::mutate(shedno = local_shed)
@@ -35,8 +35,8 @@ test_that("calc_stream", {
     system.time(c3 <- calc_pit3(str2pits, pond = pond, verbose = FALSE))
   })
 
-  expect_true(dplyr::all_equal(c1, c2))
-  expect_true(dplyr::all_equal(c2, c3))
+  expect_equal(c1, c2)
+  expect_equal(c2, c3)
 
 
 

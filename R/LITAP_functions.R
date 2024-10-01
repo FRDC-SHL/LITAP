@@ -40,6 +40,9 @@ trace_flow_fast <- function(cell, drec) {
   track[i] <- cell
   repeat {
     i <- i + 1
+    #if(track[i-1] == 1) browser()
+    #cat(track[i-1], sep = "\n")
+    #cat(drec[track[i-1]], sep = "\n")
     if(track[i-1] == drec[track[i-1]]) break
     if(drec[track[i-1]] %in% track) break
     track[i] <- drec[track[i-1]]
@@ -85,7 +88,9 @@ trace_single <- function(seqno, drec, loop_func, s, v, ...) {
   for(i in seqno) {
     t <- trace_flow_fast(cell = i, drec = drec)
     #message(i)
+    #if(t[1] == 562) browser()
     #cat(t, sep = ", ")
+
     v <- loop_func(t, s, v, ...)
   }
   v

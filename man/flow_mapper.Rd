@@ -75,6 +75,13 @@ runs in this folder?}
 
 \item{report}{Logical. Create html report of results?}
 
+\item{pitr_method}{Character. Either "landmapr" or "litap" to define whether
+to use the LandMapR method for finding a pour point during the pit removal stage
+(default) or LITAP.
+The LITAP method defines the pourpoint as the lowest neighbour. The LandMapR
+defines it as the last \emph{possible} pour point among neighbouring cells (not
+necessarily the lowest neighbouring cell).}
+
 \item{verbose}{Logical. Output extra progress messages.}
 
 \item{quiet}{Logical. Suppress all messages.}

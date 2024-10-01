@@ -19,8 +19,9 @@ test_that("output formats chains - csv", {
 
   # facet
   crule <- system.file("extdata", "crule.dbf", package = "LITAP")
-  expect_silent(facet_mapper(folder = "./testELEV/", clean = TRUE,
-                             arule = NULL, crule = crule, quiet = TRUE))
+  expect_warning(facet_mapper(folder = "./testELEV/", clean = TRUE,
+                             arule = NULL, crule = crule, quiet = TRUE),
+                 "Skipping Topographic Summary")
   expect_true(all(stringr::str_detect(list.files("./testELEV/facet"),
                                       paste0(".", !!ext, "$"))))
 

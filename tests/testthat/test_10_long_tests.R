@@ -36,9 +36,9 @@ test_that("flow_mapper() output", {
 
   for(i in list.files("./test_long/flow/", pattern = "*.rds",
                       full.names = TRUE, recursive = TRUE)){
-    readRDS(i) %>%
-      sub_dem(s) %>%
-      expect_snapshot_value(style = "json2")
+    x <- readRDS(i) %>%
+      sub_dem(s)
+    expect_snapshot_value(x, style = "json2")
   }
 })
 
@@ -52,9 +52,9 @@ test_that("form_mapper() output", {
                       pattern = "(form|length|relz|weti)[.]*.rds",
                       full.names = TRUE, recursive = TRUE)){
 
-    readRDS(i) %>%
+    x <- readRDS(i) %>%
       sub_dem(s) %>%
-      dplyr::select(-dplyr::any_of(c("cell_t", "count_d", "count_o", "elev_sum"))) %>%
-      expect_snapshot_value(style = "json2")
+      dplyr::select(-dplyr::any_of(c("cell_t", "count_d", "count_o", "elev_sum")))
+    expect_snapshot_value(x, style = "json2")
   }
 })

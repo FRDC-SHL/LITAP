@@ -104,7 +104,7 @@ flow_mapper <- function(file, nrow, ncol, grid = NULL, min_x = 1, min_y = 1,
   db_start <- load_file(file, nrow = nrow, ncol = ncol, grid = grid,
                         min_x = min_x, min_y = min_y,
                         missing_value = missing_value,
-                        clim = clim, rlim = rlim, verbose = verbose)
+                        clim = clim, rlim = rlim, quiet = quiet, verbose = verbose)
 
   if(is.null(grid)) {
     grid <- calc_grid(db_start)
@@ -406,7 +406,7 @@ flow_mapper <- function(file, nrow, ncol, grid = NULL, min_x = 1, min_y = 1,
                                max_depth = max_depth, method = pitr_method,
                                verbose = verbose)
 
-    if(length(na.omit(unique(db_inverted$local_shed))) > 1) {
+    if(length(stats::na.omit(unique(db_inverted$local_shed))) > 1) {
       stats_ipit <- pit_stat1(db_inverted, shed = "local_shed",
                               method = pitr_method, verbose = verbose) %>%
         out_stat() %>%

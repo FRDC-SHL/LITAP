@@ -22,7 +22,7 @@
 flow_to_channels <- function(db) {
 
   check <- db %>%
-    dplyr::filter(chan_no > 0, seedtype != 2) %>%
+    dplyr::filter(.data$chan_no > 0, .data$seedtype != 2) %>%
     nb_values(db = db, max_cols = max(db$col), col = "seqno", db_sub = .,
               format = "wide")
 

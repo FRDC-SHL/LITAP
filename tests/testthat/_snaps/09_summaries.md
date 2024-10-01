@@ -1,7 +1,7 @@
 # all_XXX tables()
 
     Code
-      as.data.frame(pnts[1:1000, ])
+      pnts[1:1000, ] %>% as.data.frame()
     Output
            seqno row col    elev ddir drec upslope local_shed fill_shed edge_map
       1      120   1 120 133.611    1  300       1          8         8    FALSE
@@ -9016,7 +9016,7 @@
 ---
 
     Code
-      as.data.frame(pnts_no_edge[1:1000, ])
+      pnts_no_edge[1:1000, ] %>% as.data.frame()
     Output
            seqno row col    elev ddir drec upslope local_shed fill_shed edge_map
       1     2775  16  60 130.838    1 2955     507          8         8    FALSE
@@ -18031,7 +18031,7 @@
 ---
 
     Code
-      as.data.frame(allpeak)
+      allpeak %>% as.data.frame()
     Output
         seqno row col    elev ddir  drec upslope local_shed fill_shed edge_map vol2fl
       1 14800  82 139 134.718    1 14980       1          4         4    FALSE      0
@@ -18133,7 +18133,7 @@
 ---
 
     Code
-      as.data.frame(allpit)
+      allpit %>% as.data.frame()
     Output
          seqno row col    elev ddir  drec upslope local_shed fill_shed edge_map
       1   7789  44   6 128.156    5  7789    3721          8         8    FALSE
@@ -18271,7 +18271,7 @@
 ---
 
     Code
-      as.data.frame(allcrest)
+      allcrest %>% as.data.frame()
     Output
           seqno row col    elev ddir  drec upslope local_shed fill_shed edge_map
       1    2654  15 120 133.830    4  2653       1          8         8    FALSE
@@ -30050,7 +30050,7 @@
 ---
 
     Code
-      as.data.frame(allstream)
+      allstream %>% as.data.frame()
     Output
           seqno row col    elev ddir  drec upslope local_shed fill_shed edge_map
       1    1715  10  86 132.537    1  1895     318          8         8    FALSE
@@ -42810,7 +42810,7 @@
 # Sub calculations
 
     Code
-      as.data.frame(seg_cal)
+      seg_cal %>% as.data.frame()
     Output
         max_facet counts      z2cr    l2div      z2st    l2str slope_pct   aspect
       1         1   3103 0.4071250 13.48185 4.0563899 83.98618  2.859407 264.4934
@@ -42828,7 +42828,7 @@
 ---
 
     Code
-      as.data.frame(lsf)
+      lsf %>% as.data.frame()
     Output
          name         elev       zcr2st    lstr2div            s    sin_theta
       1     n 38405.000000 38405.000000 38405.00000 3.840500e+04 3.840500e+04
@@ -42915,7 +42915,7 @@
 ---
 
     Code
-      as.data.frame(ix)
+      ix %>% as.data.frame()
     Output
         ix1_z2peak_avg ix1_l2peak_avg ix1_z2cr_avg ix1_l2cr_avg ix1_cnts
       1        1.32508       48.19388    0.5066148     16.15148      688
@@ -42931,7 +42931,7 @@
 ---
 
     Code
-      as.data.frame(cnts)
+      cnts %>% as.data.frame()
     Output
         max_facet crest_cnt stream_cnt peak_cnt pit_cnt
       1         1       340          0        2       0
@@ -42943,7 +42943,7 @@
 ---
 
     Code
-      as.data.frame(avg)
+      avg %>% as.data.frame()
     Output
         name    slope   aspect       prof      plan   qarea1   qweti1     z2st
       1  avg 4.568895 266.9117 -0.2000972 0.5712999 84.22841 6.894187 2.061014
@@ -42955,7 +42955,7 @@
 ---
 
     Code
-      as.data.frame(slp_cal)
+      slp_cal %>% as.data.frame()
     Output
         type      zc2s      lc2s      zp2p      lp2p counts        prof         cur
       1  cst 0.1961834  6.254558 1.3250799  48.19388   3103   5.2902188  0.09259502
@@ -42991,16 +42991,16 @@
 ---
 
     Code
-      as.data.frame(density)
+      density %>% as.data.frame()
     Output
-         density
+               .
       1 4477.111
 
 ---
 
     Code
-      as.data.frame(edge_drainage)
+      edge_drainage %>% as.data.frame()
     Output
-        edge_drainage
-      1          8324
+           .
+      1 8324
 

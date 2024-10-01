@@ -35,9 +35,9 @@ ix_avg <- function(j, j1, LE) {
   #qryFuzcLE5_Bdrix1_100104
   if(LE %in% c(1,2)) by <- c("inv_drec" = "seqno") else by <- c("drec" = "seqno")
 
-  t1 <- dplyr::left_join(j, j1, by = by, suffix = c("1", "2")) |>
+  t1 <- dplyr::left_join(j, j1, by = by, suffix = c("1", "2"))  %>%
     dplyr::rename("l2cr1" = "l2div1",
-                  "l2cr2" = "l2div2") |>
+                  "l2cr2" = "l2div2")  %>%
     dplyr::mutate(cr_rowd = .data$cr_row1 - .data$cr_row2,
                   cr_cold = .data$cr_col1 - .data$cr_col2,
                   st_rowd = .data$st_row1 - .data$st_row2,
@@ -52,25 +52,25 @@ ix_avg <- function(j, j1, LE) {
                   bdr_l2str  = (.data$l2str1  + .data$l2str2)/2)
 
   #qryFuzcLE5_Bdrix1_Pct_100104
-  t2 <- t1 |>
+  t2 <- t1  %>%
     dplyr::mutate(
       cs_z_pct = .data$bdr_z2cr / (.data$bdr_z2cr + .data$bdr_z2str),
       cs_l_pct = .data$bdr_l2cr / (.data$bdr_l2cr + .data$bdr_l2str),
       pp_z_pct = .data$bdr_z2peak / (.data$bdr_z2peak + .data$bdr_z2pit),
-      pp_l_pct = .data$bdr_l2peak / (.data$bdr_l2peak + .data$bdr_l2pit)) |>
+      pp_l_pct = .data$bdr_l2peak / (.data$bdr_l2peak + .data$bdr_l2pit))  %>%
 
     dplyr::filter(.data$cr_rowd == 0, .data$cr_cold == 0,
                   .data$st_rowd == 0, .data$st_cold == 0)
 
   if(LE %in% c(1,2)) {
-    t3 <- t2 |>
+    t3 <- t2  %>%
       dplyr::summarize("ix{LE}_z2peak_avg" := mean(.data$bdr_z2peak),
                        "ix{LE}_l2peak_avg" := mean(.data$bdr_l2peak),
                        "ix{LE}_z2cr_avg" := mean(.data$bdr_z2cr),
                        "ix{LE}_l2cr_avg" := mean(.data$bdr_l2cr),
                        "ix{LE}_cnts" := length(.data$seqno1))
   } else {
-    t3 <- t2 |>
+    t3 <- t2  %>%
       dplyr::summarize("ix{LE}_z2pit_avg" := mean(.data$bdr_z2pit),
                        "ix{LE}_l2pit_avg" := mean(.data$bdr_l2pit),
                        "ix{LE}_z2str_avg" := mean(.data$bdr_z2str),
@@ -83,29 +83,29 @@ ix_avg <- function(j, j1, LE) {
 }
 
 le5_avg <- function(pnts_no_edge) {
-  pnts_no_edge |>
-    dplyr::filter(.data$max_facet != 0) |>
+  pnts_no_edge  %>%
+    dplyr::filter(.data$max_facet != 0)  %>%
     dplyr::select("seqno", "max_facet", "z2cr", "l2div", "z2st", "l2str",
-                  "slope_pct", "aspect", "prof", "plan", "qarea1", "qweti1") |>
-    dplyr::group_by(.data$max_facet) |>
+                  "slope_pct", "aspect", "prof", "plan", "qarea1", "qweti1")  %>%
+    dplyr::group_by(.data$max_facet)  %>%
     dplyr::summarize(counts = dplyr::n(), dplyr::across(-"seqno", mean))
 }
 
 pnts_count <- function(allpeak, allpit, allcrest, allstream, pnts_no_edge) {
-  type_count(allcrest, pnts_no_edge, "crest") |>
-    dplyr::left_join(type_count(allstream, pnts_no_edge, "stream"), by = "max_facet") |>
-    dplyr::left_join(type_count(allpeak, pnts_no_edge, "peak"), by = "max_facet") |>
-    dplyr::left_join(type_count(allpit, pnts_no_edge, "pit"), by = "max_facet") |>
+  type_count(allcrest, pnts_no_edge, "crest")  %>%
+    dplyr::left_join(type_count(allstream, pnts_no_edge, "stream"), by = "max_facet")  %>%
+    dplyr::left_join(type_count(allpeak, pnts_no_edge, "peak"), by = "max_facet")  %>%
+    dplyr::left_join(type_count(allpit, pnts_no_edge, "pit"), by = "max_facet")  %>%
     dplyr::mutate(
       dplyr::across(dplyr::ends_with("_cnt"), ~tidyr::replace_na(.x, 0)))
 
 }
 
 type_count <- function(allXXX, pnts_no_edge, type) {
-  allXXX |>
-    dplyr::select("seqno", "max_facet") |>
-    dplyr::semi_join(pnts_no_edge, by = "seqno")  |> # Omit edges
-    dplyr::group_by(max_facet) |>
+  allXXX  %>%
+    dplyr::select("seqno", "max_facet")  %>%
+    dplyr::semi_join(pnts_no_edge, by = "seqno")   %>% # Omit edges
+    dplyr::group_by(.data$max_facet)  %>%
     dplyr::summarize("{type}_cnt" := dplyr::n())
 }
 
@@ -185,11 +185,11 @@ mid_calc <- function(pnts, pnts_no_edge, cnts, avg, seg_cal) {
     zp2p = avg$slope3 - cst$zp2p - ups$zp2p - low$zp2p - dep$zp2p,
     lp2p = avg$slope4 - cst$lp2p - ups$lp2p - low$lp2p - dep$lp2p)
 
-  all <- dplyr::bind_rows(cst, ups, mid, low, dep) |>
-    dplyr::bind_cols(dplyr::select(seg_cal, "counts", "prof")) |>
+  all <- dplyr::bind_rows(cst, ups, mid, low, dep)  %>%
+    dplyr::bind_cols(dplyr::select(seg_cal, "counts", "prof"))  %>%
     dplyr::mutate(type = factor(c("cst", "ups", "mid", "low", "dep"),
-                                levels = c("cst", "ups", "mid", "low", "dep"))) |>
-    dplyr::relocate(type)
+                                levels = c("cst", "ups", "mid", "low", "dep")))  %>%
+    dplyr::relocate("type")
 
   all <- dplyr::mutate(
     all,
@@ -202,7 +202,7 @@ mid_calc <- function(pnts, pnts_no_edge, cnts, avg, seg_cal) {
   slp_ratio <- avg$zcr2st / avg$lstr2div  # C72
   cal3_sum <- sum(all$cal3) + slp_ratio  # I72
 
-  all <- dplyr::arrange(all, dplyr::desc(type)) |>
+  all <- dplyr::arrange(all, dplyr::desc(type))  %>%
     dplyr::mutate(sg = .env$cal3_sum * 100,
                   z = 0,
                   midpntz = .data$lc2s * .data$sg / 2 / 100 + .data$z)
@@ -265,45 +265,45 @@ mid_calc <- function(pnts, pnts_no_edge, cnts, avg, seg_cal) {
       4 * .env$k * .data$a_f +
       4 * .data$a_f,
     c = 2 * .data$l_f - 2 * .data$a_f,
-    alpha = - b / 2 / a - sqrt(b^2 / 4 / a^2 - c / a),
+    alpha = - .data$b / 2 / .data$a - sqrt(.data$b^2 / 4 / .data$a^2 - .data$c / .data$a),
     alpha = dplyr::if_else(
-      type == "mid",
-      (a_f[type == "ups"] * alpha[type == "ups"] + a_f[type == "low"] * alpha[type == "low"]) /
-        (a_f[type == "ups"] + a_f[type == "low"]),
-      alpha),
-    tci = dplyr::case_when(alpha < 0 ~ 0,
-                           alpha > 100 ~ 100,
-                           TRUE ~ alpha * 100))
+      .data$type == "mid",
+      (.data$a_f[.data$type == "ups"] * .data$alpha[.data$type == "ups"] + .data$a_f[.data$type == "low"] * .data$alpha[.data$type == "low"]) /
+        (.data$a_f[.data$type == "ups"] + .data$a_f[.data$type == "low"]),
+      .data$alpha),
+    tci = dplyr::case_when(.data$alpha < 0 ~ 0,
+                           .data$alpha > 100 ~ 100,
+                           TRUE ~ .data$alpha * 100))
 
 
   dplyr::mutate(
     all,
-    l_final = pl_c2s * avg$lstr2div,
-    z_final = pz_c2s * avg$zcr2st,
-    s_final = z_final/l_final * 100,
-    pa_final = pa * 100,
-    pl_final = l_final / sum(l_final) * 100,
-    pz_final = z_final / sum(z_final) * 100,
+    l_final = .data$pl_c2s * avg$lstr2div,
+    z_final = .data$pz_c2s * avg$zcr2st,
+    s_final = .data$z_final/.data$l_final * 100,
+    pa_final = .data$pa * 100,
+    pl_final = .data$l_final / sum(.data$l_final) * 100,
+    pz_final = .data$z_final / sum(.data$z_final) * 100,
     wi = seg_cal$qweti1)
 }
 
 ls_factor_all <- function(pnts, edge_row, edge_col, nrows, ncols) {
 
-  omit_edges(pnts, edge_row, edge_col, nrows, ncols) |>
-    dplyr::select(elev, zcr2st, lstr2div) |>
+  omit_edges(pnts, edge_row, edge_col, nrows, ncols)  %>%
+    dplyr::select("elev", "zcr2st", "lstr2div")  %>%
     dplyr::mutate(
-      s = zcr2st / lstr2div,
-      sin_theta = sin(zcr2st / sqrt(zcr2st^2 + lstr2div^2)),
-      betta = (sin_theta / 0.0896) / (3 * sin_theta^0.8 + 0.56),
-      m = betta / (betta + 1),
-      l_factor = (lstr2div * 3.28084 / 72.6)^m,
-      s_factor = dplyr::if_else(s < 0.09, 10.8 * sin_theta + 0.03, 16.8 * sin_theta - 0.5),
-      ls_factor = l_factor * s_factor) |>
-    tidyr::drop_na("elev", "zcr2st", "lstr2div") |>
+      s = .data$zcr2st / .data$lstr2div,
+      sin_theta = sin(.data$zcr2st / sqrt(.data$zcr2st^2 + .data$lstr2div^2)),
+      betta = (.data$sin_theta / 0.0896) / (3 * .data$sin_theta^0.8 + 0.56),
+      m = .data$betta / (.data$betta + 1),
+      l_factor = (.data$lstr2div * 3.28084 / 72.6)^.data$m,
+      s_factor = dplyr::if_else(.data$s < 0.09, 10.8 * .data$sin_theta + 0.03, 16.8 * .data$sin_theta - 0.5),
+      ls_factor = .data$l_factor * .data$s_factor)  %>%
+    tidyr::drop_na("elev", "zcr2st", "lstr2div")  %>%
     dplyr::filter(.data$elev != 0,
                   .data$zcr2st != 0,
-                  .data$lstr2div != 0) |>
-    dplyr::as_tibble() |>
+                  .data$lstr2div != 0)  %>%
+    dplyr::as_tibble()  %>%
     dplyr::mutate(
       s_sin_theta = .data$s / sqrt(1 + .data$s^2),
       s_s_factor = dplyr::if_else(.data$s < 0.09,
@@ -313,30 +313,30 @@ ls_factor_all <- function(pnts, edge_row, edge_col, nrows, ncols) {
       s_betta = .data$s_sin_theta / 0.0896 / (3 * .data$s_sin_theta^0.8 + 0.56),
       s_m = .data$s_betta / (1 + .data$s_betta),
       s_len = exp(log(.data$s_l_factor) / .data$s_m) * 72.6 / 3.28084,  # PROBLEM
-      s_z = .data$s_len * .data$s) |>  # PROBLEM
-    stats() |>
+      s_z = .data$s_len * .data$s)  %>%  # PROBLEM
+    stats()  %>%
     percentiles_format()
 }
 
 ls_factor <- function(pnts_no_edge) {
 
-  pnts_no_edge |>
-    dplyr::select(elev, zcr2st, lstr2div) |>
+  pnts_no_edge  %>%
+    dplyr::select("elev", "zcr2st", "lstr2div")  %>%
     dplyr::mutate(
-      s = zcr2st / lstr2div,
-      sin_theta = sin(zcr2st / sqrt(zcr2st^2 + lstr2div^2)),
-      betta = (sin_theta / 0.0896) / (3 * sin_theta^0.8 + 0.56),
-      m = betta / (betta + 1),
-      l_factor = (lstr2div * 3.28084 / 72.6)^m,
-      s_factor = dplyr::if_else(s < 0.09, 10.8 * sin_theta + 0.03, 16.8 * sin_theta - 0.5),
-      ls_factor = l_factor * s_factor) |>
-    tidyr::drop_na("elev", "zcr2st", "lstr2div") |>
+      s = .data$zcr2st / .data$lstr2div,
+      sin_theta = sin(.data$zcr2st / sqrt(.data$zcr2st^2 + .data$lstr2div^2)),
+      betta = (.data$sin_theta / 0.0896) / (3 * .data$sin_theta^0.8 + 0.56),
+      m = .data$betta / (.data$betta + 1),
+      l_factor = (.data$lstr2div * 3.28084 / 72.6)^.data$m,
+      s_factor = dplyr::if_else(.data$s < 0.09, 10.8 * .data$sin_theta + 0.03, 16.8 * .data$sin_theta - 0.5),
+      ls_factor = .data$l_factor * .data$s_factor)  %>%
+    tidyr::drop_na("elev", "zcr2st", "lstr2div")  %>%
     dplyr::filter(.data$elev != 0,
                   .data$zcr2st != 0,
-                  .data$lstr2div != 0) |>
-    dplyr::as_tibble() |>
-    stats() |>
-    percentiles_format() |>
+                  .data$lstr2div != 0)  %>%
+    dplyr::as_tibble()  %>%
+    stats()  %>%
+    percentiles_format()  %>%
     dplyr::mutate(
       s_sin_theta = .data$s / sqrt(1 + .data$s^2),
       s_s_factor = dplyr::if_else(.data$s < 0.09,
@@ -350,9 +350,9 @@ ls_factor <- function(pnts_no_edge) {
 }
 
 avg_topo <- function(topo, lsf) {
-  dplyr::filter(topo, .data$name == "avg") |>
+  dplyr::filter(topo, .data$name == "avg")  %>%
     dplyr::mutate(zcr2st = lsf$zcr2st[2],
-                  lstr2div = lsf$lstr2div[2]) |>
+                  lstr2div = lsf$lstr2div[2])  %>%
     # TODO: Ask Li, Sheng if these are constants
     dplyr::mutate(slope3 = 6.87521764069166,
                   slope4 = 309.311743656845)
@@ -360,27 +360,27 @@ avg_topo <- function(topo, lsf) {
 
 ws_density <- function(pnts, allpit, meta) {
 
-  WDqry01 <- dplyr::count(pnts, .data$pit_row, .data$pit_col, name = "pit_pnt_cnts") |>
+  WDqry01 <- dplyr::count(pnts, .data$pit_row, .data$pit_col, name = "pit_pnt_cnts")  %>%
     dplyr::filter(!(.data$pit_row == 0 & .data$pit_col == 0))
 
   # Fetch only pits on exact edges
-  WDqry03 <- pnts |>
-    dplyr::filter(row %in% c(1, meta$nrows) | col %in% c(1, meta$ncols)) |>
-    dplyr::select("pit_row", "pit_col") |>  # WDqry02
+  WDqry03 <- pnts  %>%
+    dplyr::filter(.data$row %in% c(1, meta$nrows) | col %in% c(1, meta$ncols))  %>%
+    dplyr::select("pit_row", "pit_col")  %>%  # WDqry02
     dplyr::filter(!(.data$pit_row == 0 & .data$pit_col == 0))
 
   # Get pit counts without pits on exact edge
-  WDqry06 <- allpit |>
+  WDqry06 <- allpit  %>%
     # WDqry05 - Remove pits on exact edges
-    dplyr::select("seqno", "row", "col") |>
-    dplyr::anti_join(WDqry03, by = c("row" = "pit_row", "col" = "pit_col")) |>
+    dplyr::select("seqno", "row", "col")  %>%
+    dplyr::anti_join(WDqry03, by = c("row" = "pit_row", "col" = "pit_col"))  %>%
     # WDqry06
     dplyr::inner_join(WDqry01, by = c("col" = "pit_col", "row" = "pit_row"))
 
   # Get pit counts without pits in edge buffer
-  WDqry011 <- allpit |>
-    omit_edges(meta = meta) |>
-    dplyr::left_join(WDqry01, by = c("row" = "pit_row", "col" = "pit_col")) |>
+  WDqry011 <- allpit  %>%
+    omit_edges(meta = meta)  %>%
+    dplyr::left_join(WDqry01, by = c("row" = "pit_row", "col" = "pit_col"))  %>%
     dplyr::select("row", "col", "pit_pnt_cnts")
 
   method <- "remove_edge_pits"
@@ -393,20 +393,20 @@ ws_density <- function(pnts, allpit, meta) {
   }
 
   if(method == "remove_edge_pits") {
-    pit_wo_edge <- temp |>
-      dplyr::summarize(pit_cts_10 = quantile(pit_pnt_cnts, 0.1),
-                       pit_cts_25 = quantile(pit_pnt_cnts, 0.25),
-                       pit_cts_50 = quantile(pit_pnt_cnts, 0.50),
-                       pit_cts_75 = quantile(pit_pnt_cnts, 0.75),
-                       pit_cts_90 = quantile(pit_pnt_cnts, 0.90)) |>
+    pit_wo_edge <- temp  %>%
+      dplyr::summarize(pit_cts_10 = stats::quantile(.data$pit_pnt_cnts, 0.1),
+                       pit_cts_25 = stats::quantile(.data$pit_pnt_cnts, 0.25),
+                       pit_cts_50 = stats::quantile(.data$pit_pnt_cnts, 0.50),
+                       pit_cts_75 = stats::quantile(.data$pit_pnt_cnts, 0.75),
+                       pit_cts_90 = stats::quantile(.data$pit_pnt_cnts, 0.90))  %>%
       dplyr::mutate(dplyr::across(dplyr::everything(), ~tidyr::replace_na(.x, 0)))
 
     # 510_WDqry
-    WDqry08 <- WDqry03 |>  # Get small edge sheds
-      dplyr::inner_join(WDqry01, by = c("pit_row", "pit_col")) |>  # WDqry04
+    WDqry08 <- WDqry03  %>%  # Get small edge sheds
+      dplyr::inner_join(WDqry01, by = c("pit_row", "pit_col"))  %>%  # WDqry04
       dplyr::filter(.data$pit_pnt_cnts < pit_wo_edge$pit_cts_10)
 
-    WDqry09 <- WDqry01 |>  # Omit small edge sheds
+    WDqry09 <- WDqry01  %>%  # Omit small edge sheds
       dplyr::anti_join(WDqry08, by = c("pit_row", "pit_col"))
 
     real_pit_avg_area <- mean(WDqry09$pit_pnt_cnts)  # From 510_WDqry
@@ -420,11 +420,11 @@ ws_density <- function(pnts, allpit, meta) {
 }
 
 ws_drainage <- function(pnts, pit, allpit, meta) {
-  dplyr::select(allpit, "seqno", "row", "col", "pit_row", "pit_col") |>
-    dplyr::left_join(pit, by = c("pit_row", "pit_col")) |>
-    dplyr::select("seqno", "row", "col", "shed_area") |>
+  dplyr::select(allpit, "seqno", "row", "col", "pit_row", "pit_col")  %>%
+    dplyr::left_join(pit, by = c("pit_row", "pit_col"))  %>%
+    dplyr::select("seqno", "row", "col", "shed_area")  %>%
     keep_edges(edge_row = meta$edge_row_ws, edge_col = meta$edge_col_ws,
-               meta$nrows, meta$ncols) |>
-    dplyr::pull(.data$shed_area) |>
+               meta$nrows, meta$ncols)  %>%
+    dplyr::pull(.data$shed_area)  %>%
     sum()
 }

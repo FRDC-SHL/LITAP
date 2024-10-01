@@ -9,6 +9,7 @@ arule_percentiles <- function(weti, relief, edge_row, edge_col, quiet) {
                                    "z2st", "zpit2peak", "zcr2st", "lpit2peak",
                                    "lstr2div"),
                      by = "seqno") %>%
+    # Corrected edge calculations
     dplyr::filter(.data$row > (!!edge_row + 1), # Plus buffer row/col
                   .data$row <= (max(.data$row) - (!!edge_row + 1)),
                   .data$col > (!!edge_col + 1),
@@ -70,7 +71,7 @@ arule_derive <- function(perc) {
                         0,
                         perc$z2pit_p90),
                   b_low = c(rep(0, 11), 50, rep(0, 2), 50, rep(0, 2)),
-                  b_hi = b_low,
+                  b_hi = .data$b_low,
                   d = c(big_or_min((perc$prof_p90 - perc$prof_p65)/2, 0.01),
                         big_or_min((perc$prof_p35 - perc$prof_p10)/2, 0.01),
                         big_or_min((perc$prof_p75 - perc$prof_p25)/2, 0.01),
@@ -88,8 +89,8 @@ arule_derive <- function(perc) {
                         (perc$pctz2pit_p75 - perc$pctz2pit_p25) / 2,
                         perc$pctz2pit_p25 / 2,
                         (perc$z2pit_p90 - perc$z2pit_p70) / 2),
-                  b1 = b_calcs(calc, b, d, b_low, b_hi, 1),
-                  b2 = b_calcs(calc, b, d, b_low, b_hi, 2)) %>%
+                  b1 = b_calcs(.data$calc, .data$b, .data$d, .data$b_low, .data$b_hi, 1),
+                  b2 = b_calcs(.data$calc, .data$b, .data$d, .data$b_low, .data$b_hi, 2)) %>%
     dplyr::relocate("d", .after = dplyr::last_col()) %>%
     dplyr::select(-"calc")
 

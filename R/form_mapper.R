@@ -128,13 +128,13 @@ form_mapper <- function(folder, str_val = 10000, ridge_val = 10000,
 
     db_form <- dplyr::full_join(db_form, db_weti,
                                 by = c("seqno", "col", "row", "buffer")) %>%
-      dplyr::mutate(lnqarea1 = dplyr::if_else(aspect > -1, log(qarea1), 0),
-                    lnqarea2 = dplyr::if_else(aspect > -1, log(qarea2), 0),
-                    new_asp = dplyr::if_else(aspect > -1, aspect + 45, 0),
-                    new_asp = dplyr::if_else(new_asp > 360,
-                                             new_asp -360, new_asp),
-                    lnqarea1 = trunc_dec(lnqarea1, 3),
-                    lnqarea2 = trunc_dec(lnqarea2, 3))
+      dplyr::mutate(lnqarea1 = dplyr::if_else(.data$aspect > -1, log(.data$qarea1), 0),
+                    lnqarea2 = dplyr::if_else(.data$aspect > -1, log(.data$qarea2), 0),
+                    new_asp = dplyr::if_else(.data$aspect > -1, .data$aspect + 45, 0),
+                    new_asp = dplyr::if_else(.data$new_asp > 360,
+                                             .data$new_asp -360, .data$new_asp),
+                    lnqarea1 = trunc_dec(.data$lnqarea1, 3),
+                    lnqarea2 = trunc_dec(.data$lnqarea2, 3))
 
     save_output(data = db_form, name = "form", locs = out_locs,
                 out_format = out_format, where = "form", debug = debug)
@@ -188,10 +188,6 @@ form_mapper <- function(folder, str_val = 10000, ridge_val = 10000,
   if(!debug) remove_output(locs = out_locs, out_format = out_format,
                            where = "form")
 
-  # Create all points file
-  task <- "Merging flow and form data for `all_points` file"
-  announce(task, quiet)
-  #merge_all(folder)
 
   # Save final time
   run_time(start, log_file, quiet)

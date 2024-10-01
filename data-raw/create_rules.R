@@ -125,7 +125,7 @@ crule <- dplyr::tribble(
 foreign::write.dbf(as.data.frame(crule), "./inst/extdata/crule.dbf")
 
 
-# foreign::read.dbf("../Docs/C7rule.dbf") |>
+# foreign::read.dbf("../Docs/C7rule.dbf") %>%
 #   datapasta::tribble_paste()
 # Identical to ~/Dropbox/LITAP files/LandMapR_BR3Raw_20210427/LandMapR_Files/C7rule.dbf"
 tibble::tribble(
@@ -215,6 +215,6 @@ tibble::tribble(
     "DEP",   "NEAR_MID",      0L,       51L,      5L,
     "DEP",   "NEAR_PIT",     20L,       51L,      5L,
     "DEP",   "HI_ABOVE",      0L,       51L,      5L
-  ) |>
-  as.data.frame() |>
+  ) %>%
+  as.data.frame() %>%
   foreign::write.dbf("./inst/extdata/c7rule.dbf")

@@ -67,7 +67,7 @@
 #' @export
 load_file <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
                       rlim = NULL, clim = NULL, grid = NULL,
-                      min_x = 1, min_y = 1, edge = TRUE, verbose = TRUE) {
+                      min_x = 1, min_y = 1, edge = TRUE, quiet = FALSE, verbose = TRUE) {
 
   if(!file.exists(file)) stop("Cannot locate ", file,
                               " relative to working directory, ", getwd(),
@@ -80,7 +80,7 @@ load_file <- function(file, nrow = NULL, ncol = NULL, missing_value = -9999,
   } else if(ext == "dbf") {
     db <- load_dem(file, type = "elev")
   } else if(ext %in% c("xlsx", "xls")) {
-    db <- load_excel(file, type = "elev")
+    db <- load_excel(file, type = "elev", quiet)
   } else if(ext %in% c("txt", "csv", "dat")) {
     db <- load_txt(file, type = "elev")
   } else {
@@ -138,6 +138,7 @@ check_names <- function(db, type) {
 
   # Check if required columns present
   if(!all(req_names %in% names(db))) {
+    m <- req_names[!req_names %in% names(db)]
     stop("Required columns missing from data: '",
          paste0(m, collapse = "', '"), "'")
   }
@@ -148,16 +149,18 @@ check_names <- function(db, type) {
   dplyr::select(db, tidyselect::any_of(all_names))
 }
 
-load_excel <- function(file, type = "elev") {
+load_excel <- function(file, type = "elev", quiet = FALSE) {
   if(!requireNamespace("readxl", quietly = TRUE)) {
     stop("Require package 'readxl' to load .xlsx or .xls files.\n
          Install with \"install.packages('readxl')\", then try again")
   }
+
   h <- readxl::read_excel(file, n_max = 5,
-                          col_names = FALSE, .name_repair = "minimal")
+                          col_names = FALSE, .name_repair = "minimal",
+                          progress = !quiet)
   header <- any(stringr::str_detect(h[1,], "[a-zA-Z]+"))
 
-  db <- readxl::read_excel(file, col_names = header)
+  db <- readxl::read_excel(file, col_names = header, progress = !quiet)
   if(!header) {
     names(db) <- match_names$name[match_names$type == type]
   } else {
@@ -369,7 +372,7 @@ format_rule <- function(rule, type, quiet) {
     rule <- dplyr::mutate(
       rule,
       attr_in = stringr::str_replace_all(
-        attr_in,
+        .data$attr_in,
         c("slope" = "slope_pct")))
   }
   if(!quiet) message(paste0(msg, collapse = "\n"))
@@ -383,7 +386,7 @@ seqno_to_buffer <- function(seqno, seqno_buffer) {
 }
 
 seqno_as_buffer <- function(seqno, db) {
-  dplyr::mutate(db, seqno2 = seqno) %>%
+  dplyr::mutate(db, seqno2 = .env$seqno) %>%
     add_buffer() %>%
     dplyr::filter(.data$seqno2 == !!seqno) %>%
     dplyr::pull(.data$seqno)

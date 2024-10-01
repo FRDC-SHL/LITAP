@@ -74,9 +74,9 @@ first_pitr1 <- function(db, max_area, max_depth, method, verbose) {
 
   # Save as local_shed numbers
   dplyr::mutate(db,
-                local_shed = shedno,
-                local_ddir = ddir,
-                local_uced = uced) %>%
+                local_shed = .data$shedno,
+                local_ddir = .data$ddir,
+                local_uced = .data$uced) %>%
     dplyr::select(-"shedno")
 }
 

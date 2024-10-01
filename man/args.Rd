@@ -5,6 +5,8 @@
 \title{Common arguments for \code{\link[=flow_mapper]{flow_mapper()}}, \code{\link[=form_mapper]{form_mapper()}}, \code{\link[=facet_mapper]{facet_mapper()}}, a
 nd \code{\link[=wepp_mapper]{wepp_mapper()}}}
 \arguments{
+\item{folder}{Character. Location of \code{\link[=flow_mapper]{flow_mapper()}} output}
+
 \item{grid}{Numeric. Grid size in m of the input DEM file}
 
 \item{min_x}{Numeric. Starting x coordinate (in meters)}

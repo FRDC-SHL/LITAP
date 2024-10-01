@@ -1,19 +1,20 @@
-#' Create summary watersheed tables in Excel
+#' Create summary watershed tables in Excel
 #'
-#' Using output from the flow_mapper(), form_mapper() and facet_maper() runs,
-#' summarizes into various tables in Excel worksheet.
-#'
-#' @param file Character. Name of output file (.xlsx)
-#' @param min_x Numeric. Override the starting x coordinate in the original
-#'   data (in meters)
-#' @param min_y Numeric. Override the starting y coordinate in the original
-#'   data (in meters)
+#' Using output from the `flow_mapper()`, `form_mapper()` and `facet_mapper()` runs,
+#' summarizes into various tables in Excel worksheet. Based on technique from
+#' Sheng et al. (2011).
 #'
 #' @inheritParams args
 #'
-#' @examples
+#' @references
+#' Sheng Li, David A. Lobb, Brian G. McConkey, R. A. MacMillan, Alan Moulin,
+#' and Walter R. Fraser. 2011. Extracting topographic characteristics of landforms
+#' typical of Canadian agricultural landscapes for agri-environmental modeling.
+#' I. Methodology. Canadian Journal of Soil Science 91(2), 251-266.
+#' <https://doi.org/10.4141/CJSS10080>.
 #'
-#' summary_tables()
+#' @examples
+#' \dontrun{summary_tables()}
 #'
 #'
 summary_tables <- function(folder) {
@@ -77,7 +78,7 @@ topo_summary <- function(folder, allpoints, allpeak, allpit, allcrest, allstream
     topo <- readxl::read_excel(file.path(folder, "topographic_derivatives.xlsx"))
     stats <- get_previous(folder, where = "flow", step = "pit", type = "stats")
 
-    log <- readr::read_lines(list.files(folder, "facet.log", full.names = TRUE))
+    log <- readr::read_lines(list.files(folder, "facet.log", full.names = TRUE), progress = FALSE)
   }
 
   # T1: Metadata ------------------------------
@@ -124,7 +125,7 @@ tbl_meta <- function(facet, log) {
     run = get_detail(log, "Input folder = "), # Run
     run_date = get_detail(log, "Run started: ", pattern = "[0-9-]+ [0-9:]+"),   # `facet_mapper() Run`
     summary_date = Sys.Date(),             # `Summary Table Creation`
-    version = packageVersion("LITAP"),   # `LITAP version`
+    version = utils::packageVersion("LITAP"),   # `LITAP version`
     ncols = max(col),                      # Cols
     nrows = max(row),                      # Rows
     n = dplyr::n(),                        # `Points (n)`
@@ -132,14 +133,14 @@ tbl_meta <- function(facet, log) {
     grid = calc_grid(facet),               # `Cell Size`
     edge_row = get_edge(log, "row"),       # `Edge Rows`
     edge_col = get_edge(log, "col"),       # `Edge Cols`
-    edge_row_ws = as.integer(edge_row / 3) + 1, #`Edge Rows (WS)`
-    edge_col_ws = as.integer(edge_col / 3) + 1, #`Edge Cols (WS)`
-    min_x = min(x, na.rm = TRUE),          # `Min X`
-    max_x = max(x, na.rm = TRUE),          # `Max X`
-    min_y = min(y, na.rm = TRUE),          # `Min Y`
-    max_y = max(y, na.rm = TRUE),          # `Max Y`
-    min_z = min(elev, na.rm = TRUE),       # `Min Z`
-    max_z = max(elev, na.rm = TRUE))       # `Max Z`
+    edge_row_ws = as.integer(.data$edge_row / 3) + 1, #`Edge Rows (WS)`
+    edge_col_ws = as.integer(.data$edge_col / 3) + 1, #`Edge Cols (WS)`
+    min_x = min(.data$x, na.rm = TRUE),          # `Min X`
+    max_x = max(.data$x, na.rm = TRUE),          # `Max X`
+    min_y = min(.data$y, na.rm = TRUE),          # `Min Y`
+    max_y = max(.data$y, na.rm = TRUE),          # `Max Y`
+    min_z = min(.data$elev, na.rm = TRUE),       # `Min Z`
+    max_z = max(.data$elev, na.rm = TRUE))       # `Max Z`
 
   nms <- c(
     "Run" = "run", "facet_mapper() Run" = "run_date",
@@ -151,7 +152,7 @@ tbl_meta <- function(facet, log) {
     "Min X" = "min_x", "Max X" = "max_x", "Min Y" = "min_y", "Max Y" = "max_y",
     "Min Z" = "min_z", "Max Z" = "max_z")
 
-  tbl_meta <- dplyr::rename(meta, all_of(nms))
+  tbl_meta <- dplyr::rename(meta, dplyr::all_of(nms))
 
   list(meta = meta, tbl_meta = tbl_meta)
 }
@@ -161,13 +162,13 @@ tbl_derivatives <- function(slp_cal, avg) {
     slp_cal, "type",
     "L (m)" = "l_final", "Z (m)" = "z_final", "S (%)" = "s_final",
     "P_A (%)" = "pa_final", "P_L (%)" = "pl_final", "P_Z (%)" = "pz_final",
-    "WI" = "wi") |>
-    dplyr::mutate(type = toupper(.data$type)) |>
-    tidyr::pivot_longer(-"type") |>
-    dplyr::group_by(.data$name) |>
-    dplyr::mutate(Sum = sum(.data$value)) |>
-    tidyr::pivot_wider(names_from = "type", values_from = "value") |>
-    dplyr::relocate("Sum", .after = dplyr::last_col()) |>
+    "WI" = "wi")  %>%
+    dplyr::mutate(type = toupper(.data$type))  %>%
+    tidyr::pivot_longer(-"type")  %>%
+    dplyr::group_by(.data$name)  %>%
+    dplyr::mutate(Sum = sum(.data$value))  %>%
+    tidyr::pivot_wider(names_from = "type", values_from = "value")  %>%
+    dplyr::relocate("Sum", .after = dplyr::last_col())  %>%
     dplyr::mutate(Avg = NA_real_)
   x1$Sum[3:7] <- NA_real_
   x1$Avg[3] <- x1$Sum[2] / x1$Sum[1] * 100
@@ -177,38 +178,38 @@ tbl_derivatives <- function(slp_cal, avg) {
 }
 
 tbl_avg <- function(seg_cal, avg) {
-  seg_cal |>
+  seg_cal  %>%
     dplyr::select("SG (%)" = "slope_pct", "Aspect (degree)" = "aspect",
                   "PrCurv (degree / 100m)" = "prof", "PlCurv (degree / 100m)" = "plan",
-                  "Qarea" = "qarea1", "Qweti" = "qweti1") |>
-    dplyr::mutate(type = toupper(c("cst", "ups", "mid", "low", "dep"))) |>
-    tidyr::pivot_longer(-"type") |>
-    tidyr::pivot_wider(names_from = "type", values_from = "value") |>
+                  "Qarea" = "qarea1", "Qweti" = "qweti1")  %>%
+    dplyr::mutate(type = toupper(c("cst", "ups", "mid", "low", "dep")))  %>%
+    tidyr::pivot_longer(-"type")  %>%
+    tidyr::pivot_wider(names_from = "type", values_from = "value")  %>%
     dplyr::bind_cols(
-      dplyr::select(avg, "slope", "aspect", "prof", "plan", "qarea1", "qweti1") |>
-        tidyr::pivot_longer(cols = dplyr::everything()) |>
-        dplyr::select("Avg" = "value")) |>
-    dplyr::mutate(` ` = "") |>
-    dplyr::relocate(` `, .before = "Avg")
+      dplyr::select(avg, "slope", "aspect", "prof", "plan", "qarea1", "qweti1")  %>%
+        tidyr::pivot_longer(cols = dplyr::everything())  %>%
+        dplyr::select("Avg" = "value"))  %>%
+    dplyr::mutate(` ` = "")  %>%
+    dplyr::relocate(" ", .before = "Avg")
 }
 
 tbl_stats <- function(topo, lsf) {
-  topo |>
+  topo  %>%
     dplyr::select("name",
                   "SG" = "slope", "CV_pr" = "prof", "CV_pl" = "plan",
                   "WI" = "qweti1", "Lp2p" = "lpit2peak", "Zp2p" = "zpit2peak",
-                  "Ld2c" = "lstr2div", "Zd2c" = "zcr2st") |>
-    dplyr::left_join(dplyr::select(lsf, "name", "Sd2c" = "s"), by = "name") |>
-    dplyr::mutate(Sd2c = .data$Sd2c * 100) |>
-    dplyr::filter(name %in% c("avg", "sd",
+                  "Ld2c" = "lstr2div", "Zd2c" = "zcr2st")  %>%
+    dplyr::left_join(dplyr::select(lsf, "name", "Sd2c" = "s"), by = "name")  %>%
+    dplyr::mutate(Sd2c = .data$Sd2c * 100)  %>%
+    dplyr::filter(.data$name %in% c("avg", "sd",
                               "min", "1%", "5%", "10%", "25%", "50%",
-                              "75%", "90%", "95%", "99%", "max")) |>
-    tidyr::pivot_longer(-"name", names_to = "Parameter") |>
-    tidyr::pivot_wider(names_from = "name", values_from = "value") |>
+                              "75%", "90%", "95%", "99%", "max"))  %>%
+    tidyr::pivot_longer(-"name", names_to = "Parameter")  %>%
+    tidyr::pivot_wider(names_from = "name", values_from = "value")  %>%
     dplyr::mutate(Unit = c("%", "° (100 m) -1", "° (100 m) -1", "",
-                           "m", "m", "m", "m", "%")) |>
-    dplyr::relocate("Unit", .after = "Parameter") |>
-    dplyr::rename("Average" = "avg", "SD" = "sd") |>
+                           "m", "m", "m", "m", "%"))  %>%
+    dplyr::relocate("Unit", .after = "Parameter")  %>%
+    dplyr::rename("Average" = "avg", "SD" = "sd")  %>%
     dplyr::rename_with(tools::toTitleCase)
 }
 
@@ -226,69 +227,69 @@ tbl_indices <- function(topo, meta, avg, cnts, slp_cal, density, edge_drainage) 
     Dc = sum(cnts$stream_cnt) / meta$grid / meta$nrows / meta$ncols * 10000,
     TCI_UP = slp_cal$tci[slp_cal$type == "ups"],
     TCI_LOW = slp_cal$tci[slp_cal$type == "low"],
-    TCI = slp_cal$tci[slp_cal$type == "mid"]) |>
+    TCI = slp_cal$tci[slp_cal$type == "mid"])  %>%
     tidyr::pivot_longer(cols = dplyr::everything(),
                         names_to = "Parameter",
-                        values_to = "value") |>
-    dplyr::mutate(Unit = c("m", "/ 100 ha", "ha", "%", "", "", "", "m/ha", "m/ha", "%", "%", "%")) |>
+                        values_to = "value")  %>%
+    dplyr::mutate(Unit = c("m", "/ 100 ha", "ha", "%", "", "", "", "m/ha", "m/ha", "%", "%", "%"))  %>%
     dplyr::relocate("Unit", .after = "Parameter")
 }
 
 tbl_locs <- function(slp_cal, lsf) {
 
-  x5 <- slp_cal |>
-    dplyr::select("type", "pl_c2s") |>
-    tidyr::pivot_wider(names_from = "type", values_from = "pl_c2s") |>
+  x5 <- slp_cal  %>%
+    dplyr::select("type", "pl_c2s")  %>%
+    tidyr::pivot_wider(names_from = "type", values_from = "pl_c2s")  %>%
     dplyr::bind_cols(
-      lsf |>
-        dplyr::select("name", "s_len") |>
+      lsf  %>%
+        dplyr::select("name", "s_len")  %>%
         dplyr::filter(.data$name %in% c("10%", "20%", "25%", "30%", "40%",
                                         "50%", "60%", "70%", "75%", "80%", "90%")))
   # Add in the avg values from lstr2div
-  x5 <- dplyr::slice(x5, 1) |>
-    dplyr::mutate(s_len = lsf$lstr2div[2], name = "avg") |>
-    dplyr::add_row(x5) |>
+  x5 <- dplyr::slice(x5, 1)  %>%
+    dplyr::mutate(s_len = lsf$lstr2div[2], name = "avg")  %>%
+    dplyr::add_row(x5)  %>%
     dplyr::mutate(
       top = 0,
       cst = .data$top + .data$cst * .data$s_len,
       ups = .data$cst + .data$ups * .data$s_len,
       mid = .data$ups + .data$mid * .data$s_len,
       low = .data$mid + .data$low * .data$s_len,
-      dep = .data$low + .data$dep * .data$s_len) |>
-    dplyr::select(-"s_len") |>
-    dplyr::rename_with(\(x) paste0(toupper(x), "_X")) |>
-    dplyr::rename("Stat" = "NAME_X") |>
-    dplyr::relocate("Stat", "Top_X" = "TOP_X") |>
+      dep = .data$low + .data$dep * .data$s_len)  %>%
+    dplyr::select(-"s_len")  %>%
+    dplyr::rename_with(\(x) paste0(toupper(x), "_X"))  %>%
+    dplyr::rename("Stat" = "NAME_X")  %>%
+    dplyr::relocate("Stat", "Top_X" = "TOP_X")  %>%
     dplyr::mutate(Stat = dplyr::case_when(.data$Stat == "avg" ~ "Avg",
                                           .data$Stat == "50%" ~ "50% (Median)",
                                           TRUE ~ .data$Stat))
 
-  x6 <- slp_cal |>
-    dplyr::select("type", "pz_c2s") |>
-    tidyr::pivot_wider(names_from = "type", values_from = "pz_c2s") |>
-    dplyr::bind_cols(lsf |>
-                       dplyr::select("name", "s_z") |>
+  x6 <- slp_cal  %>%
+    dplyr::select("type", "pz_c2s")  %>%
+    tidyr::pivot_wider(names_from = "type", values_from = "pz_c2s")  %>%
+    dplyr::bind_cols(lsf  %>%
+                       dplyr::select("name", "s_z")  %>%
                        dplyr::filter(.data$name %in% c("10%", "20%", "25%", "30%", "40%",
                                                        "50%", "60%", "70%", "75%", "80%", "90%")))
 
   # Add in the avg values from zcr2st
-  x6 <- dplyr::slice(x6, 1) |>
-    dplyr::mutate(s_z = lsf$zcr2st[2], name = "avg") |>
-    dplyr::add_row(x6) |>
+  x6 <- dplyr::slice(x6, 1)  %>%
+    dplyr::mutate(s_z = lsf$zcr2st[2], name = "avg")  %>%
+    dplyr::add_row(x6)  %>%
     dplyr::mutate(
       top = .data$s_z,
-      top = dplyr::if_else(name == "avg",
+      top = dplyr::if_else(.data$name == "avg",
                            lsf$zcr2st[lsf$name == "avg"],
                            .data$top),
       cst = .data$top - .data$cst * .data$s_z,
       ups = .data$cst - .data$ups * .data$s_z,
       mid = .data$ups - .data$mid * .data$s_z,
       low = .data$mid - .data$low * .data$s_z,
-      dep = .data$low - .data$dep * .data$s_z) |>
-    dplyr::select(-"s_z") |>
-    dplyr::rename_with(\(x) paste0(toupper(x), "_Z")) |>
-    dplyr::rename("Stat" = "NAME_Z") |>
-    dplyr::relocate("Stat", "Top_Z" = "TOP_Z") |>
+      dep = .data$low - .data$dep * .data$s_z)  %>%
+    dplyr::select(-"s_z")  %>%
+    dplyr::rename_with(\(x) paste0(toupper(x), "_Z"))  %>%
+    dplyr::rename("Stat" = "NAME_Z")  %>%
+    dplyr::relocate("Stat", "Top_Z" = "TOP_Z")  %>%
     dplyr::mutate(Stat = dplyr::case_when(.data$Stat == "avg" ~ "Avg",
                                           .data$Stat == "50%" ~ "50% (Median)",
                                           TRUE ~ .data$Stat))
@@ -300,11 +301,11 @@ tbl_locs <- function(slp_cal, lsf) {
 
 get_edge <- function(x, type) {
   type <- paste0("edge_", type, " = ")
-  get_detail(x, type, pattern = "[0-9]{1,}") |>
+  get_detail(x, type, pattern = "[0-9]{1,}")  %>%
     as.numeric()
 }
 
 get_detail <- function(x, type, pattern = ".+") {
-  stringr::str_subset(x, type) |>
+  stringr::str_subset(x, type)  %>%
     stringr::str_extract(paste0("(?<=", type, ")", pattern))
 }

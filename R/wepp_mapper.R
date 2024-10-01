@@ -56,7 +56,15 @@ wepp_mapper <- function(folder,
   out_format <- get_format(folder, where = "flow")
 
   # Get backup fill dem
+
   db <- get_previous(folder, where = "flow", step = "fill")
+
+  # FOR TESTING ------------------
+  # db <- foreign::read.dbf("../Runs - FlowMapR/Steffi_LandMapR_tests/11_Ab02PV/FlowMapR/021dem.dbf") %>%
+  #   janitor::clean_names() %>%
+  #   dplyr::rename(seqno = seq_no, upslope = up_slope, fill_shed = shed_now) %>%
+  #   dplyr::mutate(x = col, y = row)
+
   if("ldir" %in% names(db)) db <- dplyr::rename(db, "ddir" = "ldir")
   db <- dplyr::select(db, "seqno", "x", "y", "row", "col", "elev", "drec",
                       "ddir", "upslope", "fill_shed") %>%
@@ -70,6 +78,15 @@ wepp_mapper <- function(folder,
     dplyr::mutate_at(dplyr::vars(dplyr::matches("row|col")), ~ . + 1) %>%
     dplyr::mutate_at(dplyr::vars(dplyr::contains("seqno")),
                      ~ seqno_to_buffer(., db$seqno[!db$buffer]))
+
+  # FOR TESTING ------------------
+  # fill <- foreign::read.dbf("../Runs - FlowMapR/Steffi_LandMapR_tests/11_Ab02PV/FlowMapR/021pit.dbf") %>%
+  #   janitor::clean_names() %>%
+  #   dplyr::rename(shedno = shed_no) %>%
+  #   dplyr::rename_with(\(x) stringr::str_replace(x, "rec", "seqno")) %>%
+  #   dplyr::mutate_at(dplyr::vars(dplyr::matches("row|col")), ~ . + 1) %>%
+  #   dplyr::mutate_at(dplyr::vars(dplyr::contains("seqno")),
+  #                    ~ seqno_to_buffer(., db$seqno[!db$buffer])) %>%
 
   # Get out locs
   out_locs <- locs_create(folder, which = "wepp", clean = clean)
@@ -449,7 +466,7 @@ wepp_mapper <- function(folder,
   } else skip_task(task, log_file, quiet)
 
   # Measures of channel length ------------------------------------------------
-  task <- "Calcualte 3 measures of channel length"
+  task <- "Calculate 3 measures of channel length"
   if(resume == "" || resume == "wepp_len") {
     announce(task, quiet)
     sub_start <- Sys.time()

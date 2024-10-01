@@ -38,9 +38,9 @@ find_upsegs <- function(segs) {
     s_index1 <- s %>%
       dplyr::filter(.data$num_down == 1) %>%
       dplyr::group_by(.data$down_seg) %>%
-      dplyr::summarize(down_seg = down_seg[1],
-                       center_seg = sort_order[1], # (upnum)
-                       center_seqno = end_seqno[1],       # (uprec)
+      dplyr::summarize(down_seg = .data$down_seg[1],
+                       center_seg = .data$sort_order[1], # (upnum)
+                       center_seqno = .data$end_seqno[1],       # (uprec)
                        center_imp = dplyr::if_else(.data$impound[1],
                                                    .data$down_seg,
                                                    0L))
@@ -49,47 +49,45 @@ find_upsegs <- function(segs) {
   if(any(s$num_down > 1)) {
     # Deal with multiple segments
     sindex2 <- s %>%
-      dplyr::select(down_seg, sort_order, end_type, end_row, end_col, num_down) %>%
+      dplyr::select("down_seg", "sort_order", "end_type", "end_row", "end_col", "num_down") %>%
       dplyr::filter(.data$num_down > 1) %>%
-      dplyr::group_by(down_seg) %>%
+      dplyr::group_by(.data$down_seg) %>%
       dplyr::mutate(n = 1:dplyr::n(),
                     segs = list(s),
-                    start_ddir = purrr::map2(down_seg, segs,
+                    start_ddir = purrr::map2(.data$down_seg, .data$segs,
                                              ~.y[.y$sort_order == .x,
                                                  c("start_ddir", "start_row", "start_col")])) %>%
-      dplyr::select(-segs) %>%
-      tidyr::unnest(start_ddir) %>%
-      dplyr::mutate(cr = end_row - start_row + 2,
-                    cc = end_col - start_col + 2,
-                    search_win = dplyr::case_when(end_type == 5 & n == 1 ~ 7, # (1,1)
-                                                  end_type == 5 & n == 2 ~ 9, # (1,3)
-                                                  end_type == 5 & n == 3 ~ 3, # (3,3)
-                                                  end_type == 5 ~ 0,
-                                                  start_ddir %in% 1:9 ~ start_ddir,
+      dplyr::select(-"segs") %>%
+      tidyr::unnest("start_ddir") %>%
+      dplyr::mutate(cr = .data$end_row - .data$start_row + 2,
+                    cc = .data$end_col - .data$start_col + 2,
+                    search_win = dplyr::case_when(.data$end_type == 5 & .data$n == 1 ~ 7, # (1,1)
+                                                  .data$end_type == 5 & .data$n == 2 ~ 9, # (1,3)
+                                                  .data$end_type == 5 & .data$n == 3 ~ 3, # (3,3)
+                                                  .data$end_type == 5 ~ 0,
+                                                  .data$start_ddir %in% 1:9 ~ .data$start_ddir,
                                                   TRUE ~ 0)) %>%
-      dplyr::filter(search_win != 0)
+      dplyr::filter(.data$search_win != 0)
 
     ups <- sindex2 %>%
-      dplyr::select(down_seg, sort_order, search_win, start_ddir) %>%
-      tidyr::nest(data = c(search_win, sort_order)) %>%
+      dplyr::select("down_seg", "sort_order", "search_win", "start_ddir") %>%
+      tidyr::nest(data = c("search_win", "sort_order")) %>%
       dplyr::ungroup() %>%
-      dplyr::mutate(ups = purrr::map2(data, start_ddir, get_order)) %>%
-      tidyr::unnest(ups) %>%
-      dplyr::group_by(down_seg) %>%
+      dplyr::mutate(ups = purrr::map2(.data$data, .data$start_ddir, get_order)) %>%
+      tidyr::unnest("ups") %>%
+      dplyr::group_by(.data$down_seg) %>%
       dplyr::mutate(ups = dplyr::if_else(ups == "center" & !any(ups == "left"), "left", ups)) %>%
       dplyr::ungroup() %>%
-      dplyr::select(-down_seg) %>%
-      dplyr::mutate(side_seqno = purrr::map(
-                      sort_order,
-                      ~s[s$sort_order == ., c("down_seg", "end_seqno", "impound")])) %>%
-      tidyr::unnest(side_seqno) %>%
-      dplyr::mutate(impound = dplyr::if_else(impound, sort_order, 0L))
+      dplyr::select(-"down_seg") %>%
+      dplyr::left_join(dplyr::select(s, "sort_order", "down_seg", "end_seqno", "impound"),
+                       by = "sort_order") %>%
+      dplyr::mutate(impound = dplyr::if_else(.data$impound, .data$sort_order, 0L))
 
     ups <- ups %>%
-      dplyr::select(side_seg = sort_order, side_seqno = end_seqno, side_imp = impound, ups, down_seg) %>%
+      dplyr::select("side_seg" = "sort_order", "side_seqno" = "end_seqno", "side_imp" = "impound", "ups", "down_seg") %>%
       tidyr::pivot_longer(cols = c("side_seg", "side_seqno", "side_imp")) %>%
-      dplyr::mutate(name = stringr::str_replace(name, "side", ups)) %>%
-      dplyr::select(-ups) %>%
+      dplyr::mutate(name = stringr::str_replace(.data$name, "side", .data$ups)) %>%
+      dplyr::select(-"ups") %>%
       tidyr::pivot_wider(names_from = "name", values_from = "value")
   } else ups <- dplyr::tibble(left_seg = 0, right_seg = 0, center_seg = 0,
                               left_seqno = 0, right_seqno = 0, center_seqno = 0,

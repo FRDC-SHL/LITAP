@@ -57,7 +57,7 @@ pit_stat1 <- function(db, w = NULL, shed = "shedno", method, verbose) {
       pp <- dplyr::mutate(pp, pour_elev = dplyr::lag(cummin(.data$pour_elev), default = Inf))
       pp <- dplyr::filter(pp, .data$elev_n < .data$pour_elev)
       pp <- dplyr::filter(pp, .data$lm_n == max(.data$lm_n))
-      pp <- dplyr::mutate(pp, pour_elev = pour_elev_orig)
+      pp <- dplyr::mutate(pp, pour_elev = .data$pour_elev_orig)
     }
 
     pp <- dplyr::group_by(pp, .data$shedno)

@@ -20,12 +20,12 @@ calc_segments <- function(db, grid) {
   # Add seedtype 8 after any seedtype 4/5
   fix <- db %>%
     dplyr::filter(.data$seedtype %in% c(4, 5),
-                  .data$drec != .data$seqno,
-                  .data$chan_no != 0) %>%
+                  .data$drec != .data$seqno,   # Not a pit cell
+                  .data$chan_no != 0) %>%      # on a channel
     dplyr::pull(.data$drec)
 
   fix <- db[fix, ] %>%
-    dplyr::filter(.data$seedtype == 0) %>%
+    dplyr::filter(.data$seedtype == 0) %>%  # Only replace those with 0
     dplyr::pull(.data$seqno)
 
   db$seedtype[fix] <- 8
@@ -41,8 +41,8 @@ calc_segments <- function(db, grid) {
 
   # Calculate segments
   calc <- db %>%
-    dplyr::filter(seedtype %in% c(1,2,8,5)) %>%
-    dplyr::arrange(dplyr::desc(elev)) %>%
+    dplyr::filter(.data$seedtype %in% c(1, 2, 8, 5)) %>%
+    dplyr::arrange(dplyr::desc(.data$elev)) %>%
     calc_segs(channels = ., db = db)
 
   segs <- calc$segs
@@ -53,13 +53,13 @@ calc_segments <- function(db, grid) {
     dplyr::mutate(orig_id = .data$initial_id) %>%
     dplyr::arrange(dplyr::desc(.data$end_elev), .data$initial_id) %>%
     dplyr::mutate(sort_order = as.integer(1:dplyr::n()),
-                  len_meters = .data$len_cells * grid)
+                  len_meters = .data$len_cells * .env$grid)
 
   db <- dplyr::left_join(db, dplyr::select(segs, "sort_order", "orig_id"),
                          by = c("segment_no" = "orig_id")) %>%
     dplyr::select(-"segment_no") %>%
     dplyr::rename("segment_no" = "sort_order") %>%
-    dplyr::mutate(segment_no = as.integer(tidyr::replace_na(segment_no, 0)))
+    dplyr::mutate(segment_no = as.integer(tidyr::replace_na(.data$segment_no, 0)))
 
   segs <- dplyr::select(segs, -"orig_id")
 
@@ -74,7 +74,6 @@ calc_segs <- function(channels, db) {
   static <- list(channels = channels)
 
   if(length(channels$seqno) > 500) trace <- trace_matrix else trace <- trace_single
-
   variable <- trace(seqno = channels$seqno, drec = db$drec,
                     loop_func = calc_segs_trace, s = static, v = variable)
 
@@ -100,7 +99,7 @@ calc_segs_trace <- function(t, s, v) {
   } else if (all(db$seedtype[t[1:2]] == 2)) {
     last <- 2
   } else if (length(t) > 2) {
-    # skip over first 2 or 8 seedtype if occurrs immediate after start
+    # skip over first 2 or 8 seedtype if occurs immediate after start
     last <- which(db$seedtype[t[-c(1:2)]] != 0)[1] + 2
   } else last <- length(t)
 
@@ -131,27 +130,6 @@ calc_segs_trace <- function(t, s, v) {
 
   v
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

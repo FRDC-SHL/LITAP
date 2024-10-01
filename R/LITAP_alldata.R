@@ -1,24 +1,24 @@
 all_peak <- function(folder = NULL, points = NULL, stats = NULL) {
-  all_summary(folder, points, stats, type = "peak") |>
+  all_summary(folder, points, stats, type = "peak") %>%
     dplyr::rename("pit_elev_2" = "pit_elev.x",
                   "pit_elev" = "pit_elev.y")
 }
 
 all_stream <- function(folder = NULL, points = NULL, stats = NULL) {
-  all_summary(folder, points, stats, type = "stream") |>
-    dplyr::select(-"pit_elev.y") |>
+  all_summary(folder, points, stats, type = "stream") %>%
+    dplyr::select(-"pit_elev.y") %>%
     dplyr::rename("pit_elev" = "pit_elev.x")
 }
 
 all_pit <- function(folder = NULL, points = NULL, stats = NULL) {
-  all_summary(folder, points, stats, type = "pit") |>
-    dplyr::select(-"pit_elev.y") |>
+  all_summary(folder, points, stats, type = "pit") %>%
+    dplyr::select(-"pit_elev.y") %>%
     dplyr::rename("pit_elev" = "pit_elev.x")
 }
 
 all_crest <- function(folder = NULL, points = NULL, stats = NULL) {
-  all_summary(folder, points, stats, type = "crest") |>
-    dplyr::select(-"pit_elev.y") |>
+  all_summary(folder, points, stats, type = "crest") %>%
+    dplyr::select(-"pit_elev.y") %>%
     dplyr::rename("pit_elev" = "pit_elev.x")
 }
 
@@ -34,27 +34,27 @@ all_summary <- function(folder = NULL, points = NULL, stats = NULL, type) {
 
   t <- c("crest" = "cr", "stream" = "st", "pit" = "pit", "peak" = "peak")
 
-  type_cols <- paste0(t[type], c("_row", "_col")) |>
-    setNames(c("row", "col"))
+  type_cols <- paste0(t[type], c("_row", "_col")) %>%
+    stats::setNames(c("row", "col"))
 
-  seq <- points |>
-    dplyr::select(dplyr::all_of(type_cols)) |>
-    dplyr::distinct() |>
+  seq <- points  %>%
+    dplyr::select(dplyr::all_of(type_cols)) %>%
+    dplyr::distinct() %>%
     tidyr::drop_na()
 
   pnts <- dplyr::select(points, "seqno", "x", "y", "row", "col")
 
-  pnts_type <- points |>
+  pnts_type <- points  %>%
     dplyr::semi_join(seq, by = c("row", "col"))
 
   for(i in t[names(t) != type]) {
     pnts_type <- link_points(pnts_type, pnts, by = i)
   }
 
-  joinby <- setNames(c("pit_seqno", "pit_row", "pit_col"), nm = c("seqno", "row", "col"))
+  joinby <- stats::setNames(c("pit_seqno", "pit_row", "pit_col"), nm = c("seqno", "row", "col"))
 
-  pnts_type |>
-    dplyr::left_join(stats, by = joinby) |>
+  pnts_type  %>%
+    dplyr::left_join(stats, by = joinby)  %>%
     dplyr::mutate(pnt_mark = .env$type)
 }
 
@@ -129,6 +129,6 @@ all_stats <- function(folder, type) {
     stats <- get_previous(folder, where = "flow", step = type, type = "stats")
   }
 
-  stats |>
+  stats  %>%
     dplyr::rename_with(\(x) stringr::str_replace(x, "(shedno|edge)", paste0(type, "_\\1")))
 }

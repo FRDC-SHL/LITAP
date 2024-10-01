@@ -13,7 +13,7 @@
      8     8     1     8        NA        NA     NA    NA    NA TRUE  
      9     9     1     9        NA        NA     NA    NA    NA TRUE  
     10    10     1    10        NA        NA     NA    NA    NA TRUE  
-    # ... with 159 more rows
+    # i 159 more rows
 
 ---
 
@@ -1053,13 +1053,13 @@
      8     8     NA     NA      NA    NA    NA        NA      NA      NA       NA
      9     9     NA     NA      NA    NA    NA        NA      NA      NA       NA
     10    10     NA     NA      NA    NA    NA        NA      NA      NA       NA
-    # ... with 159 more rows, and 33 more variables: z2pit <dbl>, n2pit <dbl>,
-    #   cr_row <dbl>, cr_col <dbl>, cr_elev <dbl>, z2cr <dbl>, n2cr <dbl>,
-    #   peak_seqno <int>, peak_row <dbl>, peak_col <dbl>, peak_elev <dbl>,
-    #   z2peak <dbl>, n2peak <dbl>, elev <dbl>, row <dbl>, col <dbl>, buffer <lgl>,
-    #   fill_shed <dbl>, min_elev <dbl>, max_elev <dbl>, elev_range <dbl>,
-    #   max_elev_shed <dbl>, zpit2peak <dbl>, zcr2st <dbl>, zcr2pit <dbl>,
-    #   z2top <dbl>, ztop2pit <dbl>, ncr2st <dbl>, pctz2top <dbl>, ...
+    # i 159 more rows
+    # i 33 more variables: z2pit <dbl>, n2pit <dbl>, cr_row <dbl>, cr_col <dbl>,
+    #   cr_elev <dbl>, z2cr <dbl>, n2cr <dbl>, peak_seqno <int>, peak_row <dbl>,
+    #   peak_col <dbl>, peak_elev <dbl>, z2peak <dbl>, n2peak <dbl>, elev <dbl>,
+    #   row <dbl>, col <dbl>, buffer <lgl>, fill_shed <dbl>, min_elev <dbl>,
+    #   max_elev <dbl>, elev_range <dbl>, max_elev_shed <dbl>, zpit2peak <dbl>,
+    #   zcr2st <dbl>, zcr2pit <dbl>, z2top <dbl>, ztop2pit <dbl>, ncr2st <dbl>, ...
 
 ---
 
@@ -1076,11 +1076,11 @@
      8     8     NA     NA      NA    NA    NA        NA      NA      NA       NA
      9     9     NA     NA      NA    NA    NA        NA      NA      NA       NA
     10    10     NA     NA      NA    NA    NA        NA      NA      NA       NA
-    # ... with 159 more rows, and 41 more variables: z2pit <dbl>, n2pit <dbl>,
-    #   cr_row <dbl>, cr_col <dbl>, cr_elev <dbl>, z2cr <dbl>, n2cr <dbl>,
-    #   peak_seqno <int>, peak_row <dbl>, peak_col <dbl>, peak_elev <dbl>,
-    #   z2peak <dbl>, n2peak <dbl>, elev <dbl>, row <dbl>, col <dbl>, buffer <lgl>,
-    #   fill_shed <dbl>, min_elev <dbl>, max_elev <dbl>, elev_range <dbl>,
-    #   max_elev_shed <dbl>, zpit2peak <dbl>, zcr2st <dbl>, zcr2pit <dbl>,
-    #   z2top <dbl>, ztop2pit <dbl>, ncr2st <dbl>, pctz2top <dbl>, ...
+    # i 159 more rows
+    # i 41 more variables: z2pit <dbl>, n2pit <dbl>, cr_row <dbl>, cr_col <dbl>,
+    #   cr_elev <dbl>, z2cr <dbl>, n2cr <dbl>, peak_seqno <int>, peak_row <dbl>,
+    #   peak_col <dbl>, peak_elev <dbl>, z2peak <dbl>, n2peak <dbl>, elev <dbl>,
+    #   row <dbl>, col <dbl>, buffer <lgl>, fill_shed <dbl>, min_elev <dbl>,
+    #   max_elev <dbl>, elev_range <dbl>, max_elev_shed <dbl>, zpit2peak <dbl>,
+    #   zcr2st <dbl>, zcr2pit <dbl>, z2top <dbl>, ztop2pit <dbl>, ncr2st <dbl>, ...
 

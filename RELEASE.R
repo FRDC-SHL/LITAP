@@ -11,6 +11,7 @@ devtools::check()
 devtools::build_readme()
 
 # Create reports and save to vignettes
+source("data-raw/formal_tests.R")
 # source("../formal_tests_reports_flow.R")
 # source("../formal_tests_reports_form.R")
 # source("../formal_tests_reports_facet.R")
@@ -20,7 +21,7 @@ devtools::build_readme()
 
 # Update NEWS
 
-# Update website and reports
+# Update website and reports - BUILD PACKAGE FIRST!!!
 pkgdown::build_site(lazy = TRUE)
 pkgdown::build_reference_index()
 pkgdown::build_reference()

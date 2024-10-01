@@ -7,7 +7,7 @@ check_facets <- function(folder,
   c2 <- file.exists(file.path(folder, "topographic_derivatives.xlsx"))
 
   if(!c1 || !c2 || !all(nm %in% names(facet))) {
-    warning("Skipping Topographic summary...\n",
+    warning("Skipping Topographic Summary...\n",
             "  This step requires a facets output file `dem_fuzc` with facets '",
             paste0(nm, collapse = "', '"), ",\n",
             "  as well as a topographic_derivatives.xlsx file.\n",

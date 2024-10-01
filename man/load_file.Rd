@@ -15,6 +15,7 @@ load_file(
   min_x = 1,
   min_y = 1,
   edge = TRUE,
+  quiet = FALSE,
   verbose = TRUE
 )
 }
@@ -46,6 +47,8 @@ columns to extract}
 \item{min_y}{Numeric. Starting y coordinate (in meters)}
 
 \item{edge}{Logical. Whether to add an edge (buffer) around the data.}
+
+\item{quiet}{Logical. Suppress all messages.}
 
 \item{verbose}{Logical. Output extra progress messages.}
 }

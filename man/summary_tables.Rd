@@ -2,26 +2,27 @@
 % Please edit documentation in R/LITAP_summary_tables.R
 \name{summary_tables}
 \alias{summary_tables}
-\title{Create summary watersheed tables in Excel}
+\title{Create summary watershed tables in Excel}
 \usage{
 summary_tables(folder)
 }
 \arguments{
-\item{file}{Character. Name of output file (.xlsx)}
-
-\item{min_x}{Numeric. Override the starting x coordinate in the original
-data (in meters)}
-
-\item{min_y}{Numeric. Override the starting y coordinate in the original
-data (in meters)}
+\item{folder}{Character. Location of \code{\link[=flow_mapper]{flow_mapper()}} output}
 }
 \description{
-Using output from the flow_mapper(), form_mapper() and facet_maper() runs,
-summarizes into various tables in Excel worksheet.
+Using output from the \code{flow_mapper()}, \code{form_mapper()} and \code{facet_mapper()} runs,
+summarizes into various tables in Excel worksheet. Based on technique from
+Sheng et al. (2011).
 }
 \examples{
+\dontrun{summary_tables()}
 
-summary_tables()
 
-
+}
+\references{
+Sheng Li, David A. Lobb, Brian G. McConkey, R. A. MacMillan, Alan Moulin,
+and Walter R. Fraser. 2011. Extracting topographic characteristics of landforms
+typical of Canadian agricultural landscapes for agri-environmental modeling.
+I. Methodology. Canadian Journal of Soil Science 91(2), 251-266.
+\url{https://doi.org/10.4141/CJSS10080}.
 }

@@ -41,53 +41,53 @@ hill_stats <- function(db, segs, grid) {
   hill <- db %>%
     dplyr::select("hill_no", "shed_side", "slope_pct", "aspect", "n2st") %>%
     dplyr::distinct() %>%
-    dplyr::filter(!is.na(hill_no)) %>%
-    dplyr::group_by(hill_no) %>%
-    dplyr::mutate(slope = .data$slope_pct / 100,
+    dplyr::filter(!is.na(.data$hill_no)) %>%
+    dplyr::group_by(.data$hill_no) %>%
+    dplyr::mutate(slope_pct = .data$slope_pct / 100,
                   hill_area = 1:dplyr::n(),
                   x_vector = cumsum(sin(.data$aspect * pi/180)),
                   y_vector = cumsum(cos(.data$aspect * pi/180)),
-                  xovery = x_vector / y_vector,
-                  temp_aspect = atan(xovery) * 180 / pi,
+                  xovery = .data$x_vector / .data$y_vector,
+                  temp_aspect = atan(.data$xovery) * 180 / pi,
                   hill_circ = dplyr::case_when(.data$y_vector <= 0 ~ 180 + .data$temp_aspect,
                                                .data$x_vector >= 0 ~ .data$temp_aspect,
                                                .data$x_vector <= 0 ~ 360 + .data$temp_aspect,
                                                TRUE ~ as.numeric(NA)),
-                  max_n2st = max(n2st, na.rm = TRUE),
-                  rel_n2st = dplyr::if_else(max_n2st > 1,
-                                            1 - ((n2st - 1) / (max_n2st - 1)),
+                  max_n2st = max(.data$n2st, na.rm = TRUE),
+                  rel_n2st = dplyr::if_else(.data$max_n2st > 1,
+                                            1 - ((.data$n2st - 1) / (.data$max_n2st - 1)),
                                             1))
 
   # How are <21 points calculate, across all points? Or just for min n2st points (i.e. rel_n2st == 1)
 
   prof <- hill %>%
-    dplyr::select("hill_no", "n2st", "slope", "aspect", "rel_n2st", "max_n2st") %>%
-    dplyr::arrange(.data$hill_no, .data$n2st, .data$slope) %>%
-    dplyr::mutate(curr_rel = purrr::map_dbl(rel_n2st, ~sum(. >= seq(1, 0, -0.06))),
-                  curr_rel = replace(curr_rel, max_n2st < 21, rel_n2st)) %>%
+    dplyr::select("hill_no", "n2st", "slope_pct", "aspect", "rel_n2st", "max_n2st") %>%
+    dplyr::arrange(.data$hill_no, .data$n2st, .data$slope_pct) %>%
+    dplyr::mutate(curr_rel = purrr::map_dbl(.data$rel_n2st, ~sum(. >= seq(1, 0, -0.06))),
+                  curr_rel = replace(.data$curr_rel, .data$max_n2st < 21, .data$rel_n2st)) %>%
     dplyr::group_by(.data$hill_no, .data$curr_rel) %>%
-    dplyr::summarize(slope = round(sum(slope) / dplyr::n(), 3),
+    dplyr::summarize(slope_pct = round(sum(.data$slope_pct) / dplyr::n(), 3),
                      x_vector = sum(sin(.data$aspect * pi/180)),
                      y_vector = sum(cos(.data$aspect * pi/180)),
-                     rel_dist = round(min(rel_n2st), 2),
-                     xovery = x_vector/y_vector,
-                     temp_aspect = atan(xovery) * 180 / pi,
+                     rel_dist = round(min(.data$rel_n2st), 2),
+                     xovery = .data$x_vector/.data$y_vector,
+                     temp_aspect = atan(.data$xovery) * 180 / pi,
                      aspect = dplyr::case_when(.data$y_vector <= 0 ~ 180 + .data$temp_aspect,
                                                .data$x_vector >= 0 ~ .data$temp_aspect,
                                                .data$x_vector <= 0 ~ 360 + .data$temp_aspect,
                                                TRUE ~ as.numeric(NA)),
-                     aspect = round(aspect)) %>%
+                     aspect = round(.data$aspect)) %>%
     dplyr::mutate(n = dplyr::n(),
-                  rel_n2st = rel_dist,
+                  rel_n2st = .data$rel_dist,
                   ofe_num = 0, soil_id = 0, manage_id = 0)
 
   prof_string <- prof %>%
-    dplyr::group_by(hill_no) %>%
-    dplyr::summarize(profile = glue::glue_collapse(glue::glue("{round(rel_dist, 3)}, {round(slope, 3)}"), sep = " "),
+    dplyr::group_by(.data$hill_no) %>%
+    dplyr::summarize(profile = glue::glue_collapse(glue::glue("{round(rel_dist, 3)}, {round(slope_pct, 3)}"), sep = " "),
                      num_points = unique(n), .groups = "drop")
 
   prof <- prof %>%
-    dplyr::select("hill_no", "distance" = "rel_dist", "slope",
+    dplyr::select("hill_no", "distance" = "rel_dist", "slope_pct",
                   "aspect", "rel_n2st", "ofe_num", "soil_id", "manage_id") %>%
     dplyr::arrange(.data$hill_no, dplyr::desc(.data$distance))
 
@@ -103,15 +103,15 @@ hill_stats <- function(db, segs, grid) {
   hill <- hill %>%
     dplyr::select("hill_no", "hill_area", "hill_circ", "shed_side", "max_n2st") %>%
     dplyr::group_by(.data$hill_no, .data$shed_side, .data$max_n2st) %>%
-    dplyr::summarize(hill_area = max_na(hill_area),
-                     aspect = max_na(hill_circ), .groups = "drop") %>%
+    dplyr::summarize(hill_area = max_na(.data$hill_area),
+                     aspect = max_na(.data$hill_circ), .groups = "drop") %>%
     dplyr::filter(!is.na(.data$hill_no)) %>%
     dplyr::left_join(dplyr::select(h, "hill_no", "hill_width"), by = "hill_no") %>%
-    dplyr::mutate(max_len = .data$max_n2st * grid,
-                  hill_area = .data$hill_area * (grid^2),
+    dplyr::mutate(max_len = .data$max_n2st * .env$grid,
+                  hill_area = .data$hill_area * (.env$grid^2),
                   hill_width = dplyr::if_else(.data$shed_side == 1,
                                               .data$hill_area/.data$max_len,
-                                              .data$hill_width * grid),
+                                              .data$hill_width * .env$grid),
                   wepp_len = .data$hill_area/.data$hill_width) %>%
     dplyr::left_join(prof_string, by = "hill_no") %>%
     dplyr::select("hill_no", "hill_width", "hill_area", "max_len", "wepp_len",

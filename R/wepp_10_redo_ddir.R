@@ -23,32 +23,32 @@
 
 redo_ddir <- function(db, segs) {
   # Calc new ddirs
-  db <- dplyr::mutate(db, orig_ddir = ddir)
+  db <- dplyr::mutate(db, orig_ddir = .data$ddir)
 
-  fix <- dplyr::filter(db, orig_ddir != drec) %>%
-    dplyr::select(seqno, drec, ddir, row, col) %>%
+  fix <- dplyr::filter(db, .data$orig_ddir != .data$drec) %>%
+    dplyr::select("seqno", "drec", "ddir", "row", "col") %>%
     dplyr::mutate(down_row = db$row[drec],
                   down_col = db$col[drec],
-                  row_diff = down_row - row,
-                  col_diff = down_col - col,
-                  row_diff = dplyr::case_when(row_diff == -1 ~ 1,
-                                              row_diff ==  0 ~ 2,
-                                              row_diff ==  1 ~ 3,
+                  row_diff = .data$down_row - .data$row,
+                  col_diff = .data$down_col - .data$col,
+                  row_diff = dplyr::case_when(.data$row_diff == -1 ~ 1,
+                                              .data$row_diff ==  0 ~ 2,
+                                              .data$row_diff ==  1 ~ 3,
                                               TRUE ~ as.numeric(NA)),
-                  col_diff = dplyr::case_when(col_diff == -1 ~ 1,
-                                              col_diff ==  0 ~ 2,
-                                              col_diff ==  1 ~ 3,
+                  col_diff = dplyr::case_when(.data$col_diff == -1 ~ 1,
+                                              .data$col_diff ==  0 ~ 2,
+                                              .data$col_diff ==  1 ~ 3,
                                               TRUE ~ as.numeric(NA))) %>%
-    assertr::verify(sum(is.na(row_diff)) == 0) %>%
-    assertr::verify(sum(is.na(col_diff)) == 0) %>%
-    dplyr::mutate(ddir = (3 - row_diff) * 3,
-                  ddir = ddir + col_diff) %>%
-    assertr::assert(assertr::in_set(1:9), ddir)
+    assertr::verify(sum(is.na(.data$row_diff)) == 0) %>%
+    assertr::verify(sum(is.na(.data$col_diff)) == 0) %>%
+    dplyr::mutate(ddir = (3 - .data$row_diff) * 3,
+                  ddir = .data$ddir + .data$col_diff) %>%
+    assertr::assert(assertr::in_set(1:9), "ddir")
 
   db$ddir[fix$seqno] <- fix$ddir
 
   # Add ddirs to segments
-  new_ddir <- dplyr::select(db, start_seqno = seqno, ddir)
+  new_ddir <- dplyr::select(db, "start_seqno" = "seqno", "ddir")
   segs <- dplyr::left_join(segs, new_ddir, by = "start_seqno") %>%
     dplyr::rename("start_ddir" = "ddir")
 

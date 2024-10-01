@@ -18,9 +18,9 @@
 #'
 hill_sheds <- function(db) {
   db2 <- db %>%
-    dplyr::select(seqno, row, col, elev, ddir, drec, chan_side, segment_no) %>%
+    dplyr::select("seqno", "row", "col", "elev", "ddir", "drec", "chan_side", "segment_no") %>%
     dplyr::mutate(shed_no = 0, shed_side = 0, hill_no = 0) %>%
-    dplyr::arrange(dplyr::desc(elev))
+    dplyr::arrange(dplyr::desc(.data$elev))
 
   if(nrow(db2) > 500) trace <- trace_matrix else trace <- trace_single
 

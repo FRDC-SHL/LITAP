@@ -21,10 +21,10 @@ calc_weti <- function(db, grid, verbose) {
   # 7 8 9
 
   db_n <- db %>%
-    dplyr::arrange(dplyr::desc(elev), upslope, seqno) %>%
+    dplyr::arrange(dplyr::desc(.data$elev), .data$upslope, .data$seqno) %>%
     dplyr::mutate(order = 1:dplyr::n()) %>%
     dplyr::select("seqno", "elev", "drec", "order") %>%
-    dplyr::arrange(seqno) %>%
+    dplyr::arrange(.data$seqno) %>%
     nb_values(max_cols = max(db$col), col = c("elev", "seqno", "order"),
               format = "wide") %>%
     tidyr::nest(
@@ -39,7 +39,7 @@ calc_weti <- function(db, grid, verbose) {
       n9 = c("seqno", "elev", "drec", "order", tidyselect::contains("n3"))) %>%
     tidyr::pivot_longer(cols = tidyselect::everything()) %>%
     dplyr::mutate(
-      n = stringr::str_remove(name, "n"),
+      n = stringr::str_remove(.data$name, "n"),
       value = purrr::map(value,
                          ~dplyr::rename_all(., ~stringr::str_remove(., "[0-9]{1}"))),
       value = purrr::map2(
@@ -47,20 +47,21 @@ calc_weti <- function(db, grid, verbose) {
         ~dplyr::mutate(.x,
                        n = .y,
                        diag = n %in% c(1, 3, 7, 9),
-                       deltax = dplyr::if_else(.data$diag, diagonal, orthogonal),
-                       ql = dplyr::if_else(.data$diag, l2, l1))),
+                       deltax = dplyr::if_else(.data$diag, .env$diagonal, .env$orthogonal),
+                       ql = dplyr::if_else(.data$diag, .env$l2, .env$l1))),
       value = purrr::map(
         value,
-        ~dplyr::mutate(.,
-                       status = dplyr::case_when(
-                         elev_n > elev ~ "higher",  # Neighbour higher
-                         elev_n < elev ~ "lower",   # Neighbour lower
-                         TRUE ~ "no_flow"),         # Equal, no flow
-                       status_drec = drec == seqno_n & drec != seqno, # Equal, but flows
-                       elev_diff = elev_n - elev,
-                       tan_f = (elev - elev_n) / deltax,   # From focal cell perspective
-                       tan2_f = tan_f * ql))) %>%
-    dplyr::select(value) %>%
+        ~dplyr::mutate(
+          .,
+          status = dplyr::case_when(
+            .data$elev_n > .data$elev ~ "higher",  # Neighbour higher
+            .data$elev_n < .data$elev ~ "lower",   # Neighbour lower
+            TRUE ~ "no_flow"),         # Equal, no flow
+          status_drec = .data$drec == .data$seqno_n & .data$drec != seqno, # Equal, but flows
+          elev_diff = .data$elev_n - .data$elev,
+          tan_f = (.data$elev - .data$elev_n) / .data$deltax,   # From focal cell perspective
+          tan2_f = .data$tan_f * .data$ql))) %>%
+    dplyr::select("value") %>%
     tidyr::unnest(cols = "value")
 
   if(verbose) message("  Addressing special flow cases")
@@ -169,33 +170,33 @@ trace_wetness <- function(db_n_sub, db_c) {
                   qc2 = dplyr::if_else(.data$status == "higher",
                                        .data$qarea2 / .data$sumtanbl,
                                        .data$qarea2 / 0.0001),
-                  new_qa1 = dplyr::if_else(status == "higher",
+                  new_qa1 = dplyr::if_else(.data$status == "higher",
                                           # -1 because calc from lower cell's perspective
                                           .data$qc1 * -1 * .data$tan2_f,
                                           .data$qarea1),
-                  new_qa2 = dplyr::if_else(status == "higher",
+                  new_qa2 = dplyr::if_else(.data$status == "higher",
                                            # -1 because calc from lower cell's perspective
                                            .data$qc2 * -1 * .data$tan2_f,
                                            .data$qarea2),
-                  elev_diff = replace(elev_diff, status != "higher", 0),
-                  cell_t = replace(cell_t, status != "higher", 0))
+                  elev_diff = replace(.data$elev_diff, .data$status != "higher", 0),
+                  cell_t = replace(.data$cell_t, .data$status != "higher", 0))
 
   temp_qc <- temp_n %>%
-    dplyr::group_by(seqno_n) %>%
-    dplyr::arrange(order_n) %>%
-    dplyr::summarize(qc1 = dplyr::last(qc1),
-                     qc2 = dplyr::last(qc2)) %>% # get last qc for each higher cell
-    dplyr::arrange(seqno_n)
+    dplyr::group_by(.data$seqno_n) %>%
+    dplyr::arrange(.data$order_n) %>%
+    dplyr::summarize(qc1 = dplyr::last(.data$qc1),
+                     qc2 = dplyr::last(.data$qc2)) %>% # get last qc for each higher cell
+    dplyr::arrange(.data$seqno_n)
 
   temp_n <- temp_n %>%
-    dplyr::group_by(seqno) %>%
-    dplyr::summarize(qarea1 = sum(new_qa1),
-                     qarea2 = sum(new_qa2),
-                     this_round = sum(status %in% c("higher", "higher_drec")),
-                     d = sum(diag) + sum(count_d),
-                     o = sum(!diag) + sum(count_o),
-                     t = d + o,
-                     elev_sum = sum(elev_diff) + sum(elev_sum))
+    dplyr::group_by(.data$seqno) %>%
+    dplyr::summarize(qarea1 = sum(.data$new_qa1),
+                     qarea2 = sum(.data$new_qa2),
+                     this_round = sum(.data$status %in% c("higher", "higher_drec")),
+                     d = sum(.data$diag) + sum(.data$count_d),
+                     o = sum(!.data$diag) + sum(.data$count_o),
+                     t = .data$d + .data$o,
+                     elev_sum = sum(.data$elev_diff) + sum(.data$elev_sum))
 
   temp_seqno <- temp$seqno
   temp_n_seqno <- temp_n$seqno
