@@ -27,6 +27,12 @@
 #'   runs in this folder?
 #' @param clim Numeric vector. Column limits if specifying a subset of the dem
 #' @param rlim Numeric vector. Row limits if specifying a subset of the dem
+#' @param pitr_method Character. Either "landmapr" or "litap" to define whether
+#'  to use the LandMapR method for finding a pour point during the pit removal stage
+#'  (default) or LITAP.
+#'  The LITAP method defines the pourpoint as the lowest neighbour. The LandMapR
+#'  defines it as the last *possible* pour point among neighbouring cells (not
+#'  necessarily the lowest neighbouring cell).
 #'
 #' @inheritParams args
 #'

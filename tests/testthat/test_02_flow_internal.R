@@ -23,12 +23,12 @@ test_that("Sub-functions", {
 
   #Initial Pit Removal
   expect_silent(d_local <- first_pitr1(d, max_area = 10, max_depth = 5,
-                                       verbose = FALSE)) %>%
+                                       method = "litap", verbose = FALSE)) %>%
     sub_dem(s) %>%
     expect_snapshot_value(style = "json2")
 
   # Pond Pit Removal
-  expect_silent(d_pond <- second_pitr1(d_local, verbose = FALSE))
+  expect_silent(d_pond <- second_pitr1(d_local, method = "litap", verbose = FALSE))
   expect_snapshot_value(sub_dem(d_pond$db, s), style = "json2")
   expect_snapshot_value(sub_dem(d_pond$stats, s), style = "json2")
 
@@ -39,7 +39,7 @@ test_that("Sub-functions", {
     by = "local_shed")
 
   # Fill Pit Removal
-  expect_silent(d_fill <- third_pitr1(d_local, verbose = FALSE))
+  expect_silent(d_fill <- third_pitr1(d_local, method = "litap", verbose = FALSE))
   expect_snapshot_value(sub_dem(d_fill$db, s), style = "json2")
   expect_snapshot_value(sub_dem(d_fill$stats, s), style = "json2")
 
@@ -59,7 +59,7 @@ test_that("Sub-functions", {
     expect_snapshot_value(style = "json2")
 
   # Inverted Initial Pit Removal
-  expect_silent(d <- first_pitr1(d, max_area = 10, max_depth = 5,
+  expect_silent(d <- first_pitr1(d, max_area = 10, max_depth = 5, method = "litap",
                                  verbose = FALSE)) %>%
     sub_dem(s) %>%
     expect_snapshot_value(style = "json2")
@@ -133,7 +133,7 @@ test_that("uced calculated correctly", {
     add_buffer() %>%
     calc_ddir2(verbose = FALSE) %>%
     calc_shed4(verbose = FALSE) %>%
-    first_pitr1(max_area = 0, max_depth = 0, verbose = FALSE) %>%
+    first_pitr1(max_area = 0, max_depth = 0, method = "litap", verbose = FALSE) %>%
     remove_buffer()
 
   flow_plot(db_test, type = "elev", dir = TRUE, pits = TRUE) +
@@ -158,10 +158,6 @@ test_that("uced calculated correctly", {
                                   7, 1, 1, 4, 5, 2,
                                   16, 7, 2, 1, 2, 2,
                                   1, 1, 1, 1, 1, 1))
-
-
-
-
 
 
 })
