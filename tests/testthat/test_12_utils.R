@@ -1,6 +1,11 @@
 test_that("calc_grid()", {
-  expect_silent(calc_grid(test_dem)) |>
+  expect_silent(calc_grid(test_dem)) %>%
     expect_equal(1)
+})
+
+test_that("omit_edges()", {
+  expect_silent(dm1 <- omit_edges(test_dem, edge_row = 5, edge_col = 5))
+  expect_equal(nrow(dm1), (max(test_dem$row) - 5 * 2) * (max(test_dem$col) - 5 * 2))
 })
 
 # merge_all() -----------------------------------------------------------

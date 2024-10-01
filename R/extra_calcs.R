@@ -119,13 +119,14 @@ omit_edges <- function(x, edge_row = NULL, edge_col = NULL, nrow = NULL, ncol = 
     ncol <- meta$ncols
   }
 
-  if(is.null(nrow)) nrow <- max(x$rows)
-  if(is.null(ncol)) ncol <- max(x$cols)
+  if(is.null(nrow)) nrow <- max(x$row)
+  if(is.null(ncol)) ncol <- max(x$col)
 
+  # Corrected edge calculations
   dplyr::filter(
     x,
-    .data$row > (.env$edge_row), .data$row < (.env$nrow - .env$edge_row),
-    .data$col > (.env$edge_col), .data$col < (.env$ncol - .env$edge_col))
+    .data$row > (.env$edge_row), .data$row <= (.env$nrow - .env$edge_row),
+    .data$col > (.env$edge_col), .data$col <= (.env$ncol - .env$edge_col))
 }
 
 keep_edges <- function(x, edge_row, edge_col, nrow = NULL, ncol = NULL) {
