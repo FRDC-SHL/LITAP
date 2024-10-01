@@ -126,7 +126,7 @@ cols_order <- list(
              "left_imp", "right_imp", "top_imp", "chan_shape", "flow2crow",
              "impound",
 
-             "chan_len", "num_points", "mean_slope", "gen_slope", "aspect", "profile"))
+             "chan_len", "num_points", "mean_slope_pct", "gen_slope_pct", "aspect", "profile"))
 
 debug_files <- list(
   "flow" = c("dem_dir", "dem_initial", "dem_local", "dem_pond",
@@ -134,7 +134,7 @@ debug_files <- list(
              "stats_initial", "stats_local"),
   "form" = c("dem_relief"),
   "facet" = c(),
-  "wepp" = c("dem_wepp_form", "stats_renum", "dem_renum", "dem_hillsheds",
+  "wepp" = c("dem_wepp", "stats_renum", "dem_renum", "dem_hillsheds",
              "stats_upsegs", "stats_ddir2", "dem_ddir2", "stats_ordered",
              "stats_first_segs", "dem_ups", "dem_split", "dem_remarked",
              "dem_pits", "dem_ordered", "dem_flow", "dem_first_segs",
