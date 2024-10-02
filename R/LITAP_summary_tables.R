@@ -179,8 +179,8 @@ tbl_derivatives <- function(slp_cal, avg) {
 
 tbl_avg <- function(seg_cal, avg) {
   seg_cal  %>%
-    dplyr::select("SG (%)" = "slope_pct", "Aspect (degree)" = "aspect",
-                  "PrCurv (degree / 100m)" = "prof", "PlCurv (degree / 100m)" = "plan",
+    dplyr::select("SG (%)" = "slope_pct", "Aspect (\u00B0)" = "aspect",
+                  "PrCurv (\u00B0 / 100m)" = "prof", "PlCurv (\u00B0 / 100m)" = "plan",
                   "Qarea" = "qarea1", "Qweti" = "qweti1")  %>%
     dplyr::mutate(type = toupper(c("cst", "ups", "mid", "low", "dep")))  %>%
     tidyr::pivot_longer(-"type")  %>%
@@ -206,7 +206,7 @@ tbl_stats <- function(topo, lsf) {
                               "75%", "90%", "95%", "99%", "max"))  %>%
     tidyr::pivot_longer(-"name", names_to = "Parameter")  %>%
     tidyr::pivot_wider(names_from = "name", values_from = "value")  %>%
-    dplyr::mutate(Unit = c("%", "° (100 m) -1", "° (100 m) -1", "",
+    dplyr::mutate(Unit = c("%", "\u00B0 (100 m) -1", "\u00B0 (100 m) -1", "",
                            "m", "m", "m", "m", "%"))  %>%
     dplyr::relocate("Unit", .after = "Parameter")  %>%
     dplyr::rename("Average" = "avg", "SD" = "sd")  %>%
