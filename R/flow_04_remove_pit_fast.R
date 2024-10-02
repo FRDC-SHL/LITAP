@@ -1,4 +1,4 @@
-first_pitr1 <- function(db, max_area, max_depth, verbose) {
+first_pitr1 <- function(db, max_area, max_depth, method, verbose) {
 
   # Working with initial_shed
   db$shedno <- db$initial_shed
@@ -16,7 +16,7 @@ first_pitr1 <- function(db, max_area, max_depth, verbose) {
     #   dplyr::arrange(shedno, shedno_n)
 
     # Initial Shed Statistics
-    w_stats <- pit_stat1(db, verbose = verbose) %>%
+    w_stats <- pit_stat1(db, method = method, verbose = verbose) %>%
       out_stat() %>%
       dplyr::arrange(dplyr::desc(pit_elev), varatio) %>%
       dplyr::mutate(remove = (pit_area <= max_area |
@@ -41,7 +41,7 @@ first_pitr1 <- function(db, max_area, max_depth, verbose) {
         # Update shed statistics but only for the two sheds involved
         w_stats <- w_stats %>%
           dplyr::filter(!(shedno %in% sheds)) %>%
-          dplyr::bind_rows(pit_stat1(db, w = sheds, verbose = verbose)) %>%
+          dplyr::bind_rows(pit_stat1(db, w = sheds, method = method, verbose = verbose)) %>%
           # Which to remove
           dplyr::mutate(remove = (pit_area <= max_area |
                                     ((pour_elev - pit_elev) <= max_depth)) &
@@ -74,20 +74,20 @@ first_pitr1 <- function(db, max_area, max_depth, verbose) {
 
   # Save as local_shed numbers
   dplyr::mutate(db,
-                local_shed = shedno,
-                local_ddir = ddir,
-                local_uced = uced) %>%
+                local_shed = .data$shedno,
+                local_ddir = .data$ddir,
+                local_uced = .data$uced) %>%
     dplyr::select(-"shedno")
 }
 
 
 # Includes second vol2fl/mm2fl/parea calculations
-second_pitr1 <- function(db, verbose) {
+second_pitr1 <- function(db, method, verbose) {
 
   # Working with local_shed
   db$shedno <- db$local_shed
 
-  w_stats <- pit_stat1(db, verbose = verbose) %>%
+  w_stats <- pit_stat1(db, method = method, verbose = verbose) %>%
     out_stat() %>%
     dplyr::arrange(pit_elev, varatio) %>% ## shedord2  (PITELEV*10^10 + varatio) TAG SHEDORD2
     dplyr::mutate(removed = FALSE, final = FALSE, next_pit = drains_to, becomes = 0)
@@ -133,7 +133,7 @@ second_pitr1 <- function(db, verbose) {
 
       w_stats <- dplyr::bind_rows(
         w_stats,
-        dplyr::mutate(pit_stat1(db, w = new_shed, verbose = verbose),
+        dplyr::mutate(pit_stat1(db, w = new_shed, method = method, verbose = verbose),
                       removed = FALSE,
                       final = FALSE,
                       next_pit = drains_to,
@@ -232,12 +232,12 @@ second_pitr1 <- function(db, verbose) {
   list("db" = db, "stats" = pond)
 }
 
-third_pitr1 <- function(db, verbose) {
+third_pitr1 <- function(db, method, verbose) {
 
   # Working with local_shed
   db$shedno <- db$local_shed
 
-  w_stats <- pit_stat1(db, verbose = verbose) %>%
+  w_stats <- pit_stat1(db, method = method, verbose = verbose) %>%
     out_stat() %>%
     dplyr::arrange(varatio) %>%
     dplyr::mutate(drains_to_orig = drains_to,
@@ -267,7 +267,7 @@ third_pitr1 <- function(db, verbose) {
                                   new_shed, shedno))
 
       # Update shed statistics but only for the two sheds involved
-      w_new <- pit_stat1(db, w = new_shed, verbose = verbose) %>%
+      w_new <- pit_stat1(db, w = new_shed, method = method, verbose = verbose) %>%
         dplyr::mutate(drains_to_orig = drains_to,
                       next_pit = drains_to,
                       end_pit = pond_shed,
@@ -351,8 +351,9 @@ third_pitr1 <- function(db, verbose) {
 
 remove_pit1 <- function(w_rm, db, update_elev = FALSE, verbose) {
 
+
   w_rm <- w_rm %>%
-    dplyr::mutate(direction = ifelse(pit_elev >= pit_elev_out, "out", "in"))
+    dplyr::mutate(direction = ifelse(pit_elev <= pit_elev_out, "in", "out"))
 
   if(w_rm$direction == "out"){
     w_rm <- dplyr::select(w_rm,
@@ -364,8 +365,10 @@ remove_pit1 <- function(w_rm, db, update_elev = FALSE, verbose) {
     w_rm <- dplyr::select(w_rm,
                           pit_seqno = pit_seqno_out,
                           in_seqno = out_seqno, out_seqno = in_seqno,
-                          pour_elev = pour_elev_out,
-                          shedno = drains_to, drains_to = shedno)
+                          pour_elev,
+                          shedno,
+                          drains_to
+    )
   }
 
   ## Remove Pit
@@ -380,6 +383,7 @@ remove_pit1 <- function(w_rm, db, update_elev = FALSE, verbose) {
 
   # 1. Get original flow down to old pit
   new_flow <- trace_flow2(cell = w_rm$in_seqno, drec = db$drec)
+
 
   # Reverse directions
   new_ddir <- db[new_flow, ] %>%
@@ -415,6 +419,7 @@ remove_pit1 <- function(w_rm, db, update_elev = FALSE, verbose) {
   db$upslope[new_flow[-(1:which(new_flow == w_rm$in_seqno))]] <- db$upslope[new_flow[-(1:which(new_flow == w_rm$in_seqno))]] + new_upslope[length(new_upslope)]
 
   # Update elevation of db (FlowMapR_2009.txt line 1964)
+
   if(update_elev) {
     db$elev[db$shedno == w_rm$shedno & db$elev < w_rm$pour_elev &
               !is.na(db$shedno) & !is.na(db$elev)] <- w_rm$pour_elev

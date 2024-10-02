@@ -10,40 +10,41 @@ calc_form <- function(db, grid, verbose) {
     dplyr::mutate_at(.vars = dplyr::vars(dplyr::contains("elev_n")),
                      ~ . * 100) %>%
     dplyr::mutate(sum_elev = purrr::pmap_dbl(
-      list(elev_n1, elev_n2, elev_n3, elev_n4, elev_n5,
-           elev_n6, elev_n7, elev_n8, elev_n9),
+      list(.data$elev_n1, .data$elev_n2, .data$elev_n3, .data$elev_n4, .data$elev_n5,
+           .data$elev_n6, .data$elev_n7, .data$elev_n8, .data$elev_n9),
       ~sum(is.na(c(..1, ..2, ..3, ..4, ..5, ..6, ..7, ..8, ..9))))) %>%
     #dplyr::filter(sum_elev == 0) %>%
-    dplyr::mutate(slope_x = dplyr::if_else(sum_elev > 0, NA_real_,
-                                           (elev_n6 - elev_n4) / (2 * grid)),
-                  slope_y = dplyr::if_else(sum_elev > 0, NA_real_,
-                                           (elev_n2 - elev_n8) / (2 * grid)),
-                  slope_pct = sqrt(slope_x^2 + slope_y^2),
-                  slope_deg = rad_deg(atan(slope_pct/100)),
-                  aspect = dplyr::if_else(sum_elev > 0 & !is.na(elev), 360,
-                                          aspect(slope_x, slope_y, slope_pct)),
-                  aspect = round(aspect),
-                  prof_aspect = dplyr::if_else(aspect > 180, aspect - 180, aspect),
-                  plan_aspect = dplyr::if_else((prof_aspect + 90) > 180,
-                                               prof_aspect + 90 - 180,
-                                               prof_aspect + 90),
-                  prof = dplyr::if_else(sum_elev > 0, NA_real_,
-                                        prof_plan(prof_aspect, elev_n1, elev_n2,
-                                                  elev_n3, elev_n4, elev_n5,
-                                                  elev_n6, elev_n7, elev_n8,
-                                                  elev_n9, grid, slope_pct)),
-                  plan = dplyr::if_else(sum_elev > 0, NA_real_,
-                                        prof_plan(plan_aspect, elev_n1, elev_n2,
-                                                  elev_n3, elev_n4, elev_n5,
-                                                  elev_n6, elev_n7, elev_n8,
-                                                  elev_n9, grid, slope_pct))) %>%
+    dplyr::mutate(
+      slope_x = dplyr::if_else(.data$sum_elev > 0, NA_real_,
+                               (.data$elev_n6 - .data$elev_n4) / (2 * .env$grid)),
+      slope_y = dplyr::if_else(.data$sum_elev > 0, NA_real_,
+                               (.data$elev_n2 - .data$elev_n8) / (2 * .env$grid)),
+      slope_pct = sqrt(.data$slope_x^2 + .data$slope_y^2),
+      slope_deg = rad_deg(atan(.data$slope_pct/100)),
+      aspect = dplyr::if_else(.data$sum_elev > 0 & !is.na(.data$elev), 360,
+                              aspect(.data$slope_x, .data$slope_y, .data$slope_pct)),
+      aspect = round(aspect),
+      prof_aspect = dplyr::if_else(.data$aspect > 180, .data$aspect - 180, .data$aspect),
+      plan_aspect = dplyr::if_else((.data$prof_aspect + 90) > 180,
+                                   .data$prof_aspect + 90 - 180,
+                                   .data$prof_aspect + 90),
+      prof = dplyr::if_else(.data$sum_elev > 0, NA_real_,
+                            prof_plan(.data$prof_aspect, .data$elev_n1, .data$elev_n2,
+                                      .data$elev_n3, .data$elev_n4, .data$elev_n5,
+                                      .data$elev_n6, .data$elev_n7, .data$elev_n8,
+                                      .data$elev_n9, .env$grid, .data$slope_pct)),
+      plan = dplyr::if_else(.data$sum_elev > 0, NA_real_,
+                            prof_plan(.data$plan_aspect, .data$elev_n1, .data$elev_n2,
+                                      .data$elev_n3, .data$elev_n4, .data$elev_n5,
+                                      .data$elev_n6, .data$elev_n7, .data$elev_n8,
+                                      .data$elev_n9, .env$grid, .data$slope_pct))) %>%
     dplyr::select("seqno", "elev", "row", "col", "slope_pct", "slope_deg",
                   "aspect", "prof", "plan", "buffer") %>%
-    dplyr::mutate(slope_pct = round(slope_pct, 3),
-                  slope_deg = round(slope_deg, 3),
-                  aspect = round(aspect),
-                  prof = round(prof, 3),
-                  plan = round(plan, 3))
+    dplyr::mutate(slope_pct = round(.data$slope_pct, 3),
+                  slope_deg = round(.data$slope_deg, 3),
+                  aspect = round(.data$aspect),
+                  prof = round(.data$prof, 3),
+                  plan = round(.data$plan, 3))
 
 
   # First/last rows and cols get adjacent values

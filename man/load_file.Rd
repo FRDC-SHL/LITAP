@@ -12,7 +12,10 @@ load_file(
   rlim = NULL,
   clim = NULL,
   grid = NULL,
+  min_x = 1,
+  min_y = 1,
   edge = TRUE,
+  quiet = FALSE,
   verbose = TRUE
 )
 }
@@ -39,7 +42,13 @@ columns to extract}
 
 \item{grid}{Numeric. Grid size in m of the input DEM file}
 
+\item{min_x}{Numeric. Starting x coordinate (in meters)}
+
+\item{min_y}{Numeric. Starting y coordinate (in meters)}
+
 \item{edge}{Logical. Whether to add an edge (buffer) around the data.}
+
+\item{quiet}{Logical. Suppress all messages.}
 
 \item{verbose}{Logical. Output extra progress messages.}
 }

@@ -1,7 +1,7 @@
 Package: LITAP
 Type: Package
 Title: Landscape Integrated Terrain Analysis Package
-Version: 0.6.0
+Version: 0.7.0
 Authors@R: c(
      person("Steffi", "LaZerte", email = "steffi@steffi.ca", role = c("aut","cre")),
      person("Sheng", "Li", email = "sheng.li@canada.ca", role = "aut"),
@@ -20,31 +20,30 @@ Depends:
 Imports:
     assertr (>= 2.7),
     dplyr (>= 0.7.0),
-    DT (>= 0.2),
     ggplot2 (>= 3.2.0),
     glue (>= 1.4.2),
-    gridExtra (>= 2.2.1),
     magrittr (>= 1.5),
-    progress (>= 1.1.2),
     purrr (>= 0.2.2.2),
     raster (>= 2.5.8),
     readr (>= 1.1.0),
     rlang (>= 0.4.10),
-    rmarkdown (>= 1.5),
+    rmarkdown (>= 2.11),
     stringr (>= 1.2.0),
     tibble (>= 2.1.3),
     tidyselect (>= 1.1.0),
     tidyr (>= 1.0.0),
-    writexl (>= 1.4.0)
+    writexl (>= 1.4.0),
+    openxlsx (>= 4.2.5.2),
+    janitor (>= 2.2.0)
 Suggests: 
     gt (>= 0.3.1),
     foreign (>= 0.8.67),
     knitr,
-    microbenchmark,
+    gridExtra,
+    DT,
     readxl,
-    rgdal,
     testthat (>= 3.0.0)
 VignetteBuilder: knitr
-RoxygenNote: 7.1.2
+RoxygenNote: 7.3.1
 Roxygen: list(markdown = TRUE)
 Config/testthat/edition: 3

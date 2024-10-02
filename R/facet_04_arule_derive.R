@@ -1,26 +1,19 @@
 arule_percentiles <- function(weti, relief, edge_row, edge_col, quiet) {
 
-  # Calculate buffers at 5% if not provided
-  if(is.null(edge_row)) {
-    edge_row <- round(length(unique(weti$row[!weti$buffer])) * 0.05)
-  }
-  if(is.null(edge_col)) {
-    edge_col <- round(length(unique(weti$col[!weti$buffer])) * 0.05)
-  }
-
   if(!quiet) message("Using buffer of ", edge_row, " rows ('edge_row') ",
                      "and ", edge_col, " cols ('edge_col') per side")
 
-    weti %>%
+  weti %>%
     dplyr::left_join(dplyr::select(relief,
                                    "seqno", "pctz2st", "pctz2pit", "z2pit",
                                    "z2st", "zpit2peak", "zcr2st", "lpit2peak",
                                    "lstr2div"),
                      by = "seqno") %>%
-    dplyr::filter(.data$row > (!!edge_row + 1),
-                  .data$row < (max(.data$row) - (!!edge_row + 1)),
+    # Corrected edge calculations
+    dplyr::filter(.data$row > (!!edge_row + 1), # Plus buffer row/col
+                  .data$row <= (max(.data$row) - (!!edge_row + 1)),
                   .data$col > (!!edge_col + 1),
-                  .data$col < (max(.data$col) - (!!edge_col + 1))) %>%
+                  .data$col <= (max(.data$col) - (!!edge_col + 1))) %>%
     dplyr::select("elev", "prof", "plan", "slope" = "slope_pct", "aspect",
                   "qarea", "qweti", "z2st", "z2pit", "zpit2peak", "zcr2st",
                   "pctz2st", "pctz2pit", "lpit2peak", "lstr2div") %>%
@@ -78,7 +71,7 @@ arule_derive <- function(perc) {
                         0,
                         perc$z2pit_p90),
                   b_low = c(rep(0, 11), 50, rep(0, 2), 50, rep(0, 2)),
-                  b_hi = b_low,
+                  b_hi = .data$b_low,
                   d = c(big_or_min((perc$prof_p90 - perc$prof_p65)/2, 0.01),
                         big_or_min((perc$prof_p35 - perc$prof_p10)/2, 0.01),
                         big_or_min((perc$prof_p75 - perc$prof_p25)/2, 0.01),
@@ -96,8 +89,8 @@ arule_derive <- function(perc) {
                         (perc$pctz2pit_p75 - perc$pctz2pit_p25) / 2,
                         perc$pctz2pit_p25 / 2,
                         (perc$z2pit_p90 - perc$z2pit_p70) / 2),
-                  b1 = b_calcs(calc, b, d, b_low, b_hi, 1),
-                  b2 = b_calcs(calc, b, d, b_low, b_hi, 2)) %>%
+                  b1 = b_calcs(.data$calc, .data$b, .data$d, .data$b_low, .data$b_hi, 1),
+                  b2 = b_calcs(.data$calc, .data$b, .data$d, .data$b_low, .data$b_hi, 2)) %>%
     dplyr::relocate("d", .after = dplyr::last_col()) %>%
     dplyr::select(-"calc")
 
@@ -139,23 +132,4 @@ arule_template <- function() {
     16,         "relzfile", "PCTZ2PIT", "NEAR_PIT",   5,         "bd2",
     17,         "relzfile", "Z2PIT",    "HI_ABOVE",   4,         "bd1")
 
-}
-
-percentiles_format <- function(perc) {
-  perc %>%
-    tidyr::pivot_longer(cols = dplyr::everything(),
-                        names_to = "name", values_to = "value") %>%
-    tidyr::separate(name, into = c("parameter", "name"),
-                    sep = "_", remove = TRUE) %>%
-    tidyr::pivot_wider(names_from = "parameter", values_from = "value") %>%
-    dplyr::mutate(
-      name = stringr::str_replace(.data$name, "^p[0]*([0-9]{1,2})", "\\1%"),
-      name = factor(.data$name, levels = c("n", "avg", "sd", "min", "1%",
-                                           paste0(seq(5,95,5), "%"),
-                                           "99%", "max"))) %>%
-    dplyr::arrange(.data$name) %>%
-    dplyr::select("name", "slope", "aspect", "prof", "plan",
-                  "qarea1" = "qarea", "qweti1" = "qweti",
-                  "z2st", "z2pit", "zpit2peak", "zcr2st", 'pctz2st', "pctz2pit",
-                  "lpit2peak", "lstr2div")
 }

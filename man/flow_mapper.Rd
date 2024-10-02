@@ -9,6 +9,8 @@ flow_mapper(
   nrow,
   ncol,
   grid = NULL,
+  min_x = 1,
+  min_y = 1,
   missing_value = -9999,
   max_area = 10,
   max_depth = 0.5,
@@ -20,6 +22,7 @@ flow_mapper(
   resume = NULL,
   log = TRUE,
   report = TRUE,
+  pitr_method = "landmapr",
   verbose = FALSE,
   quiet = FALSE,
   debug = FALSE
@@ -38,6 +41,10 @@ with a single column, but can be automatically assessed from files with x
 and y coordinates.}
 
 \item{grid}{Numeric. Grid size in m of the input DEM file}
+
+\item{min_x}{Numeric. Starting x coordinate (in meters)}
+
+\item{min_y}{Numeric. Starting y coordinate (in meters)}
 
 \item{missing_value}{Numeric/Character. Symbols which define missing data}
 
@@ -67,6 +74,13 @@ runs in this folder?}
 \item{log}{Logical. Create log file recording progress?}
 
 \item{report}{Logical. Create html report of results?}
+
+\item{pitr_method}{Character. Either "landmapr" or "litap" to define whether
+to use the LandMapR method for finding a pour point during the pit removal stage
+(default) or LITAP.
+The LITAP method defines the pourpoint as the lowest neighbour. The LandMapR
+defines it as the last \emph{possible} pour point among neighbouring cells (not
+necessarily the lowest neighbouring cell).}
 
 \item{verbose}{Logical. Output extra progress messages.}
 

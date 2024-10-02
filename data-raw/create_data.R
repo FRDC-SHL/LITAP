@@ -34,4 +34,6 @@ form_mapper(folder = "./inst/extdata/testELEV",
 facet_mapper(folder = "./inst/extdata/testELEV",
              arule = system.file("extdata", "arule.dbf", package = "LITAP"),
              crule = system.file("extdata", "crule.dbf", package = "LITAP"))
+wepp_mapper(folder = "./inst/extdata/testELEV",
+            chan_length = 200, upslope_threshold = 300)
 

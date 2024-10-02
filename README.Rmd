@@ -47,6 +47,8 @@ install.packages("remotes") # If not already installed
 remotes::install_github("FRDC-SHL/LITAP") 
 ```
 
+
+
 ## Example files
 
 LITAP comes with several example files (`testELEV.dbf`, `testELEV_mini.dbf`,
@@ -66,6 +68,16 @@ file.copy(system.file("extdata", "arule.dbf", package = "LITAP"), ".")
 file.copy(system.file("extdata", "crule.dbf", package = "LITAP"), ".")
 ```
 
+## Basic Usage: Overall
+
+```{r, eval = FALSE}
+flow_mapper(file = "testELEV.dbf", nrow = 90, ncol = 90, grid = 5, out_folder = "Output/")
+form_mapper(folder = "Output")
+facet_mapper(folder = "Output", crule = "crule.dbf")
+wepp_mapper(folder = "Output")
+```
+
+
 ## Basic Usage: `flow_mapper()`
 
 Load the package:
@@ -73,7 +85,8 @@ Load the package:
 library(LITAP)
 ```
 
-First, specify the dem file and the number of rows and columns:
+First, specify the dem file and the number of rows and columns, as well as the 
+grid size, if it's not inferable from the data.
 
 ```{r, eval = FALSE}
 flow_mapper(file = "testELEV.dbf", nrow = 90, ncol = 90, grid = 5)
@@ -88,7 +101,7 @@ flow_mapper(file = "testELEV.dbf", nrow = 90, ncol = 90, grid = 5,
 
 As well as the location of output files:
 ```{r}
-flow_mapper(file = "testELEV.dbf", nrow = 90, ncol = 90, grid = 5, out_folder = "./Output/")
+flow_mapper(file = "testELEV.dbf", nrow = 90, ncol = 90, grid = 5, out_folder = "Output/")
 ```
 
 ## Basic Usage: `form_mapper()`
@@ -96,13 +109,13 @@ flow_mapper(file = "testELEV.dbf", nrow = 90, ncol = 90, grid = 5, out_folder = 
 `form_mapper()` uses output from `flow_mapper()` and requires a grid size.
 
 ```{r}
-form_mapper(folder = "./Output/")
+form_mapper(folder = "Output/")
 ```
 
 Optionally, users can also define channels and ridges according to the number of up-/down-slope cells that flow through the cell in question.
 
 ```{r, eval = FALSE}
-form_mapper(folder = "./Output/", str_val = 10000, ridge_val = 10000)
+form_mapper(folder = "Output/", str_val = 10000, ridge_val = 10000)
 ```
 
 ## Basic Usage: `facet_mapper()`
@@ -111,7 +124,7 @@ form_mapper(folder = "./Output/", str_val = 10000, ridge_val = 10000)
 and, optionally, an ARULE file.
 
 ```{r}
-facet_mapper(folder = "./Output/", crule = "crule.dbf", arule = "arule.dbf")
+facet_mapper(folder = "Output/", crule = "crule.dbf", arule = "arule.dbf")
 ```
 
 If an ARULE file is not provided, LITAP will derive the rules based on the input 
@@ -119,7 +132,7 @@ files (as in Li et al. 2011, Canadian Journal of Soil Science 91(2), 251-266).
 The derived A rules will be output to "afile_derived.csv".
 
 ```{r, eval = FALSE}
-facet_mapper(folder = "./Output/", crule = "crule.dbf")
+facet_mapper(folder = "Output/", crule = "crule.dbf")
 ```
 
 ## Basic Usage: `wepp_mapper()`
@@ -127,7 +140,7 @@ facet_mapper(folder = "./Output/", crule = "crule.dbf")
 `wepp_mapper()` uses output from `flow_mapper()`
 
 ```{r, eval = FALSE}
-wepp_mapper(folder = "./Output/")
+wepp_mapper(folder = "Output/")
 ```
 
 Optionally, users can also define the maximum length of channel cells 
@@ -135,7 +148,7 @@ Optionally, users can also define the maximum length of channel cells
 upslope threshold to define channel cells 
 
 ```{r, eval = FALSE}
-wepp_mapper(folder = "./Output/", chan_length = 500, upslope_threshold = 500)
+wepp_mapper(folder = "Output/", chan_length = 500, upslope_threshold = 500)
 ```
 
 ## Multiple file types
@@ -155,7 +168,7 @@ Output files can be .csv or .rds (R data files) in the output folders "flow", "f
 See the [LITAP website](http://FRDC-SHL.github.io/LITAP/) for more details and examples
 
 ```{r, include = FALSE}
-unlink("./testELEV", recursive = TRUE)
-unlink("./Output", recursive = TRUE)
-unlink(c("./testELEV.dbf", "arule.dbf", "crule.dbf"))
+unlink("testELEV", recursive = TRUE)
+unlink("Output", recursive = TRUE)
+unlink(c("testELEV.dbf", "arule.dbf", "crule.dbf"))
 ```

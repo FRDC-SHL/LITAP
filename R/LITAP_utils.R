@@ -71,7 +71,16 @@ check_grid <- function(grid) {
 
 calc_grid <- function(db) {
   x <- sort(unique(db$x))
-  median(x - dplyr::lag(x), na.rm = TRUE)
+  gx <- median(x - dplyr::lag(x), na.rm = TRUE)
+
+  y <- sort(unique(db$y))
+  gy <- median(y - dplyr::lag(y), na.rm = TRUE)
+
+  if(gx != gy) {
+    stop("Inconsistent grid size. Grid must be square", call. = FALSE)
+  }
+
+  gx
 }
 
 run_time <- function(start, log_file, quiet) {
@@ -79,5 +88,60 @@ run_time <- function(start, log_file, quiet) {
   runtime <- round(difftime(stop, start, units = "min"), 2)
   if(!quiet) message("Run took: ", runtime, " min")
   log_write("\nTotal run time: ", runtime, " min", log = log_file)
+}
+
+trunc_dec <- function(x, digits) {
+ trunc(x * 10^(digits)) / 10^(digits)
+}
+
+stats <- function(df) {
+  df %>%
+    dplyr::summarize(
+      dplyr::across(
+        .cols = dplyr::everything(),
+        .fns = list(p99 = ~stats::quantile(., 0.99, na.rm = TRUE),
+                    p95 = ~stats::quantile(., 0.95, na.rm = TRUE),
+                    p90 = ~stats::quantile(., 0.90, na.rm = TRUE),
+                    p85 = ~stats::quantile(., 0.85, na.rm = TRUE),
+                    p80 = ~stats::quantile(., 0.80, na.rm = TRUE),
+                    p75 = ~stats::quantile(., 0.75, na.rm = TRUE),
+                    p70 = ~stats::quantile(., 0.70, na.rm = TRUE),
+                    p65 = ~stats::quantile(., 0.65, na.rm = TRUE),
+                    p60 = ~stats::quantile(., 0.60, na.rm = TRUE),
+                    p55 = ~stats::quantile(., 0.55, na.rm = TRUE),
+                    p50 = ~stats::quantile(., 0.50, na.rm = TRUE),
+                    p45 = ~stats::quantile(., 0.45, na.rm = TRUE),
+                    p40 = ~stats::quantile(., 0.40, na.rm = TRUE),
+                    p35 = ~stats::quantile(., 0.35, na.rm = TRUE),
+                    p30 = ~stats::quantile(., 0.30, na.rm = TRUE),
+                    p25 = ~stats::quantile(., 0.25, na.rm = TRUE),
+                    p20 = ~stats::quantile(., 0.20, na.rm = TRUE),
+                    p15 = ~stats::quantile(., 0.15, na.rm = TRUE),
+                    p10 = ~stats::quantile(., 0.10, na.rm = TRUE),
+                    p05 = ~stats::quantile(., 0.05, na.rm = TRUE),
+                    p01 = ~stats::quantile(., 0.01, na.rm = TRUE),
+                    avg = ~mean(., na.rm = TRUE),
+                    sd  = ~sd(., na.rm = TRUE),
+                    min = ~min(., na.rm = TRUE),
+                    max = ~max(., na.rm = TRUE),
+                    n   = ~sum(!is.na(.)))))
+}
+
+
+percentiles_format <- function(perc) {
+  perc %>%
+    tidyr::pivot_longer(cols = dplyr::everything(),
+                        names_to = "name_orig", values_to = "value") %>%
+    dplyr::mutate(
+      name = stringr::str_extract(.data$name_orig, "[^_]+$"),
+      parameter = stringr::str_remove(.data$name_orig, paste0("_", .data$name))) %>%
+    dplyr::select(-"name_orig") %>%
+    tidyr::pivot_wider(names_from = "parameter", values_from = "value") %>%
+    dplyr::mutate(
+      name = stringr::str_replace(.data$name, "^p[0]*([0-9]{1,2})", "\\1%"),
+      name = factor(.data$name, levels = c("n", "avg", "sd", "min", "1%",
+                                           paste0(seq(5,95,5), "%"),
+                                           "99%", "max"))) %>%
+    dplyr::arrange(.data$name)
 }
 

@@ -13,10 +13,11 @@ build_stru <- function(db, segs) {
     dplyr::arrange(.data$shed_no, .data$shed_side) %>%
     dplyr::select("hill_no", "shed_side", "final_id" = "shed_no") %>%
     dplyr::distinct() %>%
-    dplyr::filter(!is.na(.data$shed_side), !is.na(hill_no)) %>%
-    dplyr::mutate(hill_type = dplyr::case_when(shed_side == 1 ~ "top_hill",
-                                               shed_side == 2 ~ "right_hill",
-                                               shed_side == 3 ~ "left_hill")) %>%
+    dplyr::filter(!is.na(.data$shed_side), !is.na(.data$hill_no)) %>%
+    dplyr::mutate(hill_type = dplyr::case_when(
+      .data$shed_side == 1 ~ "top_hill",
+      .data$shed_side == 2 ~ "right_hill",
+      .data$shed_side == 3 ~ "left_hill")) %>%
     dplyr::select(-"shed_side") %>%
     tidyr::pivot_wider(names_from = "hill_type", values_from = "hill_no")
 
@@ -29,9 +30,9 @@ build_stru <- function(db, segs) {
                   left_chan = "left_seg",
                   right_chan = "right_seg",
                   top_chan = "center_seg") %>%
-    dplyr::mutate(ele_type = dplyr::if_else(impound == 1, 3, 2),
-                  comments = paste("Element No:", element_no,
-                                   dplyr::if_else(impound == 1, "impoundment", "channel")),
+    dplyr::mutate(ele_type = dplyr::if_else(.data$impound == 1, 3, 2),
+                  comments = paste("Element No:", .data$element_no,
+                                   dplyr::if_else(.data$impound == 1, "impoundment", "channel")),
                   left_chan = replace(.data$left_chan,
                                       .data$left_chan == .data$left_imp,
                                       0),

@@ -95,7 +95,7 @@ get_upslope3 <- function(db, w, type = c("upslope", "uced")){
           db$upslope[track] <- upslope_values(track, db)
         }
         if("uced" %in% type && is.na(db[cell, "uced"])) {
-          db$uced[track] <- uced_values(track, db)
+          if(length(track) > 1) db$uced[track] <- uced_values(track, db)
         }
       }
     }

@@ -73,7 +73,7 @@ test_that("get_dir returns correct direction given ddir_opts", {
 test_that("slope_gc works as expected", {
   grid <- 5
   expect_silent(s <- slope_gc(test_dem, grid = grid))
-  expect_true(dplyr::all_equal(s[names(test_dem)], test_dem))
+  expect_equal(s[names(test_dem)], test_dem, ignore_attr = TRUE)
 
   s <- remove_buffer(s)
 

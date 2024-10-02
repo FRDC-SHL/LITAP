@@ -1,5 +1,5 @@
 
-pit_stat1 <- function(db, w = NULL, shed = "shedno", verbose) {
+pit_stat1 <- function(db, w = NULL, shed = "shedno", method, verbose) {
 
   db$shedno <- db[[shed]]
 
@@ -12,37 +12,18 @@ pit_stat1 <- function(db, w = NULL, shed = "shedno", verbose) {
 
     # For each watershed calculate the pour_point (details of the point at which tip to another watershed)
 
+    # LITAP takes the lowest neighbour for the out point, whereas FlowMapR takes
+    # the *last* neighbour that could be a pour point in this order (where F is
+    # the focal cell (in point).
+    #
+    #  1  2  3
+    #  4  F  6
+    #  7  8  9
+
     # Take only ridge cells
     db_pits <- db %>%
       dplyr::filter(.data$shedno %in% !!w, .data$ridge == TRUE) %>%
       dplyr::select("seqno", "shedno", "elev", "upslope")
-
-    # # Calculate neighbouring sheds to split up files
-    # shed_groups <- pp %>%
-    #   dplyr::select(seqno, shedno) %>%
-    #   nb_values(db, max_cols = max(db$col), col = "shedno", db_sub = .) %>%
-    #   dplyr::select(-seqno, -n) %>%
-    #   dplyr::filter(shedno != shedno_n) %>%
-    #   dplyr::distinct() %>%
-    #   dplyr::arrange(shedno, shedno_n)
-    #
-    # # Get ridge stats to further reduce selection
-    # ridge_stats <- db %>%
-    #   dplyr::filter(ridge == TRUE) %>%
-    #   dplyr::group_by(shedno) %>%
-    #   dplyr::summarize(max_elev = max(elev, na.rm = TRUE), min_elev = min(elev, na.rm = TRUE))
-    #
-    # shed_groups <- shed_groups %>%
-    #   dplyr::left_join(ridge_stats, by = "shedno") %>%
-    #   dplyr::left_join(ridge_stats, by = c("shedno_n" = "shedno"), suffix = c("", "_n")) %>%
-    #   dplyr::group_by(shedno) %>%
-    #   dplyr::summarize(max_elev = min(c(max_elev, max_elev_n), na.rm = TRUE),
-    #                    min_elev = min(c(min_elev, min_elev_n[min_elev_n >= min_elev]), na.rm = TRUE))
-#
-#     pp <- pp %>%
-#       dplyr::left_join(shed_groups, by = "shedno") %>%
-#       dplyr::filter(elev >= min_elev, elev <= max_elev)
-
 
     db_pits <- db_pits %>%
       nb_values(db, max_cols = max(db$col), col = c("elev", "shedno", "seqno"), db_sub = .)
@@ -59,14 +40,42 @@ pit_stat1 <- function(db, w = NULL, shed = "shedno", verbose) {
     pp <- dplyr::group_by(pp, .data$seqno)
     pp <- dplyr::mutate(pp, min_elev_n = min(.data$elev_n, na.rm = TRUE))
     pp <- dplyr::ungroup(pp)
-    pp <- dplyr::filter(pp, .data$elev_n == .data$min_elev_n)
+
+    if(method == "litap") {
+      pp <- dplyr::filter(pp, .data$elev_n == .data$min_elev_n)
+    }
+
+    # Take first neighbour lower than the **cumulative min** pour_elev
+    # (corresponds to FlowMapR last neighbour - see chekneigh1 and getneig1)
+
+    if(method == "landmapr") {
+      np <- c(7, 8, 9, 4, 5, 6, 1, 2, 3)
+      pp <- dplyr::group_by(pp, .data$seqno)
+      pp <- dplyr::mutate(pp, pour_elev_orig = pour_elev,
+                          lm_n = .env$np[.data$n]) # Convert to landmapr order
+      pp <- dplyr::arrange(pp, .data$lm_n)
+      pp <- dplyr::mutate(pp, pour_elev = dplyr::lag(cummin(.data$pour_elev), default = Inf))
+      pp <- dplyr::filter(pp, .data$elev_n < .data$pour_elev)
+      pp <- dplyr::filter(pp, .data$lm_n == max(.data$lm_n))
+      pp <- dplyr::mutate(pp, pour_elev = .data$pour_elev_orig)
+    }
 
     pp <- dplyr::group_by(pp, .data$shedno)
     pp <- dplyr::filter(pp, .data$pour_elev == min(.data$pour_elev, na.rm = TRUE))  # Must be lowest pour point
-    #pp <- dplyr::filter(pp, upslope == max(upslope, na.rm = TRUE))     # Must be with maximum upslope contributions
-    #pp <- dplyr::filter(pp, elev_n == min(elev_n, na.rm = TRUE))        # Must have lowest pour TO elevation
-    pp <- dplyr::arrange(pp, .data$shedno, .data$seqno)                            # Sort by ascending seqno
-    pp <- dplyr::slice(pp, 1)                                               # Take first one
+    pp <- dplyr::arrange(pp, .data$shedno, .data$elev, .data$upslope, .data$seqno) # Sort by elev, upslope
+
+
+    # Because LandMapR *only* adds to pit area if hits a new *low* elevation, not
+    # a tied elevation. LITAP takes all equal to or below pour elev which can
+    # include a few extra.
+    if(method == "landmapr") {
+      omits <- dplyr::summarize(
+        pp,
+        omit_cell = dplyr::n_distinct(.data$seqno) - 1,
+        omit_elev = sum(.data$elev[-1], na.rm = TRUE))
+    }
+
+    pp <- dplyr::slice(pp, 1)                           # Take first one
 
     pp <- pp %>%
       dplyr::left_join(dplyr::select(db, "seqno", "col", "row"), by = c("seqno")) %>%
@@ -88,18 +97,32 @@ pit_stat1 <- function(db, w = NULL, shed = "shedno", verbose) {
       dplyr::group_by(shedno) %>%
       dplyr::mutate(shed_area = length(shedno)) %>%
       dplyr::filter(elev <= pour_elev) %>%
-      dplyr::summarize(shed_area = shed_area[1],
-                       edge_pit = any(edge_map),
-                       pit_area = length(shedno),
-                       pit_vol = sum(pour_elev - elev),
-                       pit_elev = elev[ddir == 5],
-                       pit_seqno = seqno[ddir == 5],
-                       pit_row = row[ddir == 5],
-                       pit_col = col[ddir == 5],
-                       pre_vol = 0,
-                       varatio = dplyr::if_else(shed_area > 0,
-                                                pit_vol / shed_area * 1000, 0)) %>%
+      dplyr::summarize(
+        shed_area = unique(shed_area),
+        edge_pit = any(edge_map),
+        pit_area = length(shedno),
+        pit_vol = sum(pour_elev - elev),
+        pit_elev = elev[ddir == 5],
+        pit_seqno = seqno[ddir == 5],
+        pit_row = row[ddir == 5],
+        pit_col = col[ddir == 5],
+        pre_vol = 0,
+        varatio = dplyr::if_else(shed_area > 0,
+                                 pit_vol / shed_area * 1000, 0)) %>%
       dplyr::right_join(pp, by = "shedno")
+
+    if(method == "landmapr") {
+      # Correction for number of cells included
+      stats <- stats %>%
+        dplyr::left_join(omits, by = "shedno") %>%
+        dplyr::mutate(
+          pit_area = .data$pit_area - .data$omit_cell,
+          pit_vol = .data$pit_vol - (.data$pour_elev * .data$omit_cell - .data$omit_elev),
+          varatio = dplyr::if_else(
+            .data$shed_area > 0, .data$pit_vol / .data$shed_area * 1000, 0)) %>%
+        dplyr::select(-"omit_cell", -"omit_elev")
+    }
+
 
   } else {
     # If only one watershed
@@ -187,7 +210,7 @@ vol2fl <- function(db, verbose) {
     dplyr::arrange(elev, dplyr::desc(upslope)) %>%
     dplyr::filter(elev <= pour_elev) %>%
     dplyr::group_by(elev, shed_area) %>%
-    dplyr::summarize(total_cells = length(elev)) %>%
+    dplyr::summarize(total_cells = dplyr::n()) %>%
     dplyr::ungroup() %>%
     dplyr::mutate(parea = cumsum(total_cells),
                   last_elev = dplyr::lag(elev, default = 0),
@@ -210,7 +233,4 @@ vol2fl <- function(db, verbose) {
                                          vol2fl/shed_area,
                                          vol2fl/1)) %>%
     dplyr::select(elev, vol2fl, mm2fl, parea)
-
-  # db <- dplyr::left_join(db, vol_stats, by = "elev") %>%
-  #   mutate_cond(is.na(parea), mm2fl = 0, vol2fl = 0, parea = 0)
 }

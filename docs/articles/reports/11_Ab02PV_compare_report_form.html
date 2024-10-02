@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Test Form - 11_Ab02PV • LITAP</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../../bootstrap-toc.css">
 <script src="../../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../../index.html">LITAP</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
       </span>
     </div>
 
@@ -55,7 +57,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/steffilazerte/LITAP">
+  <a href="https://github.com/steffilazerte/LITAP" class="external-link">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -70,15 +72,16 @@
 
       
 
-      </header><script src="11_Ab02PV_compare_report_form_files/header-attrs-2.9/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Test Form - 11_Ab02PV</h1>
-                        <h4 class="author">Steffi LaZerte</h4>
+                        <h4 data-toc-skip class="author">Steffi
+LaZerte</h4>
             
-            <h4 class="date">2021-07-21</h4>
+            <h4 data-toc-skip class="date">2024-10-01</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/FRDC-SHL/LITAP/blob/master/vignettes/reports/11_Ab02PV_compare_report_form.Rmd"><code>vignettes/reports/11_Ab02PV_compare_report_form.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/FRDC-SHL/LITAP/blob/HEAD/vignettes/reports/11_Ab02PV_compare_report_form.Rmd" class="external-link"><code>vignettes/reports/11_Ab02PV_compare_report_form.Rmd</code></a></small>
       <div class="hidden name"><code>11_Ab02PV_compare_report_form.Rmd</code></div>
 
     </div>
@@ -95,65 +98,92 @@
   margin: auto;
 }
 </style>
-<div id="details" class="section level1">
-<h1 class="hasAnchor">
-<a href="#details" class="anchor"></a>Details</h1>
+<div class="section level2">
+<h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a>
+</h2>
 <ul>
-<li>0.27 min to run</li>
-<li>/home/steffi/Projects/Business/LandmapR/Runs - FlowMapR/Steffi_LandMapR_tests/11_Ab02PV/FlowMapR original FormMapR output</li>
-<li>
-<code>grid</code> = 5</li>
+<li>0.06 min to run</li>
+<li>/home/steffi/Projects/Business/LandmapR/Runs -
+FlowMapR/Steffi_LandMapR_tests/11_Ab02PV/FlowMapR original FormMapR
+output</li>
 <li>
 <code>str_val</code> = 200</li>
 <li>
 <code>ridge_val</code> = 200</li>
 </ul>
-<div id="missing-values" class="section level3">
-<h3 class="hasAnchor">
-<a href="#missing-values" class="anchor"></a>Missing values</h3>
-<p>In the original FormMapR, cells with missing elevations were generally given values of zero or 1. However, in LITAP, they remain as <code>NA</code> (missing) to more accurately reflect the nature of the measurement.</p>
+<div class="section level4">
+<h4 id="missing-values">Missing values<a class="anchor" aria-label="anchor" href="#missing-values"></a>
+</h4>
+<p>In the original FormMapR, cells with missing elevations were
+generally given values of zero or 1. However, in LITAP, they remain as
+<code>NA</code> (missing) to more accurately reflect the nature of the
+measurement.</p>
 </div>
-<div id="by-cell-or-by-grid" class="section level3">
-<h3 class="hasAnchor">
-<a href="#by-cell-or-by-grid" class="anchor"></a>By cell or by grid</h3>
-<p>LITAP’s <code><a href="../../reference/form_mapper.html">form_mapper()</a></code> outputs two versions of <code>qweti</code>, <code>lnqarea</code>, and <code>qarea</code>. The first ones (compared here), are <code>qweti1</code>, <code>lnqarea1</code> and <code>qarea1</code> in the file <code>dem_weti</code>. Area in these values is based on the number of cells. In the other measures (not compared here; <code>qweti2</code>, <code>lnqarea2</code> and <code>qarea2</code>), area is based on actual grid cell area.</p>
-<p><code>qweti1</code>, <code>lnqarea1</code> and <code>qarea1</code> are values are compatible with <code><a href="../../reference/facet_mapper.html">facet_mapper()</a></code></p>
+<div class="section level4">
+<h4 id="by-cell-or-by-grid">By cell or by grid<a class="anchor" aria-label="anchor" href="#by-cell-or-by-grid"></a>
+</h4>
+<p>LITAP’s <code><a href="../../reference/form_mapper.html">form_mapper()</a></code> outputs two versions of
+<code>qweti</code>, <code>lnqarea</code>, and <code>qarea</code>. The
+first ones (compared here), are <code>qweti1</code>,
+<code>lnqarea1</code> and <code>qarea1</code> in the file
+<code>dem_weti</code>. Area in these values is based on the number of
+cells. In the other measures (not compared here; <code>qweti2</code>,
+<code>lnqarea2</code> and <code>qarea2</code>), area is based on actual
+grid cell area.</p>
+<p><code>qweti1</code>, <code>lnqarea1</code> and <code>qarea1</code>
+are values are compatible with <code><a href="../../reference/facet_mapper.html">facet_mapper()</a></code></p>
 </div>
-<div id="rounding-error" class="section level3">
-<h3 class="hasAnchor">
-<a href="#rounding-error" class="anchor"></a>Rounding error</h3>
-<p>Many calculated values differ by minute amounts due to differences in rounding over long calculations.</p>
+<div class="section level4">
+<h4 id="rounding-error">Rounding error<a class="anchor" aria-label="anchor" href="#rounding-error"></a>
+</h4>
+<p>Many calculated values differ by minute amounts due to differences in
+rounding over long calculations.</p>
 <ul>
 <li>
-<code>prof</code> and <code>plan</code> are particularly sensitive as they use trigonometry calculations which result in many small discrepancies.</li>
+<code>prof</code> and <code>plan</code> are particularly sensitive
+as they use trigonometry calculations which result in many small
+discrepancies.</li>
 <li>
-<code>qarea</code> and <code>qweti</code> also experience a build of up differences, as they add cell-by-cell and small differences mount up in cells which contain input from many others</li>
+<code>qarea</code> and <code>qweti</code> also experience a build of
+up differences, as they add cell-by-cell and small differences mount up
+in cells which contain input from many others</li>
 </ul>
-<p>However in all cases the are small differences, often resulting in &lt; 1% changes.</p>
+<p>However in all cases the are small differences, often resulting in
+&lt; 1% changes.</p>
 </div>
 </div>
-<div id="visual-comparison-of-form" class="section level1">
-<h1 class="hasAnchor">
-<a href="#visual-comparison-of-form" class="anchor"></a>Visual Comparison of Form</h1>
-<div id="original-vs--new-form-values" class="section level2">
-<h2 class="hasAnchor">
-<a href="#original-vs--new-form-values" class="anchor"></a>Original vs. New Form values</h2>
+<div class="section level2">
+<h2 id="visual-comparison-of-form">Visual Comparison of Form<a class="anchor" aria-label="anchor" href="#visual-comparison-of-form"></a>
+</h2>
+<div class="section level3">
+<h3 id="original-vs--new-form-values">Original vs. New Form values<a class="anchor" aria-label="anchor" href="#original-vs--new-form-values"></a>
+</h3>
 <p><img src="11_Ab02PV_compare_report_form_files/figure-html/unnamed-chunk-2-1.png" width="1152"><img src="11_Ab02PV_compare_report_form_files/figure-html/unnamed-chunk-2-2.png" width="1152"><img src="11_Ab02PV_compare_report_form_files/figure-html/unnamed-chunk-2-3.png" width="1152"><img src="11_Ab02PV_compare_report_form_files/figure-html/unnamed-chunk-2-4.png" width="1152"><img src="11_Ab02PV_compare_report_form_files/figure-html/unnamed-chunk-2-5.png" width="1152"><img src="11_Ab02PV_compare_report_form_files/figure-html/unnamed-chunk-2-6.png" width="1152"><img src="11_Ab02PV_compare_report_form_files/figure-html/unnamed-chunk-2-7.png" width="1152"></p>
 </div>
-<div id="original-vs--new-relief-values" class="section level2">
-<h2 class="hasAnchor">
-<a href="#original-vs--new-relief-values" class="anchor"></a>Original vs. New Relief values</h2>
-<p><img src="11_Ab02PV_compare_report_form_files/figure-html/unnamed-chunk-3-1.png" width="1152"><img src="11_Ab02PV_compare_report_form_files/figure-html/unnamed-chunk-3-2.png" width="1152"><img src="11_Ab02PV_compare_report_form_files/figure-html/unnamed-chunk-3-3.png" width="1152"><img src="11_Ab02PV_compare_report_form_files/figure-html/unnamed-chunk-3-4.png" width="1152"><img src="11_Ab02PV_compare_report_form_files/figure-html/unnamed-chunk-3-5.png" width="1152"><img src="11_Ab02PV_compare_report_form_files/figure-html/unnamed-chunk-3-6.png" width="1152"><img src="11_Ab02PV_compare_report_form_files/figure-html/unnamed-chunk-3-7.png" width="1152"><img src="11_Ab02PV_compare_report_form_files/figure-html/unnamed-chunk-3-8.png" width="1152"><img src="11_Ab02PV_compare_report_form_files/figure-html/unnamed-chunk-3-9.png" width="1152"><img src="11_Ab02PV_compare_report_form_files/figure-html/unnamed-chunk-3-10.png" width="1152"><img src="11_Ab02PV_compare_report_form_files/figure-html/unnamed-chunk-3-11.png" width="1152"><img src="11_Ab02PV_compare_report_form_files/figure-html/unnamed-chunk-3-12.png" width="1152"></p>
+<div class="section level3">
+<h3 id="original-vs--new-relief-values">Original vs. New Relief values<a class="anchor" aria-label="anchor" href="#original-vs--new-relief-values"></a>
+</h3>
+<p><img src="11_Ab02PV_compare_report_form_files/figure-html/unnamed-chunk-3-1.png" width="1152"><img src="11_Ab02PV_compare_report_form_files/figure-html/unnamed-chunk-3-2.png" width="1152"><img src="11_Ab02PV_compare_report_form_files/figure-html/unnamed-chunk-3-3.png" width="1152"><img src="11_Ab02PV_compare_report_form_files/figure-html/unnamed-chunk-3-4.png" width="1152"><img src="11_Ab02PV_compare_report_form_files/figure-html/unnamed-chunk-3-5.png" width="1152"><img src="11_Ab02PV_compare_report_form_files/figure-html/unnamed-chunk-3-6.png" width="1152"><img src="11_Ab02PV_compare_report_form_files/figure-html/unnamed-chunk-3-7.png" width="1152"><img src="11_Ab02PV_compare_report_form_files/figure-html/unnamed-chunk-3-8.png" width="1152"><img src="11_Ab02PV_compare_report_form_files/figure-html/unnamed-chunk-3-9.png" width="1152"><img src="11_Ab02PV_compare_report_form_files/figure-html/unnamed-chunk-3-10.png" width="1152"><img src="11_Ab02PV_compare_report_form_files/figure-html/unnamed-chunk-3-11.png" width="1152"><img src="11_Ab02PV_compare_report_form_files/figure-html/unnamed-chunk-3-12.png" width="1152"><img src="11_Ab02PV_compare_report_form_files/figure-html/unnamed-chunk-3-13.png" width="1152"><img src="11_Ab02PV_compare_report_form_files/figure-html/unnamed-chunk-3-14.png" width="1152"><img src="11_Ab02PV_compare_report_form_files/figure-html/unnamed-chunk-3-15.png" width="1152"><img src="11_Ab02PV_compare_report_form_files/figure-html/unnamed-chunk-3-16.png" width="1152"><img src="11_Ab02PV_compare_report_form_files/figure-html/unnamed-chunk-3-17.png" width="1152"><img src="11_Ab02PV_compare_report_form_files/figure-html/unnamed-chunk-3-18.png" width="1152"><img src="11_Ab02PV_compare_report_form_files/figure-html/unnamed-chunk-3-19.png" width="1152"><img src="11_Ab02PV_compare_report_form_files/figure-html/unnamed-chunk-3-20.png" width="1152"></p>
 </div>
-<div id="original-vs--new-length-values" class="section level2">
-<h2 class="hasAnchor">
-<a href="#original-vs--new-length-values" class="anchor"></a>Original vs. New Length values</h2>
+<div class="section level3">
+<h3 id="original-vs--new-length-values">Original vs. New Length values<a class="anchor" aria-label="anchor" href="#original-vs--new-length-values"></a>
+</h3>
 <blockquote>
 <p><strong>NOTE</strong></p>
-<p>Length to divide (<code>l2div</code>) is the distance from the focal cell to the nearest crest cell.</p>
-<p>In the original Fox Pro version, this is calculated by first getting the ‘flat distance’ (focal row/col to crest row/col), and then accounting for elevation by using <code>z2cr</code> (the elevation difference between focal and crest cells).</p>
-<p>However, in the C++ version <code>z2cr</code> was changed to the <code>z2peak</code>, which is the elevation difference between the focal cell and the nearest peak cell. I believe is incorrect; therefore LITAP uses the original calculation with distance to nearest crest cell (<code>z2cr</code>).</p>
-<p>This results in discrepancies between LITAP and FormMapR for <code>l2div</code>, <code>lstr2div</code>, and <code>pstr2divl</code>.</p>
+<p>Length to divide (<code>l2div</code>) is the distance from the focal
+cell to the nearest crest cell.</p>
+<p>In the original Fox Pro version, this is calculated by first getting
+the ‘flat distance’ (focal row/col to crest row/col), and then
+accounting for elevation by using <code>z2cr</code> (the elevation
+difference between focal and crest cells).</p>
+<p>However, in the C++ version <code>z2cr</code> was changed to the
+<code>z2peak</code>, which is the elevation difference between the focal
+cell and the nearest peak cell. I believe is incorrect; therefore LITAP
+uses the original calculation with distance to nearest crest cell
+(<code>z2cr</code>).</p>
+<p>This results in discrepancies between LITAP and FormMapR for
+<code>l2div</code>, <code>lstr2div</code>, and
+<code>pstr2divl</code>.</p>
 </blockquote>
 <p><img src="11_Ab02PV_compare_report_form_files/figure-html/unnamed-chunk-4-1.png" width="1152"><img src="11_Ab02PV_compare_report_form_files/figure-html/unnamed-chunk-4-2.png" width="1152"><img src="11_Ab02PV_compare_report_form_files/figure-html/unnamed-chunk-4-3.png" width="1152"><img src="11_Ab02PV_compare_report_form_files/figure-html/unnamed-chunk-4-4.png" width="1152"><img src="11_Ab02PV_compare_report_form_files/figure-html/unnamed-chunk-4-5.png" width="1152"><img src="11_Ab02PV_compare_report_form_files/figure-html/unnamed-chunk-4-6.png" width="1152"><img src="11_Ab02PV_compare_report_form_files/figure-html/unnamed-chunk-4-7.png" width="1152"><img src="11_Ab02PV_compare_report_form_files/figure-html/unnamed-chunk-4-8.png" width="1152"></p>
 </div>
@@ -171,11 +201,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Steffi LaZerte, Sheng Li, Agriculture and Agri-Food Canada.</p>
+  <p></p>
+<p>Developed by Steffi LaZerte, Sheng Li, Agriculture and Agri-Food Canada.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
 </div>
 
       </footer>
@@ -183,6 +215,8 @@
 
   
 
+
+  
 
   </body>
 </html>

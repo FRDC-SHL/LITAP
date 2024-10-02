@@ -1,19 +1,19 @@
 mark_chan <- function(db, upslope_threshold) {
 
   channels <- db %>%
-    dplyr::filter(.data$upslope > upslope_threshold) %>%
+    dplyr::filter(.data$upslope > .env$upslope_threshold) %>%
     dplyr::arrange(dplyr::desc(.data$elev)) %>%
     dplyr::mutate(chan_no = 0,
                   seed_type = 0)
 
   # Check if neighbouring cells are channels (higher elev, lower seqno)
   chan <- check_neighbours(db, channels, upslope_threshold) %>%
-    dplyr::filter(!neighbour_channel)
+    dplyr::filter(!.data$neighbour_channel)
 
   chan <- get_chan(seqno = chan$seqno, drec = db$drec,
                    upslope = db$upslope, elev = db$elev, ddir = db$ddir,
                    upslope_threshold = upslope_threshold) %>%
-    dplyr::rename(elev = new_elev)
+    dplyr::rename("elev" = "new_elev")
 
   dplyr::bind_cols(dplyr::rename(db, "orig_elev" = "elev"), chan)
 }
@@ -23,12 +23,12 @@ check_neighbours <- function(db, channels, upslope_threshold) {
     nb_values(max_cols = max(db$col), db_sub = channels,
               format = "wide", col = c("upslope", "elev", "seqno")) %>%
     dplyr::mutate(neighbour_channel = purrr::pmap_lgl(
-      list(elev_n1, elev_n2, elev_n3, elev_n4, elev_n5,
-           elev_n6, elev_n7, elev_n8, elev_n9,
-           upslope_n1, upslope_n2, upslope_n3, upslope_n4, upslope_n5,
-           upslope_n6, upslope_n7,upslope_n8, upslope_n9,
-           seqno_n1, seqno_n2, seqno_n3, seqno_n4, seqno_n5,
-           seqno_n6, seqno_n7, seqno_n8, seqno_n9),
+      list(.data$elev_n1, .data$elev_n2, .data$elev_n3, .data$elev_n4, .data$elev_n5,
+           .data$elev_n6, .data$elev_n7, .data$elev_n8, .data$elev_n9,
+           .data$upslope_n1, .data$upslope_n2, .data$upslope_n3, .data$upslope_n4, .data$upslope_n5,
+           .data$upslope_n6, .data$upslope_n7, .data$upslope_n8, .data$upslope_n9,
+           .data$seqno_n1, .data$seqno_n2, .data$seqno_n3, .data$seqno_n4, .data$seqno_n5,
+           .data$seqno_n6, .data$seqno_n7, .data$seqno_n8, .data$seqno_n9),
       mark_neighbours, upslope_threshold = upslope_threshold))
 }
 

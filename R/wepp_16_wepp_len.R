@@ -43,9 +43,9 @@ wepp_len <- function(db, grid) {
   db$z2st <- variable$z2st
 
   dplyr::mutate(db,
-                n2st = replace(n2st, seqno == drec, 0),
-                l2st = replace(l2st, seqno == drec, 0),
-                z2st = replace(z2st, seqno == drec, 0))
+                n2st = replace(.data$n2st, .data$seqno == .data$drec, 0),
+                l2st = replace(.data$l2st, .data$seqno == .data$drec, 0),
+                z2st = replace(.data$z2st, .data$seqno == .data$drec, 0))
 }
 
 get_length <- function(t, s, v) {

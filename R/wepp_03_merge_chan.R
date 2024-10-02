@@ -1,11 +1,11 @@
 merge_chan <- function(db) {
   db <- db %>%
-    dplyr::mutate(orig_chan_no = chan_no,
-                  orig_drec = drec,
-                  orig_seedtype = seedtype)
+    dplyr::mutate(orig_chan_no = .data$chan_no,
+                  orig_drec = .data$drec,
+                  orig_seedtype = .data$seedtype)
 
-  channels <- dplyr::arrange(db, elev) %>%
-    dplyr::filter(chan_no != 0)
+  channels <- dplyr::arrange(db, .data$elev) %>%
+    dplyr::filter(.data$chan_no != 0)
 
   channels <- nb_values(db, max_cols = max(db$col), db_sub = channels,
                         format = "wide", col = "seqno")

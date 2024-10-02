@@ -6,13 +6,13 @@ test_that("calc_stream", {
 
   # DB files
 
-  expect_silent(db <- get_previous(dir, step = "fill", where = "flow") %>%
+  expect_silent(db <- get_previous(dir, where = "flow", step = "fill") %>%
                   dplyr::select(seqno, row, col, elev, drec, upslope, fill_shed, local_shed) %>%
                   add_buffer()) %>%
     expect_s3_class("data.frame")
 
   expect_silent({
-    pond <- get_previous(dir, step = "pond", type = "stats", where = "flow")
+    pond <- get_previous(dir, where = "flow", step = "pond", type = "stats")
     streams <- db %>%
       dplyr::mutate(shedno = fill_shed)
   })
@@ -23,8 +23,8 @@ test_that("calc_stream", {
     system.time(s3 <- calc_stream3(streams, str_val = 1000, verbose = FALSE))
   })
 
-  expect_true(dplyr::all_equal(s1, s2))
-  expect_true(dplyr::all_equal(s2, s3))
+  expect_equal(s1, s2)
+  expect_equal(s2, s3)
 
   str2pits <- db %>%
     dplyr::mutate(shedno = local_shed)
@@ -35,14 +35,14 @@ test_that("calc_stream", {
     system.time(c3 <- calc_pit3(str2pits, pond = pond, verbose = FALSE))
   })
 
-  expect_true(dplyr::all_equal(c1, c2))
-  expect_true(dplyr::all_equal(c2, c3))
+  expect_equal(c1, c2)
+  expect_equal(c2, c3)
 
 
 
   db2 <- get_previous(paste0("/home/steffi/Projects/Business/LandmapR/Runs - ",
                              "LITAP/Munger Test - LITAP/m35ELEV/"),
-                     step = "fill", where = "flow") %>%
+                      where = "flow", step = "fill") %>%
     dplyr::select(seqno, row, col, elev, drec, upslope, fill_shed, local_shed) %>%
     add_buffer()
   grid <- 10
@@ -55,11 +55,11 @@ test_that("Sub-functions", {
                                out_folder = dir, report = FALSE, clean = TRUE))
 
   # DB files
-  expect_silent(db <- get_previous(dir, step = "fill", where = "flow")) %>%
+  expect_silent(db <- get_previous(dir, where = "flow", step = "fill")) %>%
     expect_s3_class("data.frame")
   db <- add_buffer(db)
 
-  expect_silent(idb <- get_previous(dir, step = "inverted", where = "flow")) %>%
+  expect_silent(idb <- get_previous(dir, where = "flow", step = "inverted")) %>%
     expect_s3_class("data.frame")
   idb <- add_buffer(idb)
 

@@ -2,15 +2,15 @@ Run options:
   Grid size = 5
   Relief derivative values: str_val = 1000; ridge_val = 1000
 
-Run started: 2021-12-16 16:51:59
+Run started: 2024-10-02 09:30:19.037639
 
-Started calculating form at: 2021-12-16 16:51:59
+Started calculating form at: 2024-10-02 09:30:19.038178
   Total time: 0
-Started calculating wetness indices at: 2021-12-16 16:51:59
-  Total time: 0.1
-Started calculating relief derivitives at: 2021-12-16 16:52:05
-  Total time: 0.02
-Started calculating slope length at: 2021-12-16 16:52:06
+Started calculating wetness indices at: 2024-10-02 09:30:19.13292
+  Total time: 0
+Started calculating relief derivitives at: 2024-10-02 09:30:19.256582
+  Total time: 0.01
+Started calculating slope length at: 2024-10-02 09:30:20.062609
   Total time: 0
 
-Total run time: 0.12 min
+Total run time: 0.02 min

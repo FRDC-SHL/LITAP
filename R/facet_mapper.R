@@ -4,7 +4,6 @@
 #' [form_mapper()] calculates fuzzy attributes (among other metrics).  Based on
 #' FacetMapR by R. A. (Bob) MacMillan, LandMapper Environmental Solutions.
 #'
-#' @param folder Character. Location of [flow_mapper()] output
 #' @param arule Character. Location of ARULE file. If NULL, A Rules are derived
 #'   from the dem file (see Details).
 #' @param crule Character. Location of CRULE file
@@ -58,8 +57,9 @@
 #' # And form_mapper()
 #' form_mapper(folder = "./testELEV/")
 #'
-#'
+#' # Let's use the crule file included in the LITAP package
 #' crule <- system.file("extdata", "crule.dbf", package = "LITAP")
+#' crule
 #'
 #' # Run facet_mapper() - Derive A Rules
 #' facet_mapper(folder = "./testELEV/", arule = NULL, crule = crule)
@@ -73,6 +73,13 @@
 #' crule <- system.file("extdata", "crule.dbf", package = "LITAP")
 #' facet_mapper(folder = "./testELEV/", arule = arule, crule = crule)
 #'
+#' \dontrun{
+#' # Now consider using your own Rule files
+#' facet_mapper(folder = "./testELEV/",
+#'              arule = "./testELEV/my_arule.dbf",
+#'              crule = "./testELEV/my_crule.dbf")
+#'
+#'}
 #' # Clean up (remove all output)
 #' unlink("./testELEV/", recursive = TRUE)
 #'
@@ -87,6 +94,9 @@ facet_mapper <- function(folder, arule = NULL, crule,
                          resume = NULL,
                          log = TRUE,
                          verbose = FALSE, quiet = FALSE, debug = FALSE) {
+
+  # Checks
+  check_folder(folder)
 
   # Messaging
   if(quiet) verbose <- FALSE
@@ -106,20 +116,20 @@ facet_mapper <- function(folder, arule = NULL, crule,
   out_format <- get_format(folder, where = "flow")
 
   # Get fill dem (flow_mapper)
-  db <- get_previous(folder, step = "fill", where = "flow") %>%
+  db <- get_previous(folder, where = "flow", step = "fill") %>%
     dplyr::select("seqno", "x", "y", "row", "col", "elev", "drec", "upslope",
                   "fill_shed", "local_shed") %>%
     add_buffer()
 
   # Get form dem (form_mapper)
-  weti <- get_previous(folder, step = "form", where = "form") %>%
+  weti <- get_previous(folder, where = "form", step = "form") %>%
     dplyr::select(-tidyselect::any_of(c("seqno_buffer", "drec_buffer"))) %>%
     dplyr::rename("qweti" = "qweti1", "qarea" = "qarea1",
                   "lnqarea" = "lnqarea1") %>%
     add_buffer()
 
   # Get relief dem (form_mapper)
-  relief <- get_previous(folder, step = "length", where = "form") %>%
+  relief <- get_previous(folder, where = "form", step = "length") %>%
     dplyr::select(-tidyselect::any_of(c("seqno_buffer", "drec_buffer"))) %>%
     add_buffer()
 
@@ -135,9 +145,21 @@ facet_mapper <- function(folder, arule = NULL, crule,
     stop("Must supply locations of 'crule' file", call. = FALSE)
   }
 
+  # Calculate buffers at 5% if not provided
+  edge_col_calc <- edge_row_calc <- FALSE
+  if(is.null(edge_row)) {
+    edge_row_calc <- TRUE
+    edge_row <- round(length(unique(weti$row[!weti$buffer])) * 0.05)
+  }
+  if(is.null(edge_col)) {
+    edge_col_calc <- TRUE
+    edge_col <- round(length(unique(weti$col[!weti$buffer])) * 0.05)
+  }
+
+  perc <- arule_percentiles(weti, relief, edge_row = edge_row,
+                            edge_col = edge_col, quiet = quiet)
+
   if(is.null(arule)) {
-    perc <- arule_percentiles(weti, relief, edge_row = edge_row,
-                              edge_col = edge_col, quiet = quiet)
     arule <- arule_derive(perc)
   } else {
     afile <- arule
@@ -184,12 +206,23 @@ facet_mapper <- function(folder, arule = NULL, crule,
   }
 
   # Save afile if derived
+
   if(!exists("afile")) {
-    d <- list(`Site Summary` = percentiles_format(perc),
-              `ARULE` = arule)
-    writexl::write_xlsx(d, path = file.path(folder,
-                                            "topographic_derivatives.xlsx"))
+    name <- "ARULE - Derived"
+  } else {
+    name <- paste0("ARULE - Supplied (", basename(afile), ")")
   }
+
+  p <- percentiles_format(perc) %>%
+    dplyr::select("name", "slope", "aspect", "prof", "plan",
+                  "qarea1" = "qarea", "qweti1" = "qweti",
+                  "z2st", "z2pit", "zpit2peak", "zcr2st", 'pctz2st', "pctz2pit",
+                  "lpit2peak", "lstr2div")
+
+  d <- list(p, arule) %>%
+    stats::setNames(nm = c("Site Summary", name))
+  writexl::write_xlsx(d, path = file.path(folder,
+                                          "topographic_derivatives.xlsx"))
 
   # Setup Log
   log_file <- log_setup(folder, which = "facet", log)
@@ -198,15 +231,15 @@ facet_mapper <- function(folder, arule = NULL, crule,
 
   if(exists("afile")) {
     a <- normalizePath(afile)
-  } else a <- "derived (see topographic_derivatives.xlsx)"
+  } else a <- "Derived (see topographic_derivatives.xlsx)"
 
   # File details to log
   log_write("Run options:\n", log = log_file)
   log_write("  Input folder = ", normalizePath(folder), "\n",
             "  arule file =  ", a, "\n",
             "  crule file = ", normalizePath(cfile), "\n",
-            "  edge_row = ", edge_row, "\n",
-            "  edge_col = ", edge_col, "\n",
+            "  edge_row = ", edge_row, dplyr::if_else(edge_row_calc, " (5%)\n", "\n"),
+            "  edge_col = ", edge_col, dplyr::if_else(edge_col_calc, " (5%)\n", "\n"),
             "  Procedure = ", procedure, "\n",
             log = log_file)
 
@@ -241,7 +274,7 @@ facet_mapper <- function(folder, arule = NULL, crule,
     log_start(task, sub_start, log_file)
 
     if(!exists("fuzzattr")) {
-      fuzzattr <- get_previous(folder, step = "fuza", where = "facet") %>%
+      fuzzattr <- get_previous(folder, where = "facet", step = "fuza") %>%
         add_buffer()
     }
 
@@ -254,6 +287,14 @@ facet_mapper <- function(folder, arule = NULL, crule,
     resume <- ""
   }
 
-  # Save final time
+  # Summary tables --------------------------------------------------
+  task <- "creating summary tables"
+  announce(task, quiet)
+  sub_start <- Sys.time()
+  log_start(task, sub_start, log_file)
+  summary_tables(folder)
+  log_time(sub_start, log_file)
+
+  # Save final time --------------------------------------------------
   run_time(start, log_file, quiet)
 }

@@ -1,23 +1,23 @@
 Run options:
   Dimensions: nrows = 90; ncols = 90; grid = 5; max_area = 1; max_depth = 0.1
 
-Run started: 2021-12-16 16:51:42
+Run started: 2024-10-02 09:30:00.373725
 
-Started calculating directions at: 2021-12-16 16:51:42
+Started calculating directions at: 2024-10-02 09:30:00.501828
   Total time: 0.01
-Started calculating watersheds at: 2021-12-16 16:51:43
-  Total time: 0.04
-Started removing initial pits at: 2021-12-16 16:51:45
+Started calculating watersheds at: 2024-10-02 09:30:01.134948
   Total time: 0.03
-Started calculating pond (global) watersheds at: 2021-12-16 16:51:47
-  Total time: 0.02
-Started calculating fill patterns at: 2021-12-16 16:51:48
+Started removing initial pits at: 2024-10-02 09:30:03.018873
+  Total time: 0.03
+Started calculating pond (global) watersheds at: 2024-10-02 09:30:04.660367
+  Total time: 0.03
+Started calculating fill patterns at: 2024-10-02 09:30:06.325432
   Total time: 0.05
-Started calculating inverted directions at: 2021-12-16 16:51:51
+Started calculating inverted directions at: 2024-10-02 09:30:09.204582
   Total time: 0.01
-Started calculating inverted watersheds at: 2021-12-16 16:51:52
+Started calculating inverted watersheds at: 2024-10-02 09:30:09.765271
   Total time: 0.03
-Started removing inverted pits at: 2021-12-16 16:51:53
+Started removing inverted pits at: 2024-10-02 09:30:11.454364
   Total time: 0.03
 
-Total run time: 0.29 min
+Total run time: 0.31 min

@@ -2,7 +2,7 @@ save_basic <- function(data, name, locs, out_format, where) {
   file_out <- locs[[where]]
   name <- paste0(name, ".", out_format)
   if(stringr::str_detect(name, ".rds$")) readr::write_rds(data, file.path(file_out, name))
-  if(stringr::str_detect(name, ".csv$")) readr::write_csv(data, file.path(file_out, name))
+  if(stringr::str_detect(name, ".csv$")) readr::write_csv(data, file.path(file_out, name), progress = FALSE)
 }
 
 save_output <- function(data, stats = NULL, name, locs, out_format, where,
@@ -30,7 +30,7 @@ save_output <- function(data, stats = NULL, name, locs, out_format, where,
 
     data <- remove_buffer(data)
     cols <- cols_order[[where]]
-
+    #cols <- c(cols, "n_rnds")  # Only for debugging
     if(!debug) data <- dplyr::select(data, -dplyr::contains("buffer"))
 
     if(dynamic_cols) data <- dplyr::select(data, dplyr::any_of(cols),
@@ -62,7 +62,7 @@ save_shed <- function(file_name, obj, clean = FALSE){
   }
 
   if(stringr::str_detect(file_name, ".rds$")) readr::write_rds(obj, file_name)
-  if(stringr::str_detect(file_name, ".csv$")) readr::write_csv(obj, file_name)
+  if(stringr::str_detect(file_name, ".csv$")) readr::write_csv(obj, file_name, progress = FALSE)
 }
 
 read_shed <- function(file_out, name){
@@ -177,33 +177,44 @@ locs_create <- function(out_folder, which, clean) {
 #' Load previously created files
 #'
 #' @param folder Location of Project
-#' @param step Fill, pond, etc.
 #' @param where backup, Flow, Form, etc.
-#' @param type Some files have both "db" and "stats" extract which one?
+#' @param step Fill, pond, etc.
+#' @param type Some files have both "dem" and "stats" extract which one?
 #'
 #'
 #' @noRd
-get_previous <- function(folder, step, where, type = "dem") {
+get_previous <- function(folder, where, step, type = "dem", quiet = TRUE) {
 
-  if(!dir.exists(folder)) stop("This folder doesn't exist: ", folder, call. = FALSE)
-
-  f <- list.files(file.path(folder, where), pattern = paste0("_", step),
-                  recursive = TRUE, full.names = TRUE)
-  f <- f[stringr::str_detect(basename(f), type)]
-
-  if(length(f) > 1) stop("There is more than one eligable ", step, " for type ",
-                         type, "\n(",
-                         paste0(f, collapse = "\n"), ")", call. = FALSE)
-  if(length(f) == 0) stop("There are no eligable ", step, " for type ", type, " files",
-                          call. = FALSE)
+  check_folder(folder, fun = stop)
+  f <- list_previous(folder, step, where, type)
 
   ext <- get_format(folder, where)
 
   if(ext == "rds") r <- readr::read_rds(f)
-  if(ext == "csv") r <- readr::read_csv(f, col_types = readr::cols())
+  if(ext == "csv") r <- readr::read_csv(f, col_types = readr::cols(), progress = !quiet)
 
   dplyr::select(r, -dplyr::contains("_buffer"))
 }
+
+list_previous <- function(folder, step, where, type = "dem", check_only = FALSE) {
+  f <- list.files(file.path(folder, where), pattern = paste0("_", step),
+                  recursive = TRUE, full.names = TRUE)
+  f <- f[stringr::str_detect(basename(f), type)]
+
+  # return TRUE/FALSE with no errors
+  if(check_only) f <- length(f) == 1
+
+  # Otherwise error
+  if(length(f) > 1) stop("There is more than one eligable ", step, " for type ",
+                         type, "\n(",
+                         paste0(f, collapse = "\n"), ")", call. = FALSE)
+  if(length(f) == 0)  stop("Cannot find ", where, " ", paste0(type, "_", step), " files. ",
+                           "Did you run `", where, "_mapper()`?",
+                           call. = FALSE)
+
+  f
+}
+
 
 #' Guess format from previous files
 #'
@@ -212,7 +223,6 @@ get_previous <- function(folder, step, where, type = "dem") {
 #'
 #' @noRd
 get_format <- function(folder, where) {
-  if(!dir.exists(folder)) stop("This folder doesn't exist: ", folder, call. = FALSE)
 
   ext <- list.files(file.path(folder, where), recursive = TRUE, full.names = TRUE) %>%
     stringr::str_extract("[a-z]{3,4}$") %>%

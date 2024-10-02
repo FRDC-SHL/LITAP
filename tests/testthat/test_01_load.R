@@ -154,9 +154,9 @@ test_that("Excel files load", {
   f <- system.file("extdata", "test_input_files",
                    "FES04_XYZ.xlsx", package = "LITAP")
 
-  expect_silent(d <- load_excel(f))
+  expect_error(d <- load_excel(f), NA)
   expect_equal(nrow(d), 434421)
-  expect_silent(load_file(f, verbose = FALSE)) %>%
+  expect_error(load_file(f, verbose = FALSE), NA) %>%
     expect_values()
 })
 

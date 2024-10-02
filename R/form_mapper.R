@@ -40,6 +40,9 @@ form_mapper <- function(folder, str_val = 10000, ridge_val = 10000,
                         log = TRUE, clean = FALSE,
                         verbose = FALSE, quiet = FALSE, debug = FALSE) {
 
+  # Checks
+  check_folder(folder)
+
   # Messaging
   if(quiet) verbose <- FALSE
 
@@ -54,23 +57,23 @@ form_mapper <- function(folder, str_val = 10000, ridge_val = 10000,
   out_format <- get_format(folder, where = "flow")
 
     # Get fill dem
-  db <- get_previous(folder, step = "fill", where = "flow") %>%
-    dplyr::select("seqno", "x", "y", "row", "col", "elev", "drec", "upslope",
-                  "fill_shed", "local_shed") %>%
+  db <- get_previous(folder, where = "flow", step = "fill") %>%
+    dplyr::select("seqno", "x", "y", "row", "col", "elev", "ddir", "drec",
+                  "upslope", "fill_shed", "local_shed") %>%
     add_buffer()
 
   grid <- calc_grid(db)
   check_grid(grid)
 
   # Get backup inverted dem
-  idb <- get_previous(folder, step = "inverted", where = "flow")
+  idb <- get_previous(folder, where = "flow", step = "inverted")
   if("ldir" %in% names(idb)) idb <- dplyr::rename(idb, "ddir" = "ldir")
   idb <- dplyr::select(idb, "seqno", "x", "y", "row", "col", "elev", "drec", "ddir",
                        "upslope", "inv_local_shed") %>%
     add_buffer()
 
   # Get pond stats
-  pond <- get_previous(folder, step = "pond", type = "stats", where = "flow") %>%
+  pond <- get_previous(folder, where = "flow", step = "pond", type = "stats") %>%
     add_buffer(db = db, stats = .)
 
   # Get out locs
@@ -115,26 +118,27 @@ form_mapper <- function(folder, str_val = 10000, ridge_val = 10000,
     log_start(task, sub_start, log_file)
 
     if(!exists("db_form")) {
-      db_form <- get_previous(folder, step = "form", where = "form") %>%
+      db_form <- get_previous(folder, where = "form", step = "form") %>%
         dplyr::select(dplyr::any_of(c("seqno", "row", "col", "slope_pct",
                                       "slope_deg", "aspect", "prof", "plan"))) %>%
         add_buffer()
     }
 
-    db_weti <- calc_weti(db, grid, verbose = verbose)
+    db_weti <- calc_weti2(db, grid, verbose = verbose)
 
     db_form <- dplyr::full_join(db_form, db_weti,
                                 by = c("seqno", "col", "row", "buffer")) %>%
-      dplyr::mutate(lnqarea1 = dplyr::if_else(aspect > -1, log(qarea1), 0),
-                    lnqarea2 = dplyr::if_else(aspect > -1, log(qarea2), 0),
-                    new_asp = dplyr::if_else(aspect > -1, aspect + 45, 0),
-                    new_asp = dplyr::if_else(new_asp > 360,
-                                             new_asp -360, new_asp),
-                    lnqarea1 = round(lnqarea1, 3),
-                    lnqarea2 = round(lnqarea2, 3))
+      dplyr::mutate(lnqarea1 = dplyr::if_else(.data$aspect > -1, log(.data$qarea1), 0),
+                    lnqarea2 = dplyr::if_else(.data$aspect > -1, log(.data$qarea2), 0),
+                    new_asp = dplyr::if_else(.data$aspect > -1, .data$aspect + 45, 0),
+                    new_asp = dplyr::if_else(.data$new_asp > 360,
+                                             .data$new_asp -360, .data$new_asp),
+                    lnqarea1 = trunc_dec(.data$lnqarea1, 3),
+                    lnqarea2 = trunc_dec(.data$lnqarea2, 3))
 
     save_output(data = db_form, name = "form", locs = out_locs,
                 out_format = out_format, where = "form", debug = debug)
+
     rm(db_form, db_weti)
     log_time(sub_start, log_file)
 
@@ -166,7 +170,7 @@ form_mapper <- function(folder, str_val = 10000, ridge_val = 10000,
     log_start(task, sub_start, log_file)
 
     if(!exists("db_relz")) {
-      db_relz <- get_previous(folder, step = "relief", where = "form") %>%
+      db_relz <- get_previous(folder, where = "form", step = "relief") %>%
         add_buffer()
     }
 
@@ -184,10 +188,6 @@ form_mapper <- function(folder, str_val = 10000, ridge_val = 10000,
   if(!debug) remove_output(locs = out_locs, out_format = out_format,
                            where = "form")
 
-  # Create all points file
-  task <- "Merging flow and form data for `all_points` file"
-  announce(task, quiet)
-  merge_all(folder)
 
   # Save final time
   run_time(start, log_file, quiet)

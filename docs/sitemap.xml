@@ -1,43 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/index.html</loc>
-  </url>
-  <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/reference/args.html</loc>
-  </url>
-  <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/reference/dot-onLoad.html</loc>
-  </url>
-  <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/reference/facet_mapper.html</loc>
-  </url>
-  <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/reference/flow_mapper.html</loc>
-  </url>
-  <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/reference/flow_plot.html</loc>
-  </url>
-  <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/reference/form_mapper.html</loc>
-  </url>
-  <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/reference/load_file.html</loc>
-  </url>
-  <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/reference/merge_all.html</loc>
-  </url>
-  <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/reference/pipe.html</loc>
-  </url>
-  <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/reference/slope_gc.html</loc>
-  </url>
-  <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/reference/test_dem.html</loc>
-  </url>
-  <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/reference/wepp_mapper.html</loc>
+    <loc>http://steffilazerte.github.io/LITAP_docs/404.html</loc>
   </url>
   <url>
     <loc>http://steffilazerte.github.io/LITAP_docs/articles/LITAP.html</loc>
@@ -46,49 +10,19 @@
     <loc>http://steffilazerte.github.io/LITAP_docs/articles/articles/flow_plots.html</loc>
   </url>
   <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/01_H1_compare_report_flow.html</loc>
+    <loc>http://steffilazerte.github.io/LITAP_docs/articles/articles/test_021.html</loc>
   </url>
   <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/02_H3_compare_report_facet.html</loc>
+    <loc>http://steffilazerte.github.io/LITAP_docs/articles/discrepancies.html</loc>
   </url>
   <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/02_H3_compare_report_flow.html</loc>
+    <loc>http://steffilazerte.github.io/LITAP_docs/articles/flow_plots.html</loc>
   </url>
   <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/02_H3_compare_report_form.html</loc>
+    <loc>http://steffilazerte.github.io/LITAP_docs/articles/index.html</loc>
   </url>
   <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/02_H3_compare_report_wepp.html</loc>
-  </url>
-  <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/02_H3_miss_compare_report_facet.html</loc>
-  </url>
-  <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/02_H3_miss_compare_report_flow.html</loc>
-  </url>
-  <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/02_H3_miss_compare_report_form.html</loc>
-  </url>
-  <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/02_H3_miss_compare_report_wepp.html</loc>
-  </url>
-  <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/03_R1_compare_report_flow.html</loc>
-  </url>
-  <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/04_R3_compare_report_flow.html</loc>
-  </url>
-  <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/04_R3_miss_compare_report_flow.html</loc>
-  </url>
-  <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/05_I1_compare_report_flow.html</loc>
-  </url>
-  <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/06_I3_compare_report_flow.html</loc>
-  </url>
-  <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/06_I3_miss_compare_report_flow.html</loc>
+    <loc>http://steffilazerte.github.io/LITAP_docs/articles/litap.html</loc>
   </url>
   <url>
     <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/11_Ab02PV_compare_report_facet.html</loc>
@@ -103,79 +37,7 @@
     <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/11_Ab02PV_compare_report_wepp.html</loc>
   </url>
   <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/11_Ab02PV_high_compare_report_facet.html</loc>
-  </url>
-  <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/11_Ab02PV_high_compare_report_flow.html</loc>
-  </url>
-  <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/11_Ab02PV_high_compare_report_form.html</loc>
-  </url>
-  <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/11_Ab02PV_high_compare_report_wepp.html</loc>
-  </url>
-  <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/11_Ab02PV_zero_compare_report_facet.html</loc>
-  </url>
-  <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/11_Ab02PV_zero_compare_report_flow.html</loc>
-  </url>
-  <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/11_Ab02PV_zero_compare_report_form.html</loc>
-  </url>
-  <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/12_FES4_compare_report_facet.html</loc>
-  </url>
-  <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/12_FES4_compare_report_flow.html</loc>
-  </url>
-  <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/12_FES4_compare_report_form.html</loc>
-  </url>
-  <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/12_FES4_high_compare_report_facet.html</loc>
-  </url>
-  <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/12_FES4_high_compare_report_flow.html</loc>
-  </url>
-  <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/12_FES4_high_compare_report_form.html</loc>
-  </url>
-  <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/12_FES4_zero_compare_report_facet.html</loc>
-  </url>
-  <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/12_FES4_zero_compare_report_flow.html</loc>
-  </url>
-  <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/12_FES4_zero_compare_report_form.html</loc>
-  </url>
-  <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/13_MZTRF_compare_report_facet.html</loc>
-  </url>
-  <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/13_MZTRF_compare_report_flow.html</loc>
-  </url>
-  <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/13_MZTRF_compare_report_form.html</loc>
-  </url>
-  <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/13_MZTRF_high_compare_report_flow.html</loc>
-  </url>
-  <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/13_MZTRF_zero_compare_report_facet.html</loc>
-  </url>
-  <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/13_MZTRF_zero_compare_report_flow.html</loc>
-  </url>
-  <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/13_MZTRF_zero_compare_report_form.html</loc>
-  </url>
-  <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/BR3_compare_report_facet_arule.html</loc>
-  </url>
-  <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/BR3_compare_report_facet_no_arule.html</loc>
+    <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/BR3_compare_report_facet.html</loc>
   </url>
   <url>
     <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/BR3_compare_report_flow.html</loc>
@@ -193,9 +55,69 @@
     <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/Ehsan_compare_report_form.html</loc>
   </url>
   <url>
-    <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/general.html</loc>
+    <loc>http://steffilazerte.github.io/LITAP_docs/articles/reports/Ehsan_compare_report_wepp.html</loc>
   </url>
   <url>
     <loc>http://steffilazerte.github.io/LITAP_docs/articles/variables.html</loc>
+  </url>
+  <url>
+    <loc>http://steffilazerte.github.io/LITAP_docs/authors.html</loc>
+  </url>
+  <url>
+    <loc>http://steffilazerte.github.io/LITAP_docs/index.html</loc>
+  </url>
+  <url>
+    <loc>http://steffilazerte.github.io/LITAP_docs/news/index.html</loc>
+  </url>
+  <url>
+    <loc>http://steffilazerte.github.io/LITAP_docs/reference/LITAP-package.html</loc>
+  </url>
+  <url>
+    <loc>http://steffilazerte.github.io/LITAP_docs/reference/args.html</loc>
+  </url>
+  <url>
+    <loc>http://steffilazerte.github.io/LITAP_docs/reference/complete_run.html</loc>
+  </url>
+  <url>
+    <loc>http://steffilazerte.github.io/LITAP_docs/reference/dot-onLoad.html</loc>
+  </url>
+  <url>
+    <loc>http://steffilazerte.github.io/LITAP_docs/reference/facet_mapper.html</loc>
+  </url>
+  <url>
+    <loc>http://steffilazerte.github.io/LITAP_docs/reference/flow_mapper.html</loc>
+  </url>
+  <url>
+    <loc>http://steffilazerte.github.io/LITAP_docs/reference/flow_plot.html</loc>
+  </url>
+  <url>
+    <loc>http://steffilazerte.github.io/LITAP_docs/reference/form_mapper.html</loc>
+  </url>
+  <url>
+    <loc>http://steffilazerte.github.io/LITAP_docs/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>http://steffilazerte.github.io/LITAP_docs/reference/load_file.html</loc>
+  </url>
+  <url>
+    <loc>http://steffilazerte.github.io/LITAP_docs/reference/merge_all.html</loc>
+  </url>
+  <url>
+    <loc>http://steffilazerte.github.io/LITAP_docs/reference/merge_flow_form.html</loc>
+  </url>
+  <url>
+    <loc>http://steffilazerte.github.io/LITAP_docs/reference/pipe.html</loc>
+  </url>
+  <url>
+    <loc>http://steffilazerte.github.io/LITAP_docs/reference/slope_gc.html</loc>
+  </url>
+  <url>
+    <loc>http://steffilazerte.github.io/LITAP_docs/reference/summary_tables.html</loc>
+  </url>
+  <url>
+    <loc>http://steffilazerte.github.io/LITAP_docs/reference/test_dem.html</loc>
+  </url>
+  <url>
+    <loc>http://steffilazerte.github.io/LITAP_docs/reference/wepp_mapper.html</loc>
   </url>
 </urlset>

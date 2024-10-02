@@ -36,13 +36,13 @@ order_segments <- function(db, segs) {
   }
 
   segs2 <- segs %>%
-    dplyr::mutate(d = purrr::pmap(list(start_type, end_type, end_seqno,
-                                       sort_order, impound),
+    dplyr::mutate(d = purrr::pmap(list(.data$start_type, .data$end_type, .data$end_seqno,
+                                       .data$sort_order, .data$impound),
                                   down_cases, segs = !!segs, db = !!db)) %>%
     tidyr::unnest(cols = "d")
 
   # Now deal with impoundments
-  segs3 <- dplyr::filter(segs2, down_seg == 0)
+  segs3 <- dplyr::filter(segs2, .data$down_seg == 0)
 
   # Go down to sub cell just in case (if no drain cell, will just circle around)
   down <- db[segs3$end_seqno,]
@@ -51,10 +51,10 @@ order_segments <- function(db, segs) {
   segs3$down_seg <- down$segment_no
   segs3$drain_seqno <- down$seqno
 
-  segs <- dplyr::filter(segs2, down_seg != 0) %>%
+  segs <- dplyr::filter(segs2, .data$down_seg != 0) %>%
     dplyr::bind_rows(segs3) %>%
-    dplyr::arrange(sort_order) %>%
-    dplyr::select(sort_order, down_seg, dplyr::everything())
+    dplyr::arrange(.data$sort_order) %>%
+    dplyr::select("sort_order", "down_seg", dplyr::everything())
 
   list(db = db, segs = segs)
 }

@@ -16,12 +16,12 @@ renum_segs <- function(db, segs) {
 
   db <- dplyr::mutate(db,
                       dplyr::across(c("segment_no", "shed_no"), ~replace(., . == 0, NA)),
-                      dplyr::across(c("segment_no", "shed_no"), ~ . + max_hill))
+                      dplyr::across(c("segment_no", "shed_no"), ~ . + .env$max_hill))
 
   segs <- dplyr::mutate(segs,
-                        final_id = sort_order + max_hill,
+                        final_id = .data$sort_order + .env$max_hill,
                         dplyr::across(dplyr::matches("_seg|_imp"),
-                                      ~dplyr::if_else(. == 0, 0L, as.integer(. + max_hill))))
+                                      ~dplyr::if_else(. == 0, 0L, as.integer(. + .env$max_hill))))
 #
 #   # Rename chan_no to final id in db
 #   db <- dplyr::left_join(db, unique(dplyr::select(segs, "final_id", "sort_order")),

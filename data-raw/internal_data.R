@@ -1,12 +1,9 @@
 fix_names <- list("elev" = c("^elevation$" = "elev",
                              "^z$" = "elev",
-                             "^northing$" = "y",
-                             "^latitude$" = "y",
-                             "^lat$" = "y",
-                             "^easting$" = "x",
-                             "^longitude$" = "x",
-                             "^lon$" = "x",
-                             "^long$" = "x",
+                             "^(northing)|(north)|(southing)|(south)$" = "y",
+                             "^(latitude)|(lat)$" = "y",
+                             "^(easting)|(east)|(westing)|(west)$" = "x",
+                             "^(longitude)|(lon)|(long)$" = "x",
                              "^gridcode$" = "zone",
                              "^code$" = "zone",
                              "^ecozone$" = "zone",
@@ -23,6 +20,7 @@ fix_names <- list("elev" = c("^elevation$" = "elev",
                              "^beczone$" = "zone",
                              "^bec$" = "zone",
                              "^dss$" = "zone"))
+# Final acceptable names, see fix_names above to rename things
 match_names <- dplyr::tribble(
   ~type, ~name, ~required,
 
@@ -107,7 +105,9 @@ cols_order <- list(
               "convex_a", "concave_a", "planar_a",
               "high_wi", "low_wi", "near_level", "rel_steep",
               "near_div", "near_half", "near_chan", "near_peak", "near_mid",
-              "near_pit", "hi_above", "planar_2x"),
+              "near_pit", "hi_above", "planar_2x",
+              "max_facet", "max_value", "max_facet_name",
+              "max_2nd_facet", "max_2nd_value", "max_2nd_facet_name"),
 
   "wepp" = c("seqno", "x", "y", "row", "col", "elev", "ddir", "drec",
              "upslope",
@@ -126,8 +126,9 @@ cols_order <- list(
              "left_imp", "right_imp", "top_imp", "chan_shape", "flow2crow",
              "impound",
 
-             "chan_len", "num_points", "mean_slope", "gen_slope", "aspect", "profile"))
+             "chan_len", "num_points", "mean_slope_pct", "gen_slope_pct", "aspect", "profile"))
 
+# Intermediate files to be omitted
 debug_files <- list(
   "flow" = c("dem_dir", "dem_initial", "dem_local", "dem_pond",
              "dem_idir", "dem_iinitial",

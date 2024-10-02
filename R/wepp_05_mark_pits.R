@@ -21,65 +21,77 @@ mark_pits <- function(db, fill) {
 
   # Get watershed pits
   fill <- dplyr::group_by(fill, pit_seqno) %>%
-    dplyr::slice(dplyr::n())
+    dplyr::slice(dplyr::n()) # Get last record of each pit
 
   # Mark all pit seeds types as pits
   db$seedtype[fill$pit_seqno] <- 5
 
   # Get all pit cells to start marking channels for
   channels <- db[fill$pit_seqno, ]
-  # The way it works out in original script
-  channels <- dplyr::filter(channels, .data$chan_no == 0 |
-                              .data$drec != .data$seqno) %>%
-    dplyr::left_join(dplyr::select(fill, .data$pit_seqno, .data$out_seqno),
-                     by = c("seqno" = "pit_seqno")) %>%
-    # If no flow from pit, flow to pour point
-    dplyr::mutate(drec_orig = .data$drec,
-                  drec = replace(.data$drec, .data$drec == .data$seqno,
-                                 .data$out_seqno[.data$drec == .data$seqno]))
 
-  # If no flow from pit, flow to pour point (add to db)
-  new_drec <- dplyr::filter(channels, drec_orig == seqno)
-  db <- dplyr::mutate(db, drec_orig = drec)
-  db$drec[new_drec$seqno] <- new_drec$drec
-  db$drec_to_pour_point <- FALSE
-  db$drec_to_pour_point[new_drec$seqno] <- TRUE
 
-  # Add new chan_no
-  max_chan <- max(db$chan_no, na.rm = TRUE) + 1
-  max_chan <- max_chan:(max_chan + nrow(channels)-1)
-  channels$chan_no <- max_chan
-  db$chan_no[channels$seqno] <- max_chan
+  # > -------------------------
 
-  # Second cells are marked as seedtype 8, unless going through pour point
-  db$seedtype[channels$drec] <- dplyr::case_when(
-    channels$drec_orig == channels$seqno ~ 1, TRUE ~ 8)
 
-  # Process channels only if second cell doesn't end flow
-  channels <- channels[db$chan_no[channels$drec] == 0, ]
+  max_chan <- max(db$chan_no, na.rm = TRUE) + 1  # Update channel numbering
 
-  # Second cells are marked with chan_no of pit
-  db$chan_no[channels$drec] <- channels$chan_no
+  # Working with pits where the drec != seqno
+  ch1 <- channels %>%
+    dplyr::filter(.data$chan_no == 0 & .data$drec != .data$seqno)
 
-  # Get neighbouring seqnos
-  db <- nb_values(db, max_cols = max(db$col),
-                  col = "seqno", format = "wide")
+  if(nrow(ch1) > 0) {
+    ch1 <- ch1 %>%
+      dplyr::mutate(chan_no = max_chan:(max_chan + dplyr::n() - 1))
 
-  # Travel down and mark the rest of the cells
-  channels <- get_pit_chan(seqno = channels$seqno, drec = db$drec,
-                           chan_no = db$chan_no, seedtype = db$seedtype,
-                           neighbours = dplyr::select(db, dplyr::contains("seqno_n")),
-                           upslope = db$upslope, elev = db$elev)
+    db$seedtype[ch1$drec] <- 8
+    db$chan_no[ch1$seqno] <- ch1$chan_no
 
-  dplyr::bind_cols(dplyr::select(db, -"chan_no", -"seedtype", -"drec"),
-                   channels) %>%
-    dplyr::mutate(drec = replace(drec, drec_to_pour_point,
-                                 drec_orig[drec_to_pour_point])) %>%
-    dplyr::select(-drec_to_pour_point, -drec_orig)
+    # Travel down and mark the rest of the cells
+    cn <- get_pit_chan1(seqno = ch1$seqno, drec = db$drec,
+                        chan_no = db$chan_no, seedtype = db$seedtype,
+                        neighbours = dplyr::select(db, dplyr::contains("seqno_n")),
+                        upslope = db$upslope, elev = db$elev)
+
+    db[, c("chan_no", "seedtype", "drec")] <- cn
+    max_chan <- max(db$chan_no, na.rm = TRUE) + 1  # Update channel numbering
+  }
+
+  # Working with pits where chan_no != 0 (ignore those with drec = seqno if already have channel)
+  ch2 <- dplyr::filter(channels, .data$chan_no != 0 & .data$drec != .data$seqno)
+  db$seedtype[ch2$drec] <- 8
+
+  # Working with pits where the drec == seqno and no channels
+  ch3 <- channels %>%
+    dplyr::filter(.data$chan_no == 0 & .data$drec == .data$seqno)
+
+  if(nrow(ch3) > 0) {
+    ch3 <- ch3 %>%
+      dplyr::rename("drec_orig" = "drec") %>%
+      dplyr::left_join(dplyr::select(fill, "seqno" = "pit_seqno", "drec" = "out_seqno"),
+                       by = "seqno") %>%
+      dplyr::mutate(chan_no = max_chan:(max_chan + dplyr::n() - 1))
+
+    db$chan_no[ch3$seqno] <- ch3$chan_no
+
+    db2 <- db
+    db2$chan_no[ch3$drec] <- dplyr::if_else(db$chan_no[ch3$drec] == 0, ch3$chan_no, db$chan_no[ch3$drec])
+
+    # Travel down and mark the rest of the cells - NOTE STARTING FROM SECOND CELL!!!
+    cn <- get_pit_chan2(seqno = ch3$drec, drec = db$drec,
+                        chan_no = db$chan_no,
+                        chan_no2 = db2$chan_no,
+                        seedtype = db$seedtype,
+                        neighbours = dplyr::select(db, dplyr::contains("seqno_n")),
+                        upslope = db$upslope, elev = db$elev)
+
+    db[, c("chan_no", "seedtype", "drec")] <- cn
+  }
+
+  db
 }
 
 
-get_pit_chan <- function(seqno, drec, chan_no, seedtype, neighbours, upslope, elev) {
+get_pit_chan1 <- function(seqno, drec, chan_no, seedtype, neighbours, upslope, elev) {
   variable <- list(chan_no = chan_no,
                    seedtype = seedtype,
                    drec = drec)
@@ -89,7 +101,24 @@ get_pit_chan <- function(seqno, drec, chan_no, seedtype, neighbours, upslope, el
   # if(length(seqno) > 500) trace <- trace_matrix
   trace <- trace_single
 
-  variable <- trace(seqno = seqno, drec = drec, loop_func = mark_pit_chan,
+  variable <- trace(seqno = seqno, drec = drec, loop_func = mark_pit_chan1,
+                    s = static, v = variable)
+
+  data.frame(variable[c("chan_no", "seedtype", "drec")])
+}
+
+get_pit_chan2 <- function(seqno, drec, chan_no, chan_no2, seedtype, neighbours, upslope, elev) {
+  variable <- list(chan_no = chan_no,
+                   chan_no2 = chan_no2,
+                   seedtype = seedtype,
+                   drec = drec)
+  static <- list(neighbours = neighbours, upslope = upslope, elev = elev)
+
+  # Because drec can be modified, can't use matrix format
+  # if(length(seqno) > 500) trace <- trace_matrix
+  trace <- trace_single
+
+  variable <- trace(seqno = seqno, drec = drec, loop_func = mark_pit_chan2,
                     s = static, v = variable)
 
   data.frame(variable[c("chan_no", "seedtype", "drec")])
@@ -133,6 +162,87 @@ mark_pit_chan <- function(t, s, v) {
     #
     #} else if(v$seedtype[l] == 7) {
     #}
+
+  v
+}
+
+
+
+
+
+mark_pit_chan1 <- function(t, s, v) {
+
+  chan <- v$chan_no[t[1]]
+
+  # Find first marked cell in track - Skip the first two as they should be 5 and 8
+  first_marked <- which(v$chan_no[t[3:length(t)]] != 0 |
+                          v$seedtype[t[3:length(t)]] %in% c(5, 6))
+
+  if(length(first_marked) == 0) {
+    first_marked <- length(t)
+  } else {
+    first_marked <- first_marked[1] + 2 # Get first record and proper location in t
+  }
+
+  # Mark un-marked channels with new channel
+  v$chan_no[t[2:(first_marked - 1)]] <- chan
+
+  # Adjust last marked cell
+  l <- t[first_marked]
+
+  if(v$seedtype[l] %in% c(0, 2)) {
+    v$seedtype[l] <- 2
+    aj <- above_junct(seqno = l,
+                      drec = v$drec, seedtype = v$seedtype, chan_no = v$chan_no,
+                      elev = s$elev, upslope = s$upslope, neighbours = s$neighbours)
+    v$drec <- aj$drec
+    v$seedtype <- aj$seedtype
+
+  } else if(v$seedtype[l] == 1) {
+    v$seedtype[l] <- 0
+  } else if(v$seedtype[l] %in% c(5, 6)) {
+    v$chan_no[l] <- chan
+  }
+
+  v
+}
+
+mark_pit_chan2 <- function(t, s, v) {
+
+  chan <- v$chan_no2[t[1]]
+
+  if(v$chan_no[t[1]] == 0) {
+    v$seedtype[t[1]] <- 1
+    v$chan_no[t[1]] <- chan
+  }
+
+  # Find first marked cell in track (except for the first one above)
+  first_marked <- which(v$chan_no[t[-1]] != 0 | v$seedtype[t[-1]] %in% c(5, 6))
+  if(length(first_marked) == 0) {
+    first_marked <- length(t)
+  } else {
+    first_marked <- first_marked[1] + 1 # Get first record and proper location in t
+  }
+
+  # Mark un-marked channels with new channel
+  v$chan_no[t[2:(first_marked - 1)]] <- chan
+
+  # Adjust last marked cell
+  l <- t[first_marked]
+
+  if(v$seedtype[l] %in% c(0, 2)) {
+    v$seedtype[l] <- 2
+    aj <- above_junct(seqno = l,
+                      drec = v$drec, seedtype = v$seedtype, chan_no = v$chan_no,
+                      elev = s$elev, upslope = s$upslope, neighbours = s$neighbours)
+    v$drec <- aj$drec
+    v$seedtype <- aj$seedtype
+
+  } else if(v$seedtype[l] == 1) {
+    v$seedtype[l] <- 0
+  } else if(v$seedtype[l] %in% c(5, 6)) {
+    v$chan_no[l] <- chan
+  }
 
   v
 }
