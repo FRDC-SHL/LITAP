@@ -181,6 +181,7 @@ mid_calc <- function(pnts, pnts_no_edge, cnts, avg, seg_cal) {
 
   # Mid
   # zp2p and lp2p corrected from errors in the original spreadsheet
+  # (but aren't really used downstream anyway)
   mid <- dplyr::tibble(
     zc2s = avg$zcr2st - cst$zc2s - ups$zc2s - low$zc2s - dep$zc2s,
     lc2s = avg$lstr2div - cst$lc2s - ups$lc2s - low$lc2s - dep$lc2s,
@@ -233,6 +234,7 @@ mid_calc <- function(pnts, pnts_no_edge, cnts, avg, seg_cal) {
   # Back to C2S/P2P PL and PZ...
   # - pz_p2p and pl_p2p corrected from errors in the original spreadsheet
   #   (should have referenced zpit2peak and lpit2peak but referenced unlinked cell)
+  #   But these aren't used downstream anyway.
   all <- dplyr::mutate(
     all,
     pa = .data$counts / sum(.data$counts),
