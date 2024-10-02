@@ -12,10 +12,6 @@ devtools::build_readme()
 
 # Create reports and save to vignettes
 source("data-raw/formal_tests.R")
-# source("../formal_tests_reports_flow.R")
-# source("../formal_tests_reports_form.R")
-# source("../formal_tests_reports_facet.R")
-# source("../formal_tests_reports_wepp.R")
 
 # Update package Version
 

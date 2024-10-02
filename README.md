@@ -28,10 +28,10 @@ See articles for new features specific to LITAP (coming soon)!
 
 Currently LITAP includes major functions
 
--   `flow_mapper()` - based on FlowMapR
--   `form_mapper()` - based on FormMapR
--   `facet_mapper()` - based on FacetMapR
--   `wepp_mapper()` - based on WeppMapR
+- `flow_mapper()` - based on FlowMapR
+- `form_mapper()` - based on FormMapR
+- `facet_mapper()` - based on FacetMapR
+- `wepp_mapper()` - based on WeppMapR
 
 See the companion website for more details:
 <https://FRDC-SHL.github.io/LITAP/>
@@ -59,6 +59,15 @@ system.file("extdata", package = "LITAP")
 Now you can copy and paste these files to your working folder to try out
 the following examples.
 
+## Basic Usage: Overall
+
+``` r
+flow_mapper(file = "testELEV.dbf", nrow = 90, ncol = 90, grid = 5, out_folder = "Output/")
+form_mapper(folder = "Output")
+facet_mapper(folder = "Output", crule = "crule.dbf")
+wepp_mapper(folder = "Output")
+```
+
 ## Basic Usage: `flow_mapper()`
 
 Load the package:
@@ -67,11 +76,12 @@ Load the package:
 library(LITAP)
 ```
 
-    ## LITAP v0.6.0
+    ## LITAP v0.7.0
     ## LITAP is still in development; Help us by submitting bugs/feature requests: 
     ## http://github.com/FRDC-SHL/LITAP/issues
 
-First, specify the dem file and the number of rows and columns:
+First, specify the dem file and the number of rows and columns, as well
+as the grid size, if it’s not inferable from the data.
 
 ``` r
 flow_mapper(file = "testELEV.dbf", nrow = 90, ncol = 90, grid = 5)
@@ -87,7 +97,7 @@ flow_mapper(file = "testELEV.dbf", nrow = 90, ncol = 90, grid = 5,
 As well as the location of output files:
 
 ``` r
-flow_mapper(file = "testELEV.dbf", nrow = 90, ncol = 90, grid = 5, out_folder = "./Output/")
+flow_mapper(file = "testELEV.dbf", nrow = 90, ncol = 90, grid = 5, out_folder = "Output/")
 ```
 
     ## CALCULATING DIRECTIONS
@@ -110,7 +120,7 @@ flow_mapper(file = "testELEV.dbf", nrow = 90, ncol = 90, grid = 5, out_folder = 
 
     ## CREATING REPORT
 
-    ## Run took: 0.25 min
+    ## Run took: 0.28 min
 
 ## Basic Usage: `form_mapper()`
 
@@ -118,7 +128,7 @@ flow_mapper(file = "testELEV.dbf", nrow = 90, ncol = 90, grid = 5, out_folder = 
 size.
 
 ``` r
-form_mapper(folder = "./Output/")
+form_mapper(folder = "Output/")
 ```
 
     ## SETUP
@@ -131,15 +141,13 @@ form_mapper(folder = "./Output/")
 
     ## CALCULATING SLOPE LENGTH
 
-    ## MERGING FLOW AND FORM DATA FOR `ALL_POINTS` FILE
-
-    ## Run took: 0.1 min
+    ## Run took: 0.02 min
 
 Optionally, users can also define channels and ridges according to the
 number of up-/down-slope cells that flow through the cell in question.
 
 ``` r
-form_mapper(folder = "./Output/", str_val = 10000, ridge_val = 10000)
+form_mapper(folder = "Output/", str_val = 10000, ridge_val = 10000)
 ```
 
 ## Basic Usage: `facet_mapper()`
@@ -148,8 +156,10 @@ form_mapper(folder = "./Output/", str_val = 10000, ridge_val = 10000)
 and requires a CRULE file and, optionally, an ARULE file.
 
 ``` r
-facet_mapper(folder = "./Output/", crule = "crule.dbf", arule = "arule.dbf")
+facet_mapper(folder = "Output/", crule = "crule.dbf", arule = "arule.dbf")
 ```
+
+    ## Using buffer of 4 rows ('edge_row') and 4 cols ('edge_col') per side
 
     ## Formatting arule file
 
@@ -163,15 +173,22 @@ facet_mapper(folder = "./Output/", crule = "crule.dbf", arule = "arule.dbf")
 
     ## CALCULATING CLASSES
 
-    ## Run took: 0.01 min
+    ## CREATING SUMMARY TABLES
+
+    ## Warning: Skipping Topographic Summary...
+    ##   This step requires a facets output file `dem_fuzc` with facets 'cst', 'ups', 'mid', 'low', 'dep,
+    ##   as well as a topographic_derivatives.xlsx file.
+    ##   Use `facet_mapper()` with a `crule` file defining the relevant facets and *no* `arule` file.
+
+    ## Run took: 0.05 min
 
 If an ARULE file is not provided, LITAP will derive the rules based on
 the input files (as in Li et al. 2011, Canadian Journal of Soil Science
 91(2), 251-266). The derived A rules will be output to
-“afile\_derived.csv”.
+“afile_derived.csv”.
 
 ``` r
-facet_mapper(folder = "./Output/", crule = "crule.dbf")
+facet_mapper(folder = "Output/", crule = "crule.dbf")
 ```
 
 ## Basic Usage: `wepp_mapper()`
@@ -179,7 +196,7 @@ facet_mapper(folder = "./Output/", crule = "crule.dbf")
 `wepp_mapper()` uses output from `flow_mapper()`
 
 ``` r
-wepp_mapper(folder = "./Output/")
+wepp_mapper(folder = "Output/")
 ```
 
 Optionally, users can also define the maximum length of channel cells
@@ -187,7 +204,7 @@ Optionally, users can also define the maximum length of channel cells
 upslope threshold to define channel cells
 
 ``` r
-wepp_mapper(folder = "./Output/", chan_length = 500, upslope_threshold = 500)
+wepp_mapper(folder = "Output/", chan_length = 500, upslope_threshold = 500)
 ```
 
 ## Multiple file types
