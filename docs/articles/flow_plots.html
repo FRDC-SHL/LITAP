@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Flow Plots • LITAP</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">LITAP</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
       </span>
     </div>
 
@@ -76,9 +76,10 @@
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Flow Plots</h1>
-                        <h4 data-toc-skip class="author">Steffi LaZerte</h4>
+                        <h4 data-toc-skip class="author">Steffi
+LaZerte</h4>
             
-            <h4 data-toc-skip class="date">2022-01-20</h4>
+            <h4 data-toc-skip class="date">2024-10-01</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/FRDC-SHL/LITAP/blob/HEAD/vignettes/articles/flow_plots.Rmd" class="external-link"><code>vignettes/articles/flow_plots.Rmd</code></a></small>
       <div class="hidden name"><code>flow_plots.Rmd</code></div>
@@ -97,106 +98,122 @@
   margin: auto;
 }
 </style>
-<p>Flow plots are simply a way of visualizing what LITAP is doing under the hood.</p>
-<p>In the following examples, we will be using the output from complete run on the supplied “testELEV.dbf”. You can find the original DEM file in the LITAP <code>extdata</code> folder by using the <code><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file()</a></code> function. For more information on the <code><a href="../reference/flow_mapper.html">flow_mapper()</a></code> function see the <a href="../LITAP.html">Getting Started Vignette</a>.</p>
+<p>Flow plots are simply a way of visualizing what LITAP is doing under
+the hood.</p>
+<p>In the following examples, we will be using the output from complete
+run on the supplied “testELEV.dbf”. You can find the original DEM file
+in the LITAP <code>extdata</code> folder by using the
+<code><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file()</a></code> function. For more information on the
+<code><a href="../reference/flow_mapper.html">flow_mapper()</a></code> function see the <a href="../LITAP.html">Getting Started Vignette</a>.</p>
 <p>Let’s first copy this file to your working directory with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.copy</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"testELEV.dbf"</span>, package <span class="op">=</span> <span class="st">"LITAP"</span><span class="op">)</span>, <span class="st">"."</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## [1] FALSE</span></code></pre>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.copy</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"testELEV.dbf"</span>, package <span class="op">=</span> <span class="st">"LITAP"</span><span class="op">)</span>, <span class="st">"."</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] TRUE</span></span></code></pre>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/FRDC-SHL/LITAP" class="external-link">LITAP</a></span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## LITAP v0.6.0</span>
-<span class="co">## LITAP is still in development; Help us by submitting bugs/feature requests: </span>
-<span class="co">## http://github.com/FRDC-SHL/LITAP/issues</span></code></pre>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/FRDC-SHL/LITAP" class="external-link">LITAP</a></span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## LITAP v0.7.0</span></span>
+<span><span class="co">## LITAP is still in development; Help us by submitting bugs/feature requests: </span></span>
+<span><span class="co">## http://github.com/FRDC-SHL/LITAP/issues</span></span></code></pre>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Save output to working directory</span>
-<span class="fu"><a href="../reference/flow_mapper.html">flow_mapper</a></span><span class="op">(</span><span class="st">"testELEV.dbf"</span>, grid <span class="op">=</span> <span class="fl">1</span>, nrow <span class="op">=</span> <span class="fl">90</span>, ncol <span class="op">=</span> <span class="fl">90</span>, clean <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> </code></pre></div>
-<pre><code><span class="co">## CALCULATING DIRECTIONS</span></code></pre>
-<pre><code><span class="co">## CALCULATING WATERSHEDS</span></code></pre>
-<pre><code><span class="co">## REMOVING INITIAL PITS</span></code></pre>
-<pre><code><span class="co">## CALCULATING POND (GLOBAL) WATERSHEDS</span></code></pre>
-<pre><code><span class="co">## CALCULATING FILL PATTERNS</span></code></pre>
-<pre><code><span class="co">## INVERTING DEM</span></code></pre>
-<pre><code><span class="co">## CALCULATING INVERTED DIRECTIONS</span></code></pre>
-<pre><code><span class="co">## CALCULATING INVERTED WATERSHEDS</span></code></pre>
-<pre><code><span class="co">## REMOVING INVERTED PITS</span></code></pre>
-<pre><code><span class="co">## CREATING REPORT</span></code></pre>
-<pre><code><span class="co">## Run took: 0.27 min</span></code></pre>
-<p>We will load the rds file (R data files) for the final dems and stats file.</p>
+<code class="sourceCode R"><span><span class="co"># Save output to working directory</span></span>
+<span><span class="fu"><a href="../reference/flow_mapper.html">flow_mapper</a></span><span class="op">(</span><span class="st">"testELEV.dbf"</span>, grid <span class="op">=</span> <span class="fl">1</span>, nrow <span class="op">=</span> <span class="fl">90</span>, ncol <span class="op">=</span> <span class="fl">90</span>, clean <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> </span></code></pre></div>
+<pre><code><span><span class="co">## CALCULATING DIRECTIONS</span></span></code></pre>
+<pre><code><span><span class="co">## CALCULATING WATERSHEDS</span></span></code></pre>
+<pre><code><span><span class="co">## REMOVING INITIAL PITS</span></span></code></pre>
+<pre><code><span><span class="co">## CALCULATING POND (GLOBAL) WATERSHEDS</span></span></code></pre>
+<pre><code><span><span class="co">## CALCULATING FILL PATTERNS</span></span></code></pre>
+<pre><code><span><span class="co">## INVERTING DEM</span></span></code></pre>
+<pre><code><span><span class="co">## CALCULATING INVERTED DIRECTIONS</span></span></code></pre>
+<pre><code><span><span class="co">## CALCULATING INVERTED WATERSHEDS</span></span></code></pre>
+<pre><code><span><span class="co">## REMOVING INVERTED PITS</span></span></code></pre>
+<pre><code><span><span class="co">## CREATING REPORT</span></span></code></pre>
+<pre><code><span><span class="co">## Run took: 0.29 min</span></span></code></pre>
+<p>We will load the rds file (R data files) for the final dems and stats
+file.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">dem</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"./testELEV/flow/dem_fill.rds"</span><span class="op">)</span>
-<span class="va">inverted_dem</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"./testELEV/flow/dem_inverted.rds"</span><span class="op">)</span>
-
-<span class="va">pond_stats</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"./testELEV/flow/stats_pond.rds"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">dem</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"./testELEV/flow/dem_fill.rds"</span><span class="op">)</span></span>
+<span><span class="va">inverted_dem</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"./testELEV/flow/dem_inverted.rds"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">pond_stats</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"./testELEV/flow/stats_pond.rds"</span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="basic-maps">Basic maps<a class="anchor" aria-label="anchor" href="#basic-maps"></a>
 </h2>
-<p>By default, the <code><a href="../reference/flow_plot.html">flow_plot()</a></code> function displays relief maps, using the <code>terrain()</code> and <code>hillShade()</code> functions from the <code>raster</code> package. Note the outer border of dark grey, this represents unknown cells, as the relief calculations do not work on cells without neighbours.</p>
+<p>By default, the <code><a href="../reference/flow_plot.html">flow_plot()</a></code> function displays relief
+maps, using the <code>terrain()</code> and <code>hillShade()</code>
+functions from the <code>raster</code> package. Note the outer border of
+dark grey, this represents unknown cells, as the relief calculations do
+not work on cells without neighbours.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/flow_plot.html">flow_plot</a></span><span class="op">(</span><span class="va">dem</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_plot.html">flow_plot</a></span><span class="op">(</span><span class="va">dem</span><span class="op">)</span></span></code></pre></div>
 <p><img src="flow_plots_files/figure-html/unnamed-chunk-5-1.png" width="90%"></p>
 <p>Alternatively, you can plot elevation data directly.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/flow_plot.html">flow_plot</a></span><span class="op">(</span><span class="va">dem</span>, type <span class="op">=</span> <span class="st">"elevation"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_plot.html">flow_plot</a></span><span class="op">(</span><span class="va">dem</span>, type <span class="op">=</span> <span class="st">"elevation"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="flow_plots_files/figure-html/unnamed-chunk-7-1.png" width="90%"></p>
 </div>
 <div class="section level2">
 <h2 id="subsets">Subsets<a class="anchor" aria-label="anchor" href="#subsets"></a>
 </h2>
-<p>You can zoom in on a particular area of interest by specifying row and column limits:</p>
+<p>You can zoom in on a particular area of interest by specifying row
+and column limits:</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/flow_plot.html">flow_plot</a></span><span class="op">(</span><span class="va">dem</span>, type <span class="op">=</span> <span class="st">"elevation"</span>, rlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">30</span><span class="op">)</span>, clim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">35</span>, <span class="fl">45</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_plot.html">flow_plot</a></span><span class="op">(</span><span class="va">dem</span>, type <span class="op">=</span> <span class="st">"elevation"</span>, rlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">30</span><span class="op">)</span>, clim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">35</span>, <span class="fl">45</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="flow_plots_files/figure-html/unnamed-chunk-9-1.png" width="90%"></p>
 </div>
 <div class="section level2">
 <h2 id="cell-numbering">Cell numbering<a class="anchor" aria-label="anchor" href="#cell-numbering"></a>
 </h2>
-<p>You can number the cells in a plot with <code>seqno = TRUE</code>:</p>
+<p>You can number the cells in a plot with
+<code>seqno = TRUE</code>:</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/flow_plot.html">flow_plot</a></span><span class="op">(</span><span class="va">dem</span>, type <span class="op">=</span> <span class="st">"elevation"</span>, rlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">30</span><span class="op">)</span>, clim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">35</span>, <span class="fl">45</span><span class="op">)</span>, 
-          seqno <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_plot.html">flow_plot</a></span><span class="op">(</span><span class="va">dem</span>, type <span class="op">=</span> <span class="st">"elevation"</span>, rlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">30</span><span class="op">)</span>, clim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">35</span>, <span class="fl">45</span><span class="op">)</span>, </span>
+<span>          seqno <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="flow_plots_files/figure-html/unnamed-chunk-11-1.png" width="90%"></p>
-<p>If you’re only interested in certain cells, specify which ones with <code>cells = c()</code> and <code>highlight = TRUE</code></p>
+<p>If you’re only interested in certain cells, specify which ones with
+<code>cells = c()</code> and <code>highlight = TRUE</code></p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/flow_plot.html">flow_plot</a></span><span class="op">(</span><span class="va">dem</span>, type <span class="op">=</span> <span class="st">"elevation"</span>, rlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">30</span><span class="op">)</span>, clim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">35</span>, <span class="fl">45</span><span class="op">)</span>, 
-          seqno <span class="op">=</span> <span class="cn">TRUE</span>, cells <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3187</span><span class="op">:</span><span class="fl">3193</span>, <span class="fl">3336</span><span class="op">:</span><span class="fl">3343</span><span class="op">)</span>, highlight <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_plot.html">flow_plot</a></span><span class="op">(</span><span class="va">dem</span>, type <span class="op">=</span> <span class="st">"elevation"</span>, rlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">30</span><span class="op">)</span>, clim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">35</span>, <span class="fl">45</span><span class="op">)</span>, </span>
+<span>          seqno <span class="op">=</span> <span class="cn">TRUE</span>, cells <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3187</span><span class="op">:</span><span class="fl">3193</span>, <span class="fl">3336</span><span class="op">:</span><span class="fl">3343</span><span class="op">)</span>, highlight <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="flow_plots_files/figure-html/unnamed-chunk-13-1.png" width="90%"></p>
 </div>
 <div class="section level2">
 <h2 id="flow-directions">Flow directions<a class="anchor" aria-label="anchor" href="#flow-directions"></a>
 </h2>
-<p>You can plot individual flow directions with <code>dir = TRUE</code>.</p>
+<p>You can plot individual flow directions with
+<code>dir = TRUE</code>.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/flow_plot.html">flow_plot</a></span><span class="op">(</span><span class="va">dem</span>, type <span class="op">=</span> <span class="st">"elevation"</span>, rlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">30</span><span class="op">)</span>, clim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">35</span>, <span class="fl">45</span><span class="op">)</span>, 
-          dir <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_plot.html">flow_plot</a></span><span class="op">(</span><span class="va">dem</span>, type <span class="op">=</span> <span class="st">"elevation"</span>, rlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">30</span><span class="op">)</span>, clim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">35</span>, <span class="fl">45</span><span class="op">)</span>, </span>
+<span>          dir <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="flow_plots_files/figure-html/unnamed-chunk-15-1.png" width="90%"></p>
 <p>In combination with cell numbers</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/flow_plot.html">flow_plot</a></span><span class="op">(</span><span class="va">dem</span>, type <span class="op">=</span> <span class="st">"elevation"</span>, rlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">30</span><span class="op">)</span>, clim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">35</span>, <span class="fl">45</span><span class="op">)</span>, 
-          dir <span class="op">=</span> <span class="cn">TRUE</span>, seqno <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_plot.html">flow_plot</a></span><span class="op">(</span><span class="va">dem</span>, type <span class="op">=</span> <span class="st">"elevation"</span>, rlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">30</span><span class="op">)</span>, clim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">35</span>, <span class="fl">45</span><span class="op">)</span>, </span>
+<span>          dir <span class="op">=</span> <span class="cn">TRUE</span>, seqno <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="flow_plots_files/figure-html/unnamed-chunk-17-1.png" width="90%"></p>
-<p>Only for certain cells (this will show the entire flow path that a given cell is on)</p>
+<p>Only for certain cells (this will show the entire flow path that a
+given cell is on)</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/flow_plot.html">flow_plot</a></span><span class="op">(</span><span class="va">dem</span>, type <span class="op">=</span> <span class="st">"elevation"</span>, rlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">30</span><span class="op">)</span>, clim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">35</span>, <span class="fl">45</span><span class="op">)</span>, 
-          dir <span class="op">=</span> <span class="cn">TRUE</span>, cells <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3187</span><span class="op">:</span><span class="fl">3193</span>, <span class="fl">3336</span><span class="op">:</span><span class="fl">3343</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_plot.html">flow_plot</a></span><span class="op">(</span><span class="va">dem</span>, type <span class="op">=</span> <span class="st">"elevation"</span>, rlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">30</span><span class="op">)</span>, clim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">35</span>, <span class="fl">45</span><span class="op">)</span>, </span>
+<span>          dir <span class="op">=</span> <span class="cn">TRUE</span>, cells <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3187</span><span class="op">:</span><span class="fl">3193</span>, <span class="fl">3336</span><span class="op">:</span><span class="fl">3343</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="flow_plots_files/figure-html/unnamed-chunk-19-1.png" width="90%"></p>
 <p>Only for certain cells and show cell numbers</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/flow_plot.html">flow_plot</a></span><span class="op">(</span><span class="va">dem</span>, type <span class="op">=</span> <span class="st">"elevation"</span>, rlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">30</span><span class="op">)</span>, clim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">35</span>, <span class="fl">45</span><span class="op">)</span>, 
-          dir <span class="op">=</span> <span class="cn">TRUE</span>, seqno <span class="op">=</span> <span class="cn">TRUE</span>, cells <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3187</span><span class="op">:</span><span class="fl">3193</span>, <span class="fl">3336</span><span class="op">:</span><span class="fl">3343</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_plot.html">flow_plot</a></span><span class="op">(</span><span class="va">dem</span>, type <span class="op">=</span> <span class="st">"elevation"</span>, rlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">30</span><span class="op">)</span>, clim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">35</span>, <span class="fl">45</span><span class="op">)</span>, </span>
+<span>          dir <span class="op">=</span> <span class="cn">TRUE</span>, seqno <span class="op">=</span> <span class="cn">TRUE</span>, cells <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3187</span><span class="op">:</span><span class="fl">3193</span>, <span class="fl">3336</span><span class="op">:</span><span class="fl">3343</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="flow_plots_files/figure-html/unnamed-chunk-21-1.png" width="90%"></p>
 <p>Highlight the cells of interest</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/flow_plot.html">flow_plot</a></span><span class="op">(</span><span class="va">dem</span>, type <span class="op">=</span> <span class="st">"elevation"</span>, rlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">30</span><span class="op">)</span>, clim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">35</span>, <span class="fl">45</span><span class="op">)</span>, 
-          dir <span class="op">=</span> <span class="cn">TRUE</span>, seqno <span class="op">=</span> <span class="cn">TRUE</span>, cells <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3187</span><span class="op">:</span><span class="fl">3193</span>, <span class="fl">3336</span><span class="op">:</span><span class="fl">3343</span><span class="op">)</span>, highlight <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_plot.html">flow_plot</a></span><span class="op">(</span><span class="va">dem</span>, type <span class="op">=</span> <span class="st">"elevation"</span>, rlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">30</span><span class="op">)</span>, clim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">35</span>, <span class="fl">45</span><span class="op">)</span>, </span>
+<span>          dir <span class="op">=</span> <span class="cn">TRUE</span>, seqno <span class="op">=</span> <span class="cn">TRUE</span>, cells <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3187</span><span class="op">:</span><span class="fl">3193</span>, <span class="fl">3336</span><span class="op">:</span><span class="fl">3343</span><span class="op">)</span>, highlight <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="flow_plots_files/figure-html/unnamed-chunk-23-1.png" width="90%"></p>
 </div>
 <div class="section level2">
 <h2 id="flow-directions-by-upslope-area">Flow directions by upslope area<a class="anchor" aria-label="anchor" href="#flow-directions-by-upslope-area"></a>
 </h2>
-<p>You can filter the flow directions to show only those with an upslope area greater than some threshold:</p>
+<p>You can filter the flow directions to show only those with an upslope
+area greater than some threshold:</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/flow_plot.html">flow_plot</a></span><span class="op">(</span><span class="va">dem</span>, type <span class="op">=</span> <span class="st">"elevation"</span>, dir <span class="op">=</span> <span class="cn">TRUE</span>, upslope_threshold <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_plot.html">flow_plot</a></span><span class="op">(</span><span class="va">dem</span>, type <span class="op">=</span> <span class="st">"elevation"</span>, dir <span class="op">=</span> <span class="cn">TRUE</span>, upslope_threshold <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span></code></pre></div>
 <p><img src="flow_plots_files/figure-html/unnamed-chunk-25-1.png" width="90%"></p>
 <div class="section level3">
 <h3 id="comparing-different-upslope-thresholds">Comparing different upslope thresholds:<a class="anchor" aria-label="anchor" href="#comparing-different-upslope-thresholds"></a>
@@ -208,7 +225,7 @@
 </h3>
 <p>To look at ridge lines, use the inverted dem files</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/flow_plot.html">flow_plot</a></span><span class="op">(</span><span class="va">inverted_dem</span>, type <span class="op">=</span> <span class="st">"elevation"</span>, dir <span class="op">=</span> <span class="cn">TRUE</span>, upslope_threshold <span class="op">=</span> <span class="fl">250</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_plot.html">flow_plot</a></span><span class="op">(</span><span class="va">inverted_dem</span>, type <span class="op">=</span> <span class="st">"elevation"</span>, dir <span class="op">=</span> <span class="cn">TRUE</span>, upslope_threshold <span class="op">=</span> <span class="fl">250</span><span class="op">)</span></span></code></pre></div>
 <p><img src="flow_plots_files/figure-html/unnamed-chunk-29-1.png" width="90%"></p>
 </div>
 </div>
@@ -217,15 +234,15 @@
 </h2>
 <p>You can also highlight watersheds</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/flow_plot.html">flow_plot</a></span><span class="op">(</span>db <span class="op">=</span> <span class="va">dem</span>, type <span class="op">=</span> <span class="st">"elevation"</span>, shed <span class="op">=</span> <span class="cn">TRUE</span>, shed_type <span class="op">=</span> <span class="st">"initial"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Initial Watersheds"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_plot.html">flow_plot</a></span><span class="op">(</span>db <span class="op">=</span> <span class="va">dem</span>, type <span class="op">=</span> <span class="st">"elevation"</span>, shed <span class="op">=</span> <span class="cn">TRUE</span>, shed_type <span class="op">=</span> <span class="st">"initial"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Initial Watersheds"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="flow_plots_files/figure-html/unnamed-chunk-31-1.png" width="90%"></p>
 <div class="section level3">
 <h3 id="watershed-pits">Watershed pits<a class="anchor" aria-label="anchor" href="#watershed-pits"></a>
 </h3>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/flow_plot.html">flow_plot</a></span><span class="op">(</span>db <span class="op">=</span> <span class="va">dem</span>, type <span class="op">=</span> <span class="st">"elevation"</span>, shed <span class="op">=</span> <span class="cn">TRUE</span>, shed_type <span class="op">=</span> <span class="st">"initial"</span>, 
-          pits <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_plot.html">flow_plot</a></span><span class="op">(</span>db <span class="op">=</span> <span class="va">dem</span>, type <span class="op">=</span> <span class="st">"elevation"</span>, shed <span class="op">=</span> <span class="cn">TRUE</span>, shed_type <span class="op">=</span> <span class="st">"initial"</span>, </span>
+<span>          pits <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="flow_plots_files/figure-html/unnamed-chunk-33-1.png" width="90%"></p>
 </div>
 <div class="section level3">
@@ -235,7 +252,8 @@
 <li>Initial = no removal</li>
 <li>Local = smoothing, only small pits removed</li>
 <li>Pond = looking at overflow in 2nd pit removal process</li>
-<li>Fill = looking at overflow in a second way in 3rd pit removal process</li>
+<li>Fill = looking at overflow in a second way in 3rd pit removal
+process</li>
 </ul>
 <p><img src="flow_plots_files/figure-html/unnamed-chunk-35-1.png" width="90%"></p>
 </div>
@@ -243,14 +261,14 @@
 <h3 id="watersheds-by-flow-paths">Watersheds by flow paths<a class="anchor" aria-label="anchor" href="#watersheds-by-flow-paths"></a>
 </h3>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/flow_plot.html">flow_plot</a></span><span class="op">(</span>db <span class="op">=</span> <span class="va">dem</span>, type <span class="op">=</span> <span class="st">"elevation"</span>, shed <span class="op">=</span> <span class="cn">TRUE</span>, 
-          shed_type <span class="op">=</span> <span class="st">"initial"</span>, dir <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_plot.html">flow_plot</a></span><span class="op">(</span>db <span class="op">=</span> <span class="va">dem</span>, type <span class="op">=</span> <span class="st">"elevation"</span>, shed <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span>          shed_type <span class="op">=</span> <span class="st">"initial"</span>, dir <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="flow_plots_files/figure-html/unnamed-chunk-37-1.png" width="90%"></p>
 <p>Subsets still apply</p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/flow_plot.html">flow_plot</a></span><span class="op">(</span>db <span class="op">=</span> <span class="va">dem</span>, type <span class="op">=</span> <span class="st">"elevation"</span>, shed <span class="op">=</span> <span class="cn">TRUE</span>, 
-          rlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">30</span>,<span class="fl">60</span><span class="op">)</span>, clim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">45</span>,<span class="fl">75</span><span class="op">)</span>,
-          shed_type <span class="op">=</span> <span class="st">"initial"</span>, dir <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_plot.html">flow_plot</a></span><span class="op">(</span>db <span class="op">=</span> <span class="va">dem</span>, type <span class="op">=</span> <span class="st">"elevation"</span>, shed <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span>          rlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">30</span>,<span class="fl">60</span><span class="op">)</span>, clim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">45</span>,<span class="fl">75</span><span class="op">)</span>,</span>
+<span>          shed_type <span class="op">=</span> <span class="st">"initial"</span>, dir <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="flow_plots_files/figure-html/unnamed-chunk-39-1.png" width="90%"></p>
 </div>
 <div class="section level3">
@@ -262,13 +280,13 @@
 <h3 id="look-at-pour-points">Look at pour points<a class="anchor" aria-label="anchor" href="#look-at-pour-points"></a>
 </h3>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/flow_plot.html">flow_plot</a></span><span class="op">(</span>db <span class="op">=</span> <span class="va">dem</span>, type <span class="op">=</span> <span class="st">"elevation"</span>, shed <span class="op">=</span> <span class="cn">TRUE</span>, shed_type <span class="op">=</span> <span class="st">"pond"</span>, 
-          stats <span class="op">=</span> <span class="va">pond_stats</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_plot.html">flow_plot</a></span><span class="op">(</span>db <span class="op">=</span> <span class="va">dem</span>, type <span class="op">=</span> <span class="st">"elevation"</span>, shed <span class="op">=</span> <span class="cn">TRUE</span>, shed_type <span class="op">=</span> <span class="st">"pond"</span>, </span>
+<span>          stats <span class="op">=</span> <span class="va">pond_stats</span><span class="op">)</span></span></code></pre></div>
 <p><img src="flow_plots_files/figure-html/unnamed-chunk-42-1.png" width="90%"></p>
 <p>Take a closer look</p>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/flow_plot.html">flow_plot</a></span><span class="op">(</span>db <span class="op">=</span> <span class="va">dem</span>, type <span class="op">=</span> <span class="st">"elevation"</span>, shed <span class="op">=</span> <span class="cn">TRUE</span>, shed_type <span class="op">=</span> <span class="st">"pond"</span>,
-          rlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">40</span><span class="op">)</span>, clim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">110</span>, <span class="fl">150</span><span class="op">)</span>, stats <span class="op">=</span> <span class="va">pond_stats</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_plot.html">flow_plot</a></span><span class="op">(</span>db <span class="op">=</span> <span class="va">dem</span>, type <span class="op">=</span> <span class="st">"elevation"</span>, shed <span class="op">=</span> <span class="cn">TRUE</span>, shed_type <span class="op">=</span> <span class="st">"pond"</span>,</span>
+<span>          rlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">40</span><span class="op">)</span>, clim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">110</span>, <span class="fl">150</span><span class="op">)</span>, stats <span class="op">=</span> <span class="va">pond_stats</span><span class="op">)</span></span></code></pre></div>
 <p><img src="flow_plots_files/figure-html/unnamed-chunk-44-1.png" width="90%"></p>
 </div>
 </div>
@@ -291,7 +309,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
 </div>
 
       </footer>
