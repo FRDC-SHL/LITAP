@@ -15,11 +15,12 @@ vignette: >
 knitr::opts_chunk$set(fig.width = 15, fig.height = 10, eval = TRUE)
 ```
 
-
 This is a non-exclusive list of known differences between LITAP and 
 R. A. (Bob) MacMillan's original LandMapR. 
 Some differences reflect differences in the programming techniques, 
-some reflect deleberate changes. 
+some reflect deliberate changes. 
+
+### General differences
 
 #### Missing variables
 
@@ -27,6 +28,11 @@ Some variables are not included in LITAP if they are not necessary.
 For example, the inverted DEMs originally included Vol2Fl, MM2Fl and PArea, 
 but LITAP does not include these values because they aren't calculated specifically 
 for the inverted DEM, but are identical to those in the non-inverted DEM.
+
+#### Renamed variables
+
+Some variables have been renamed in LITAP for consistency. See the [variables](variables.html)
+article for an overview 
 
 #### Flat areas (where all cells are the same elevation)
 
@@ -47,3 +53,40 @@ Adding changes in flow direction to small differences in rounding error can
 result in larger differences when adding up measures over all cells in a watershed.
 These should be considered stochastic differences. However if things look really 
 different, contact us and let us know!
+
+### `flow_mapper()` and FlowMapR
+
+#### Pond/Fill/Pit files
+
+- `PitAreas` sometimes larger because of LITAP works with elevation slices. `PitArea` is all cells upto `PourElev.` LandMapR worked by spiralling up the cells. `PitArea` is total area up to `PourPoint` cell (not necessarily all cells at the `PourElev`)
+- `Nextpit` is often incorrect for Pond Data (not sure why)
+- `DrainsTo` isn't always updated in original LandMapR (not sure if represents something missing in LITAP or bug in LandMapR)
+- Exact location of pour point between two watersheds is sometimes off by a cell or two (out rec and in rec) due to tie breaking
+- `PitRecs` in big patches of equal elevation are in the centre of the patch in LITAP, but at the bottom of the patch in FlowMapR
+- Sometimes rounding difference on the `InElev` and/or `PourElev.`
+
+#### Dem file
+- The calculations for `Vol2Fl`/`mm2fl`/`parea` are sometimes off, if the upslope calculations are slightly different (generally due to tie breaking)
+
+#### idem/ipit
+- `DrainsTo` in LITAP is a real shed, whereas in FlowMapR it is often 0, not sure of why the differences
+
+### `form_mapper()` and FormMapR
+
+- Underlying differences in upslope area can have cascade effects on `form_mapper()` calculations
+- The total area of a given cell can sometimes be off between LITAP and FormMapR due to in tie-breaking determining which cell is evaluated first.
+
+
+### `wepp_mapper()` and WeppMapR
+
+In the original WeppMapR, there was a bug resulting in some pit cells being marked as belonging to channels they were nowhere near. This may result in some differences between the output of the two programs.
+
+Note also that the use of "top", "left", and "right" *is* consistent between
+LITAP and FlowMapR, but its usage isn't quite consistent within the programs.
+"Top" refers to coming in from the top to the cell (direction of flow is downwards).
+Whereas "right" and "left" refer to the direction of flow (towards the right, coming
+in to the cell from the left and vice versa). We leave this as is to be consistent
+with FlowMapR but may change this in future.
+
+Further, there are still some discrepancies in the exactly how different segments and
+hillslopes are named which has yet to be figured out.

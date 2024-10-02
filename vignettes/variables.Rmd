@@ -76,10 +76,10 @@ These variables are common to many files in LITAP and so for the sake of brevity
 These variables correspond to dem files, meaning there is a value for each cell 
 in the dem file. 
 
-```{r, message = FALSE}
+```{r generic, message = FALSE}
 p <- tribble(
   ~param, ~desc, ~landmapr,
-  "seqno",      "Cell number identifing a particular cell in the DEM", "SeqNo",
+  "seqno",      "Cell number identifying a particular cell in the DEM", "SeqNo",
   "x",          "The horizontal (longitudinal) measure of position in the units of the original dem (or metres, if not supplied)", "--",
   "y",          "The vertical (latitudinal) measure of position in the units of the original dem (or metres, if not supplied)", "--",
   "row",        "Row number",  "Row",
@@ -114,7 +114,7 @@ Variables in `flow/dem_fill` (corresponds to FlowMapR's `XXXdem.dbf`).
 
 This list only includes variables not already described above in the [Generic DEMs](#generic-dem).
 
-```{r}
+```{r flow_dem}
 
 f <- readRDS(system.file("extdata", "testELEV", "flow", "dem_fill.rds", package = "LITAP"))
 #names(f)[!names(f) %in% c(all$param)]
@@ -137,9 +137,9 @@ p <- tribble(
   "hill_r_dir",    "Direction the row slope is facing (2 = east facing, 4 = west facing", NA_character_,
   "hill_c_dir",    "Direction the col slope is facing (1 = north facing, 3 = south facing", NA_character_,
   "hill_r_n",      "Number of hillslopes in the focal row. Hillslope number increments when the slope changes from down to up and vice versa.", NA_character_,
-  "hill_r_cell",   "Order number of a cell within a row hillslope", NA_character_,
+  "hill_r_cell",   "Order number of a cell within a row hillslope.", NA_character_,
   "hill_c_n",      "Number of hillslopes in the focal column. Hillslope number increments when the slope changes from down to up and vice versa.", NA_character_,
-  "hill_c_cell",   "Order number of a cell within a column hillslope", NA_character_
+  "hill_c_cell",   "Order number of a cell within a column hillslope.", NA_character_
   )
 
 all <- bind_rows(all, p)
@@ -163,7 +163,7 @@ This list only includes variables not already described above in the [Generic DE
 they weren't calculated specifically for the inverted DEM, 
 but were identical to those in the non-inverted DEM.
 
-```{r}
+```{r flow_idem}
 f <- readRDS(system.file("extdata", "testELEV", "flow", "dem_inverted.rds", package = "LITAP"))
 #names(f)[!names(f) %in% c(all$param)]
 
@@ -190,7 +190,7 @@ for `flow_mapper()`.
 
 #### Stats files
 
-```{r}
+```{r flow_stats}
 tibble(param = c("stats_pit", "stats_pond", "stats_fill", "stats_inverted"),
        landmapr = c("XXXpit", "XXXpond", "XXXfill", "XXXipit"),
        desc = c("Information on final pits", 
@@ -553,7 +553,9 @@ This list only includes variables not already described above in the [Generic DE
 be in the `dem_fuzc` file. Here we show some common elements included in the
 CRULE files included in the original LandMapR and `LITAP`. Be aware, however,
 that these can be custom created and could therefore represent something else
-entirely.
+entirely. These values represent the *probability/likelihood* of the cell being 
+that particular landform element. For example, `lcr` is the probability of being
+a "Level crest".
 
 
 ```{r}
@@ -570,26 +572,32 @@ p <- tribble(
   "cbs", "CBS", "Convergent back slope",
   "ter", "TER", "Terrace",
   "sad", "SAD", "Saddle",
-  "mde", "MDE", "Mid slope depression",
+  "mde", "MDE", "Mid-slope depression",
   "fsl", "FSL", "Foot slope",
   "tsl", "TSL", "Toe slope", 
   "fan", "FAN", "Fan",
-  "lsm", "LSM", "Lower slope mound",
+  "lsm", "LSM", "Lower-slope mound",
   "lls", "LLS", "Level lower slope",
   "dep", "DEP", "Lower depression",
+  "cst", "--", "Crest",
+  "ups", "--", "Upper slope",
+  "mid", "--", "Mid slope",
+  "low", "--", "Lower slope",
+  "dep", "--", "Depression",
   
   "max_facet",      "max_facet",   glue("Number identifying the landform ",
                                         "element/facet which has the max value ",
                                         "for this cell (most likely facet to ",
                                         "occur)"),
-  "max_value",      "--",          "The value of the maximum facet",
+  "max_value",      "--",          glue("The highest computed likelihood value of ",
+                                        "the maximum facet"),
   "max_2nd_facet",  "next_facet",  glue("Number identifying the landform",
                                         "element/facet which has the second ",
-                                        "highest value for this cell ",
+                                        "highest likelihood value for this cell ",
                                         "(second most likely facet to occur)"),
   "max_2nd_value",      "--",      "The value of the second highest facet",
-  "max_facet_name",     "--",      "3-letter code of the max facet",
-  "max_2nd_facet_name", "--",      "3-letter code of the second highest facet"
+  "max_facet_name",     "--",      "3-letter code of the facet with the highest likelihood",
+  "max_2nd_facet_name", "--",      "3-letter code of the facet with the second highest likelihood"
   )
 
 all <- bind_rows(all, p)
@@ -602,7 +610,10 @@ p %>%
   tab_footnote(footnote = glue("As described in MacMillian et al. (2000) ",
                                "and MacMillian (2003)"), 
                location = cells_body(columns = "desc", 
-                                     rows = nchar(param) == 3))
+                                     rows = 1:15)) |>
+  tab_footnote(footnote = "As described in Sheng et al. (2011)",
+               location = cells_body(columns = "desc",
+                                     rows = 16:20))
                                     
 ```
 
@@ -617,6 +628,8 @@ p_facet <- filter(all, !param %in%
 
 crule <- system.file("extdata", "crule.dbf", package = "LITAP") %>%
   foreign::read.dbf() %>%
+  bind_rows(system.file("extdata", "c7rule.dbf", package = "LITAP") %>%
+              foreign::read.dbf()) %>%
   select(F_NAME, FUZATTR) %>%
   mutate(across(everything(), tolower)) %>%
   unlist() %>%
@@ -625,8 +638,6 @@ crule <- system.file("extdata", "crule.dbf", package = "LITAP") %>%
 
 p1_facet <- c(LITAP:::cols_order$facet,
               crule)
-
-  
 
 if(!all(p_facet %in% p1_facet) | !all(p1_facet %in% p_facet)) {
   
@@ -645,15 +656,244 @@ if(!all(p_facet %in% p1_facet) | !all(p1_facet %in% p_facet)) {
 
 ```
 
-### Extra Data files (`all_XXX`, etc.)
+## `wepp_mapper()` variables
+
+The following describes variables output by `wepp_mapper()` to various files in the `wepp` folder, e.g., `dem_wepp.csv` or `dem_wepp.rds` depending on the 
+file format chosen.
+
+### `wepp/dem_wepp`
+Variables in `wepp/dem_wepp` (corresponds to FlowMapR's `XXXwepp.dbf`).
+
+This list only includes variables not already described above in the [Generic DEMs](#generic-dem).
+
+**Note:** that the use of "top", "left", and "right" isn't quite consistent. 
+"Top" refers to coming in from the top to the cell (direction of flow is downwards).
+Whereas "right" and "left" refer to the direction of flow (towards the right, coming
+in to the cell from the left and vice versa). We leave this as is to be consistent
+with FlowMapR but may change this in future.
+
+```{r}
+f <- readRDS(system.file("extdata", "testELEV", "wepp", "dem_wepp.rds", package = "LITAP"))
+#names(f)[!names(f) %in% c(all$param)]
+
+p <- tribble(
+  ~param,       ~landmapr,    ~desc,
+  "seedtype",   "SEEDTYPE",   glue::glue(
+    "1 - Channel start ",
+      "(where the upslope value is greater than the `upslope_threshold` argument<br>",
+    "2 - Channel junction (where two channels meet)<br>",
+    "3 - Cell upslope of a junction which is *not* the main branch (end point of a segment)<br>",
+    "4 - Split cell ",
+      "(where a channel is split to the maximum `chan_length` value; end point of a segment)<br>", 
+    "5 - Pit cell (end point of a segment)<br>",
+    "6 - Channel end (end point of a segment)<br>",
+    "7 - Cell upslope of a junction identifying the main branch ",
+      "(has the largest upslope area; endpoint of a segment)<br>",
+    "8 - Cell immediate down stream from either a depression (pit) or a split-type seed cell [start of new channel segment]"),
+  "shed_no",    "SHED_NO",   "The ID of the channel segment which a cell eventually flows into",
+  "shed_side",  "SHED_SIDE",  "The side from which this cell eventually flows into the channel. channel cell from the top (1) of the channel (downwards), from the left (towards the right; 2), or from the right (towards the left; 3) of the channel.",
+  "hill_no",    "HILL_HO",   "The ID of a hillside based on where the cells flow into a channel",
+  "chan_no",    "CHAN_NO",   "The ID of a channel",
+  "chan_side",  "CHAN_SIDE",  "A non-channel cell which drains into a channel cell from the top (1) of the channel (downwards), from the left (towards the right; 2), or from the right (towards the left; 3) of the channel.",
+  "segment_no", "SEGMENT_NO",   "ID of an individual channel segment",
+  "l2st",       "L2ST",    "Line-of-sight distance from a cell to the cell where it flows into the channel",
+  )
+
+all <- bind_rows(all, p)
+
+check_missing(f, all, "dem_wepp")
+
+p %>%
+  gt() %>%
+  litap_style() %>%
+  fmt_markdown(columns = "desc")
+                                    
+```
+
+
+
+### `wepp/struct`
+Variables in `wepp/struct` (corresponds to FlowMapR's `XXXstruc.dbf`).
+
+This list only includes variables not already described above in the [Generic DEMs](#generic-dem).
+
+**Note:** that the use of "top", "left", and "right" isn't quite consistent. 
+"Top" refers to coming in from the top to the cell (direction of flow is downwards).
+Whereas "right" and "left" refer to the direction of flow (towards the right, coming
+in to the cell from the left and vice versa). We leave this as is to be consistent
+with FlowMapR but may change this in future.
+
+```{r}
+f <- readRDS(system.file("extdata", "testELEV", "wepp", "struct.rds", package = "LITAP"))
+#names(f)[!names(f) %in% c(all$param)]
+
+p <- tribble(
+  ~param,       ~landmapr,    ~desc,
+  "element_no",   "Element_no",   "ID of the channel or impoundment element",
+  "ele_type",    "Ele_type",   "Channel type (2) or impoundment type (3)",
+  "left_hill",  "Left_hill",  "The ID of hill slope which drains in",
+  "right_hill", "Right_hill", "The ID of hill slope which drains in",
+  "top_hill", "Top_hill", "The ID of hill slope which drains in",
+  "left_chan", "Left_chan", "The ID of the channel segment which drains in",
+  "right_chan", "Right_chan", "The ID of the channel segment which drains in",
+  "top_chan", "Top_chan", "The ID of the channel segment which drains in",
+  "left_imp", "Left_imp", "The ID of the impoundment which drains in",
+  "right_imp", "Right_imp", "The ID of the impoundment which drains in",
+  "top_imp", "Top_imp", "The ID of the impoundment which drains in",
+  "comments", "Comment", "Description of the element"
+  )
+
+all <- bind_rows(all, p)
+
+check_missing(f, all, "struct")
+
+p %>%
+  gt() %>%
+  litap_style() %>%
+  fmt_markdown(columns = "desc")
+                                    
+```
+
+
+### `wepp/segs`
+Variables in `wepp/segs` (corresponds to FlowMapR's `XXXsegs.dbf`).
+
+This list only includes variables not already described above in the [Generic DEMs](#generic-dem).
+
+**Note:** that the use of "top", "left", and "right" isn't quite consistent. 
+"Top" refers to coming in from the top to the cell (direction of flow is downwards).
+Whereas "right" and "left" refer to the direction of flow (towards the right, coming
+in to the cell from the left and vice versa). We leave this as is to be consistent
+with FlowMapR but may change this in future.
+
+```{r}
+f <- readRDS(system.file("extdata", "testELEV", "wepp", "segs.rds", package = "LITAP"))
+#names(f)[!names(f) %in% c(all$param)]
+
+p <- tribble(
+  ~param,         ~landmapr,      ~desc,
+  "initial_id",   "Initial_id",   "Original ID for a segment before sorting",
+  "down_seg",     "Down_seg",     "Downslope channel segment ID this segment drains into",
+  "sort_order",   "Sort_order",   "Topological order of sorting channel segments",
+  "final_id",     "Final_id",     "Final ID of a segment",
+  "drain_seqno",  "Drain_seqno",  "The number of the first cell where this segment drains",
+  "start_seqno",  "Start_seqno",  "Number of the first cell in this segment",
+  "start_row",    "Start_row",    "Row of the first cell in this segment",
+  "start_col",    "Start_col",    "Column of the first cell in this segment",
+  "start_type",   "Start_type",   "Seed type of this start of the segment (see `seedtype` above under `wepp/dem_wepp`)",
+  "start_elev",   "Start_elev",   "Elevation of the first cell in this segment",
+  "start_ddir",   "Start_ddir",   "Direction of water flow of the first cell in this segment",
+  "end_seqno",    "End_seqno",    "Number of the last cell in this segment",
+  "end_row",      "End_row",      "Row of the last cell in this segment",
+  "end_col",      "End_col",      "Column of the last cell in this segment",
+  "end_type",     "End_type",     "Seed type of this end of the segment (see `seedtype` above under `wepp/dem_wepp`)",
+  "end_elev",     "End_elev",     "Elevation of the last cell in this segment",
+  "impound",      "Impound",      "Whether this segment is an impoundment",
+  "center_seg",   "Center_seg",   "ID of the segment drainign in from the top",
+  "center_seqno", "Center_seqno", "Cell of the segment draining in from the top",
+  "right_seg",    "Right_seg",    "ID of the segment drainign in right",
+  "right_seqno",  "Right_seqno",  "Cell of the segment draining in right",
+  "left_seg",     "Left_seg",     "ID of the segment drainign in left",
+  "left_seqno",   "Left_seqno",   "Cell of the segment draining in left",
+  "len_cells",    "Len_cells",    "Length of the segment in cells",
+  "len_meters",   "Len_meters",   "Length of the segment in meters",
+  "flow2crow",    "Flow2crow",    "Empy",
+  "chan_shape",   "Chan_shape",   "Empy",
+  "width_m",      "Width_m",      "Empy"
+  )
+
+all <- bind_rows(all, p)
+
+check_missing(f, all, "segs")
+
+p %>%
+  gt() %>%
+  litap_style() %>%
+  fmt_markdown(columns = "desc")
+                                    
+```
+
+### `wepp/prof`
+Variables in `wepp/prof` (corresponds to FlowMapR's `XXXprof.dbf`).
+
+This list only includes variables not already described above in the [Generic DEMs](#generic-dem).
+
+This is an intermediate file and isn't documented by LandMapR.
+
+### `wepp/hill`
+Variables in `wepp/hill` (corresponds to FlowMapR's `XXXhill.dbf`).
+
+This list only includes variables not already described above in the [Generic DEMs](#generic-dem).
+
+**Note:** that the use of "top", "left", and "right" isn't quite consistent. 
+"Top" refers to coming in from the top to the cell (direction of flow is downwards).
+Whereas "right" and "left" refer to the direction of flow (towards the right, coming
+in to the cell from the left and vice versa). We leave this as is to be consistent
+with FlowMapR but may change this in future.
+
+```{r}
+f <- readRDS(system.file("extdata", "testELEV", "wepp", "hill.rds", package = "LITAP"))
+#names(f)[!names(f) %in% c(all$param)]
+
+p <- tribble(
+  ~param,         ~landmapr,      ~desc,
+  "hill_width", "Hill_width", "Length of the WEPP channel that this hillslope drains to for left and rigth hill slopes",
+  "hill_area", "Hill_area", "The area of the hill slope",
+  "max_len", "Max_len", "Maximum distance to the channel",
+  "wepp_len", "Wepp_len", "`hill_area` / `hill_width`",
+  "num_points", "Num_points", "Number of points along the profile at which slope and aspect were calculated",
+  "profile", "Profile", "Profile: Sample of mean values for slope gradient and aspect at different relative distances along the feature"
+  )
+
+all <- bind_rows(all, p)
+
+check_missing(f, all, "hill")
+
+p %>%
+  gt() %>%
+  litap_style() %>%
+  fmt_markdown(columns = "desc")
+                                    
+```
+
+
+### `wepp/chan`
+Variables in `wepp/chan` (corresponds to FlowMapR's `XXXchan.dbf`).
+
+This list only includes variables not already described above in the [Generic DEMs](#generic-dem).
+
+This is similar to the `wepp/hill` but with the channels, rather than hillslopes.
+
+```{r}
+f <- readRDS(system.file("extdata", "testELEV", "wepp", "chan.rds", package = "LITAP"))
+#names(f)[!names(f) %in% c(all$param)]
+
+p <- tribble(
+  ~param,         ~landmapr,      ~desc,
+  "chan_len", "Chan_len", "The area of the channel (length * cell width)",
+  "mean_slope_pct", "Mean_slope", "The mean of the slope gradient across all cells in the channel",
+  "gen_slope_pct", "Gen_slope", "The general mean of the slope, as the absolute vertical drop divided by the length (area) of the channel."
+  )
+
+all <- bind_rows(all, p)
+
+check_missing(f, all, "hill")
+
+p %>%
+  gt() %>%
+  litap_style() %>%
+  fmt_markdown(columns = "desc")
+                                    
+```
+
+## Extra Data files (`all_XXX`, etc.)
 
 There are several extra data files created at the end of `facet_mapper()`
 which are not part of the original FlowMapR runs, but are adapted from an 
 Access workflow developed by Li, Sheng. 
 
-Variables in `all_XXX.xlsx` (corresponds to Li, Sheng's `XXX_AllData.txt`).
-
-This list only includes variables not already described above in the [Generic DEMs](#generic-dem).
+Variables in `all_XXX.xlsx` correspond to Li, Sheng's `XXX_AllData.txt` and
+are collected from variables in the other LITAP outputs.
 
 **Note**: We don't calculate the `lk_XXX` variables in the original `XXX_ALLData.txt`
 files because they correspond to columns already included in the data. 
@@ -670,3 +910,9 @@ Macmillan, R.A. (2003). LandMapR Software Toolkit- C++ Version (2003): User’s 
 MacMillan, R.A., Pettapiece, W.W., Nolan, S.C., & Goddard, T.W. 2000. A generic procedure for automatically segmenting landforms into landform elements using DEMs, heuristic rules and fuzzy logic– Fuzzy sets and Systems 113: 81–109.
 
 Quinn, P., K. Beven, P. Chevallier and O. Planchon. 1991. The prediction of hillslope flow paths for distributed hydrological modelling using digital terrain models. Hydrological Processes. 5: 59-79
+
+Sheng Li, David A. Lobb, Brian G. McConkey, R. A. MacMillan, Alan Moulin,
+and Walter R. Fraser. 2011. Extracting topographic characteristics of landforms
+typical of Canadian agricultural landscapes for agri-environmental modeling.
+I. Methodology. Canadian Journal of Soil Science 91(2), 251-266.
+<https://doi.org/10.4141/CJSS10080>.
