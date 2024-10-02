@@ -1,5 +1,5 @@
 
-# Create local data
+# Create local data - BUILD PACKAGE FIRST!!!
 source("data-raw/create_rules.R")
 source("data-raw/internal_data.R")
 source("data-raw/create_data.R")

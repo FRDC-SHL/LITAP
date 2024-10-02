@@ -6,45 +6,45 @@ Run options:
   upslope_threshold = 300
 
 
-Run started: 2024-10-01 19:54:33.360487
+Run started: 2024-10-02 09:35:08.284425
 
-Started Marking channels and channel junction at: 2024-10-01 19:54:33.360914
+Started Marking channels and channel junction at: 2024-10-02 09:35:08.285083
   Total time: 0
-Started Cut channels fix elevation at: 2024-10-01 19:54:33.499883
+Started Cut channels fix elevation at: 2024-10-02 09:35:08.324111
   Total time: 0
-Started Merge/thin adjacent channels at: 2024-10-01 19:54:33.537445
+Started Merge/thin adjacent channels at: 2024-10-02 09:35:08.350222
   Total time: 0
-Started Re-calculate upslopes at: 2024-10-01 19:54:33.575425
-  Total time: 0.04
-Started Re-mark Channels at: 2024-10-01 19:54:35.803829
+Started Re-calculate upslopes at: 2024-10-02 09:35:08.375346
+  Total time: 0.03
+Started Re-mark Channels at: 2024-10-02 09:35:10.245652
   Total time: 0
-Started Mark Pits at: 2024-10-01 19:54:35.865736
+Started Mark Pits at: 2024-10-02 09:35:10.30505
   Total time: 0
-Started Split Segments at: 2024-10-01 19:54:35.911537
+Started Split Segments at: 2024-10-02 09:35:10.337807
   Total time: 0
-Started Flow to channels at: 2024-10-01 19:54:36.031924
+Started Flow to channels at: 2024-10-02 09:35:10.367611
   Total time: 0
-Started Calculate segments at: 2024-10-01 19:54:36.055297
+Started Calculate segments at: 2024-10-02 09:35:10.41765
+  Total time: 0
+Started Order segments at: 2024-10-02 09:35:10.583714
+  Total time: 0
+Started Redo and Add ddir at: 2024-10-02 09:35:10.664783
+  Total time: 0
+Started Find upslope segments at: 2024-10-02 09:35:10.737277
+  Total time: 0
+Started Compute and label hillslope segments at: 2024-10-02 09:35:10.840432
   Total time: 0.01
-Started Order segments at: 2024-10-01 19:54:36.929603
+Started Renumber segments at: 2024-10-02 09:35:11.464662
   Total time: 0
-Started Redo and Add ddir at: 2024-10-01 19:54:37.030365
+Started Build WEPP structure file at: 2024-10-02 09:35:11.50857
   Total time: 0
-Started Find upslope segments at: 2024-10-01 19:54:37.095472
+Started Compute aspect and slope for WEPP at: 2024-10-02 09:35:11.552158
+  Total time: 0
+Started Calculate 3 measures of channel length at: 2024-10-02 09:35:11.634774
   Total time: 0.01
-Started Compute and label hillslope segments at: 2024-10-01 19:54:37.905826
-  Total time: 0.02
-Started Renumber segments at: 2024-10-01 19:54:38.833015
-  Total time: 0
-Started Build WEPP structure file at: 2024-10-01 19:54:38.880339
-  Total time: 0
-Started Compute aspect and slope for WEPP at: 2024-10-01 19:54:38.946093
-  Total time: 0
-Started Calculate 3 measures of channel length at: 2024-10-01 19:54:39.134619
-  Total time: 0.02
-Started Calculate hill profiles at: 2024-10-01 19:54:40.147224
-  Total time: 0.02
-Started Calculate channel stats at: 2024-10-01 19:54:41.084744
+Started Calculate hill profiles at: 2024-10-02 09:35:11.991344
+  Total time: 0.01
+Started Calculate channel stats at: 2024-10-02 09:35:12.503329
   Total time: 0
 
-Total run time: 0.13 min
+Total run time: 0.07 min

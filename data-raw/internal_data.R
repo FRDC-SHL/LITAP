@@ -128,13 +128,14 @@ cols_order <- list(
 
              "chan_len", "num_points", "mean_slope_pct", "gen_slope_pct", "aspect", "profile"))
 
+# Intermediate files to be omitted
 debug_files <- list(
   "flow" = c("dem_dir", "dem_initial", "dem_local", "dem_pond",
              "dem_idir", "dem_iinitial",
              "stats_initial", "stats_local"),
   "form" = c("dem_relief"),
   "facet" = c(),
-  "wepp" = c("dem_wepp", "stats_renum", "dem_renum", "dem_hillsheds",
+  "wepp" = c("dem_wepp_form", "stats_renum", "dem_renum", "dem_hillsheds",
              "stats_upsegs", "stats_ddir2", "dem_ddir2", "stats_ordered",
              "stats_first_segs", "dem_ups", "dem_split", "dem_remarked",
              "dem_pits", "dem_ordered", "dem_flow", "dem_first_segs",

@@ -29,6 +29,7 @@ report_compare_wepp(
   folder = "../Runs - LITAP/11_Ab02PV",
   orig_loc = "../Runs - FlowMapR/Steffi_LandMapR_tests/11_Ab02PV/FlowMapR/",
   chan_length = 200, upslope_threshold = 300)
+#pkgdown::build_article("reports/11_Ab02PV_compare_report_wepp")
 
 # BR3 ------------------------------------------------------------------------
 # Should detect grid size of 1
