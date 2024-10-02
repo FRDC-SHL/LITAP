@@ -180,11 +180,12 @@ mid_calc <- function(pnts, pnts_no_edge, cnts, avg, seg_cal) {
     lp2p = ix$ix4_l2pit_avg - dep$lp2p)
 
   # Mid
+  # zp2p and lp2p corrected from errors in the original spreadsheet
   mid <- dplyr::tibble(
     zc2s = avg$zcr2st - cst$zc2s - ups$zc2s - low$zc2s - dep$zc2s,
     lc2s = avg$lstr2div - cst$lc2s - ups$lc2s - low$lc2s - dep$lc2s,
-    zp2p = avg$slope3 - cst$zp2p - ups$zp2p - low$zp2p - dep$zp2p,
-    lp2p = avg$slope4 - cst$lp2p - ups$lp2p - low$lp2p - dep$lp2p)
+    zp2p = avg$zpit2peak - cst$zp2p - ups$zp2p - low$zp2p - dep$zp2p,
+    lp2p = avg$lpit2peak - cst$lp2p - ups$lp2p - low$lp2p - dep$lp2p)
 
   all <- dplyr::bind_rows(cst, ups, mid, low, dep)  %>%
     dplyr::bind_cols(dplyr::select(seg_cal, "counts", "prof"))  %>%
@@ -230,14 +231,15 @@ mid_calc <- function(pnts, pnts_no_edge, cnts, avg, seg_cal) {
     segsg = .data$segh/.data$lc2s * 100)
 
   # Back to C2S/P2P PL and PZ...
-
+  # - pz_p2p and pl_p2p corrected from errors in the original spreadsheet
+  #   (should have referenced zpit2peak and lpit2peak but referenced unlinked cell)
   all <- dplyr::mutate(
     all,
     pa = .data$counts / sum(.data$counts),
     pz_c2s = .data$segh / .env$z,
     pl_c2s = .data$lc2s / avg$lstr2div,
-    pz_p2p = .data$zp2p / avg$slope3,
-    pl_p2p = .data$lp2p / avg$slope4)
+    pz_p2p = .data$zp2p / avg$zpit2peak,
+    pl_p2p = .data$lp2p / avg$lpit2peak)
 
   all <- dplyr::mutate(
     all,
@@ -353,10 +355,7 @@ ls_factor <- function(pnts_no_edge) {
 avg_topo <- function(topo, lsf) {
   dplyr::filter(topo, .data$name == "avg")  %>%
     dplyr::mutate(zcr2st = lsf$zcr2st[2],
-                  lstr2div = lsf$lstr2div[2])  %>%
-    # TODO: Ask Li, Sheng if these are constants
-    dplyr::mutate(slope3 = 6.87521764069166,
-                  slope4 = 309.311743656845)
+                  lstr2div = lsf$lstr2div[2])
 }
 
 ws_density <- function(pnts, allpit, meta) {

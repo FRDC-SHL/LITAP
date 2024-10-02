@@ -19,8 +19,6 @@
 #'
 summary_tables <- function(folder) {
 
-  #TODO: Figure out edge row stuff based on different number of edge rows
-
   # Output File paths
   summary_file <- file.path(folder, paste0(basename(folder), "_topo_summary.xlsx"))
   allpoints_file <- file.path(folder, paste0(basename(folder), "_all_points.xlsx"))
